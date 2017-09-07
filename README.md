@@ -1,3 +1,5 @@
 # StudyGroup
 
-Fuller just edited the README.md
+account creation group chat flash cards whiteboards tutorial
+
+extra: webcams voice chat
