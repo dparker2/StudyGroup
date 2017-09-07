@@ -1,13 +1,13 @@
 # StudyGroup
 
-account creation 
-group chat 
-flash cards 
-whiteboards 
-tutorial
+account creation,  
+group chat, 
+flash cards, 
+whiteboards, 
+tutorial,
 
 extra: 
-webcams 
+webcams, 
 voice chat
 
 
