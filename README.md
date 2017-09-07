@@ -1,8 +1,14 @@
 # StudyGroup
 
-account creation group chat flash cards whiteboards tutorial
+account creation 
+group chat 
+flash cards 
+whiteboards 
+tutorial
 
-extra: webcams voice chat
+extra: 
+webcams 
+voice chat
 
 
 #Fuller is adding to the README.
