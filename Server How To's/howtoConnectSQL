@@ -1,0 +1,11 @@
+Instructions for Connecting to SQL Database on AWS.
+
+1. Download and Install Community Edition WorkBench for My SQL at:
+  https://dev.mysql.com/downloads/workbench/
+2. Launch MySQL WorkBench and go to Database > Connect To Database
+3. Enter in the following:
+   Hostname: csci150-mysql-sg.cvawt8ol1m2q.us-east-2.rds.amazonaws.com
+   Port: 3306
+   Username: admin
+   Password: Click Store in Vault, use password.
+4. Click OK, then it should be able to connect to SQL Database.
