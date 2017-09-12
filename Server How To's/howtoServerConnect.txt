@@ -6,9 +6,9 @@ Instructions for connecting to the AWS server.
 3. Run this command, this will add it to ssh:
     chmod 400 admin-pair-useast.pem
 4. While inside the same folder as the key-pair, run this command to connect to server:
-    ssh -i "admin-pair-useast.pem" ec2-user@ec2-18-221-67-202.us-east-2.compute.amazon.aws.com
+    ssh -i "admin-pair-useast.pem" ec2-user@ec2-18-221-67-202.us-east-2.compute.amazonaws.com
    -- If you're not in the folder with the key-pair, you can just use the directoy path, i.e. 
-    ssh -i ~/FILEPATH/admin-pair-useast.pem ec2-user@ec2-18-221-67-202.us-east-2.compute.amazon.aws.com
+    ssh -i ~/FILEPATH/admin-pair-useast.pem ec2-user@ec2-18-221-67-202.us-east-2.compute.amazonaws.com
     
     
  
