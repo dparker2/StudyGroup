@@ -26,5 +26,5 @@ White boards:
 
 
 **Stretch Goals**  
-  -Voice
+  -Voice  
   -Video 
