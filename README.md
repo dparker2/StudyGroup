@@ -25,6 +25,6 @@ White boards:
     -Students will be able to use a white board in order to provide real time examples and solutions  
 
 
-**Stretch Goals**
+**Stretch Goals**  
   -Voice
   -Video 
