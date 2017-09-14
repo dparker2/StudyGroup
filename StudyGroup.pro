@@ -30,7 +30,8 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
-    loginpage.h
+    loginpage.h \
+    mysql.h
 
 FORMS += \
         mainwindow.ui \
