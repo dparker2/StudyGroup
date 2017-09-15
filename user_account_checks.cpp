@@ -1,44 +1,40 @@
-#include <iostream>
-#include <string>
-#include <cstddef>
-#include <conio.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <regex>
+using namespace std;
 /* TO DO: test code, check if all libraries are required
-	add special char check, email check, user check
+	add  user check
+	test all functions
 	
 	known issues: lengthcheck function
 */
 class Password {
 	public:
-		bool SpecialCharactercCheck (const char * pstr);
-		bool UppercaseCheck (const char *pstr);
-		bool LengthCheck (const char *pstr);
-		bool NumCheck (const char *pstr);
+		bool SpecialCharactercCheck (string pstr);
+		bool UppercaseCheck (string pstr);
+		bool LengthCheck (string pstr);
+		bool NumCheck (string pstr);
 };
 class Email {
 	public:
-		EmailCheck (const char *estr);
+		EmailCheck (string estr);
 };
 class Username {
 	public:
-		UsernameCheck (const char *ustr);
+		UsernameCheck (string ustr);
 };
 
 // check for at least 1 special character
-bool SpecialCharacterCheck (const char *pstr){
-	size_t special;
+bool SpecialCharacterCheck (string pstr){
 	int i = 0;
+	char c;
 	while (pstr[i]) {
-		
-		i++;
+		c = pstr[i];
+		if (isalpha(c) && isdigit(c) == false) return true;
 	}
-
+	return false;
 }
 
 // check for  at least 1 upper case character
-bool UppercaseCheck (const char *pstr){
+bool UppercaseCheck (string pstr){
 	int i = 0;
 	char c;
 	while (pstr[i]) {
@@ -50,14 +46,13 @@ bool UppercaseCheck (const char *pstr){
 
 // if length != <= 8, not long enough
 // also if length >= 16, too long
-bool LengthCheck (const char *pstr){
-	int pl = pstr.size();
-	if (pl <= 8 || pl >= 16) return false;
+bool LengthCheck (string pstr){
+	if (pstr.size() <= 8 || pstr.size() >= 16) return false;
 	else return true;
 }
 
 //check for at least 1 number
-bool NumCheck (const char *pstr) {
+bool NumCheck (string pstr) {
 	int i = 0;
 	char c;
 	while (pstr[i]) {
@@ -68,8 +63,10 @@ bool NumCheck (const char *pstr) {
 }
 
 //needs at least, in this order: 1 character, @, 1 character
-bool EmailCheck (const char *estr) {
-
+bool EmailCheck (string estr) {
+	const std::regex pattern;
+	
+	return std::regex_match(estr, pattern);
 }
 
 /* needs to check against every username currently in database
@@ -77,6 +74,11 @@ bool EmailCheck (const char *estr) {
    allow special characters / spaces ?
    any checks for cursing/slurs/etc?
 */
-bool UsernameCheck (const char *ustr) {
+bool UsernameCheck (string ustr) {
 
+
+}
+
+int main(){
+	return 0;
 }
