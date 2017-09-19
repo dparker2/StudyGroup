@@ -57,7 +57,7 @@
     <item row="1" column="1">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_sign_in">
        <attribute name="title">
@@ -177,7 +177,8 @@
          </widget>
         </item>
        </layout>
-       <zorder>layoutWidget_2</zorder>
+       <zorder>lineEdit_username_2</zorder>
+       <zorder>lineEdit_password_2</zorder>
        <zorder>lineEdit_password_4</zorder>
        <zorder>signInButton_2</zorder>
        <zorder>label_password_4</zorder>
@@ -220,7 +221,7 @@
      <x>0</x>
      <y>0</y>
      <width>557</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
