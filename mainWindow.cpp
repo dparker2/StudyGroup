@@ -1,11 +1,13 @@
 #include "mainWindow.h"
-#include "ui_loginwindow.h"
+#include "ui_mainwindow.h"
 
 LoginWindow::LoginWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
+
+    my_serv = new server();
 }
 
 LoginWindow::~LoginWindow()
@@ -15,9 +17,13 @@ LoginWindow::~LoginWindow()
 
 void LoginWindow::on_signInButton_clicked()
 {
-    if(ui->lineEdit_username->text() != "studygroup" || ui->lineEdit_password->text() != "csci150"){
-        ui->label->setText("Username or Password incorrect");
+    QString username = ui->lineEdit_username->text();
+    QString password = ui->lineEdit_password->text();
 
+    if(username != "studygroup" || password != "csci150"){
+        ui->label->setText("Username or Password incorrect");
+    } else {
+        my_serv->verifyUserInfo(username, password);
     }
 }
 
