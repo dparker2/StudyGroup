@@ -15,7 +15,8 @@ public:
 signals:
 
 public slots:
-    void connected();
+    void socket_connected();
+    void socket_readyRead();
     void error(QAbstractSocket::SocketError);
 
 private:

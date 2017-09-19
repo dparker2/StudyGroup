@@ -4,7 +4,8 @@
 server::server(QObject *parent) : QObject(parent)
 {
     my_socket = new QTcpSocket(this);
-    connect(my_socket, SIGNAL(connected()), this, SLOT(connected()));
+    connect(my_socket, SIGNAL(connected()), this, SLOT(socket_connected()));
+    connect(my_socket, SIGNAL(readyRead()), this, SLOT(socket_readyRead()));
     connect(my_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
     //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
@@ -34,14 +35,33 @@ bool server::verifyUserInfo(QString& username, QString& password)
     }
 
     // Socket connected at this point, pass through info
-    my_socket->write(QString("0"+username+" "+password).toLocal8Bit());
+    my_socket->write(QString("0"+username+" "+password+"\n").toLocal8Bit());
 
     return true; // Always return true for now
 }
 
-void server::connected()
+bool server::createAccount(QString& email, QString& username, QString& password)
+{
+    my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
+    if (my_socket->waitForConnected(5000)) {
+        qDebug() << "Connected.";
+    } else {
+        qDebug() << "Not connected.";
+    }
+
+    // Socket connected at this point, pass through info
+    my_socket->write(QString("1"+email+" "+username+" "+password+"\n").toLocal8Bit());
+
+    return true; // Always return true for now
+}
+
+void server::socket_connected()
 {
     qDebug() << "Connected!";
+}
+
+void server::socket_readyRead() {
+    qDebug() << my_socket->readAll();
 }
 
 void server::error(QAbstractSocket::SocketError err)
