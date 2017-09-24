@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-09-11T14:42:44
+# Project created by QtCreator 2017-09-17T19:38:27
 #
 #-------------------------------------------------
 
@@ -12,7 +12,7 @@ TARGET = StudyGroup
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
-# any feature of Qt which as been marked as deprecated (the exact warnings
+# any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -26,11 +26,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
+    user_account_check.cpp \
     server.cpp
 
 HEADERS += \
         mainwindow.h \
+    user_account_check.h \
     server.h
 
 FORMS += \
         mainwindow.ui
+
+RESOURCES += \
+    resource.qrc
