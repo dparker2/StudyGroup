@@ -3,7 +3,7 @@ SHOW databases; - to see all databases
 USE [name]; - to select a database  
 SELECT [what] FROM [table name]; - query 
 select * from [table name] where [column name] like '%[what you're looking for]%'; - searches a column in a table. returns anything similar to whats inbetween the %                                                                                           similar to whats between the %  
-current databases: Accounts  
-current table: Accounts:UserInfo (username, pass, email)  
+current databases: StudyGroup  
+current tables: StudyGroup:UserInfo (username, pass, email)  
   
 INSERT INTO accounts (username, pass, email) VALUES ('[name goes here]', '[password goes here]', '[email goes here]');
