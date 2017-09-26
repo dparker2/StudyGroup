@@ -3,7 +3,11 @@ SHOW databases; - to see all databases
 USE [name]; - to select a database  
 SELECT [what] FROM [table name]; - query 
 select * from [table name] where [column name] like '%[what you're looking for]%'; - searches a column in a table. returns anything similar to whats inbetween the %                                                                                           similar to whats between the %  
+ALTER TABLE [table name] MODIFY [column name] [variable]; - for changing table inputs
+ALTER TABLE table1 RENAME table2; - for renaming tables
+CREATE DATABASE [database name]; - for creating a database
+CREATE TABLE [table name] ([[id name] [variable]]*); - for creating a table
+INSERT INTO accounts (username, pass, email) VALUES ('[name goes here]', '[password goes here]', '[email goes here]');
+
 current databases: StudyGroup  
 current tables: StudyGroup:UserInfo (username, pass, email), StudyGroup:Chat (Clock, user, Message) - clock = timestamp
-  
-INSERT INTO accounts (username, pass, email) VALUES ('[name goes here]', '[password goes here]', '[email goes here]');
