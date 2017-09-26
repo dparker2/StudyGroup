@@ -2,7 +2,7 @@
 include 'functions.php';
 //include 'rdsconnect.php';
 // Opening a server that accepts anything from ports 9001
-
+/*
 $servername = "csci150-mysql-sg.cvawt8ol1m2q.us-east-2.rds.amazonaws.com";
 $username = "admin";
 $password = "csci1502017";
@@ -14,7 +14,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
   if ($conn->connect_error) {
       die("Connection failed: " . $conn->connect_error);
   }
-  echo "Connected successfully to the Database as Well\n";
+  echo "Connected successfully to the Database as Well\n";*/
 
 $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage);
 
@@ -76,10 +76,10 @@ while(true)
           echo $loginArray[3]."\n";   //email*/
 
           if ($loginArray[0] == "CREATE") {
-            createAccount($loginArray[1], $loginArray[2], $loginArray[3], $conn, $sock);
+            createAccount($loginArray[1], $loginArray[2], $loginArray[3], $sock);
           }
           elseif ($loginArray[0] == "LOGIN") {
-            loginAccount($loginArray[1], $loginArray[2], $conn, $sock);
+            loginAccount($loginArray[1], $loginArray[2], $sock);
           }
         }
     }
