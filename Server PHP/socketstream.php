@@ -1,12 +1,12 @@
 <?php
-
+include 'functions.php';
 //include 'rdsconnect.php';
 // Opening a server that accepts anything from ports 9001
 
 $servername = "csci150-mysql-sg.cvawt8ol1m2q.us-east-2.rds.amazonaws.com";
 $username = "admin";
 $password = "csci1502017";
-$dbname = "Accounts";
+$dbname = "StudyGroup";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -53,7 +53,7 @@ while(true)
         //delete the server socket from the read sockets
         unset($read_socks[ array_search($server, $read_socks) ]);
     }
-c
+
     //message from existing client
     foreach($read_socks as $sock)
     {
@@ -69,24 +69,16 @@ c
         else {
           echo "THIS IS YOUR MESSAGE: $data";
           $loginArray = explode(" ", $data);
+          /*
           echo $loginArray[0]."\n";   //Code for creating new user account
           echo $loginArray[1]."\n";   //username
           echo $loginArray[2]."\n";   //password
-          echo $loginArray[3]."\n";   //email
-          $sql = "INSERT INTO accounts (username, pass, email) VALUES ('$loginArray[1]', '$loginArray[2]', '$loginArray[3]')";
+          echo $loginArray[3]."\n";   //email*/
 
-          if ($conn->query($sql) === TRUE) {
-            echo "New record created successfully \n";
+          if ($loginArray[0] == "CREATE") {
+            createAccount($loginArray[1], $loginArray[2], $loginArray[3], $conn, $sock);
           }
-          else {
-            echo "FAIL. ERROR: " . $sql . "\n" . $conn->error;
-          }
-          $conn->close();
-
-
         }
-        $sendback = "Return Message\n";
-        fwrite($sock, $sendback);
     }
 }
 ?>
