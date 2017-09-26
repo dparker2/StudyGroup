@@ -50,6 +50,17 @@ function createAccount($username, $password, $email, $connection, $sock) {
   }
 }
 
+function loginAccount($username, $password, $connection, $sock){
+  $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
+  if ($result = $connection->query($check_password)) {
+    $obj = $result->fetch_object();
+    if ($obj->Pass == $password)
+      fwrite($sock, "Login Successful!\n");
+    else
+      fwrite($sock, "Password Incorrect \n");
+  }
+}
+
 
 
 

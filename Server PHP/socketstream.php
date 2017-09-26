@@ -78,6 +78,9 @@ while(true)
           if ($loginArray[0] == "CREATE") {
             createAccount($loginArray[1], $loginArray[2], $loginArray[3], $conn, $sock);
           }
+          elseif ($loginArray[0] == "LOGIN") {
+            loginAccount($loginArray[1], $loginArray[2], $conn, $sock);
+          }
         }
     }
 }
