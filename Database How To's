@@ -1,4 +1,8 @@
-quick database howtos:  
+current databases: StudyGroup  
+current tables: StudyGroup:UserInfo (username, pass, email), StudyGroup:Chat (Clock, user, Message) - clock = timestamp
+             -> StudyGroup:GroupNames (groupname) - a table for keeping a list of all current groups
+
+[quick database howtos]
 SHOW databases; - to see all databases  
 USE [name]; - to select a database  
 SELECT [what] FROM [table name]; - query 
@@ -9,5 +13,19 @@ CREATE DATABASE [database name]; - for creating a database
 CREATE TABLE [table name] ([[id name] [variable]]*); - for creating a table
 INSERT INTO accounts (username, pass, email) VALUES ('[name goes here]', '[password goes here]', '[email goes here]');
 
-current databases: StudyGroup  
-current tables: StudyGroup:UserInfo (username, pass, email), StudyGroup:Chat (Clock, user, Message) - clock = timestamp
+[potential friendlist integration code]
+CREATE DATABASE [username goes here]_FriendList
+USE [above database name]
+CREATE TABLE FriendList (friend1 varchar(20))
+
+  [upon adding a new friend]
+ALTER TABLE FriendList ADD COLUMN friend[last column +1] AFTER [last column name goes here];
+
+  [upon removing a friend]
+ - search table Friendlist columns for the name, alter table to remove that column
+
+[potential group integration code]
+CREATE DATABASE Group_1[+1 for each new call];
+USE [above database name];
+CREATE TABLE group(CreatorName varchar(50), GroupName varchar(50));
+CREATE TABLE Chat (Clock time, user varchar(20), Message varchar(255);
