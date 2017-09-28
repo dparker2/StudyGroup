@@ -3,9 +3,12 @@
 
 server::server(QObject *parent) : QObject(parent)
 {
+    // Initialize socket stuff
     my_socket = new QTcpSocket(this);
-    connect(my_socket, SIGNAL(connected()), this, SLOT(socket_connected()));
-    connect(my_socket, SIGNAL(readyRead()), this, SLOT(socket_readyRead()));
+    // Try to reconnect socket whenever it disconnects
+    connect(my_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(reconnect_socket(QAbstractSocket::SocketState)));
+    //connect(my_socket, SIGNAL())
+    // Prints any socket errors to console
     connect(my_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
     //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
@@ -25,43 +28,85 @@ server::server(QObject *parent) : QObject(parent)
  *          false if not
  */
 
-bool server::verifyUserInfo(QString& username, QString& password)
+bool server::connectServer()
 {
+    //Connect the socket to the host
     my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    if (my_socket->waitForConnected(5000)) {
+    if (my_socket->waitForConnected(5000))
+    {
         qDebug() << "Connected.";
+        return true;
     } else {
-        qDebug() << "Not connected.";
+        qDebug() << "Not connected."; // Timeout
+        return false;
+    }
+}
+
+bool server::login(QString& username, QString& password)
+{
+    // Socket connected at this point, pass through info
+    my_socket->write(QString("LOGIN "+username+" "+password).toLatin1());
+    qDebug() << "Sending info...";
+    if (my_socket->waitForReadyRead(5000)) {
+        qDebug() << "Reading info...";
+        QString server_response = my_socket->readAll();
+        qDebug() << "Server response: " << server_response;
+
+        if(server_response == "success message") // INSERT REAL MESSAGE HERE
+        {
+            return true;
+        } else {
+            return false; // Wrong info
+        }
     }
 
-    // Socket connected at this point, pass through info
-    my_socket->write(QString("0"+username+" "+password+"\n").toLocal8Bit());
-
-    return true; // Always return true for now
+    return false; // Timeout
 }
+
+/***
+ * Sends info to server to create
+ * a new account.
+ */
 
 bool server::createAccount(QString& email, QString& username, QString& password)
 {
-    my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    if (my_socket->waitForConnected(5000)) {
-        qDebug() << "Connected.";
-    } else {
-        qDebug() << "Not connected.";
+    // Socket connected at this point, pass through info
+    my_socket->write(QString("CREATE "+username+" "+password+" "+email).toLatin1());
+    qDebug() << "Sending info...";
+    if (my_socket->waitForReadyRead(5000)) {
+        qDebug() << "Reading info...";
+        QString server_response = my_socket->readAll();
+        qDebug() << "Server response: " << server_response;
+
+        if(server_response == "success message") // INSERT REAL MESSAGE HERE
+        {
+            return true;
+        } else {
+            return false; // Wrong info
+        }
     }
 
-    // Socket connected at this point, pass through info
-    my_socket->write(QString("1"+email+" "+username+" "+password+"\n").toLocal8Bit());
-
-    return true; // Always return true for now
+    return false; // Timeout
 }
 
-void server::socket_connected()
-{
-    qDebug() << "Connected!";
-}
+void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
 
-void server::socket_readyRead() {
-    qDebug() << my_socket->readAll();
+    qDebug() << current_state;
+
+    if(QAbstractSocket::UnconnectedState == current_state)
+    {
+        // Here because connection with the server was severed
+        // Either by server going offline or client internet going out
+        // So, try to continually reconnect until successful.
+        emit disconnected();
+        bool connected = false;
+
+        while(!connected)
+        {
+            qDebug() << "Trying to reconnect...";
+            connected = connectServer();
+        }
+    }
 }
 
 void server::error(QAbstractSocket::SocketError err)

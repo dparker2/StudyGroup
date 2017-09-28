@@ -3,20 +3,22 @@
 
 #include <QObject>
 #include <QtNetwork>
+#include <QTimer>
 
 class server : public QObject
 {
     Q_OBJECT
 public:
     explicit server(QObject *parent = nullptr);
-    bool verifyUserInfo(QString&, QString&);
+    bool connectServer();
+    bool login(QString&, QString&);
     bool createAccount(QString&, QString&, QString&);
 
 signals:
+    void disconnected();
 
 public slots:
-    void socket_connected();
-    void socket_readyRead();
+    void reconnect_socket(QAbstractSocket::SocketState);
     void error(QAbstractSocket::SocketError);
 
 private:
