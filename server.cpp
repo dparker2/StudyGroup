@@ -1,6 +1,8 @@
 #include "server.h"
 #include <QDebug>
 
+// Testing changes
+
 server::server(QObject *parent) : QObject(parent)
 {
     // Initialize socket stuff
