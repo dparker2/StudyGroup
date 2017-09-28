@@ -1,0 +1,27 @@
+database: StudyGroup  
+current tables: UserInfo (username, pass, email), Chat (Clock, user, Message) - clock = timestamp
+             -> GroupNames (groupname) - a table for keeping a list of all current groups
+
+[quick database howtos]
+SHOW databases; - to see all databases  
+USE [name]; - to select a database  
+SELECT [what] FROM [table name]; - query 
+select * from [table name] where [column name] like '%[what you're looking for]%'; - searches a column in a table. returns anything similar to whats inbetween the %                                                                                           similar to whats between the %  
+ALTER TABLE [table name] MODIFY [column name] [variable]; - for changing table inputs
+ALTER TABLE table1 RENAME table2; - for renaming tables
+CREATE DATABASE [database name]; - for creating a database
+CREATE TABLE [table name] ([[id name] [variable]]*); - for creating a table
+DROP TABLE [table name]; - for deleting a table
+INSERT INTO accounts (username, pass, email) VALUES ('[name goes here]', '[password goes here]', '[email goes here]');
+
+[potential friendlist integration code]
+CREATE TABLE [username goes here]_FriendList (username varchar(20))
+
+  [upon adding a new friend]
+ALTER TABLE [username goes here]_FriendList ADD COLUMN friend[last column +1] AFTER [last column name goes here];
+
+  [upon removing a friend]
+ - search table Friendlist columns for the name, alter table to remove that column
+
+[potential group integration code]
+CREATE TABLE Group_[incremental #] (CreatorName varchar(50), GroupName varchar(50), Clock time, user varchar(20), Message varchar (255));
