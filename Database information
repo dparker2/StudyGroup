@@ -11,6 +11,7 @@ ALTER TABLE [table name] MODIFY [column name] [variable]; - for changing table i
 ALTER TABLE table1 RENAME table2; - for renaming tables
 CREATE DATABASE [database name]; - for creating a database
 CREATE TABLE [table name] ([[id name] [variable]]*); - for creating a table
+DROP TABLE [table name]; - for deleting a table
 INSERT INTO accounts (username, pass, email) VALUES ('[name goes here]', '[password goes here]', '[email goes here]');
 
 [potential friendlist integration code]
