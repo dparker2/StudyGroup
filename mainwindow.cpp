@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_email_check->hide();
 
     my_serv = new server();
+    my_serv->connectServer();
     user_info = new UserAccount();
 }
 
@@ -35,7 +36,9 @@ void MainWindow::on_signin_button_clicked()
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
 
-    my_serv->verifyUserInfo(username, password);
+    if(my_serv->login(username, password)) {
+        ui->stackedWidget->setCurrentWidget(ui->page_6);
+    }
 }
 void MainWindow::on_singup_button_clicked()
 {

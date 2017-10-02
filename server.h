@@ -10,7 +10,7 @@ class server : public QObject
     Q_OBJECT
 public:
     explicit server(QObject *parent = nullptr);
-    bool connectServer();
+    void connectServer();
     bool login(QString&, QString&);
     bool createAccount(QString&, QString&, QString&);
 
