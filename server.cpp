@@ -2,6 +2,8 @@
 #include <QDebug>
 
 // Testing changes
+// More changes
+// TESTING
 
 server::server(QObject *parent) : QObject(parent)
 {
@@ -30,18 +32,10 @@ server::server(QObject *parent) : QObject(parent)
  *          false if not
  */
 
-bool server::connectServer()
+void server::connectServer()
 {
     //Connect the socket to the host
     my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    if (my_socket->waitForConnected(5000))
-    {
-        qDebug() << "Connected.";
-        return true;
-    } else {
-        qDebug() << "Not connected."; // Timeout
-        return false;
-    }
 }
 
 bool server::login(QString& username, QString& password)
@@ -101,13 +95,9 @@ void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
         // Either by server going offline or client internet going out
         // So, try to continually reconnect until successful.
         emit disconnected();
-        bool connected = false;
 
-        while(!connected)
-        {
-            qDebug() << "Trying to reconnect...";
-            connected = connectServer();
-        }
+        qDebug() << "Trying to reconnect...";
+        connectServer();
     }
 }
 
