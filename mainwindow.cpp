@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
+    QPixmap logo2(":/resources/img/GSLogoName2.png");    // StudyGroup2 logo
+    ui->inner_label_logo->setPixmap(logo2.scaled(500,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
+
     // check/X icons are hidden initially
     ui->label_username_check->hide();
     ui->label_username_error->hide();
@@ -24,6 +27,14 @@ MainWindow::MainWindow(QWidget *parent) :
     my_serv = new server();
     my_serv->connectServer();
     user_info = new UserAccount();
+
+    // UI Connections
+    connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
+
+    // TEST STUFF
+    std::vector<QString> testusers1;
+    testusers1.push_back("TestName1"); testusers1.push_back("XxXNoScopeTest"); testusers1.push_back("LelNameTest");
+
 }
 
 MainWindow::~MainWindow()
@@ -36,9 +47,10 @@ void MainWindow::on_signin_button_clicked()
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
 
-    if(my_serv->login(username, password)) {
-        ui->stackedWidget->setCurrentWidget(ui->page_6);
-    }
+    //if(my_serv->login(username, password)) {
+        // Now logged in!
+        ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
+    //}
 }
 void MainWindow::on_singup_button_clicked()
 {
@@ -241,3 +253,18 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
      }
 }
 
+void MainWindow::on_settings_button_released()
+{
+    exit_settings_to = ui->stackedWidget_splitter->currentWidget(); // Save previous page to exit to after
+    ui->stackedWidget_splitter->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+}
+
+void MainWindow::exit_settings()
+{
+    ui->stackedWidget_splitter->setCurrentWidget(exit_settings_to); // Go back to previously active page
+}
+
+void MainWindow::on_join_button_released()
+{
+    ui->stackedWidget_splitter->setCurrentWidget(ui->stackedPage_JoinGroup);
+}
