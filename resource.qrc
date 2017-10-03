@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/resources">
+        <file>img/GSLogoName2.png</file>
+        <file>img/GSLogoName1.png</file>
+        <file>img/check_mark.png</file>
+        <file>img/x_mark.png</file>
+    </qresource>
+</RCC>
