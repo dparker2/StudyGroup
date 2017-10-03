@@ -37,7 +37,10 @@ void MainWindow::on_signin_button_clicked()
     QString password = ui->lineEdit_password->text();
 
     if(my_serv->login(username, password)) {
-        ui->stackedWidget->setCurrentWidget(ui->page_6);
+        // Now logged in!
+        ui->stackedWidget->setCurrentWidget(ui->page_6); // Change main page
+        QPixmap logo(":/resources/img/GSLogoName2.png");    // StudyGroup logo
+        ui->inner_label_logo->setPixmap(logo.scaled(150,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
     }
 }
 void MainWindow::on_singup_button_clicked()
