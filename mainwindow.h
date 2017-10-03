@@ -40,14 +40,19 @@ private slots:
     void invalid_label_stylesheet(QLabel* this_label, QLineEdit *this_line, QString error_msg);
     void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
 
-
-
     void on_singup_button_clicked();
+
+    void on_settings_button_released();
+    void exit_settings();
+
+    void on_join_button_released();
 
 private:
     Ui::MainWindow *ui;
     server *my_serv;
     UserAccount *user_info;
+
+    QWidget* exit_settings_to;
 };
 
 #endif // MAINWINDOW_H
