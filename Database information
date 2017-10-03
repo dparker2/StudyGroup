@@ -1,6 +1,7 @@
 database: StudyGroup  
 current tables: UserInfo (username, pass, email), Chat (Clock, user, Message) - clock = timestamp
-             -> GroupNames (groupname) - a table for keeping a list of all current groups
+             -> Groups (groupname, GroupCreator, Gpassword) - GroupCreator = username of person who made the group, Gpassword can be null
+             -> 
 
 [quick database howtos]
 SHOW databases; - to see all databases  
