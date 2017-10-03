@@ -1,5 +1,5 @@
 <?php
-//Create a new group given username input
+// Create a new group given username input
 
 function createGroup($groupname, $sock)
 {
