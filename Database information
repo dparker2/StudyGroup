@@ -1,13 +1,13 @@
-database: StudyGroup  
+database: StudyGroup
 current tables: UserInfo (username, pass, email), Chat (Clock, user, Message) - clock = timestamp
              -> Groups (groupname, GroupCreator, Gpassword) - GroupCreator = username of person who made the group, Gpassword can be null
-             -> 
+             ->
 
 [quick database howtos]
-SHOW databases; - to see all databases  
-USE [name]; - to select a database  
-SELECT [what] FROM [table name]; - query 
-select * from [table name] where [column name] like '%[what you're looking for]%'; - searches a column in a table. returns anything similar to whats inbetween the %                                                                                           similar to whats between the %  
+SHOW databases; - to see all databases
+USE [name]; - to select a database
+SELECT [what] FROM [table name]; - query
+select * from [table name] where [column name] like '%[what you're looking for]%'; - searches a column in a table. returns anything similar to whats inbetween the %                                                                                           similar to whats between the %
 ALTER TABLE [table name] MODIFY [column name] [variable]; - for changing table inputs
 ALTER TABLE table1 RENAME table2; - for renaming tables
 CREATE DATABASE [database name]; - for creating a database
@@ -25,4 +25,4 @@ ALTER TABLE [username goes here]_FriendList ADD COLUMN friend[last column +1] AF
  - search table Friendlist columns for the name, alter table to remove that column
 
 [potential group integration code]
-CREATE TABLE Group_[incremental #] (CreatorName varchar(50), GroupName varchar(50), Clock time, user varchar(20), Message varchar (255));
+CREATE TABLE Group_[incremental #] (CreatorName varchar(50), GroupName varchar(50), userList varchar(20), user varchar(20), Clock time, Message varchar (255));
