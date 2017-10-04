@@ -1,14 +1,11 @@
 <?php
 //Functions for server
 //CREATE Function, JOIN Function, etc.
+include_once 'db_credentials.php';
 
 function createAccount($username, $password, $email, $sock) {
-  $servername = "csci150-mysql-sg.cvawt8ol1m2q.us-east-2.rds.amazonaws.com";
-  $serverusername = "admin";
-  $serverpassword = "csci1502017";
-  $dbname = "StudyGroup";
   // Create connection
-  $connection = new mysqli($servername, $serverusername, $serverpassword, $dbname);
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
 
   // Check connection
     if ($connection->connect_error)
@@ -70,12 +67,8 @@ function createAccount($username, $password, $email, $sock) {
 
 
 function loginAccount($username, $password, $sock){
-  $servername = "csci150-mysql-sg.cvawt8ol1m2q.us-east-2.rds.amazonaws.com";
-  $serverusername = "admin";
-  $serverpassword = "csci1502017";
-  $dbname = "StudyGroup";
   // Create connection
-  $connection = new mysqli($servername, $serverusername, $serverpassword, $dbname);
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
 
   // Check connection
     if ($connection->connect_error)
@@ -84,14 +77,25 @@ function loginAccount($username, $password, $sock){
       echo "Connected to database \n";
 
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
-  if ($result = mysqli_query($connection, $check_password)) {
-    $obj = $result->fetch_object();
-    if ($obj->Pass == $password)
-      fwrite($sock, "Login Successful!\n");
+  $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
+  //Checks if username exists before attempting to login, will return error otherwise.
+  if ($result1 = mysqli_query($connection, $check_username)) {
+    $obj = $result1->fetch_object();
+    if ($obj->Username == $username) {
+      if ($result = mysqli_query($connection, $check_password)) {
+        $obj = $result->fetch_object();
+        if ($obj->Pass == $password)
+          fwrite($sock, "Login Successful!\n");
+        else
+          fwrite($sock, "Password Incorrect \n");
+        mysqli_free_result($result);
+      }
+    }
     else
-      fwrite($sock, "Password Incorrect \n");
-    mysqli_free_result($result);
+      fwrite($sock, "Username does not exist\n");
+    mysqli_free_result($result1);
   }
+
 
   if ($connection->close()) {
     echo "Databased Closed\n";

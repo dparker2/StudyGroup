@@ -1,5 +1,6 @@
 <?php
 include 'functions.php';
+include 'CreateGroup2.php';
 //include 'rdsconnect.php';
 // Opening a server that accepts anything from ports 9001
 /*
@@ -25,8 +26,8 @@ if ($server === false)
 }
 
 $clients = array();
-while(true)
-{
+while(true) {
+    echo "Listening \n";
     //prepare readable sockets
     $read_socks = $clients;
     $read_socks[] = $server;
@@ -80,6 +81,9 @@ while(true)
           }
           elseif ($loginArray[0] == "LOGIN") {
             loginAccount($loginArray[1], $loginArray[2], $sock);
+          }
+          elseif ($loginArray[0] == "CREATEGRP") {
+            createGroup($loginArray[1], $loginArray[2], $sock);
           }
         }
     }
