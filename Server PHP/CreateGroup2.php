@@ -13,7 +13,7 @@ function createGroup($groupname, $username, $sock)
     echo "Connected to database \n";
 
   $rand4 = rand(1000, 9999);
-  $groupID = $groupname . $rand4;
+  $groupID = $groupname . "_" . $rand4;
   // sql command to check if groupname table already exists
   $check_groupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
   // Run, store, and close sql commands

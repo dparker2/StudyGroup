@@ -7,7 +7,7 @@ if (!$fp)
 }
 else
 {
-    $out = "LOGIN fuller1234 fuller \n";
+    $out = "CREATEGRP fullertest fuller \n";
     ///Send data
     fwrite($fp, $out);
 
