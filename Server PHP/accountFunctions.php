@@ -135,28 +135,29 @@ function recoverAccount($email, $sock) {
   
   //check if email exists before attempting to send recovery email, will return error otherwise.
   $check_email = "SELECT Email FROM UserInfo WHERE Email = '$email'";
-  $change_password = "UPDATE UserInfo SET Pass='' WHERE Email = '$email'";
+  $change_password = "UPDATE UserInfo SET Pass='$newPass' WHERE Email = '$email'";
   if ($result1 = mysqli_query($connection, $check_email)) {
-  	$obj = $result1->fetch_object();
-  	if ($obj->Email == $email) {
-  		fwrite($sock, "SUCC\n");
-  		// create random id to be sent via email, save it in db
-  		$rID = rand(10000000, 99999999);
-  		$insertRecoveryTable = "INSERT INTO AccountRecovery (email, rID) VALUES ('$email', '$rID')";
+    $obj = $result1->fetch_object();
+    if ($obj->Email == $email) {
+      fwrite($sock, "SUCC\n");
+      // create random id to be sent via email, save it in db
+      $rID = rand(10000000, 99999999);
+      $insertRecoveryTable = "INSERT INTO AccountRecovery (email, rID) VALUES ('$email', '$rID')";
   		
-  		// UI should now send a 'they did it' message and a new password
-  		$newPass = //new pass from UI goes here
-  		mysqli_query($connection, $change_password);
-	  }
-	else
-		fwrite($sock, "FAIL\n");
-    
-	mysqli_free_result($result1);
-  }
-  
-    if ($connection->close()){
-      echo "Database Closed \n";
+      // UI should now send a 'they did it' message and a new password
+      $newPass = //new pass from UI goes here
+      mysqli_query($connection, $change_password);
     }
+    else
+      fwrite($sock, "FAIL\n");
+    
+    mysqli_free_result($result1);
+  }
+	
+if ($connection->close()){
+  echo "Database Closed \n";
+  }
+	
 }
 
 ?>
