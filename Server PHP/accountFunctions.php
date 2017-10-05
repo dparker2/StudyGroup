@@ -101,7 +101,7 @@ function loginAccount($username, $password, $sock){
 
 
   if ($connection->close()) {
-    echo "Databased Closed\n";
+    echo "Database Closed\n";
   }
 }
 
@@ -119,6 +119,9 @@ function logoutAccount($username, $sock) {
     }
     else {
       fwrite($sock, "FAIL\n");
+    }
+    if ($connection->close()){
+      echo "Database Closed \n";
     }
 }
 
