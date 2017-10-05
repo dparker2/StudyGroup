@@ -6,6 +6,7 @@ function createGroup($groupname, $username, $sock)
 {
   // Create connection
   $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
+
   // Check connection
   if ($connection->connect_error)
     die("Connection failed: " . $connection->connect_error);
@@ -27,6 +28,7 @@ function createGroup($groupname, $username, $sock)
   //if group name exists, return failure. else, run query and create table for group
   //$insert = "INSERT INTO GroupNames (groupname) VALUES ('$groupID')";
   $createGroupTable = "CREATE TABLE $groupID (
+
     CreatorName varchar(50), userList varchar(20),
     user varchar(20), Clock time, Message varchar(255)
   )";
@@ -49,7 +51,6 @@ function createGroup($groupname, $username, $sock)
     echo "Database Closed\n";
   }
 }
-
 
 function joinGroup($groupname, $username, $sock) {
   // Create connection
