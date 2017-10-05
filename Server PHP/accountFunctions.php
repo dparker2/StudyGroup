@@ -1,6 +1,6 @@
 <?php
-//Functions for server
-//CREATE Function, JOIN Function, etc.
+//Functions for Account Creation 
+//Create Account, LOGIN, LOGOUT.
 include_once 'db_credentials.php';
 
 function createAccount($username, $password, $email, $sock) {
