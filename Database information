@@ -26,3 +26,7 @@ ALTER TABLE [username goes here]_FriendList ADD COLUMN friend[last column +1] AF
 
 [potential group integration code]
 CREATE TABLE Group_[incremental #] (CreatorName varchar(50), GroupName varchar(50), userList varchar(20), user varchar(20), Clock time, Message varchar (255));
+
+
+Searching Databse for Table name
+select table_name from information_schema.tables where TABLE_SCHEMA='$DB_Name' and table_name =%groupname%

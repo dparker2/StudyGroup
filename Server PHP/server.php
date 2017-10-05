@@ -65,6 +65,9 @@ while(true) {
           elseif ($loginArray[0] == "CREATEGRP") {
             createGroup($loginArray[1], $loginArray[2], $sock);
           }
+          elseif ($loginArray[0] == "JOINGRP") {
+            joinGroup($loginArray[1], $loginArray[2], $sock);
+          }
         }
     }
 }
