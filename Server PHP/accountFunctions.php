@@ -1,5 +1,5 @@
 <?php
-//Functions for Account Creation 
+//Functions for Account Creation
 //Create Account, LOGIN, LOGOUT.
 include_once 'db_credentials.php';
 
@@ -45,16 +45,16 @@ function createAccount($username, $password, $email, $sock) {
   $insert = "INSERT INTO UserInfo (Username, Pass, Email) VALUES ('$username', '$password', '$email')";
 
   if ($username_exists > 0) {
-    $sendback = "Failure, username already exists.\n";
+    $sendback = "FAIL\n";
     fwrite($sock, $sendback);
   }
   elseif ($email_exists > 0) {
-    $sendback = "Failure, email already exists.\n";
+    $sendback = "FAIL\n";
     fwrite($sock, $sendback);
   }
   else {
     if (($result = mysqli_query($connection, $insert)) === TRUE){
-      $sendback = "Success! Account created";
+      $sendback = "SUCC\n";
       fwrite($sock, $sendback);
       mysqli_free_result($result);
     }
@@ -78,21 +78,24 @@ function loginAccount($username, $password, $sock){
 
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
   $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
+  $change_online = "UPDATE UserInfo SET Status='Online' WHERE Username = '$username'";
   //Checks if username exists before attempting to login, will return error otherwise.
   if ($result1 = mysqli_query($connection, $check_username)) {
     $obj = $result1->fetch_object();
     if ($obj->Username == $username) {
       if ($result = mysqli_query($connection, $check_password)) {
         $obj = $result->fetch_object();
-        if ($obj->Pass == $password)
-          fwrite($sock, "Login Successful!\n");
+        if ($obj->Pass == $password){
+          fwrite($sock, "SUCC\n");
+          mysqli_query($connection, $change_online);
+        }
         else
-          fwrite($sock, "Password Incorrect \n");
+          fwrite($sock, "FAIL\n");
         mysqli_free_result($result);
       }
     }
     else
-      fwrite($sock, "Username does not exist\n");
+      fwrite($sock, "FAIL\n");
     mysqli_free_result($result1);
   }
 
@@ -102,7 +105,22 @@ function loginAccount($username, $password, $sock){
   }
 }
 
+function logoutAccount($username, $sock) {
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
+  // Check connection
+    if ($connection->connect_error)
+        die("Connection failed: " . $conn->connect_error);
+    else
+      echo "Connected to database \n";
 
+    $change_offline = "UPDATE UserInfo SET Status='Offline' WHERE Username = '$username'";
+    if (mysqli_query($connection, $change_offline)) {
+      fwrite($sock, "SUCC\n");
+    }
+    else {
+      fwrite($sock, "FAIL\n");
+    }
+}
 
 
 ?>

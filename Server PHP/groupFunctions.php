@@ -33,13 +33,13 @@ function createGroup($groupname, $username, $sock)
   $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList) VALUES ('$username', '$username')";
   if ($groupID_exists > 0)
 {
-  $sendback = "Failure, groupID already exists. \n";
+  $sendback = "FAIL\n";
   fwrite($sock, $sendback);
 }
   else {
       mysqli_query($connection, $createGroupTable);
       mysqli_query($connection, $insertUserAdmin);
-      $sendback = "Success! Group created!\n";
+      $sendback = "SUCC\n";
       fwrite($sock, $sendback);
       fwrite($sock, "$groupID\n");
       fwrite($sock, "$username\n");

@@ -59,6 +59,9 @@ while(true) {
           elseif ($loginArray[0] == "LOGIN") {
             loginAccount($loginArray[1], $loginArray[2], $sock);
           }
+          elseif ($loginArray[0] == "LOGOUT") {
+            logoutAccount($loginArray[1], $sock);
+          }
           elseif ($loginArray[0] == "CREATEGRP") {
             createGroup($loginArray[1], $loginArray[2], $sock);
           }
