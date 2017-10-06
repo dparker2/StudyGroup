@@ -1,25 +1,29 @@
 #include "user_account_check.h"
 //#include "mainwindow.h"
 #include <QRegularExpression>
+#include <QDebug>
 
 UserAccount::UserAccount(QWidget *parent) : QMainWindow(parent)
 {
-    acct_email = "0 ";
-    acct_username = "1 ";
-    acct_password = "2 ";
     info_complete[3] = 0;    // defaulted to false
+}
+void UserAccount::printReadyState(){
+    qDebug() << "INFO COMPLETE";
+    qDebug() << info_complete[0];
+    qDebug() << info_complete[1];
+    qDebug() << info_complete[2];
 }
 bool UserAccount::get_info_complete(int i){
     return info_complete[i];
 }
 void UserAccount::setUsername(QString usernameStr){
-    acct_username.push_back(usernameStr);
+    acct_username = usernameStr;
 }
 void UserAccount::setEmail(QString emailStr){
-    acct_email.push_back(emailStr);
+    acct_email = emailStr;
 }
 void UserAccount::setPassword(QString passwordStr){
-    acct_password.push_back(passwordStr);
+    acct_password = passwordStr;
 }
 /*
  * Verifys if info is ready to send. If all true: ready to send
