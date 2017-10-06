@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     user_account_check.cpp \
-    server.cpp
+    server.cpp \
+    groupwidget.cpp
 
 HEADERS += \
         mainwindow.h \
     user_account_check.h \
-    server.h
+    server.h \
+    groupwidget.h
 
 FORMS += \
         mainwindow.ui

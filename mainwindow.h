@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
 #include <QLineEdit>
+#include "groupwidget.h"
 #include "server.h"
 #include "user_account_check.h"
 
@@ -46,6 +46,8 @@ private slots:
     void exit_settings();
 
     void on_join_button_released();
+
+    void on_radioButton_toggled(bool checked);
 
 private:
     Ui::MainWindow *ui;

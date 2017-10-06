@@ -9,9 +9,13 @@ server::server(QObject *parent) : QObject(parent)
 {
     // Initialize socket stuff
     my_socket = new QTcpSocket(this);
+
     // Try to reconnect socket whenever it disconnects
     connect(my_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(reconnect_socket(QAbstractSocket::SocketState)));
-    //connect(my_socket, SIGNAL())
+
+    // New information -> send appropriate signal
+    connect(my_socket, SIGNAL(readyRead()), this, SLOT(read_socket_send_signal()));
+
     // Prints any socket errors to console
     connect(my_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
@@ -48,7 +52,7 @@ bool server::login(QString& username, QString& password)
         QString server_response = my_socket->readAll();
         qDebug() << "Server response: " << server_response;
 
-        if(server_response == "success message") // INSERT REAL MESSAGE HERE
+        if(server_response == "SUCC") // INSERT REAL MESSAGE HERE
         {
             return true;
         } else {
@@ -74,7 +78,7 @@ bool server::createAccount(QString& email, QString& username, QString& password)
         QString server_response = my_socket->readAll();
         qDebug() << "Server response: " << server_response;
 
-        if(server_response == "success message") // INSERT REAL MESSAGE HERE
+        if(server_response == "SUCC") // INSERT REAL MESSAGE HERE
         {
             return true;
         } else {
@@ -99,6 +103,13 @@ void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
         qDebug() << "Trying to reconnect...";
         connectServer();
     }
+}
+
+void server::read_socket_send_signal()
+{
+    QString peek_msg = my_socket->peek(4);
+
+    // TODO: Implement if statements and send signals based on what was received.
 }
 
 void server::error(QAbstractSocket::SocketError err)

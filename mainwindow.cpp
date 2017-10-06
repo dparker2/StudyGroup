@@ -47,10 +47,10 @@ void MainWindow::on_signin_button_clicked()
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
 
-    //if(my_serv->login(username, password)) {
+    if(my_serv->login(username, password)) {
         // Now logged in!
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
-    //}
+    }
 }
 void MainWindow::on_singup_button_clicked()
 {
@@ -255,16 +255,26 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
 
 void MainWindow::on_settings_button_released()
 {
-    exit_settings_to = ui->stackedWidget_splitter->currentWidget(); // Save previous page to exit to after
-    ui->stackedWidget_splitter->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+    exit_settings_to = ui->stackedWidget_inner->currentWidget(); // Save previous page to exit to after
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
 }
 
 void MainWindow::exit_settings()
 {
-    ui->stackedWidget_splitter->setCurrentWidget(exit_settings_to); // Go back to previously active page
+    ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
 }
 
 void MainWindow::on_join_button_released()
 {
-    ui->stackedWidget_splitter->setCurrentWidget(ui->stackedPage_JoinGroup);
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+}
+
+void MainWindow::on_radioButton_toggled(bool checked)
+{
+    if (checked)
+    {
+        GroupWidget* group_widget = new GroupWidget();
+        ui->stackedWidget_inner->addWidget(group_widget);
+        ui->stackedWidget_inner->setCurrentWidget(group_widget);
+    }
 }
