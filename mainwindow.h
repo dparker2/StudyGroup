@@ -47,6 +47,10 @@ private slots:
 
     void on_join_button_released();
 
+    void on_lineEdit_password2_textEdited();
+
+    void on_lineEdit_password2_cursorPositionChanged();
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
