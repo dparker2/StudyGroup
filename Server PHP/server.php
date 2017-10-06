@@ -1,20 +1,6 @@
 <?php
-include 'functions.php';
-//include 'rdsconnect.php';
-// Opening a server that accepts anything from ports 9001
-/*
-$servername = "csci150-mysql-sg.cvawt8ol1m2q.us-east-2.rds.amazonaws.com";
-$username = "admin";
-$password = "csci1502017";
-$dbname = "StudyGroup";
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-  if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-  }
-  echo "Connected successfully to the Database as Well\n";*/
+include 'accountFunctions.php';
+include 'groupFunctions.php';
 
 $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage);
 
@@ -25,8 +11,8 @@ if ($server === false)
 }
 
 $clients = array();
-while(true)
-{
+while(true) {
+    echo "Listening \n";
     //prepare readable sockets
     $read_socks = $clients;
     $read_socks[] = $server;
@@ -45,11 +31,8 @@ while(true)
         {
             //print remote client information, ip and port number
             echo 'Connection accepted from ' . stream_socket_get_name($new_client, true) . "\n";
-
             $clients[] = $new_client;
-
         }
-
         //delete the server socket from the read sockets
         unset($read_socks[ array_search($server, $read_socks) ]);
     }
@@ -69,17 +52,21 @@ while(true)
         else {
           echo "THIS IS YOUR MESSAGE: $data";
           $loginArray = explode(" ", $data);
-          /*
-          echo $loginArray[0]."\n";   //Code for creating new user account
-          echo $loginArray[1]."\n";   //username
-          echo $loginArray[2]."\n";   //password
-          echo $loginArray[3]."\n";   //email*/
 
           if ($loginArray[0] == "CREATE") {
             createAccount($loginArray[1], $loginArray[2], $loginArray[3], $sock);
           }
           elseif ($loginArray[0] == "LOGIN") {
             loginAccount($loginArray[1], $loginArray[2], $sock);
+          }
+          elseif ($loginArray[0] == "LOGOUT") {
+            logoutAccount($loginArray[1], $sock);
+          }
+          elseif ($loginArray[0] == "CREATEGRP") {
+            createGroup($loginArray[1], $loginArray[2], $sock);
+          }
+          elseif ($loginArray[0] == "JOINGRP") {
+            joinGroup($loginArray[1], $loginArray[2], $sock);
           }
         }
     }
