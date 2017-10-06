@@ -49,6 +49,10 @@ private slots:
 
     void on_radioButton_toggled(bool checked);
 
+    void on_lineEdit_password2_textEdited();
+
+    void on_lineEdit_password2_cursorPositionChanged();
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
