@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_email_check->hide();
 
     my_serv = new server();
-    my_serv->connectServer();
+    my_serv->connect_server();
     user_info = new UserAccount();
 
     // UI Connections
@@ -47,10 +47,10 @@ void MainWindow::on_signin_button_clicked()
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
 
-    //if(my_serv->login(username, password)) {
+    if(my_serv->login(username, password)) {
         // Now logged in!
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
-    //}
+    }
 }
 void MainWindow::on_singup_button_clicked()
 {
@@ -72,7 +72,7 @@ void MainWindow::on_singup_button_clicked()
         QString username = user_info->getUsername();
 
 
-        my_serv->createAccount(email, username, password);
+        my_serv->create_account(email, username, password);
 
         qDebug() << "Ready To Send";
     }
@@ -261,20 +261,38 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
 
 void MainWindow::on_settings_button_released()
 {
-    exit_settings_to = ui->stackedWidget_splitter->currentWidget(); // Save previous page to exit to after
-    ui->stackedWidget_splitter->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+    exit_settings_to = ui->stackedWidget_inner->currentWidget(); // Save previous page to exit to after
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
 }
 
 void MainWindow::exit_settings()
 {
-    ui->stackedWidget_splitter->setCurrentWidget(exit_settings_to); // Go back to previously active page
+    ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
 }
 
 void MainWindow::on_join_button_released()
 {
-    ui->stackedWidget_splitter->setCurrentWidget(ui->stackedPage_JoinGroup);
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
 }
 
+void MainWindow::on_create_button_released()
+{
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_CreateGroup);
+}
 
+void MainWindow::on_create_group_button_released()
+{
+    QString group_name = ui->create_group_lineEdit->text();
+    QString group_id = group_name + "_0000";
+    if(true)//my_serv->create_group(group_name, group_id);       Gotta wait until TCP stuff is taken care of
+    {
+        group_widget = new GroupWidget();
+        ui->stackedWidget_inner->addWidget(group_widget);
+        ui->stackedWidget_inner->setCurrentWidget(group_widget);
+        QString name = "User1";
+        group_widget->user_joined(name);
+        QString chat = "12:43am - User1: Hello!";
+        group_widget->new_chat(chat);
+    }
 
-
+}
