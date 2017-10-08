@@ -50,7 +50,7 @@ while(true) {
         }
         //send the message back to client
         else {
-          echo "THIS IS YOUR MESSAGE: $data";
+          echo "THIS IS YOUR MESSAGE: $data \n";
           $loginArray = explode(" ", $data);
 
           if ($loginArray[0] == "CREATE") {
