@@ -21,6 +21,8 @@ public slots:
     void user_joined(QString& username);
     void user_left(QString& username);
 
+    void on_submit_chat_released();
+
 private:
     // UI elements:
     QGridLayout* main_layout;

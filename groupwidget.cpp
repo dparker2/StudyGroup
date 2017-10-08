@@ -1,4 +1,5 @@
 #include "groupwidget.h"
+#include <QTime>
 
 GroupWidget::GroupWidget(QWidget *parent) : QWidget(parent)
 {
@@ -20,6 +21,7 @@ GroupWidget::GroupWidget(QWidget *parent) : QWidget(parent)
     chat_input = new QLineEdit();
     submit_chat = new QPushButton();
     submit_chat->setText("Chat!");
+    connect(submit_chat, SIGNAL(released()), this, SLOT(on_submit_chat_released()));
     main_layout->addWidget(chat_input, 1, 0); // Bottom left
     main_layout->addWidget(submit_chat, 1, 1);
 
@@ -40,4 +42,11 @@ void GroupWidget::user_joined(QString &username)
 void GroupWidget::user_left(QString &username)
 {
 
+}
+
+void GroupWidget::on_submit_chat_released()
+{
+    QString chat_message = chat_input->text();
+    QString formatted_message = QTime::currentTime().toString("hh:mm AP") + " - " + "usernamehere:" + chat_message + "\n";
+    chat_box->insertPlainText(formatted_message);
 }

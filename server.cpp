@@ -36,10 +36,12 @@ server::server(QObject *parent) : QObject(parent)
  *          false if not
  */
 
-void server::connectServer()
+void server::connect_server()
 {
-    //Connect the socket to the host
+    // Connect the socket to the host
     my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
+    // If it ever disconnects (including while trying this), the socket will
+    // continuously try to reconnect. See reconnect_socket().
 }
 
 bool server::login(QString& username, QString& password)
@@ -52,8 +54,9 @@ bool server::login(QString& username, QString& password)
         QString server_response = my_socket->readAll();
         qDebug() << "Server response: " << server_response;
 
-        if(server_response == "SUCC") // INSERT REAL MESSAGE HERE
+        if(server_response == "SUCC\n")
         {
+            this->username = username;
             return true;
         } else {
             return false; // Wrong info
@@ -68,7 +71,7 @@ bool server::login(QString& username, QString& password)
  * a new account.
  */
 
-bool server::createAccount(QString& email, QString& username, QString& password)
+bool server::create_account(QString& username, QString& password, QString& email)
 {
     // Socket connected at this point, pass through info
     my_socket->write(QString("CREATE "+username+" "+password+" "+email).toLatin1());
@@ -78,7 +81,7 @@ bool server::createAccount(QString& email, QString& username, QString& password)
         QString server_response = my_socket->readAll();
         qDebug() << "Server response: " << server_response;
 
-        if(server_response == "SUCC") // INSERT REAL MESSAGE HERE
+        if(server_response == "SUCC\n") // INSERT REAL MESSAGE HERE
         {
             return true;
         } else {
@@ -88,6 +91,48 @@ bool server::createAccount(QString& email, QString& username, QString& password)
 
     return false; // Timeout
 }
+
+bool server::create_group(QString& group_name, QString& group_id)
+{
+    // Pass through info
+    my_socket->write(QString("CREATEGRP "+group_name+" "+this->username).toLatin1());
+    qDebug() << "Sending info...";
+    if (my_socket->waitForReadyRead(5000)) {
+        qDebug() << "Reading info...";
+        QString server_response = my_socket->readAll();
+        qDebug() << "Server response: " << server_response;
+
+        if(server_response == "SUCC\n") // INSERT REAL MESSAGE HERE
+        {
+            my_socket->waitForReadyRead();
+            QString group_id = my_socket->readAll();
+            qDebug() << group_id;
+            return true;
+        } else {
+            return false; // Wrong info
+        }
+    }
+
+    return false; // Timeout
+}
+
+QString server::get_username()
+{
+    return this->username;
+}
+
+void server::set_username(QString& username)
+{
+    this->username = username;
+}
+
+/*
+ *
+ *
+ * SLOTS
+ *
+ *
+ */
 
 void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
 
@@ -101,13 +146,14 @@ void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
         emit disconnected();
 
         qDebug() << "Trying to reconnect...";
-        connectServer();
+        connect_server();
     }
 }
 
 void server::read_socket_send_signal()
 {
     QString peek_msg = my_socket->peek(4);
+    qDebug() << peek_msg;
 
     // TODO: Implement if statements and send signals based on what was received.
 }

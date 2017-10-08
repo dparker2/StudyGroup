@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_email_check->hide();
 
     my_serv = new server();
-    my_serv->connectServer();
+    my_serv->connect_server();
     user_info = new UserAccount();
 
     // UI Connections
@@ -72,7 +72,7 @@ void MainWindow::on_singup_button_clicked()
         QString username = user_info->getUsername();
 
 
-        my_serv->createAccount(email, username, password);
+        my_serv->create_account(email, username, password);
 
         qDebug() << "Ready To Send";
     }
@@ -275,16 +275,24 @@ void MainWindow::on_join_button_released()
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
 }
 
-void MainWindow::on_radioButton_toggled(bool checked)
+void MainWindow::on_create_button_released()
 {
-    if (checked)
-    {
-        GroupWidget* group_widget = new GroupWidget();
-        ui->stackedWidget_inner->addWidget(group_widget);
-        ui->stackedWidget_inner->setCurrentWidget(group_widget);
-    }
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_CreateGroup);
 }
 
+void MainWindow::on_create_group_button_released()
+{
+    QString group_name = ui->create_group_lineEdit->text();
+    QString group_id = group_name + "_0000";
+    if(true)//my_serv->create_group(group_name, group_id);       Gotta wait until TCP stuff is taken care of
+    {
+        group_widget = new GroupWidget();
+        ui->stackedWidget_inner->addWidget(group_widget);
+        ui->stackedWidget_inner->setCurrentWidget(group_widget);
+        QString name = "User1";
+        group_widget->user_joined(name);
+        QString chat = "12:43am - User1: Hello!";
+        group_widget->new_chat(chat);
+    }
 
-
-
+}
