@@ -41,10 +41,11 @@ function createGroup($groupname, $username, $sock)
   else {
       mysqli_query($connection, $createGroupTable);
       mysqli_query($connection, $insertUserAdmin);
-      $sendback = "SUCC\n";
-      fwrite($sock, $sendback);
-      fwrite($sock, "$groupID\n");
-      fwrite($sock, "$username\n");
+      $sendback = "SUCC";
+      $message = "{$sendback}{$groupID} {$username}";
+      echo "$message";
+      $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
+      fwrite($sock, "{$messageSize}{$message}");
 
     }
   if($connection->close()) {

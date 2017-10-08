@@ -284,7 +284,7 @@ void MainWindow::on_create_group_button_released()
 {
     QString group_name = ui->create_group_lineEdit->text();
     QString group_id = group_name + "_0000";
-    if(true)//my_serv->create_group(group_name, group_id);       Gotta wait until TCP stuff is taken care of
+    if(my_serv->create_group(group_name, group_id))     // Gotta wait until TCP stuff is taken care of
     {
         group_widget = new GroupWidget();
         ui->stackedWidget_inner->addWidget(group_widget);
