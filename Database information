@@ -1,7 +1,7 @@
 database: StudyGroup
-current tables: UserInfo (username, pass, email), Chat (Clock, user, Message) - clock = timestamp
-             -> Groups (groupname, GroupCreator, Gpassword) - GroupCreator = username of person who made the group, Gpassword can be null
-             ->
+current tables: UserInfo(username, pass, email), Groups(Gpassword, user, userlist, clock, message, moderator)
+             -> FriendListTest(username), GroupTest(CreatorName, GroupName, Clock, user, Message)
+             -> testgroup_9588(CreatorName, userList, user, Clock, Message), AccountRecovery(email, rID)
 
 [quick database howtos]
 SHOW databases; - to see all databases
@@ -9,6 +9,8 @@ USE [name]; - to select a database
 SELECT [what] FROM [table name]; - query
 select * from [table name] where [column name] like '%[what you're looking for]%'; - searches a column in a table. returns anything similar to whats inbetween the %                                                                                           similar to whats between the %
 ALTER TABLE [table name] MODIFY [column name] [variable]; - for changing table inputs
+ALTER TABLE [table name] ADD [column name] [variable] - for adding a column to a table
+ALTER TABLE [table name] DROP COLUMN [column name]; - for deleting a column
 ALTER TABLE table1 RENAME table2; - for renaming tables
 CREATE DATABASE [database name]; - for creating a database
 CREATE TABLE [table name] ([[id name] [variable]]*); - for creating a table

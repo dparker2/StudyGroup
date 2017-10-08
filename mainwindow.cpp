@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_email_check->hide();
 
     my_serv = new server();
-    my_serv->connectServer();
+    my_serv->connect_server();
     user_info = new UserAccount();
 
     // UI Connections
@@ -47,13 +47,15 @@ void MainWindow::on_signin_button_clicked()
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
 
-    //if(my_serv->login(username, password)) {
+    if(my_serv->login(username, password)) {
         // Now logged in!
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
-    //}
+    }
 }
 void MainWindow::on_singup_button_clicked()
 {
+    user_info->printReadyState();
+
     bool ready_to_send = true;
     int size = 3;
 
@@ -64,19 +66,14 @@ void MainWindow::on_singup_button_clicked()
             break;
         }
     }
-
+    QString password = user_info->getPassword();
     if(ready_to_send){
         QString email = user_info->getEmail();
         QString username = user_info->getUsername();
-        QString password = user_info->getPassword();
 
-        my_serv->createAccount(email, username, password);
 
-        //Fuller needs an entire string which he'll "explode" in php
-        //Qstring account = email+username+password; ???
-        //my_serv->createAccount(account);
+        my_serv->create_account(email, username, password);
 
-        qDebug() << "username: " << username;
         qDebug() << "Ready To Send";
     }
     else{
@@ -102,10 +99,11 @@ void MainWindow::on_lineEdit_username_signup_editingFinished()
     if(valid){                         // sets valid username to UserAccounts username member
         user_info->setUsername(username);
         user_info->set_info_complete(1,1);
+        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, error_msg, valid);
     }
     // sets correct icon
     // green: valid, X otherwise
-    set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, error_msg, valid);
+
 }
 /*
  * Hides the icons when the user edits the line
@@ -136,17 +134,16 @@ void MainWindow::on_lineEdit_email_editingFinished()
     QString error_msg;
     bool valid = user_info->emailValidation(email, error_msg);      // returns if email is valid or not
                                                                     // with error msg if not valid
-
     if(email.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
         ui->lineEdit_email->setStyleSheet("color:black; background-color:white");
     }
-    if(valid){                      // sets valid email to UserAccounts email member
+    else if(valid){                      // sets valid email to UserAccounts email member
         user_info->setEmail(email);
         user_info->set_info_complete(0,1);
+        // sets correct icon
+        // green: valid, X otherwise
+        set_valid_icons(ui->label_email_check, ui->lineEdit_email, error_msg, valid);
     }
-    // sets correct icon
-    // green: valid, X otherwise
-    set_valid_icons(ui->label_email_check, ui->lineEdit_email, error_msg, valid);
 }
 /*
  * Hides the icons when the user edits the line
@@ -174,19 +171,17 @@ void MainWindow::on_lineEdit_password1_editingFinished()
 {
     QString password = ui->lineEdit_password1->text();
     QString error_msg;
-    bool valid = user_info->usernameValidation(password,  error_msg);       // returns if password is valid or not
+    bool valid = user_info->passwordValidtion(password,  error_msg);       // returns if password is valid or not
                                                                             // with error msg if not valid
-
     if(password.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
         ui->lineEdit_password1->setStyleSheet("color:black; background-color:white");
-
     }
-    if(valid){                        // sets valid password to UserAccounts password member
+    else if(valid){                        // sets valid password to UserAccounts password member
         user_info->setPassword(password);
+        // sets correct icon
+        // green: valid, X otherwise
+        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, error_msg, valid);
     }
-    // sets correct icon
-    // green: valid, X otherwise
-    set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, error_msg, valid);
 
 }
 /*
@@ -194,8 +189,9 @@ void MainWindow::on_lineEdit_password1_editingFinished()
  */
 void MainWindow::on_lineEdit_password1_textEdited()
 {
-    ui->label_email_check->hide();               // hides the red X when user begins editing text
-    on_lineEdit_email_cursorPositionChanged();   // resets color when editing text
+    user_info->set_info_complete(2,0);
+    ui->label_password1_check->hide();               // hides the red X when user begins editing text
+    on_lineEdit_password1_cursorPositionChanged();   // resets color when editing text
 }
 /*
  * Resets defaults to line edit style sheet anytime the user changes cursor to edit
@@ -211,11 +207,9 @@ void MainWindow::on_lineEdit_password1_cursorPositionChanged()
  */
 void MainWindow::on_lineEdit_password2_editingFinished()
 {
-    QString password = "2 ";
-    password.push_back(ui->lineEdit_password2->text());
+    QString password = ui->lineEdit_password2->text();
     if(password.isEmpty()){
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, "", 0);
-        user_info->set_info_complete(2,0);
+        ui->lineEdit_password2->setStyleSheet("color: black; background-color: white");
     }
     else if(password == user_info->getPassword()){
         set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, "", 1);
@@ -226,6 +220,17 @@ void MainWindow::on_lineEdit_password2_editingFinished()
         set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, "", 0);
         user_info->set_info_complete(2,0);
     }
+}
+void MainWindow::on_lineEdit_password2_textEdited()
+{
+
+    ui->label_password2_check->hide();               // hides the red X when user begins editing text
+    user_info->set_info_complete(2,0);
+    on_lineEdit_password2_cursorPositionChanged();   // resets color when editing text
+}
+void MainWindow::on_lineEdit_password2_cursorPositionChanged()
+{
+    ui->lineEdit_password2->setStyleSheet("color: black; background-color:white");
 }
 /*
  * Sets the stylesheet colors for invalid input
@@ -243,6 +248,7 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
     if(valid){
         QPixmap check_mark(":/resources/img/check_mark.png");
         this_label->setPixmap(check_mark.scaled(31,31,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+        this_line->setStyleSheet("color: black; background-color:white");
         this_label->show();
      }
      else{
@@ -255,16 +261,38 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
 
 void MainWindow::on_settings_button_released()
 {
-    exit_settings_to = ui->stackedWidget_splitter->currentWidget(); // Save previous page to exit to after
-    ui->stackedWidget_splitter->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+    exit_settings_to = ui->stackedWidget_inner->currentWidget(); // Save previous page to exit to after
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
 }
 
 void MainWindow::exit_settings()
 {
-    ui->stackedWidget_splitter->setCurrentWidget(exit_settings_to); // Go back to previously active page
+    ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
 }
 
 void MainWindow::on_join_button_released()
 {
-    ui->stackedWidget_splitter->setCurrentWidget(ui->stackedPage_JoinGroup);
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+}
+
+void MainWindow::on_create_button_released()
+{
+    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_CreateGroup);
+}
+
+void MainWindow::on_create_group_button_released()
+{
+    QString group_name = ui->create_group_lineEdit->text();
+    QString group_id = group_name + "_0000";
+    if(true)//my_serv->create_group(group_name, group_id);       Gotta wait until TCP stuff is taken care of
+    {
+        group_widget = new GroupWidget();
+        ui->stackedWidget_inner->addWidget(group_widget);
+        ui->stackedWidget_inner->setCurrentWidget(group_widget);
+        QString name = "User1";
+        group_widget->user_joined(name);
+        QString chat = "12:43am - User1: Hello!";
+        group_widget->new_chat(chat);
+    }
+
 }
