@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
 #include <QLineEdit>
+#include "groupwidget.h"
 #include "server.h"
 #include "user_account_check.h"
 
@@ -47,12 +47,23 @@ private slots:
 
     void on_join_button_released();
 
+    void on_lineEdit_password2_textEdited();
+
+    void on_lineEdit_password2_cursorPositionChanged();
+
+    void on_create_button_released();
+
+    void on_create_group_button_released();
+
+    void on_join_group_button_released();
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
     UserAccount *user_info;
 
     QWidget* exit_settings_to;
+    GroupWidget* group_widget;
 };
 
 #endif // MAINWINDOW_H

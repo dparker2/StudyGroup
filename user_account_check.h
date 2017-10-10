@@ -25,6 +25,7 @@ public:
     void set_info_complete(int i, bool set);
     bool get_info_complete(int i);
 
+    void printReadyState();
 
 signals:
 
