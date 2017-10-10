@@ -285,15 +285,30 @@ void MainWindow::on_create_group_button_released()
 {
     QString group_name = ui->create_group_lineEdit->text();
     QString group_id = group_name + "_0000";
-    if(true)//my_serv->create_group(group_name, group_id);       Gotta wait until TCP stuff is taken care of
+    if(my_serv->create_group(group_name, group_id))
     {
         group_widget = new GroupWidget();
         ui->stackedWidget_inner->addWidget(group_widget);
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
-        QString name = "User1";
+        QString name = group_id;
         group_widget->user_joined(name);
         QString chat = "12:43am - User1: Hello!";
         group_widget->new_chat(chat);
     }
 
+}
+
+void MainWindow::on_join_group_button_released()
+{
+    QString group_id = ui->join_group_lineEdit->text();
+    if(my_serv->join_group(group_id))
+    {
+        group_widget = new GroupWidget();
+        ui->stackedWidget_inner->addWidget(group_widget);
+        ui->stackedWidget_inner->setCurrentWidget(group_widget);
+        QString name = group_id;
+        group_widget->user_joined(name);
+        QString chat = "12:43am - User1: Hello!";
+        group_widget->new_chat(chat);
+    }
 }

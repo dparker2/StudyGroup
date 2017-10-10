@@ -749,7 +749,11 @@ font: bold;</string>
         <item row="1" column="0" colspan="3">
          <widget class="QStackedWidget" name="stackedWidget_inner">
           <property name="currentIndex">
+<<<<<<< HEAD
            <number>2</number>
+=======
+           <number>0</number>
+>>>>>>> master
           </property>
           <widget class="QWidget" name="stackedPage_JoinGroup">
            <layout class="QGridLayout" name="gridLayout_4">
