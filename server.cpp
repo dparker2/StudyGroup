@@ -191,7 +191,7 @@ void server::read_socket_send_signal()
  *
  */
 
-QString server::format_socket_request(const QString &request_code, QString request_arg)
+QByteArray server::format_socket_request(const QString &request_code, QString request_arg)
 {
     QString full_request = request_code + request_arg;
     QString request_length = QString::number(full_request.size());
