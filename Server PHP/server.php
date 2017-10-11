@@ -51,7 +51,9 @@ while(true) {
         // $ip holds the ip address of the client socket
         // $clients[$ip][1] is equal to the username AFTER successful login
 
-        $data = fread($sock, 128);
+        $data = fread($sock, 5);
+        $bytes = (int)$data;
+        $newdata = fread($sock, $bytes);
         if(!$data)
         {
             var_dump(array_search($sock, array_column($clients, 0)));
@@ -63,16 +65,19 @@ while(true) {
         //send the message back to client
         else {
           $ip = stream_socket_get_name($sock, true);
-          echo "THIS IS YOUR MESSAGE: $data";
+
+          echo "THIS IS YOUR MESSAGE: $newdata";
           //Takes in the first 5 bytes as to determine length of message.
-          $bytes = (int)(substr($data, 0, 5));
+          $firstfive = substr($data, 0, 5);
+          $bytes = (int)$firstfive;
           $message = substr($data, 5, $bytes);
-          $loginArray = explode(" ", $message);  //Puts message into array
+          $loginArray = explode(" ", $data);  //Puts message into array
 
           if ($loginArray[0] == "CACC") {
             createAccount($loginArray[1], $loginArray[2], $loginArray[3], $sock);
           }
           elseif ($loginArray[0] == "LOGN") {
+            echo "GOING IN \n";
             if(loginAccount($loginArray[1], $loginArray[2], $sock))
             {
               $clients[$ip][1] = $loginArray[1]; // Set username to clients dict

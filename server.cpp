@@ -61,7 +61,7 @@ bool server::login(QString& username, QString& password)
     // Determine size of message, which is length(username)+length(password)+6 (for 2 spaces and 4 letter code)
     //QString message_length = username.length() + password.length() + 6;
 
-    my_socket->write(QString("LOGIN "+username+" "+password).toLatin1());
+    my_socket->write(QString("LOGN "+username+" "+password).toLatin1());
     qDebug() << "Sending info...";
     success_flag = false;
     fail_flag = false;

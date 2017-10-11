@@ -87,7 +87,12 @@ function loginAccount($username, $password, $sock){
       if ($result = mysqli_query($connection, $check_password)) {
         $obj = $result->fetch_object();
         if ($obj->Pass == $password){
-          fwrite($sock, "SUCC\n");
+          $sendback = "SUCC";
+          $message = "$sendback";
+          //echo "$message";
+          $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
+          fwrite($sock, "{$messageSize}{$message}");
+          echo "{$messageSize}{$message}";
           $return_bool = true;
           mysqli_query($connection, $change_online);
         }
