@@ -197,7 +197,7 @@ QString server::format_socket_request(const QString &request_code, QString reque
     QString request_length = QString::number(full_request.size());
     full_request = full_request.prepend(request_length.rightJustified(5, '0', true));
     qDebug() << "Sending: " << full_request;
-    return full_request;
+    return full_request.toLatin1();
 }
 
 bool server::read_socket_helper(QString& out_message)

@@ -87,7 +87,7 @@ while(true) {
           elseif ($loginArray[0] == "JGRP") {
             joinGroup($loginArray[1], $ip, $clients, $sock);
           }
-          elseif ($loginArray[0] == "CPAS") {
+          elseif ($loginArray[0] == "CHPW") {
             changePassword($client[$ip][1], $loginArray[2], $sock);
           }
           elseif ($loginArray[0] == "RACC") {

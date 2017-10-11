@@ -29,10 +29,10 @@ function createGroup($groupname, $ip, $clients, $sock)
   //$insert = "INSERT INTO GroupNames (groupname) VALUES ('$groupID')";
   $createGroupTable = "CREATE TABLE $groupID (
 
-    CreatorName varchar(50), userList varchar(20),
+    CreatorName varchar(50), userList varchar(20), ipAddress varchar(50),
     user varchar(20), Clock time, Message varchar(255)
   )";
-  $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList) VALUES ("$clients[$ip][1]", "$clients[$ip][1]")";
+  $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList, ipAddress) VALUES ("$clients[$ip][1]", "$clients[$ip][1]", "$ip")";
   if ($groupID_exists > 0)
 {
   $sendback = "FAIL\n";
@@ -53,7 +53,7 @@ function createGroup($groupname, $ip, $clients, $sock)
   }
 }
 
-function joinGroup($groupname, $username, $clients, $sock) {
+function joinGroup($groupname, $ip, $clients, $sock) {
   // Create connection
   $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
@@ -71,19 +71,26 @@ function joinGroup($groupname, $username, $clients, $sock) {
   }
 
   $return_userList = "SELECT userList FROM $groupname";
-  $join_group = "INSERT INTO $groupname (userList) VALUES ('$username')";
+  $return_ipList = "SELECT ipAddress FROM $groupname";
+  $join_group = "INSERT INTO $groupname (userList, ipAddress) VALUES ("$clients[$ip][1]", "$ip")";
   if ($groupname_exists > 0) {
     $result = mysqli_query($connection, $return_userList);
     $row_count = $result->num_rows;
     if ($row_count < 4) {
       fwrite($sock, "SUCC\n");
       mysqli_query($connection, $join_group);
-      $result2 = mysqli_query($connection, $return_userList);
-      $num_user = $result2->num_rows;
-      while($num_user > 0) {
-        $row=mysqli_fetch_array($result2);
-        fwrite($sock,"$row[0]\n");
-        $num_user = $num_user - 1;
+      $resultUsers = mysqli_query($connection, $return_userList);
+      $num_user = $resultUsers->num_rows;
+      $resultIP = mysqli_query($connection, $return_ipList);
+      $num_ip = $resultIP->num_rows;
+      while($num_ip > 0) {
+        $rowIP = mysqli_fetch_array($resultIP);
+        $currIP = $clients[$rowIP][0];
+        for($num_user; $num_user > 0; $num_user = $num_user - 1){
+        $row=mysqli_fetch_array($resultUsers);
+        fwrite($currIP,"$row[0]\n");
+        }
+        $num_ip = $num_ip - 1;
       }
     }
     else {
