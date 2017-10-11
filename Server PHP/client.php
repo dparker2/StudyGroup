@@ -7,7 +7,7 @@ if (!$fp)
 }
 else
 {
-    $out = "JOINGRP testgroup_9588 dave \n";
+    $out = "LOGIN fuller testpass \n";
     ///Send data
     fwrite($fp, $out);
 

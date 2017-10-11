@@ -66,6 +66,8 @@ bool server::login(QString& username, QString& password)
     success_message = nullptr;
     if(my_socket->waitForReadyRead(5000))
     {
+        QString server_response = my_socket->readAll();
+        qDebug() << "Server Response: " << server_response;
         if(success_flag)
         {
             return true;
