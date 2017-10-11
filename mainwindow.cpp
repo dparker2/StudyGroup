@@ -311,3 +311,13 @@ void MainWindow::on_join_group_button_released()
         group_widget->new_chat(chat);
     }
 }
+
+void MainWindow::on_backdoorButton_released()
+{
+    QString username = ui->lineEdit_username->text();
+    QString password = ui->lineEdit_password->text();
+
+    my_serv->login(username, password);
+        // Now logged in!
+    ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
+}
