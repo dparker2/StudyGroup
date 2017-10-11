@@ -64,7 +64,11 @@ while(true) {
         else {
           $ip = stream_socket_get_name($sock, true);
           echo "THIS IS YOUR MESSAGE: $data";
-          $loginArray = explode(" ", $data);
+          //Takes in the first 5 bytes as to determine length of message.
+          $bytes = (int)(substr($data, 0, 5));
+          $message = substr($data, 5, $bytes);
+          $loginArray = explode(" ", $message);
+          echo "$loginArray[0], $loginArray[1], $loginArray[2] \n";
 
           if ($loginArray[0] == "CREATE") {
             createAccount($loginArray[1], $loginArray[2], $loginArray[3], $sock);

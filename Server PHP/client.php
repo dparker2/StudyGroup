@@ -7,7 +7,7 @@ if (!$fp)
 }
 else
 {
-    $out = "LOGIN fuller testpass \n";
+    $out = "00021LOGIN fuller testpass \n";
     ///Send data
     fwrite($fp, $out);
 
