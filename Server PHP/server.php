@@ -89,6 +89,12 @@ while(true) {
           elseif ($loginArray[0] == "JOINGRP") {
             joinGroup($loginArray[1], $client[$ip][1], $sock);
           }
+          elseif ($loginArray[0] == "CHNGPASS") {
+            changePassword($loginArray[1], $loginArray[2], $sock);
+          }
+          elseif ($loginArray[0] == "RECOVERACC") {
+            recoverAccount($loginArray[1], $sock);
+          }          
         }
     }
 }
