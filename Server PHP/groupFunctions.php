@@ -32,7 +32,8 @@ function createGroup($groupname, $ip, $clients, $sock)
     CreatorName varchar(50), userList varchar(20), ipAddress varchar(50),
     user varchar(20), Clock time, Message varchar(255)
   )";
-  $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList, ipAddress) VALUES ("$clients[$ip][1]", "$clients[$ip][1]", "$ip")";
+  $username = $clients[$ip][1];
+  $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList, ipAddress) VALUES ('$username', '$username', '$ip')";
   if ($groupID_exists > 0)
 {
   $sendback = "FAIL\n";
@@ -43,9 +44,9 @@ function createGroup($groupname, $ip, $clients, $sock)
       mysqli_query($connection, $insertUserAdmin);
       $sendback = "SUCC";
       $message = "{$sendback}{$groupID} {$clients[$ip][1]}";
-      echo "$message";
+      //echo "$message";
       $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-      fwrite($sock, "{$messageSize}{$message}");
+      fwrite($clients[$ip][0], "{$messageSize}{$message}");
 
     }
   if($connection->close()) {
@@ -70,9 +71,10 @@ function joinGroup($groupname, $ip, $clients, $sock) {
     mysqli_stmt_close($stmt);
   }
 
+  $username = $clients[$ip][1];
   $return_userList = "SELECT userList FROM $groupname";
   $return_ipList = "SELECT ipAddress FROM $groupname";
-  $join_group = "INSERT INTO $groupname (userList, ipAddress) VALUES ("$clients[$ip][1]", "$ip")";
+  $join_group = "INSERT INTO $groupname (userList, ipAddress) VALUES ('$username', '$ip')";
   if ($groupname_exists > 0) {
     $result = mysqli_query($connection, $return_userList);
     $row_count = $result->num_rows;
@@ -87,8 +89,9 @@ function joinGroup($groupname, $ip, $clients, $sock) {
         $rowIP = mysqli_fetch_array($resultIP);
         $currIP = $clients[$rowIP][0];
         for($num_user; $num_user > 0; $num_user = $num_user - 1){
-        $row=mysqli_fetch_array($resultUsers);
-        fwrite($currIP,"$row[0]\n");
+          $row=mysqli_fetch_array($resultUsers);
+          fwrite($currIP,"$row[0]\n");
+          fwrite($currIP, "LOLOL LESS GOOO");
         }
         $num_ip = $num_ip - 1;
       }
