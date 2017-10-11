@@ -63,8 +63,10 @@ while(true) {
         //send the message back to client
         else {
           $ip = stream_socket_get_name($sock, true);
-          echo "THIS IS YOUR MESSAGE: $data";
+          echo "THIS IS YOUR MESSAGE: ";
+          echo $data;
           $loginArray = explode(" ", $data);
+          var_dump($loginArray);
 
           if ($loginArray[0] == "CREATE") {
             createAccount($loginArray[1], $loginArray[2], $loginArray[3], $sock);

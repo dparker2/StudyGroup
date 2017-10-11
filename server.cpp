@@ -44,8 +44,8 @@ server::server(QObject *parent) : QObject(parent)
 void server::connect_server()
 {
     // Connect the socket to the host
-    //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    my_socket->connectToHost("localhost", 9001);
+    my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
+    //my_socket->connectToHost("localhost", 9001);
     // If it ever disconnects (including while trying this), the socket will
     // continuously try to reconnect. See reconnect_socket().
 }
@@ -57,8 +57,7 @@ void server::connect_server()
 bool server::login(QString& username, QString& password)
 {
     // Socket connected at this point, pass through info
-    //my_socket->write(format_socket_request("LOGN", QString(username+" "+password)));
-    my_socket->write(QString("LOGIN "+username+" "+password).toLatin1());
+    my_socket->write(format_socket_request("LOGN", QString(username+" "+password)));
     QString reply;
     this->username = username;
     return read_socket_helper(reply); // TODO: Handle receiving the email when it is passed back in reply
@@ -89,6 +88,10 @@ bool server::join_group(QString &group_id)
     QString _str;
     return read_socket_helper(_str);
 }
+
+/*
+ * Until UserAccount gets usable
+ */
 
 QString server::get_username()
 {
@@ -167,13 +170,13 @@ void server::read_socket_send_signal()
  *
  */
 
-QByteArray server::format_socket_request(const QString &request_code, QString request_arg)
+QString server::format_socket_request(const QString &request_code, QString request_arg)
 {
     QString full_request = request_code + request_arg;
     QString request_length = QString::number(full_request.size());
-
-    qDebug() << "Sending: " << full_request.prepend(request_length.rightJustified(5, '0', true));
-    return full_request.prepend(request_length.rightJustified(5, '0', true)).toLatin1();
+    full_request = full_request.prepend(request_length.rightJustified(5, '0', true));
+    qDebug() << "Sending: " << full_request;
+    return full_request;
 }
 
 bool server::read_socket_helper(QString& out_message)
