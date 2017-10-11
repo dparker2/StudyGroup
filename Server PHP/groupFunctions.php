@@ -42,7 +42,7 @@ function createGroup($groupname, $ip, $clients, $sock)
       mysqli_query($connection, $createGroupTable);
       mysqli_query($connection, $insertUserAdmin);
       $sendback = "SUCC";
-      $message = "{$sendback}{$groupID} {$username}";
+      $message = "{$sendback}{$groupID} {$clients[$ip][1]}";
       echo "$message";
       $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
       fwrite($sock, "{$messageSize}{$message}");
