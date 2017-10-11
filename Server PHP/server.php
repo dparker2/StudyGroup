@@ -73,6 +73,7 @@ while(true) {
             if(loginAccount($loginArray[1], $loginArray[2], $sock))
             {
               $clients[$ip][1] = $loginArray[1]; // Set username to clients dict
+              echo "WE DID IT";
             }
           }
           elseif ($loginArray[0] == "LOGOUT") {
