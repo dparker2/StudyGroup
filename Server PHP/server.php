@@ -52,8 +52,9 @@ while(true) {
         // $clients[$ip][1] is equal to the username AFTER successful login
 
         $data = fread($sock, 5);
-        $bytes = (int)$data;
-        $newdata = fread($sock, $bytes);
+        if ($data > 0) {
+          $bytes = (int)$data;
+          $newdata = fread($sock, $bytes);}
         if(!$data)
         {
             var_dump(array_search($sock, array_column($clients, 0)));
@@ -66,37 +67,35 @@ while(true) {
         else {
           $ip = stream_socket_get_name($sock, true);
 
-          echo "THIS IS YOUR MESSAGE: $newdata";
           //Takes in the first 5 bytes as to determine length of message.
-          $firstfive = substr($data, 0, 5);
-          $bytes = (int)$firstfive;
-          $message = substr($data, 5, $bytes);
-          $loginArray = explode(" ", $data);  //Puts message into array
+          $code = substr($newdata, 0, 4);
+          $message = substr($newdata, 4, $bytes);
+          echo "THIS IS THE MESSAGE $code: $message \n";
+          $loginArray = explode(" ", $message);  //Puts message into array
 
-          if ($loginArray[0] == "CACC") {
-            createAccount($loginArray[1], $loginArray[2], $loginArray[3], $sock);
+          if ($code == "CACC") {
+            createAccount($loginArray[0], $loginArray[1], $loginArray[2], $sock);
           }
-          elseif ($loginArray[0] == "LOGN") {
-            echo "GOING IN \n";
-            if(loginAccount($loginArray[1], $loginArray[2], $sock))
+          elseif ($code == "LOGN") {
+            if(loginAccount($loginArray[0], $loginArray[1], $sock))
             {
-              $clients[$ip][1] = $loginArray[1]; // Set username to clients dict
+              $clients[$ip][1] = $loginArray[0]; // Set username to clients dict
             }
           }
-          elseif ($loginArray[0] == "LOGT") {
+          elseif ($code == "LOGT") {
             logoutAccount($client[$ip][1], $sock);
           }
-          elseif ($loginArray[0] == "CGRP") {
-            createGroup($loginArray[1], $ip, $clients, $sock);
+          elseif ($code == "CGRP") {
+            createGroup($loginArray[0], $ip, $clients, $sock);
           }
-          elseif ($loginArray[0] == "JGRP") {
-            joinGroup($loginArray[1], $ip, $clients, $sock);
+          elseif ($code == "JGRP") {
+            joinGroup($loginArray[0], $ip, $clients, $sock);
           }
-          elseif ($loginArray[0] == "CHPW") {
-            changePassword($client[$ip][1], $loginArray[2], $sock);
+          elseif ($code == "CHPW") {
+            changePassword($client[$ip][1], $loginArray[1], $sock);
           }
-          elseif ($loginArray[0] == "RACC") {
-            recoverAccount($loginArray[1], $sock);
+          elseif ($code == "RACC") {
+            recoverAccount($loginArray[0], $sock);
           }
         }
     }

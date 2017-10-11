@@ -43,8 +43,8 @@ function createGroup($groupname, $ip, $clients, $sock)
       mysqli_query($connection, $createGroupTable);
       mysqli_query($connection, $insertUserAdmin);
       $sendback = "SUCC";
-      $message = "{$sendback}{$groupID} {$clients[$ip][1]}";
-      //echo "$message";
+      $message = "{$sendback}{$groupID}";
+      echo "$message";
       $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
       fwrite($clients[$ip][0], "{$messageSize}{$message}");
 
@@ -85,13 +85,17 @@ function joinGroup($groupname, $ip, $clients, $sock) {
       $num_user = $resultUsers->num_rows;
       $resultIP = mysqli_query($connection, $return_ipList);
       $num_ip = $resultIP->num_rows;
+      echo "Debugging: num_user = $num_user and num_ip = $num_ip \n";
       while($num_ip > 0) {
         $rowIP = mysqli_fetch_array($resultIP);
-        $currIP = $clients[$rowIP][0];
-        for($num_user; $num_user > 0; $num_user = $num_user - 1){
+        echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
+        $keyIP = $rowIP[0];
+        $keySock = $clients[$keyIP][0];
+        echo "Debugging: This is keySock we're writing to: $keySock \n";
+        for($n_user = $num_user; $n_user > 0; $n_user = $n_user - 1){
           $row=mysqli_fetch_array($resultUsers);
-          fwrite($currIP,"$row[0]\n");
-          fwrite($currIP, "LOLOL LESS GOOO");
+          echo "$row[0] \n";
+          fwrite($keySock,"$row[0]\n");
         }
         $num_ip = $num_ip - 1;
       }

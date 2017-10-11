@@ -7,7 +7,7 @@ if (!$fp)
 }
 else
 {
-    $out = "00015JGRP lesgo_6759 \n";
+    $out = "00019LOGNfuller testpass \n";
     ///Send data
     fwrite($fp, $out);
 

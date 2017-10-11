@@ -57,31 +57,10 @@ void server::connect_server()
 bool server::login(QString& username, QString& password)
 {
     // Socket connected at this point, pass through info
-
-    // Determine size of message, which is length(username)+length(password)+6 (for 2 spaces and 4 letter code)
-    //QString message_length = username.length() + password.length() + 6;
-
-    my_socket->write(QString("LOGN "+username+" "+password).toLatin1());
-    qDebug() << "Sending info...";
-    success_flag = false;
-    fail_flag = false;
-    success_message = nullptr;
-    if(my_socket->waitForReadyRead(5000))
-    {
-        QString server_response = my_socket->readAll();
-        qDebug() << "Server Response: " << server_response;
-        if(success_flag)
-        {
-            return true;
-        }
-
-        if(fail_flag)
-        {
-            return false; // Wrong info
-        }
-    }
-
-    return false; // Timeout
+    my_socket->write(format_socket_request("LOGN", QString(username+" "+password)));
+    QString reply;
+    this->username = username;
+    return read_socket_helper(reply); // TODO: Handle receiving the email when it is passed back in reply
 }
 
 bool server::create_account(QString& username, QString& password, QString& email)
