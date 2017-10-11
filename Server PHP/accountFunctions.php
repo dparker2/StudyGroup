@@ -131,27 +131,27 @@ function logoutAccount($username, $sock) {
 
 //unfinished code to change a users password
 function changePassword($username, $password, $sock) {
-  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name):
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
   if ($connection -> connect_error)
     die("connection failed: " . $conn->connect_error);
   else
     echo "Connected to database \n";
-  
-  // UI should now send a 'they did it' message and a new password 
-  $newPass = nul; //new pass from UI goes here	
+
+  // UI should now send a 'they did it' message and a new password
+  $newPass = nul; //new pass from UI goes here
   $change_password = "UPDATE UserInfo SET Pass= 'newPass' WHERE Username = '$username'";
   if (mysqli_query($connection, $change_password)) {
     fwrite($sock, "SUCC\n");
   }
   else {
     fwrite($sock, "FAIL\n");
-  }	
-	
+  }
+
   if ($connection->close()) {
     echo "Database Closed \n";
   }
-	
+
 }
 
 // unfinised account recovery

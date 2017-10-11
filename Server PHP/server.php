@@ -67,34 +67,32 @@ while(true) {
           //Takes in the first 5 bytes as to determine length of message.
           $bytes = (int)(substr($data, 0, 5));
           $message = substr($data, 5, $bytes);
-          $loginArray = explode(" ", $message);
-          echo "$loginArray[0], $loginArray[1], $loginArray[2] \n";
+          $loginArray = explode(" ", $message);  //Puts message into array
 
-          if ($loginArray[0] == "CREATE") {
+          if ($loginArray[0] == "CACC") {
             createAccount($loginArray[1], $loginArray[2], $loginArray[3], $sock);
           }
-          elseif ($loginArray[0] == "LOGIN") {
+          elseif ($loginArray[0] == "LOGN") {
             if(loginAccount($loginArray[1], $loginArray[2], $sock))
             {
               $clients[$ip][1] = $loginArray[1]; // Set username to clients dict
-              echo "WE DID IT";
             }
           }
-          elseif ($loginArray[0] == "LOGOUT") {
+          elseif ($loginArray[0] == "LOGT") {
             logoutAccount($client[$ip][1], $sock);
           }
-          elseif ($loginArray[0] == "CREATEGRP") {
-            createGroup($loginArray[1], $client[$ip][1], $sock);
+          elseif ($loginArray[0] == "CGRP") {
+            createGroup($loginArray[1], $ip, $clients, $sock);
           }
-          elseif ($loginArray[0] == "JOINGRP") {
-            joinGroup($loginArray[1], $client[$ip][1], $sock);
+          elseif ($loginArray[0] == "JGRP") {
+            joinGroup($loginArray[1], $ip, $clients, $sock);
           }
-          elseif ($loginArray[0] == "CHNGPASS") {
-            changePassword($loginArray[1], $loginArray[2], $sock);
+          elseif ($loginArray[0] == "CPAS") {
+            changePassword($client[$ip][1], $loginArray[2], $sock);
           }
-          elseif ($loginArray[0] == "RECOVERACC") {
+          elseif ($loginArray[0] == "RACC") {
             recoverAccount($loginArray[1], $sock);
-          }          
+          }
         }
     }
 }

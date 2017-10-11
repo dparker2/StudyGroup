@@ -2,7 +2,7 @@
 // Create a new group given username input
 include_once 'db_credentials.php';
 
-function createGroup($groupname, $username, $sock)
+function createGroup($groupname, $ip, $clients, $sock)
 {
   // Create connection
   $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
@@ -32,7 +32,7 @@ function createGroup($groupname, $username, $sock)
     CreatorName varchar(50), userList varchar(20),
     user varchar(20), Clock time, Message varchar(255)
   )";
-  $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList) VALUES ('$username', '$username')";
+  $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList) VALUES ("$clients[$ip][1]", "$clients[$ip][1]")";
   if ($groupID_exists > 0)
 {
   $sendback = "FAIL\n";
@@ -53,7 +53,7 @@ function createGroup($groupname, $username, $sock)
   }
 }
 
-function joinGroup($groupname, $username, $sock) {
+function joinGroup($groupname, $username, $clients, $sock) {
   // Create connection
   $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
