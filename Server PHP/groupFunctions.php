@@ -28,7 +28,6 @@ function createGroup($groupname, $ip, $clients, $sock)
   //if group name exists, return failure. else, run query and create table for group
   //$insert = "INSERT INTO GroupNames (groupname) VALUES ('$groupID')";
   $createGroupTable = "CREATE TABLE $groupID (
-
     CreatorName varchar(50), userList varchar(20), ipAddress varchar(50),
     user varchar(20), Clock time, Message varchar(255)
   )";
@@ -80,20 +79,22 @@ function joinGroup($groupname, $ip, $clients, $sock) {
     $row_count = $result->num_rows;
     if ($row_count < 4) {
       mysqli_query($connection, $join_group);
-      //$resultUsers = mysqli_query($connection, $return_userList);
-      //$num_user = $resultUsers->num_rows;
+      
       $resultIP = mysqli_query($connection, $return_ipList);
       $num_ip = $resultIP->num_rows;
       fwrite($sock, "00004SUCC");
       while($num_ip > 0) {
         $resultUsers = mysqli_query($connection, $return_userList);
         $num_user = $resultUsers->num_rows;
+        
         $rowIP = mysqli_fetch_array($resultIP);
         echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
+        
         $keyIP = $rowIP[0];
         $keySock = $clients[$keyIP][0];
         echo "Debugging: This is keySock we're writing to: $keySock \n";
         fwrite($keySock, "00004USCH");
+        
         for($n_user = $num_user; $n_user > 0; $n_user = $n_user - 1){
           $row=mysqli_fetch_array($resultUsers);
           $name = $row[0];
@@ -106,10 +107,12 @@ function joinGroup($groupname, $ip, $clients, $sock) {
         $num_ip = $num_ip - 1;
       }
     }
+    
     else {
       fwrite($sock, "00016FAILMax Capacity");
     }
   }
+  
   else {
     fwrite($sock, "00004FAIL");
   }
