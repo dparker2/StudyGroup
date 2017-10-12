@@ -5,6 +5,7 @@ GroupWidget::GroupWidget(QWidget *parent) : QWidget(parent)
 {
     // First make the required layouts to fill everything into
     main_layout = new QGridLayout();
+    username_layout = new QVBoxLayout();
 
     // Tackle username area first.
     username_layout->setDirection(QBoxLayout::BottomToTop);
