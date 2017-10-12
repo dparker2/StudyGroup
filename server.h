@@ -25,9 +25,10 @@ public:
 
 signals:
     void disconnected();
-    void new_chat(QString&);
-    void user_joined(QString&);
-    void user_left(QString&);
+    void new_chat(QString);
+    void users_changed();
+    void user_joined(QString);
+    void user_left(QString);
 
 public slots:
     void reconnect_socket(QAbstractSocket::SocketState);

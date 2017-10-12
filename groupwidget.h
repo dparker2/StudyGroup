@@ -17,9 +17,10 @@ public:
 signals:
 
 public slots:
-    void new_chat(QString& message);
-    void user_joined(QString& username);
-    void user_left(QString& username);
+    void new_chat(QString message);
+    void users_changed();
+    void user_joined(QString username);
+    void user_left(QString username);
 
     void on_submit_chat_released();
 

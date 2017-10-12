@@ -36,7 +36,7 @@ function createGroup($groupname, $ip, $clients, $sock)
   $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList, ipAddress) VALUES ('$username', '$username', '$ip')";
   if ($groupID_exists > 0)
 {
-  $sendback = "FAIL\n";
+  $sendback = "00004FAIL";
   fwrite($sock, $sendback);
 }
   else {
@@ -84,6 +84,7 @@ function joinGroup($groupname, $ip, $clients, $sock) {
       //$num_user = $resultUsers->num_rows;
       $resultIP = mysqli_query($connection, $return_ipList);
       $num_ip = $resultIP->num_rows;
+      fwrite($sock, "00004SUCC");
       while($num_ip > 0) {
         $resultUsers = mysqli_query($connection, $return_userList);
         $num_user = $resultUsers->num_rows;
@@ -106,11 +107,11 @@ function joinGroup($groupname, $ip, $clients, $sock) {
       }
     }
     else {
-      fwrite($sock, "FAIL. Max Capacity \n");
+      fwrite($sock, "00016FAILMax Capacity");
     }
   }
   else {
-    fwrite($sock, "FAIL\n");
+    fwrite($sock, "00004FAIL");
   }
 
   if($connection->close()) {
