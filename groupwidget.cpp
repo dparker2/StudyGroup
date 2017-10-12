@@ -5,9 +5,10 @@ GroupWidget::GroupWidget(QWidget *parent) : QWidget(parent)
 {
     // First make the required layouts to fill everything into
     main_layout = new QGridLayout();
-    username_layout = new QVBoxLayout;
+    username_layout = new QVBoxLayout();
 
     // Tackle username area first.
+    username_layout->setDirection(QBoxLayout::BottomToTop);
     username_layout->addItem(new QSpacerItem(200, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     // Now put that layout inside the main layout, on the right side spanning all the way down
     main_layout->addLayout(username_layout, 0, 2, -1, 1);
@@ -29,17 +30,29 @@ GroupWidget::GroupWidget(QWidget *parent) : QWidget(parent)
     this->setLayout(main_layout);
 }
 
-void GroupWidget::new_chat(QString &message)
+void GroupWidget::new_chat(QString message)
 {
 
 }
 
-void GroupWidget::user_joined(QString &username)
+void GroupWidget::users_changed()
 {
+    QLayoutItem* item;
+    while ( ( item = username_layout->takeAt( 0 ) ) != NULL )
+    {
+        delete item->widget();
+        delete item;
+    }
+    username_layout->addItem(new QSpacerItem(200, 0, QSizePolicy::Minimum, QSizePolicy::Expanding)); // Add the spacer
+}
+
+void GroupWidget::user_joined(QString username)
+{
+    //username_layout->removeWidget()
     username_layout->addWidget(new QLabel(username));
 }
 
-void GroupWidget::user_left(QString &username)
+void GroupWidget::user_left(QString username)
 {
 
 }
