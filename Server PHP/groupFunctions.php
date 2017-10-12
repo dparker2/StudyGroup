@@ -33,7 +33,7 @@ function createGroup($groupname, $ip, $clients, $sock)
   $username = $clients[$ip][1]; //Takes username from dict. $clients.
   $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList, ipAddress) VALUES ('$username', '$username', '$ip')";
   if ($groupID_exists > 0) {
-    $sendback = "00004FAIL";  //Sends back fail if group already exists.
+    $sendback = "00024FAILGroup already exists";  //Sends back fail if group already exists.
     fwrite($sock, $sendback);
   }
   else { // Runs queries and creates group, adding the current user as the user admin/creator
@@ -115,7 +115,7 @@ function joinGroup($groupname, $ip, $clients, $sock) {
     }
   }//closes if statement for group exists
   else {
-    fwrite($sock, "00020FAILGroupname Exists"); //Fail case that groupname already exists, or doesn't exist.
+    fwrite($sock, "00023FAILGroup Doesn't Exist"); //Fail case that groupname doesn't exist
   }
 
   if($connection->close()) {
