@@ -69,7 +69,6 @@ function createAccount($username, $password, $email, $sock) {
 function loginAccount($username, $password, $sock){
   // Create connection
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
-  $return_bool = false;
 
   // Check connection
     if ($connection->connect_error)
@@ -88,7 +87,6 @@ function loginAccount($username, $password, $sock){
         $obj = $result->fetch_object();
         if ($obj->Pass == $password){
           fwrite($sock, "SUCC\n");
-          $return_bool = true;
           mysqli_query($connection, $change_online);
         }
         else
@@ -105,8 +103,6 @@ function loginAccount($username, $password, $sock){
   if ($connection->close()) {
     echo "Database Closed\n";
   }
-
-  return $return_bool;
 }
 
 function logoutAccount($username, $sock) {
@@ -162,7 +158,7 @@ function recoverAccount($email, $sock) {
     die("Connection failed: " . $conn->connect_error);
   else
     echo "Connected to database \n";
-
+  
   //check if email exists before attempting to send recovery email, will return error otherwise.
   $check_email = "SELECT Email FROM UserInfo WHERE Email = '$email'";
   $change_password = "UPDATE UserInfo SET Pass= '$newPass' WHERE Email = '$email'";
@@ -173,21 +169,21 @@ function recoverAccount($email, $sock) {
       // create random id to be sent via email, save it in db
       $rID = rand(10000000, 99999999);
       $insertRecoveryTable = "INSERT INTO AccountRecovery (email, rID) VALUES ('$email', '$rID')";
-
+  		
       // UI should now send a 'they did it' message and a new password
       $newPass = //new pass from UI goes here
       mysqli_query($connection, $change_password);
     }
     else
       fwrite($sock, "FAIL\n");
-
+    
     mysqli_free_result($result1);
   }
-
+	
 if ($connection->close()){
   echo "Database Closed \n";
   }
-
+	
 }
 
 ?>

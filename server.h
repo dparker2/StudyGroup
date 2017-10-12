@@ -41,8 +41,7 @@ private:
     bool fail_flag;    // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.
     QString success_message; // ***Always set this to nullptr before checking, ONLY to be set by the read_socket_send_signal() function.
 
-    QByteArray format_socket_request(const QString& request_code, QString request_arg);
-    bool read_socket_helper(QString& out_message);
+    QString message_length_string(QString& input_string);
 };
 
 #endif // SERVER_H
