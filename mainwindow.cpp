@@ -14,10 +14,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
-    ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
+    ui->label_logo->setPixmap(logo.scaled(300,350,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
-    QPixmap logo2(":/resources/img/GSLogoName2.png");    // StudyGroup2 logo
-    ui->inner_label_logo->setPixmap(logo2.scaled(500,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
+    QPixmap logo2(":/resources/img/GSLogoName1.png");    // StudyGroup2 logo
+    ui->inner_label_logo->setPixmap(logo2.scaled(200,250,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
+
 
     // check/X icons are hidden initially
     ui->label_username_check->hide();
@@ -50,6 +51,9 @@ void MainWindow::on_signin_button_clicked()
     if(my_serv->login(username, password)) {
         // Now logged in!
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
+    }
+    else{
+        ui->label_signin_error->setText("Unable to connect. Try again.");
     }
 
 }
