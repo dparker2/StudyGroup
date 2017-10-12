@@ -115,7 +115,7 @@ function joinGroup($groupname, $ip, $clients, $sock) {
     }
   }//closes if statement for group exists
   else {
-    fwrite($sock, "00004FAIL"); //Fail case that username already exists, or doesn't exist.
+    fwrite($sock, "00020FAILGroupname Exists"); //Fail case that groupname already exists, or doesn't exist.
   }
 
   if($connection->close()) {
