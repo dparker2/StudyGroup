@@ -57,8 +57,6 @@ private slots:
 
     void on_join_group_button_released();
 
-    void on_backdoorButton_released();
-
 private:
     Ui::MainWindow *ui;
     server *my_serv;
