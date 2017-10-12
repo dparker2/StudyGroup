@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap wrench(":/resources/img/wrench.png");    // StudyGroup2 logo
     QIcon setting_btn(wrench);
     ui->settings_button->setIcon(setting_btn);
-    ui->settings_button->setIconSize(QSize(25,25));    // Resize to fit
+    ui->settings_button->setIconSize(QSize(30,30));    // Resize to fit
 
 
     // check/X icons are hidden initially
@@ -53,6 +53,8 @@ void MainWindow::on_signin_button_clicked()
     if(my_serv->login(username, password)) {
         // Now logged in!
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
+        ui->settings_username->setText(username);
+        ui->settings_email->setText("mail@mail.com");
     }
     else{
         ui->label_signin_error->setText("Unable to connect. Try again.");
@@ -81,10 +83,10 @@ void MainWindow::on_singup_button_clicked()
 
         my_serv->create_account(email, username, password);
 
-        qDebug() << "Ready To Send";
+        //qDebug() << "Ready To Send";
     }
     else{
-        qDebug() << "ready? "<< ready_to_send; // test
+        //qDebug() << "ready? "<< ready_to_send; // test
         // error message sign up form not complete?
     }
 }
