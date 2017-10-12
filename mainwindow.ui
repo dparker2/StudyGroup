@@ -46,7 +46,7 @@
        <string notr="true">background-color: none;</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="login_page">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -162,7 +162,7 @@
 background-color: #283035;</string>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab_sign_in">
            <attribute name="title">
@@ -1220,6 +1220,26 @@ padding: 8px 12px 8px 12px;
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton#create_button{
+background-color: #ff6247;
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border-style: outset;
+border-color: #aaa;
+border-top: 1px solid;
+border-left: 1px solid;
+
+}
+
+QPushButton#create_button:pressed{
+border-style: inset;
+border-color: rgba(30,33,36, 255);
+border-top: 2px  solid;
+border-left: 1px solid;
+}</string>
+              </property>
               <property name="text">
                <string>Create Group</string>
               </property>
@@ -1235,6 +1255,12 @@ padding: 8px 12px 8px 12px;
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: #ff6247;
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;</string>
               </property>
               <property name="text">
                <string>Join Group</string>
