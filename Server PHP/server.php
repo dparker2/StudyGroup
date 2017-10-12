@@ -15,14 +15,14 @@ $clients = array(); // $ip => ($socket, $username)
 while(true) {
     echo "Listening \n";
     //prepare readable sockets
-    echo "Clients:\n";
-    var_dump($clients);
+    //echo "Clients:\n";
+    //var_dump($clients);
 
     $read_socks = array_column($clients, 0);
     $read_socks[] = $server;
 
-    echo "Readable sockets:\n";
-    var_dump($read_socks);
+    //echo "Readable sockets:\n";
+    //var_dump($read_socks);
 
     //start reading and use a large timeout
     if(!stream_select ( $read_socks, $write, $except, 300000 ))

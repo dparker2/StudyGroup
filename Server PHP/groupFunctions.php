@@ -81,12 +81,13 @@ function joinGroup($groupname, $ip, $clients, $sock) {
     if ($row_count < 4) {
       fwrite($sock, "SUCC\n");
       mysqli_query($connection, $join_group);
-      $resultUsers = mysqli_query($connection, $return_userList);
-      $num_user = $resultUsers->num_rows;
+      //$resultUsers = mysqli_query($connection, $return_userList);
+      //$num_user = $resultUsers->num_rows;
       $resultIP = mysqli_query($connection, $return_ipList);
       $num_ip = $resultIP->num_rows;
-      echo "Debugging: num_user = $num_user and num_ip = $num_ip \n";
       while($num_ip > 0) {
+        $resultUsers = mysqli_query($connection, $return_userList);
+        $num_user = $resultUsers->num_rows;
         $rowIP = mysqli_fetch_array($resultIP);
         echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
         $keyIP = $rowIP[0];
@@ -94,8 +95,12 @@ function joinGroup($groupname, $ip, $clients, $sock) {
         echo "Debugging: This is keySock we're writing to: $keySock \n";
         for($n_user = $num_user; $n_user > 0; $n_user = $n_user - 1){
           $row=mysqli_fetch_array($resultUsers);
-          echo "$row[0] \n";
-          fwrite($keySock,"$row[0]\n");
+          $name = $row[0];
+          echo "Debugging: We are writing $row[0] to $keyIP with socket $keySock \n";
+          $message = "NUSR $name";
+          $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
+          fwrite($keySock,"{$messageSize}{$message}");
+          echo "Client should be receiving: {$messageSize}{$message} \n";
         }
         $num_ip = $num_ip - 1;
       }
