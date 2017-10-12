@@ -294,8 +294,8 @@ void MainWindow::on_create_group_button_released()
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
         QString name = user_info->getUsername();
         group_widget->user_joined(name);
-        QString chat = "12:43am - User1: Hello!";
-        group_widget->new_chat(chat);
+
+        ui->groupid_label->setText("GroupID: "+group_id);
 
         connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
@@ -313,8 +313,8 @@ void MainWindow::on_join_group_button_released()
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
         QString name = user_info->getUsername();
         group_widget->user_joined(name);
-        QString chat = "12:43am - User1: Hello!";
-        group_widget->new_chat(chat);
+
+        ui->groupid_label->setText("GroupID: "+group_id);
 
         connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
