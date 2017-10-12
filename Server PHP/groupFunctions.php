@@ -1,7 +1,7 @@
 <?php
-// Create a new group given username input
 include_once 'db_credentials.php';
 
+// Create a new group given username input
 function createGroup($groupname, $ip, $clients, $sock)
 {
   // Create connection
@@ -114,6 +114,7 @@ function joinGroup($groupname, $ip, $clients, $sock) {
       fwrite($sock, "00016FAILMax Capacity"); //Fail case for max capcity.
     }
   }//closes if statement for group exists
+  
   else {
     fwrite($sock, "00023FAILGroup Doesn't Exist"); //Fail case that groupname doesn't exist
   }

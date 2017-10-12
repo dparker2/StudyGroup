@@ -1,6 +1,6 @@
 <?php
 //Functions for Account Creation
-//Create Account, LOGIN, LOGOUT.
+//Create Account, LOGIN, LOGOUT, change password, recover account using email / recovery questions.
 include_once 'db_credentials.php';
 
 function createAccount($email, $username, $password, $sock) {
@@ -64,8 +64,6 @@ function createAccount($email, $username, $password, $sock) {
   }
 }
 
-
-
 function loginAccount($username, $password, $sock){
   // Create connection
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
@@ -108,13 +106,13 @@ function loginAccount($username, $password, $sock){
       $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
       fwrite($sock, "{$messageSize}{$message}");
     }
+    
     mysqli_free_result($resultUser);
   }//Closes Username Access
 
   if ($connection->close()) {
     echo "Database Closed\n";
   }
-
   return $return_bool;
 }
 
@@ -170,12 +168,11 @@ function changePassword($username, $password, $sock) {
   if ($connection->close()) {
     echo "Database Closed \n";
   }
-
 }
 
 
-// unfinised account recovery
-function recoverAccount($email, $sock) {
+// unfinised account recovery using email method
+function recoverAccount($email, $password, $sock) {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
   if ($connection -> connect_error)
@@ -195,7 +192,7 @@ function recoverAccount($email, $sock) {
       $insertRecoveryTable = "INSERT INTO AccountRecovery (email, rID) VALUES ('$email', '$rID')";
 
       // UI should now send a 'they did it' message and a new password
-      $newPass = //new pass from UI goes here
+      $newPass = '$password';//new pass from UI goes here
       mysqli_query($connection, $change_password);
     }
     else
@@ -207,7 +204,30 @@ function recoverAccount($email, $sock) {
 if ($connection->close()){
   echo "Database Closed \n";
   }
-
 }
 
+// account recovery using recovery question method.
+// requires UserInfo table to be updated with Question column
+// should recovery question itself be stored somewhere?
+// if recovery questions are mandatory, this function can be included in account creation
+function recoveryQset($username, $question, $sock) {
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
+  // Check connection
+  if ($connection -> connect_error)
+    die("Connection failed: " . $conn->connect_error);
+  else
+    echo "Connected to database \n";
+  
+  //store recovery question answer into the table
+  $setAnswer = "UPDATE UserInfo set Question = 'question' WHERE Username = 'username'";
+  if (mysqli_query($connection, $setAnswer)) {
+    fwrite($sock, "SUCC\n");
+  }
+  else {
+    fwrite($sock, "FAIL\n");
+  }
+
+  if ($connection->close()) {
+    echo "Database Closed \n";
+  }
 ?>
