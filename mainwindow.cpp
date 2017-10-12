@@ -16,8 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(300,350,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
-    QPixmap logo2(":/resources/img/GSLogoName1.png");    // StudyGroup2 logo
-    ui->inner_label_logo->setPixmap(logo2.scaled(200,250,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
+    QPixmap wrench(":/resources/img/wrench.png");    // StudyGroup2 logo
+    QIcon setting_btn(wrench);
+    ui->settings_button->setIcon(setting_btn);
+    ui->settings_button->setIconSize(QSize(25,25));    // Resize to fit
 
 
     // check/X icons are hidden initially
@@ -214,7 +216,7 @@ void MainWindow::on_lineEdit_password2_editingFinished()
 {
     QString password = ui->lineEdit_password2->text();
     if(password.isEmpty()){
-        ui->lineEdit_password2->setStyleSheet("color: black; background-color: white");
+        //ui->lineEdit_password2->setStyleSheet("color: white; background-color: gray");
     }
     else if(password == user_info->getPassword()){
         set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, "", 1);
