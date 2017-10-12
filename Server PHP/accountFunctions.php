@@ -1,6 +1,6 @@
 <?php
 //Functions for Account Creation
-//Create Account, LOGIN, LOGOUT.
+//Create Account, LOGIN, LOGOUT, change password, recover account using email / recovery questions.
 include_once 'db_credentials.php';
 
 function createAccount($username, $password, $email, $sock) {
