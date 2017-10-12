@@ -46,7 +46,7 @@
        <string notr="true">background-color: none;</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="login_page">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -162,7 +162,7 @@
  f</string>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_sign_in">
            <attribute name="title">
@@ -1200,7 +1200,7 @@ font: bold;</string>
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
