@@ -79,7 +79,6 @@ function joinGroup($groupname, $ip, $clients, $sock) {
     $result = mysqli_query($connection, $return_userList);
     $row_count = $result->num_rows;
     if ($row_count < 4) {
-      fwrite($sock, "SUCC\n");
       mysqli_query($connection, $join_group);
       //$resultUsers = mysqli_query($connection, $return_userList);
       //$num_user = $resultUsers->num_rows;
@@ -93,11 +92,12 @@ function joinGroup($groupname, $ip, $clients, $sock) {
         $keyIP = $rowIP[0];
         $keySock = $clients[$keyIP][0];
         echo "Debugging: This is keySock we're writing to: $keySock \n";
+        fwrite($keySock, "00004USCH");
         for($n_user = $num_user; $n_user > 0; $n_user = $n_user - 1){
           $row=mysqli_fetch_array($resultUsers);
           $name = $row[0];
           echo "Debugging: We are writing $row[0] to $keyIP with socket $keySock \n";
-          $message = "NUSR $name";
+          $message = "NUSR$name";
           $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
           fwrite($keySock,"{$messageSize}{$message}");
           echo "Client should be receiving: {$messageSize}{$message} \n";
