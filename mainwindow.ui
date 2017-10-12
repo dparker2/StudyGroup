@@ -14,7 +14,7 @@
    <string>StudyGroup</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: qconicalgradient(cx:0, cy:1, angle:161.299, stop:0.669951 rgba(0, 161, 216, 255), stop:0.926108 rgba(255, 255, 255, 255))</string>
+   <string notr="true">background-color:rgba(30,33,36, 255);</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -46,7 +46,7 @@
        <string notr="true">background-color: none;</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="login_page">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -159,10 +159,10 @@
           </property>
           <property name="styleSheet">
            <string notr="true">color: black;
- f</string>
+background-color: #283035;</string>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_sign_in">
            <attribute name="title">
@@ -241,8 +241,9 @@
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">background-color: white;
-</string>
+               <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
               </property>
               <property name="placeholderText">
                <string>Username</string>
@@ -270,7 +271,9 @@
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">background-color: white</string>
+               <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
               </property>
               <property name="inputMethodHints">
                <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
@@ -315,9 +318,11 @@
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">background-color: rgb(37, 216, 255);
+               <string notr="true">background-color: #ff6247;
 color: white; 
-font:bold;</string>
+font:bold;
+padding: 8px 12px 8px 12px;
+</string>
               </property>
               <property name="text">
                <string>Login</string>
@@ -407,6 +412,11 @@ font:bold;</string>
                 <width>16777215</width>
                 <height>30</height>
                </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
               </property>
               <property name="placeholderText">
                <string>Username</string>
@@ -509,9 +519,11 @@ font:bold;</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">background-color: rgb(37, 216, 255);
-color: white;
-font: bold;</string>
+               <string notr="true">background-color: #ff6247;
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+</string>
               </property>
               <property name="text">
                <string>Register</string>
@@ -587,7 +599,9 @@ font: bold;</string>
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">background-color:white;</string>
+               <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
               </property>
               <property name="echoMode">
                <enum>QLineEdit::Password</enum>
@@ -650,7 +664,9 @@ font: bold;</string>
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">background-color:white;</string>
+               <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
               </property>
               <property name="echoMode">
                <enum>QLineEdit::Password</enum>
@@ -731,7 +747,9 @@ font: bold;</string>
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">background-color:white;</string>
+               <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
               </property>
               <property name="placeholderText">
                <string>Email</string>
