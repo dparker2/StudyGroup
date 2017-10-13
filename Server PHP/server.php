@@ -2,27 +2,20 @@
 include 'accountFunctions.php';
 include 'groupFunctions.php';
 
-// $socket_tuple = ($socket, $username)
 $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage);
 
 //Returns error message if we fail to bind
-if ($server[0] === false)
+if ($server === false)
 {
     die("Failed to bind to socket:  $errorMessage \n");
 }
 
-$clients = array(); // $ip => ($socket, $username)
+$clients = array();
 while(true) {
     echo "Listening \n";
     //prepare readable sockets
-    //echo "Clients:\n";
-    //var_dump($clients);
-
-    $read_socks = array_column($clients, 0);
+    $read_socks = $clients;
     $read_socks[] = $server;
-
-    //echo "Readable sockets:\n";
-    //var_dump($read_socks);
 
     //start reading and use a large timeout
     if(!stream_select ( $read_socks, $write, $except, 300000 ))
@@ -38,7 +31,7 @@ while(true) {
         {
             //print remote client information, ip and port number
             echo 'Connection accepted from ' . stream_socket_get_name($new_client, true) . "\n";
-            $clients[stream_socket_get_name($new_client, true)] = array($new_client, "");
+            $clients[] = $new_client;
         }
         //delete the server socket from the read sockets
         unset($read_socks[ array_search($server, $read_socks) ]);
@@ -47,61 +40,40 @@ while(true) {
     //message from existing client
     foreach($read_socks as $sock)
     {
-        // We go through every client socket here.
-        // $ip holds the ip address of the client socket
-        // $clients[$ip][1] is equal to the username AFTER successful login
-
-        $data = fread($sock, 5);
-        if ($data > 0) {
-          $bytes = (int)$data;
-          $newdata = fread($sock, $bytes);}
+        $data = fread($sock, 128);
         if(!$data)
         {
-            var_dump(array_search($sock, array_column($clients, 0)));
-            unset($clients[ array_search($sock, array_map(function($item){return $item[0];}, $clients)) ]);
+            unset($clients[ array_search($sock, $clients) ]);
             @fclose($sock);
             echo "A client disconnected. Now there are total ". count($clients) . " clients.\n";
             continue;
         }
         //send the message back to client
         else {
-          $ip = stream_socket_get_name($sock, true);
+          echo "THIS IS YOUR MESSAGE: $data";
+          $loginArray = explode(" ", $data);
 
-          //Takes in the first 5 bytes as to determine length of message.
-          $code = substr($newdata, 0, 4);
-          $message = substr($newdata, 4, $bytes);
-          echo "THIS IS THE MESSAGE $code: $message \n";
-          $loginArray = explode(" ", $message);  //Puts message into array
-
-          if ($code == "CACC") {
-            createAccount($loginArray[0], $loginArray[1], $loginArray[2], $sock);
+          if ($loginArray[0] == "CREATE") {
+            createAccount($loginArray[1], $loginArray[2], $loginArray[3], $sock);
           }
-          elseif ($code == "LOGN") {
-            if(loginAccount($loginArray[0], $loginArray[1], $sock))
-            {
-              $clients[$ip][1] = $loginArray[0]; // Set username to clients dict
-            }
+          elseif ($loginArray[0] == "LOGIN") {
+            loginAccount($loginArray[1], $loginArray[2], $sock);
           }
-          elseif ($code == "LOGT") {
-            logoutAccount($client[$ip][1], $sock);
+          elseif ($loginArray[0] == "LOGOUT") {
+            logoutAccount($loginArray[1], $sock);
           }
-          elseif ($code == "CGRP") {
-            createGroup($loginArray[0], $ip, $clients, $sock);
+          elseif ($loginArray[0] == "CREATEGRP") {
+            createGroup($loginArray[1], $loginArray[2], $sock);
           }
-          elseif ($code == "JGRP") {
-            joinGroup($loginArray[0], $ip, $clients, $sock);
+          elseif ($loginArray[0] == "JOINGRP") {
+            joinGroup($loginArray[1], $loginArray[2], $sock);
           }
-          elseif ($code == "LGRP") {
-            leaveGroup($loginArray[0], $ip, $clients, $sock);
+          elseif ($loginArray[0] == "CHNGPASS") {
+            changePassword($loginArray[1], $loginArray[2], $sock);
           }
-          elseif ($code == "CHPW") {
-            changePassword($client[$ip][1], $loginArray[1], $sock);
-          }
-          elseif ($code == "RACC") {
-            recoverAccount($loginArray[0], $loginArray[1], $sock);
-          }
-          elseif ($code == "RARQ") {
-              recoveryQset($loginArray[0], $loginArray[1], $sock);
+          elseif ($loginArray[0] == "RECOVERACC") {
+            recoverAccount($loginArray[1], $sock);
+          }          
         }
     }
 }

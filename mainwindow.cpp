@@ -14,10 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
-    ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
+    ui->label_logo->setPixmap(logo.scaled(300,350,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
-    QPixmap logo2(":/resources/img/GSLogoName2.png");    // StudyGroup2 logo
-    ui->inner_label_logo->setPixmap(logo2.scaled(500,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
+    QPixmap wrench(":/resources/img/wrench.png");    // StudyGroup2 logo
+    QIcon setting_btn(wrench);
+    ui->settings_button->setIcon(setting_btn);
+    ui->settings_button->setIconSize(QSize(30,30));    // Resize to fit
+
 
     // check/X icons are hidden initially
     ui->label_username_check->hide();
@@ -49,12 +52,15 @@ void MainWindow::on_signin_button_clicked()
 
     if(my_serv->login(username, password)) {
         // Now logged in!
-        user_info->setUsername(username);
-        user_info->setPassword(password);
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
+        ui->settings_username->setText(username);
+        ui->settings_email->setText("mail@mail.com");
     }
-}
+    else{
+        ui->label_signin_error->setText("Unable to connect. Try again.");
+    }
 
+}
 void MainWindow::on_singup_button_clicked()
 {
     user_info->printReadyState();
@@ -77,10 +83,10 @@ void MainWindow::on_singup_button_clicked()
 
         my_serv->create_account(email, username, password);
 
-        qDebug() << "Ready To Send";
+        //qDebug() << "Ready To Send";
     }
     else{
-        qDebug() << "ready? "<< ready_to_send; // test
+        //qDebug() << "ready? "<< ready_to_send; // test
         // error message sign up form not complete?
     }
 }
@@ -97,7 +103,7 @@ void MainWindow::on_lineEdit_username_signup_editingFinished()
                                                                         // with error msg if not valid
     //qDebug() << valid;   testing
     if(username.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_username_signup->setStyleSheet("color:black; background-color:white");
+        //ui->lineEdit_username_signup->setStyleSheet("color:black; background-color:white");
     }
     if(valid){                         // sets valid username to UserAccounts username member
         user_info->setUsername(username);
@@ -123,7 +129,7 @@ void MainWindow::on_lineEdit_username_signup_textEdited()
  */
 void MainWindow::on_lineEdit_username_signup_cursorPositionChanged()
 {
-    ui->lineEdit_username_signup->setStyleSheet("color:black; background-color:white");
+    //ui->lineEdit_username_signup->setStyleSheet("color:black; background-color:white");
 }
 /*
  * Sign Up Check - Email
@@ -138,7 +144,7 @@ void MainWindow::on_lineEdit_email_editingFinished()
     bool valid = user_info->emailValidation(email, error_msg);      // returns if email is valid or not
                                                                     // with error msg if not valid
     if(email.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_email->setStyleSheet("color:black; background-color:white");
+        //ui->lineEdit_email->setStyleSheet("color:black; background-color:white");
     }
     else if(valid){                      // sets valid email to UserAccounts email member
         user_info->setEmail(email);
@@ -163,7 +169,7 @@ void MainWindow::on_lineEdit_email_textEdited()
  */
 void MainWindow::on_lineEdit_email_cursorPositionChanged()
 {
-    ui->lineEdit_email->setStyleSheet("color: black; background-color:white");
+    //ui->lineEdit_email->setStyleSheet("color: black; background-color:white");
 }
 /*
  * Sign Up Check - Password
@@ -177,7 +183,7 @@ void MainWindow::on_lineEdit_password1_editingFinished()
     bool valid = user_info->passwordValidtion(password,  error_msg);       // returns if password is valid or not
                                                                             // with error msg if not valid
     if(password.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_password1->setStyleSheet("color:black; background-color:white");
+        //ui->lineEdit_password1->setStyleSheet("color:black; background-color:white");
     }
     else if(valid){                        // sets valid password to UserAccounts password member
         user_info->setPassword(password);
@@ -201,7 +207,7 @@ void MainWindow::on_lineEdit_password1_textEdited()
  */
 void MainWindow::on_lineEdit_password1_cursorPositionChanged()
 {
-    ui->lineEdit_email->setStyleSheet("color: black; background-color:white");
+   //ui->lineEdit_email->setStyleSheet("color: black; background-color:#545454");
 }
 /*
  * Sign Up Check - Password (Second Input)
@@ -212,7 +218,7 @@ void MainWindow::on_lineEdit_password2_editingFinished()
 {
     QString password = ui->lineEdit_password2->text();
     if(password.isEmpty()){
-        ui->lineEdit_password2->setStyleSheet("color: black; background-color: white");
+        //ui->lineEdit_password2->setStyleSheet("color: white; background-color: gray");
     }
     else if(password == user_info->getPassword()){
         set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, "", 1);
@@ -233,16 +239,16 @@ void MainWindow::on_lineEdit_password2_textEdited()
 }
 void MainWindow::on_lineEdit_password2_cursorPositionChanged()
 {
-    ui->lineEdit_password2->setStyleSheet("color: black; background-color:white");
+    //ui->lineEdit_password2->setStyleSheet("color: black; background-color:white");
 }
 /*
  * Sets the stylesheet colors for invalid input
  */
 void MainWindow::invalid_label_stylesheet(QLabel* this_label, QLineEdit *this_line, QString error_msg){
     this_label->show();                           // becomes visible (hidden in constructor)
-    this_label->setStyleSheet("color:white");
+    //this_label->setStyleSheet("color:white");
     this_label->setText(error_msg);
-    this_line->setStyleSheet("color:white; background-color: rgb(20, 230, 180)");
+    //this_line->setStyleSheet("color:white; background-color: rgb(20, 230, 180)");
 }
 /*
  * Sets green check/X accordingly with given valid input. Outputs error message if needed
@@ -251,7 +257,7 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
     if(valid){
         QPixmap check_mark(":/resources/img/check_mark.png");
         this_label->setPixmap(check_mark.scaled(31,31,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-        this_line->setStyleSheet("color: black; background-color:white");
+        //this_line->setStyleSheet("color: black; background-color:white");
         this_label->show();
      }
      else{
@@ -292,13 +298,10 @@ void MainWindow::on_create_group_button_released()
         group_widget = new GroupWidget();
         ui->stackedWidget_inner->addWidget(group_widget);
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
-        QString name = user_info->getUsername();
+        QString name = group_id;
         group_widget->user_joined(name);
-
-        ui->groupid_label->setText("GroupID: "+group_id);
-
-        connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-        connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+        QString chat = "12:43am - User1: Hello!";
+        group_widget->new_chat(chat);
     }
 
 }
@@ -311,12 +314,9 @@ void MainWindow::on_join_group_button_released()
         group_widget = new GroupWidget();
         ui->stackedWidget_inner->addWidget(group_widget);
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
-        QString name = user_info->getUsername();
+        QString name = group_id;
         group_widget->user_joined(name);
-
-        ui->groupid_label->setText("GroupID: "+group_id);
-
-        connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-        connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+        QString chat = "12:43am - User1: Hello!";
+        group_widget->new_chat(chat);
     }
 }
