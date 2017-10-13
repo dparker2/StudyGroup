@@ -69,12 +69,10 @@ function joinGroup($groupID, $ip, $clients, $sock) {
     mysqli_stmt_close($stmt);
   }
 
-
-
   $username = $clients[$ip][1]; //Using client dict. to store username
+  //SQL Commands
   $return_userList = "SELECT userList FROM $groupID";
   $join_group = "INSERT INTO $groupID (userList, ipAddress) VALUES ('$username', '$ip')";
-
 
   if ($groupID_exists > 0) {
     $result = mysqli_query($connection, $return_userList);
