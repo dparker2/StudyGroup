@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     my_serv->connect_server();
     user_info = new UserAccount();
 
+
     // UI Connections
     connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
 
@@ -295,7 +296,7 @@ void MainWindow::on_create_group_button_released()
         QString name = user_info->getUsername();
         group_widget->user_joined(name);
 
-        ui->groupid_label->setText("GroupID: "+group_id);
+        //ui->groupid_label->setText("GroupID: "+group_id);
 
         connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
@@ -314,7 +315,7 @@ void MainWindow::on_join_group_button_released()
         QString name = user_info->getUsername();
         group_widget->user_joined(name);
 
-        ui->groupid_label->setText("GroupID: "+group_id);
+        //ui->groupid_label->setText("GroupID: "+group_id);
 
         connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));

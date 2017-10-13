@@ -98,8 +98,10 @@ while(true) {
             changePassword($client[$ip][1], $loginArray[1], $sock);
           }
           elseif ($code == "RACC") {
-            recoverAccount($loginArray[0], $sock);
+            recoverAccount($loginArray[0], $loginArray[1], $sock);
           }
+          elseif ($code == "RARQ") {
+              recoveryQset($loginArray[0], $loginArray[1], $sock);
         }
     }
 }
