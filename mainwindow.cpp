@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     my_serv->connect_server();
     user_info = new UserAccount();
 
+
     // UI Connections
     connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
 

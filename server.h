@@ -18,6 +18,7 @@ public:
     bool create_group(QString& group_name, QString& group_id);
     bool join_group(QString& group_id);
 
+
     // Access
     QString get_username();
     // Set

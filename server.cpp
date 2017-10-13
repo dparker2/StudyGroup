@@ -17,6 +17,7 @@ server::server(QObject *parent) : QObject(parent)
     // New information -> send appropriate signal
     connect(my_socket, SIGNAL(readyRead()), this, SLOT(read_socket_send_signal()));
 
+
     // Prints any socket errors to console
     connect(my_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
