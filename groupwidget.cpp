@@ -5,11 +5,7 @@ GroupWidget::GroupWidget(QWidget *parent) : QWidget(parent)
 {
     // First make the required layouts to fill everything into
     main_layout = new QGridLayout();
-<<<<<<< HEAD
     username_layout = new QVBoxLayout();
-=======
-    username_layout = new QVBoxLayout;
->>>>>>> parent of 4ff44b6... Merge branch 'master' of https://github.com/ParkerD559/StudyGroup
 
     // Tackle username area first.
     username_layout->addItem(new QSpacerItem(200, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
