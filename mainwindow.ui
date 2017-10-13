@@ -165,34 +165,25 @@
 background-color: #283035;</string>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab_sign_in">
            <attribute name="title">
             <string>Sign In</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_2">
-<<<<<<< HEAD
             <item row="5" column="0">
              <spacer name="verticalSpacer_17">
-=======
-            <item row="5" column="1">
-             <spacer name="verticalSpacer_4">
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeType">
-               <enum>QSizePolicy::Preferred</enum>
+               <enum>QSizePolicy::Maximum</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
-<<<<<<< HEAD
                 <height>20</height>
-=======
-                <height>50</height>
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
                </size>
               </property>
              </spacer>
@@ -229,7 +220,6 @@ background-color: #283035;</string>
               </property>
              </spacer>
             </item>
-<<<<<<< HEAD
             <item row="7" column="0">
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
@@ -303,9 +293,6 @@ padding: 8px 12px 8px 12px;
              </spacer>
             </item>
             <item row="2" column="0">
-=======
-            <item row="1" column="1">
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
              <widget class="QLineEdit" name="lineEdit_username">
               <property name="enabled">
                <bool>true</bool>
@@ -343,7 +330,6 @@ border-style:none;</string>
               </property>
              </widget>
             </item>
-<<<<<<< HEAD
             <item row="4" column="0">
              <widget class="QLineEdit" name="lineEdit_password">
               <property name="sizePolicy">
@@ -357,19 +343,9 @@ border-style:none;</string>
                 <width>300</width>
                 <height>35</height>
                </size>
-=======
-            <item row="2" column="2">
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
               </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Maximum</enum>
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
-              </property>
-              <property name="sizeHint" stdset="0">
+              <property name="maximumSize">
                <size>
-<<<<<<< HEAD
                 <width>16777215</width>
                 <height>35</height>
                </size>
@@ -397,13 +373,6 @@ border-style:none;</string>
                <string>Password</string>
               </property>
              </widget>
-=======
-                <width>50</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_signin_error">
@@ -416,58 +385,7 @@ border-style:none;</string>
                <string notr="true">color:springgreen;</string>
               </property>
               <property name="text">
-<<<<<<< HEAD
                <string/>
-=======
-               <string>Login</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLineEdit" name="lineEdit_password">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>30</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: white</string>
-              </property>
-              <property name="inputMethodHints">
-               <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="echoMode">
-               <enum>QLineEdit::Password</enum>
-              </property>
-              <property name="placeholderText">
-               <string>Password</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -1797,7 +1715,6 @@ padding-right: 20px;
            </layout>
           </widget>
           <widget class="QWidget" name="stackedPage_Settings">
-<<<<<<< HEAD
            <layout class="QGridLayout" name="gridLayout_12">
             <item row="0" column="0">
              <widget class="QFrame" name="frame_4">
@@ -1985,14 +1902,6 @@ border-style:none;</string>
                 </widget>
                </item>
               </layout>
-=======
-           <layout class="QGridLayout" name="gridLayout_7">
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Email</string>
-              </property>
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
              </widget>
             </item>
             <item row="1" column="0">
@@ -2008,76 +1917,8 @@ border-style:none;</string>
               </property>
              </spacer>
             </item>
-<<<<<<< HEAD
             <item row="0" column="2">
              <widget class="QToolButton" name="exit_settings_button">
-=======
-            <item row="4" column="2">
-             <widget class="QLabel" name="settings_email">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <spacer name="horizontalSpacer_11">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Username</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <spacer name="horizontalSpacer_12">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Profile Information</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <spacer name="horizontalSpacer_14">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="3" column="2">
-             <widget class="QLabel" name="settings_username">
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
               <property name="text">
                <string>X</string>
               </property>
@@ -2087,145 +1928,6 @@ border-style:none;</string>
           </widget>
          </widget>
         </item>
-<<<<<<< HEAD
-=======
-        <item row="0" column="0" colspan="3">
-         <layout class="QGridLayout" name="gridLayout_12">
-          <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QPushButton" name="create_button">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Create Group</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="join_button">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Join Group</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_9">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="2">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <spacer name="horizontalSpacer_8">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="settings_button">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>Settings</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="2">
-           <spacer name="verticalSpacer_16">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="1" rowspan="2">
-           <widget class="QLabel" name="inner_label_logo">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="scaledContents">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <spacer name="verticalSpacer_15">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QLabel" name="groupid_label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
        </layout>
       </widget>
      </widget>
@@ -2239,7 +1941,7 @@ border-style:none;</string>
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

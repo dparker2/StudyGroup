@@ -191,30 +191,19 @@ void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
 
 void server::read_socket_send_signal()
 {
-<<<<<<< HEAD
     QString message_size_str = my_socket->read(5);  // Read first 5 bytes, which is the serialized message size
 
     if(message_size_str == "SUCC\n")
-=======
-    while(!my_socket->atEnd())
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
     {
-        qDebug() << "Receiving info...";
-        QString message_size_str = my_socket->read(5);  // Read first 5 bytes, which is the serialized message size
-        qDebug() << "Message size: " << message_size_str;
+        success_flag = true;
+        return;
+    }
 
-        if(message_size_str == "SUCC\n") // Until the messages are all updated. Backwards compatibility.
-        {
-            success_flag = true;
-            return;
-        }
+    int message_size = message_size_str.toInt();    // Convert the size to an integer
+    QTextStream message_stream(my_socket->read(message_size));   // Read the message, which is the next size bytes
+    QString server_code = message_stream.read(4);   // Get the server code
+    qDebug() << "Server code: " << server_code;
 
-        int message_size = message_size_str.toInt();    // Convert the size to an integer
-        QTextStream message_stream(my_socket->read(message_size));   // Read the message, which is the next size bytes
-        QString server_code = message_stream.read(4);   // Get the server code
-        qDebug() << "Server code: " << server_code;
-
-<<<<<<< HEAD
     // Hinge on server_code
     if (server_code == "SUCC")      // Success code
     {
@@ -226,31 +215,6 @@ void server::read_socket_send_signal()
     {
         // Set the fail flag
         fail_flag = true;
-=======
-        // Hinge on server_code
-        if (server_code == "SUCC")      // Success code
-        {
-            // Set the success flag and message
-            success_flag = true;
-            success_message = message_stream.readAll();
-            qDebug() << "Server message: " << success_message;
-        }
-        else if (server_code == "FAIL") // Fail code
-        {
-            // Set the fail flag
-            fail_flag = true;
-        }
-        else if (server_code == "USCH") // User List has CHANGED
-        {
-            emit users_changed();
-        }
-        else if (server_code == "NUSR") // New User code
-        {
-            QString new_username = message_stream.readAll();
-            qDebug() << "New user: " << new_username;
-            emit user_joined(new_username);
-        }
->>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
     }
 
     return;

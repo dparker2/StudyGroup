@@ -52,8 +52,6 @@ void MainWindow::on_signin_button_clicked()
 
     if(my_serv->login(username, password)) {
         // Now logged in!
-        user_info->setUsername(username);
-        user_info->setPassword(password);
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
         ui->settings_username->setText(username);
         ui->settings_email->setText("mail@mail.com");
@@ -63,7 +61,6 @@ void MainWindow::on_signin_button_clicked()
     }
 
 }
-
 void MainWindow::on_singup_button_clicked()
 {
     user_info->printReadyState();
@@ -301,13 +298,10 @@ void MainWindow::on_create_group_button_released()
         group_widget = new GroupWidget();
         ui->stackedWidget_inner->addWidget(group_widget);
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
-        QString name = user_info->getUsername();
+        QString name = group_id;
         group_widget->user_joined(name);
-
-        ui->groupid_label->setText("GroupID: "+group_id);
-
-        connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-        connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+        QString chat = "12:43am - User1: Hello!";
+        group_widget->new_chat(chat);
     }
 
 }
@@ -320,12 +314,9 @@ void MainWindow::on_join_group_button_released()
         group_widget = new GroupWidget();
         ui->stackedWidget_inner->addWidget(group_widget);
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
-        QString name = user_info->getUsername();
+        QString name = group_id;
         group_widget->user_joined(name);
-
-        ui->groupid_label->setText("GroupID: "+group_id);
-
-        connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-        connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+        QString chat = "12:43am - User1: Hello!";
+        group_widget->new_chat(chat);
     }
 }
