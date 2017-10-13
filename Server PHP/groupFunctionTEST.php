@@ -1,6 +1,7 @@
 <?php
 // Create a new group given username input
 include_once 'db_credentials.php';
+include 'utilityFunctions.php';
 
 function createGroup($groupname, $ip, $clients, $sock)
 {
@@ -27,11 +28,12 @@ function createGroup($groupname, $ip, $clients, $sock)
 
   //if group name exists, return failure. else, run query and create table for group
   $createGroupTable = "CREATE TABLE $groupID (
-    CreatorName varchar(50), userList varchar(20), ipAddress varchar(50),
+    Admin varchar(50), userList varchar(20), ipAddress varchar(50),
     user varchar(20), Clock time, Message varchar(255)
   )";
   $username = $clients[$ip][1]; //Takes username from dict. $clients.
-  $insertUserAdmin = "INSERT INTO $groupID (CreatorName, UserList, ipAddress) VALUES ('$username', '$username', '$ip')";
+  $insertUserAdmin = "INSERT INTO $groupID (Admin) VALUES ('$username')";
+  $insertUserList = "INSERT INTO $groupID (UserList, ipAddress) VALUES ('$username', '$ip')";
   if ($groupID_exists > 0) {
     $sendback = "00024FAILGroup already exists";  //Sends back fail if group already exists.
     fwrite($sock, $sendback);
@@ -39,6 +41,7 @@ function createGroup($groupname, $ip, $clients, $sock)
   else { // Runs queries and creates group, adding the current user as the user admin/creator
       mysqli_query($connection, $createGroupTable);
       mysqli_query($connection, $insertUserAdmin);
+      mysqli_query($connection, $insertUserList);
       $sendback = "SUCC";
       $message = "{$sendback}{$groupID}";
       echo "$message";
@@ -71,17 +74,27 @@ function joinGroup($groupID, $ip, $clients, $sock) {
 
   $username = $clients[$ip][1]; //Using client dict. to store username
   //SQL Commands
-  $return_userList = "SELECT userList FROM $groupID";
+  $return_userList = "SELECT userList FROM $groupID WHERE userList IS NOT NULL";
   $join_group = "INSERT INTO $groupID (userList, ipAddress) VALUES ('$username', '$ip')";
-
+  $checkAdmin = "SELECT userList FROM $groupID WHERE (SELECT Admin FROM $groupID WHERE Admin IS NOT NULL) = userList";
+  $selectAdmin = "SELECT Admin FROM $groupID WHERE Admin IS NOT NULL";
   if ($groupID_exists > 0) {
     $result = mysqli_query($connection, $return_userList);
     $row_count = $result->num_rows;
+    //Returns current admin into adminname as string to compare
+    if ($resultAdmin = mysqli_query($connection, $selectAdmin)) {
+      $obj = $resultAdmin->fetch_object();
+      $adminname = $obj->Admin;
+    }
 
     if ($row_count < 4) { //Max group size currently set at 4.
-      fwrite($sock, "00004SUCC");
-      mysqli_query($connection, $join_group); //Inserts username and ip to list.
-      updateGroupList($connection, $ip, $clients, $groupID, $sock); //Writes back current list to each ip
+      if(($row_count == 3) && (($adminExists = checkExists($connection, $checkAdmin)) < 1) && ($adminname != $username) ) //Checks to see if admin is in group before max capacity
+        fwrite($sock, "00021FAILNo Admin in Group");
+      else {
+        fwrite($sock, "00004SUCC");
+        mysqli_query($connection, $join_group); //Inserts username and ip to list.
+        updateGroupList($connection, $ip, $clients, $groupID, $sock); //Writes back current list to each ip
+      }
     }//closes if statement for capacity
     else {
       fwrite($sock, "00016FAILMax Capacity"); //Fail case for max capcity.
@@ -120,9 +133,9 @@ function leaveGroup($groupID, $ip, $clients, $sock) {
 
 
 function updateGroupList($connection, $ip, $clients, $groupID, $sock) {
-  $return_userList = "SELECT userList FROM $groupID";
-  $return_ipList = "SELECT ipAddress FROM $groupID";
-
+  //SQL Commands
+  $return_userList = "SELECT userList FROM $groupID WHERE userList IS NOT NULL";
+  $return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
   $resultIP = mysqli_query($connection, $return_ipList); //Returns list of current IP addresses i.e. current user list connected.
   $num_ip = $resultIP->num_rows; //Stores number of people currently connected for while loop iteration.
 
