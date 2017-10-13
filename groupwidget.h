@@ -14,6 +14,7 @@ class GroupWidget : public QWidget
 public:
     explicit GroupWidget(QWidget *parent = nullptr);
 
+
 signals:
 
 public slots:

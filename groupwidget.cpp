@@ -7,6 +7,7 @@ GroupWidget::GroupWidget(QWidget *parent) : QWidget(parent)
     main_layout = new QGridLayout();
     username_layout = new QVBoxLayout();
 
+
     // Tackle username area first.
     username_layout->setDirection(QBoxLayout::BottomToTop);
     username_layout->addItem(new QSpacerItem(200, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
