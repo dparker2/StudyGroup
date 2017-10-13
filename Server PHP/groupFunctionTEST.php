@@ -106,22 +106,12 @@ function leaveGroup($groupID, $ip, $clients, $sock) {
   //SQL Commands
   $username = $clients[$ip][1];
   $leaveGroup = "DELETE FROM $groupID
-    WHERE ipAddress = '$ip', userList = '$username'";
+    WHERE userList = '$username'";
   $return_userList = "SELECT userList FROM $groupID";
-
-  $result = mysqli_query($connection, $return_userList);
-  $row_count = $result->num_rows;
-
-  if ($row_count == 1) {
-    //do something. are we deleting the group after the last person leaves?
-    //Or are we having a delete group button..?
-  }
-  else {
-    //Delete from database.
-    mysqli_query($connection, $leaveGroup);
-    fwrite($sock, "00004SUCC"); //writes back to current client success on leave
-    updateGroupList($connection, $ip, $clients, $groupID, $sock);
-  }
+  //Delete from database.
+  mysqli_query($connection, $leaveGroup);
+  fwrite($sock, "00004SUCC"); //writes back to current client success on leave
+  updateGroupList($connection, $ip, $clients, $groupID, $sock);
   if($connection->close()) {
     echo "Database closed\n";
   }
