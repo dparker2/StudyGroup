@@ -1,8 +1,8 @@
 <?php
-// Create a new group given username input
 include_once 'db_credentials.php';
 include 'utilityFunctions.php';
 
+//CREATE GROUP FUNCTION
 function createGroup($groupname, $ip, $clients, $sock)
 {
   // Create connection
@@ -18,14 +18,6 @@ function createGroup($groupname, $ip, $clients, $sock)
   $groupID = $groupname . "_" . $rand4; //Creates random groupname + 4 random digits.
   // sql command to check if groupname table already exists
   $check_groupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
-  // Run, store, and close sql commands
-  if ($stmt = mysqli_prepare($connection, $check_groupID)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_store_result($stmt);
-    $groupID_exists = mysqli_stmt_num_rows($stmt);
-    mysqli_stmt_close($stmt);
-  }
-
   //if group name exists, return failure. else, run query and create table for group
   $createGroupTable = "CREATE TABLE $groupID (
     Admin varchar(50), userList varchar(20), ipAddress varchar(50),
@@ -34,7 +26,7 @@ function createGroup($groupname, $ip, $clients, $sock)
   $username = $clients[$ip][1]; //Takes username from dict. $clients.
   $insertUserAdmin = "INSERT INTO $groupID (Admin) VALUES ('$username')";
   $insertUserList = "INSERT INTO $groupID (UserList, ipAddress) VALUES ('$username', '$ip')";
-  if ($groupID_exists > 0) {
+  if (($groupID_exists = checkExists($connection, $check_groupID)) > 0) {
     $sendback = "00024FAILGroup already exists";  //Sends back fail if group already exists.
     fwrite($sock, $sendback);
   }
@@ -54,6 +46,7 @@ function createGroup($groupname, $ip, $clients, $sock)
   }
 }
 
+//JOIN GROUP FUNCTION
 function joinGroup($groupID, $ip, $clients, $sock) {
   // Create connection
   $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
@@ -65,20 +58,13 @@ function joinGroup($groupID, $ip, $clients, $sock) {
 
   //Checks group name if it exists in table.  Stores result in groupname_exists
   $check_groupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
-  if ($stmt = mysqli_prepare($connection, $check_groupID)) {
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_store_result($stmt);
-    $groupID_exists = mysqli_stmt_num_rows($stmt);
-    mysqli_stmt_close($stmt);
-  }
-
   $username = $clients[$ip][1]; //Using client dict. to store username
   //SQL Commands
   $return_userList = "SELECT userList FROM $groupID WHERE userList IS NOT NULL";
   $join_group = "INSERT INTO $groupID (userList, ipAddress) VALUES ('$username', '$ip')";
   $checkAdmin = "SELECT userList FROM $groupID WHERE (SELECT Admin FROM $groupID WHERE Admin IS NOT NULL) = userList";
   $selectAdmin = "SELECT Admin FROM $groupID WHERE Admin IS NOT NULL";
-  if ($groupID_exists > 0) {
+  if (($groupID_exists = checkExists($connection, $check_groupID)) > 0) {
     $result = mysqli_query($connection, $return_userList);
     $row_count = $result->num_rows;
     //Returns current admin into adminname as string to compare
@@ -109,6 +95,7 @@ function joinGroup($groupID, $ip, $clients, $sock) {
   }
 }
 
+//LEAVE GROUP FUNCTION
 function leaveGroup($groupID, $ip, $clients, $sock) {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
 
@@ -130,8 +117,7 @@ function leaveGroup($groupID, $ip, $clients, $sock) {
   }
 }
 
-
-
+//UPDATE GROUP LIST FUNCTION
 function updateGroupList($connection, $ip, $clients, $groupID, $sock) {
   //SQL Commands
   $return_userList = "SELECT userList FROM $groupID WHERE userList IS NOT NULL";
