@@ -16,9 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
-    QPixmap logo2(":/resources/img/GSLogoName2.png");    // StudyGroup2 logo
-    ui->inner_label_logo->setPixmap(logo2.scaled(500,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
-
     // check/X icons are hidden initially
     ui->label_username_check->hide();
     ui->label_username_error->hide();
@@ -48,7 +45,7 @@ void MainWindow::on_signin_button_clicked()
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
 
-    //if(my_serv->login(username, password))
+    if(my_serv->login(username, password))
     {
         // Now logged in!
         user_info->setUsername(username);
@@ -289,15 +286,15 @@ void MainWindow::on_create_group_button_released()
 {
     QString group_name = ui->create_group_lineEdit->text();
     QString group_id = group_name + "_0000";
-    //if(my_serv->create_group(group_name, group_id))
+    if(my_serv->create_group(group_name, group_id))
     {
         group_widget = new GroupWidget();
         ui->stackedWidget_inner->addWidget(group_widget);
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
         QString name = user_info->getUsername();
         group_widget->user_joined(name);
-
-        //ui->groupid_label->setText("GroupID: "+group_id);
+        QString group_label = "GroupID: "+group_id;
+        group_widget->set_groupID(group_label);
 
         connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
@@ -315,8 +312,8 @@ void MainWindow::on_join_group_button_released()
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
         QString name = user_info->getUsername();
         group_widget->user_joined(name);
-
-        //ui->groupid_label->setText("GroupID: "+group_id);
+        QString group_label = "GroupID: "+group_id;
+        group_widget->set_groupID(group_label);
 
         connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));

@@ -29,6 +29,8 @@ public slots:
     void user_joined(QString username);
     void user_left(QString username);
 
+    void set_groupID(QString& groupID);
+
     void on_submit_chat_released();
 
 private:

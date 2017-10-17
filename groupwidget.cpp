@@ -32,7 +32,6 @@ void GroupWidget::users_changed()
 
 void GroupWidget::user_joined(QString username)
 {
-    //username_layout->removeWidget()
     QLabel* username_label = new QLabel(username);
     username_label->setStyleSheet("color: white; font-size: 20px;");
     ui->username_layout->addWidget(username_label);
@@ -41,6 +40,11 @@ void GroupWidget::user_joined(QString username)
 void GroupWidget::user_left(QString username)
 {
 
+}
+
+void GroupWidget::set_groupID(QString &groupID)
+{
+    ui->groupid_label->setText(groupID);
 }
 
 void GroupWidget::on_submit_chat_released()

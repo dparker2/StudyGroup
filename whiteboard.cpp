@@ -2,45 +2,51 @@
 #include <QMouseEvent>
 #include <QDebug>
 
-Whiteboard::Whiteboard(QWidget *parent) : QWidget(parent)
+class my_whiteboard : public QWidget
+{
+public:
+    explicit my_whiteboard(QWidget* parent = nullptr);
+
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
+
+private:
+    void draw_line(const QPoint& final_mouse_pos);
+    QPoint prev_mouse_pos;
+    QImage image;
+    bool drawing;
+    bool moving;
+};
+
+my_whiteboard::my_whiteboard(QWidget *parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_StaticContents);
     drawing = false;
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
-void Whiteboard::test_call()
-{
-    qDebug() << "success";
-}
-
-void Whiteboard::mousePressEvent(QMouseEvent *event)
+void my_whiteboard::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
     {
         prev_mouse_pos = event->pos();
         drawing = true;
     }
-    if(event->button() == Qt::RightButton)
-    {
-        prev_mouse_pos = event->pos();
-        moving = true;
-    }
 }
 
-void Whiteboard::mouseMoveEvent(QMouseEvent *event)
+void my_whiteboard::mouseMoveEvent(QMouseEvent *event)
 {
     if(drawing)
     {
         draw_line(event->pos());
     }
-    if(moving)
-    {
-        move_image(event->pos());
-    }
 }
 
-void Whiteboard::mouseReleaseEvent(QMouseEvent *event)
+void my_whiteboard::mouseReleaseEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton && drawing)
     {
@@ -49,14 +55,14 @@ void Whiteboard::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void Whiteboard::paintEvent(QPaintEvent *event)
+void my_whiteboard::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     QRect dirtyRect = event->rect();
     painter.drawImage(dirtyRect, image, dirtyRect);
 }
 
-void Whiteboard::resizeEvent(QResizeEvent *event)
+void my_whiteboard::resizeEvent(QResizeEvent *event)
 {
     QImage old_image = image;
     image = QImage(this->width(), this->height(), QImage::Format_RGB32);
@@ -66,7 +72,7 @@ void Whiteboard::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
-void Whiteboard::draw_line(const QPoint& final_mouse_pos)
+void my_whiteboard::draw_line(const QPoint& final_mouse_pos)
 {
     QPainter painter(&image);
     painter.setPen(QPen(QBrush(QColor(0, 0, 0)), 10, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -75,7 +81,19 @@ void Whiteboard::draw_line(const QPoint& final_mouse_pos)
     prev_mouse_pos = final_mouse_pos;
 }
 
-void Whiteboard::move_image(const QPoint &final_mouse_pos)
+/*******************
+ *
+ *
+ *
+ *  WHITEBOARD CLASS
+ *
+ *
+ *
+ */
+Whiteboard::Whiteboard(QWidget *parent) : QScrollArea(parent)
 {
-    // TODO: Make a bigger image to always pull from and figure out how to move it around and stuff....
+    this->setStyleSheet("background-color: #ababab");
+    drawing_board = new my_whiteboard;
+    drawing_board->resize(2000, 1000);
+    this->setWidget(drawing_board);
 }
