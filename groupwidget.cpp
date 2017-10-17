@@ -50,6 +50,6 @@ void GroupWidget::set_groupID(QString &groupID)
 void GroupWidget::on_submit_chat_released()
 {
     QString chat_message = ui->chat_input->text();
-    QString formatted_message = QTime::currentTime().toString("hh:mm AP") + " - " + "usernamehere:" + chat_message + "\n";
-    ui->chat_box->insertPlainText(formatted_message);
+    QString groupID = ""; // TODO::::::: Remove this once merged
+    emit send_chat(groupID, chat_message); // Send the chat signal
 }

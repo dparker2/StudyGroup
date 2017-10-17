@@ -22,6 +22,7 @@ public:
 
 
 signals:
+    void send_chat(QString& groupID, QString& message);
 
 public slots:
     void new_chat(QString message);
