@@ -300,6 +300,7 @@ void MainWindow::on_create_group_button_released()
 
         connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+        connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
     }
 
 }
@@ -319,5 +320,6 @@ void MainWindow::on_join_group_button_released()
 
         connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+        connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
     }
 }

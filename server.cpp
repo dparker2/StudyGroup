@@ -60,7 +60,6 @@ bool server::login(QString& username, QString& password)
     // Socket connected at this point, pass through info
     my_socket->write(format_socket_request("LOGN", QString(username+" "+password)));
     QString reply;
-    this->username = username;
     return read_socket_helper(reply); // TODO: Handle receiving the email when it is passed back in reply
 }
 
@@ -88,20 +87,6 @@ bool server::join_group(QString &group_id)
     my_socket->write(format_socket_request("JGRP", QString(group_id)));
     QString _str;
     return read_socket_helper(_str);
-}
-
-/*
- * Until UserAccount gets usable
- */
-
-QString server::get_username()
-{
-    return this->username;
-}
-
-void server::set_username(QString& username)
-{
-    this->username = username;
 }
 
 /*
@@ -159,6 +144,12 @@ void server::read_socket_send_signal()
         {
             // Set the fail flag
             fail_flag = true;
+            // Display the failure message to user
+            QMessageBox timeout_box;
+            timeout_box.setText("Error");
+            timeout_box.setInformativeText(message_stream.readAll());
+            timeout_box.setIcon(QMessageBox::Warning);
+            timeout_box.exec();
         }
         else if (server_code == "USCH") // User List has CHANGED
         {
@@ -174,6 +165,13 @@ void server::read_socket_send_signal()
 
     return;
     // TODO: Implement if statements and send signals based on what was received.
+}
+
+void server::send_chat(QString& groupID, QString& message)
+{
+    my_socket->write(format_socket_request("CHAT", QString(groupID+" "+message)));
+    QString _str;
+    read_socket_helper(_str);
 }
 
 /*
