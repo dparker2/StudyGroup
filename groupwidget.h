@@ -8,6 +8,12 @@
 #include <QSpacerItem>
 #include <QPushButton>
 
+#include "whiteboard.h"
+
+namespace Ui {
+class GroupWidget;
+}
+
 class GroupWidget : public QWidget
 {
     Q_OBJECT
@@ -26,12 +32,8 @@ public slots:
     void on_submit_chat_released();
 
 private:
-    // UI elements:
-    QGridLayout* main_layout;
-    QVBoxLayout* username_layout;
-    QTextEdit* chat_box;
-    QLineEdit* chat_input;
-    QPushButton* submit_chat;
+    Ui::GroupWidget* ui;
+    Whiteboard* whiteboard;
 };
 
 #endif // GROUPWIDGET_H

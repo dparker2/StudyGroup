@@ -48,7 +48,8 @@ void MainWindow::on_signin_button_clicked()
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
 
-    if(my_serv->login(username, password)) {
+    //if(my_serv->login(username, password))
+    {
         // Now logged in!
         user_info->setUsername(username);
         user_info->setPassword(password);
@@ -288,7 +289,7 @@ void MainWindow::on_create_group_button_released()
 {
     QString group_name = ui->create_group_lineEdit->text();
     QString group_id = group_name + "_0000";
-    if(my_serv->create_group(group_name, group_id))
+    //if(my_serv->create_group(group_name, group_id))
     {
         group_widget = new GroupWidget();
         ui->stackedWidget_inner->addWidget(group_widget);
