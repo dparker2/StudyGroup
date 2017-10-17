@@ -1,34 +1,18 @@
 #include "groupwidget.h"
+#include "ui_groupwidget.h"
 #include <QTime>
 
-GroupWidget::GroupWidget(QWidget *parent) : QWidget(parent)
+GroupWidget::GroupWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::GroupWidget)
 {
-    // First make the required layouts to fill everything into
-    main_layout = new QGridLayout();
-    username_layout = new QVBoxLayout();
+    ui->setupUi(this);
 
+    whiteboard = new Whiteboard();
 
-    // Tackle username area first.
-    username_layout->setDirection(QBoxLayout::BottomToTop);
-    username_layout->addItem(new QSpacerItem(200, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    // Now put that layout inside the main layout, on the right side spanning all the way down
-    main_layout->addLayout(username_layout, 0, 2, -1, 1);
-
-    // Chat area. Make a line edit widget that is not editable and put it into main layout
-    chat_box = new QTextEdit();
-    chat_box->setReadOnly(true);
-    main_layout->addWidget(chat_box, 0, 0, 1, 2); // Top left
-
-    // Chat input area.
-    chat_input = new QLineEdit();
-    submit_chat = new QPushButton();
-    submit_chat->setText("Chat!");
-    connect(submit_chat, SIGNAL(released()), this, SLOT(on_submit_chat_released()));
-    main_layout->addWidget(chat_input, 1, 0); // Bottom left
-    main_layout->addWidget(submit_chat, 1, 1);
-
-    // Finish by setting the main layout to the group widget
-    this->setLayout(main_layout);
+    ui->study_mode->addWidget(whiteboard);
+    ui->study_mode->setCurrentWidget(whiteboard);
+    ui->study_mode->setStyleSheet("background-color: #ffffff;");
 }
 
 void GroupWidget::new_chat(QString message)
@@ -39,18 +23,18 @@ void GroupWidget::new_chat(QString message)
 void GroupWidget::users_changed()
 {
     QLayoutItem* item;
-    while ( ( item = username_layout->takeAt( 0 ) ) != NULL )
+    while ( ( item = ui->username_layout->takeAt( 0 ) ) != NULL )
     {
         delete item->widget();
         delete item;
     }
-    username_layout->addItem(new QSpacerItem(200, 0, QSizePolicy::Minimum, QSizePolicy::Expanding)); // Add the spacer
 }
 
 void GroupWidget::user_joined(QString username)
 {
-    //username_layout->removeWidget()
-    username_layout->addWidget(new QLabel(username));
+    QLabel* username_label = new QLabel(username);
+    username_label->setStyleSheet("color: white; font-size: 20px;");
+    ui->username_layout->addWidget(username_label);
 }
 
 void GroupWidget::user_left(QString username)
@@ -58,9 +42,14 @@ void GroupWidget::user_left(QString username)
 
 }
 
+void GroupWidget::set_groupID(QString &groupID)
+{
+    ui->groupid_label->setText(groupID);
+}
+
 void GroupWidget::on_submit_chat_released()
 {
-    QString chat_message = chat_input->text();
+    QString chat_message = ui->chat_input->text();
     QString groupID = ""; // TODO::::::: Remove this once merged
     emit send_chat(groupID, chat_message); // Send the chat signal
 }
