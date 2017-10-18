@@ -18,12 +18,6 @@ public:
     bool create_group(QString& group_name, QString& group_id);
     bool join_group(QString& group_id);
 
-
-    // Access
-    QString get_username();
-    // Set
-    void set_username(QString& username);
-
 signals:
     void disconnected();
     void new_chat(QString);
@@ -34,6 +28,7 @@ signals:
 public slots:
     void reconnect_socket(QAbstractSocket::SocketState);
     void read_socket_send_signal();
+    void send_chat(QString& groupID, QString& message);
     void error(QAbstractSocket::SocketError);
 
 private:
