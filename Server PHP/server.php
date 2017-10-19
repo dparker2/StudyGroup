@@ -94,6 +94,9 @@ while(true) {
           elseif ($code == "LGRP") {
             leaveGroup($loginArray[0], $ip, $clients, $sock);
           }
+          elseif ($code == "GCHT") {
+            sendChatMessage($loginArray[0], $loginArray[1], $loginArray[2], $ip, $clients, $sock);
+          }
           elseif ($code == "CHPW") {
             changePassword($client[$ip][1], $loginArray[1], $sock);
           }
