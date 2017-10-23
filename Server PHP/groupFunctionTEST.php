@@ -152,7 +152,7 @@ function updateGroupList($connection, $ip, $clients, $groupID, $sock) {
 
 
 
-function sendChatMessage($groupID, $message, $timezone, $ip, $clients, $sock) {
+function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
   // Create connection
   $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
@@ -164,10 +164,10 @@ function sendChatMessage($groupID, $message, $timezone, $ip, $clients, $sock) {
   $username = $clients[$ip][1];
   //SQL Commands
   $insertChat = "INSERT INTO $groupID (user, Clock, Message)
-                 VALUES ('$username', current_timestamp(), $message)";
+                 VALUES ('$username', current_timestamp(), ''$message')";
   mysqli_query($connection, $insertChat);
   fwrite($sock, "00004SUCC");
-  updateGroupChat($connection, $ip, $clients, $groupID, $timezone, $sock);
+  updateGroupChat($connection, $ip, $clients, $groupID, $sock);
 
   if($connection->close()) {
     echo "Database closed\n";
@@ -175,19 +175,19 @@ function sendChatMessage($groupID, $message, $timezone, $ip, $clients, $sock) {
 }
 
 
-function updateGroupChat($connection, $ip, $clients, $groupID, $timezone, $sock) {
+function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
   //SQL Commands
-  $return_Messages = "SELECT user, convert_tz(Clock, 'UTC', '$timezone'), Message
+  $return_Messages = "SELECT user, convert_tz(Clock, 'UTC', '-07:00'), Message
                         FROM $groupID
                         WHERE Message IS NOT NULL";
   $return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
   $resultIP = mysqli_query($connection, $return_ipList); //Returns list of current IP addresses i.e. current user list connected.
   $num_ip = $resultIP->num_rows; //Stores number of people currently connected for while loop iteration.
 
-
+  //NEED TO DETERMINE HOW TO KEEP TRACK OF TIME ZONES PER CLIENT. DURING EACH FOR LOOP OF EACH CLIENT WE NEED TO PULL THEIR TIMEZONE FROM SOMEWHERE SO IT UPDATES IT WHEN WRITING TO EACH PERSON CORRECTLY.
   while($num_ip > 0) { //Loops through each active client, printing out the current user list in order to update ui
-    $resultMessages = mysqli_query($connection, $return_Messages); //runs and stores results of all usernames in the group currently
-    $num_Messages = $resultMessages->num_rows;//stores number of usernames
+    $resultMessages = mysqli_query($connection, $return_Messages); //runs and stores results of all messages in the group currently.
+    $num_Messages = $resultMessages->num_rows;//stores number of messages
 
     //Entire section below is to keep track of sockets we're writing to.
     $rowIP = mysqli_fetch_array($resultIP); //Fetches first IP as an array.
@@ -198,7 +198,7 @@ function updateGroupChat($connection, $ip, $clients, $groupID, $timezone, $sock)
     fwrite($keySock, "00004UCHT"); //Notifies client that wave of new users will be updated.
 
     for($n_messages = $num_Messages; $n_messages > 0; $n_messages = $n_messages - 1){ //For loop that iterates through lists of messages to writeback to client.
-      $row=mysqli_fetch_array($resultMessages); //Fetches first username into array
+      $row=mysqli_fetch_array($resultMessages); //Fetches first message into array
       $messages = $row[0]; //Stores name into variable
       echo "Debugging: We are writing $row[0] to $keyIP with socket $keySock \n";
       $message = "NCHT$messages"; //Appends CODE NUSR to username
