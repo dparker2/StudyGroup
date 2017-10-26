@@ -177,7 +177,7 @@ function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
 
 function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
   //SQL Commands
-  $return_Messages = "SELECT user, convert_tz(Clock, 'UTC', '-07:00'), Message
+  $return_Messages = "SELECT user, Clock, Message
                         FROM $groupID
                         WHERE Message IS NOT NULL";
   $return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
@@ -199,7 +199,7 @@ function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
 
     for($n_messages = $num_Messages; $n_messages > 0; $n_messages = $n_messages - 1){ //For loop that iterates through lists of messages to writeback to client.
       $row=mysqli_fetch_array($resultMessages); //Fetches first message into array
-      $messages = $row[0]; //Stores name into variable
+      $messages = $row[0]; //Stores user clock message into variable
       echo "Debugging: We are writing $row[0] to $keyIP with socket $keySock \n";
       $message = "NCHT$messages"; //Appends CODE NUSR to username
       $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read

@@ -71,7 +71,11 @@ while(true) {
           $code = substr($newdata, 0, 4);
           $message = substr($newdata, 4, $bytes);
           echo "THIS IS THE MESSAGE $code: $message \n";
-          $loginArray = explode(" ", $message);  //Puts message into array
+          $limit = 3;
+          if ($code == "GCHT") {
+            $limit = 2;
+          }
+          $loginArray = explode(" ", $message, $limit);  //Puts message into array
 
           if ($code == "CACC") {
             createAccount($loginArray[0], $loginArray[1], $loginArray[2], $sock);
@@ -93,6 +97,9 @@ while(true) {
           }
           elseif ($code == "LGRP") {
             leaveGroup($loginArray[0], $ip, $clients, $sock);
+          }
+          elseif ($code == "GCHT") {
+            sendChatMessage($loginArray[0], $loginArray[1], $loginArray[2], $ip, $clients, $sock);
           }
           elseif ($code == "CHPW") {
             changePassword($client[$ip][1], $loginArray[1], $sock);
