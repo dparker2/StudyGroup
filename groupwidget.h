@@ -37,6 +37,7 @@ public slots:
 private:
     Ui::GroupWidget* ui;
     Whiteboard* whiteboard;
+    QString group_id;
 };
 
 #endif // GROUPWIDGET_H

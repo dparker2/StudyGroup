@@ -169,7 +169,7 @@ void server::read_socket_send_signal()
 
 void server::send_chat(QString& groupID, QString& message)
 {
-    my_socket->write(format_socket_request("CHAT", QString(groupID+" "+message)));
+    my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
     QString _str;
     read_socket_helper(_str);
 }
