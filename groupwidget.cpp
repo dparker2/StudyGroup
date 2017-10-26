@@ -44,12 +44,13 @@ void GroupWidget::user_left(QString username)
 
 void GroupWidget::set_groupID(QString &groupID)
 {
-    ui->groupid_label->setText(groupID);
+    group_id = groupID;
+    ui->groupid_label->setText("GroupID: "+groupID);
 }
 
 void GroupWidget::on_submit_chat_released()
 {
     QString chat_message = ui->chat_input->text();
-    QString groupID = ""; // TODO::::::: Remove this once merged
+    QString groupID = group_id;
     emit send_chat(groupID, chat_message); // Send the chat signal
 }
