@@ -161,6 +161,14 @@ void server::read_socket_send_signal()
             qDebug() << "New user: " << new_username;
             emit user_joined(new_username);
         }
+        else if (server_code == "NCHT")
+        {
+            QString message = message_stream.readAll();
+            QString username = message.section(' ', 0, 0);
+            QString time = message.section(' ', 1, 1);
+            QString chat = message.section(' ', 2, -1);
+            emit new_chat(username, time, chat);
+        }
     }
 
     return;

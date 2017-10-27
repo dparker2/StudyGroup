@@ -1,6 +1,7 @@
 #include "groupwidget.h"
 #include "ui_groupwidget.h"
 #include <QTime>
+#include <QDebug>
 
 GroupWidget::GroupWidget(QWidget *parent) :
     QWidget(parent),
@@ -15,9 +16,10 @@ GroupWidget::GroupWidget(QWidget *parent) :
     ui->study_mode->setStyleSheet("background-color: #ffffff;");
 }
 
-void GroupWidget::new_chat(QString message)
+void GroupWidget::new_chat(QString username, QString time, QString message)
 {
-
+    qDebug() << message;
+    ui->chat_box->append(time+" - "+username+": "+message);
 }
 
 void GroupWidget::users_changed()

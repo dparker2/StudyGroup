@@ -20,7 +20,7 @@ public:
 
 signals:
     void disconnected();
-    void new_chat(QString);
+    void new_chat(QString,QString,QString);
     void users_changed();
     void user_joined(QString);
     void user_left(QString);
