@@ -1,6 +1,9 @@
-database: StudyGroup
+database 1: StudyGroup
 current tables: UserInfo(Username, Pass, Email, Status), Groups(Gpassword, user, userlist, clock, message, moderator)
              -> FriendListTest(username), AccountRecovery(email, question, username, QAnswer)
+database 2: StudyGroup_UserInfo
+current tables: UserInfo(Username, Pass, Email, Status), AccountRecovery(email, question, username, QAnswer)
+// once code takes into account database 2 we can remove the info and recovery tables of db 1
 
 [quick database howtos]
 SHOW databases; - to see all databases
