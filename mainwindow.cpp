@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     my_serv = new server();
     my_serv->connect_server();
+    connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
 
 
@@ -33,6 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    on_logout_button_released();
+
+    delete user_info;
+    delete my_serv;
     delete ui;
 }
 
@@ -313,6 +318,7 @@ void MainWindow::on_leave_button_released()
         if(my_serv->leave_group(group_id))
         {
             ui->stackedWidget_inner->removeWidget(group_widget);
+            ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
             ui->back_to_group_button->setVisible(false);
             ui->leave_button->setVisible(false);
         }
@@ -342,4 +348,22 @@ void MainWindow::_setup_group_stuff(QString &group_id)
     connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
     connect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
     connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
+}
+
+void MainWindow::on_logout_button_released()
+{
+    if(my_serv->logout())
+    {
+        if(group_widget != nullptr)
+        {
+            // Leave group if still in it
+            this->on_leave_button_released();
+        }
+        // Clear username info
+        delete user_info;
+        user_info = new UserAccount();
+
+        // Change widget
+        ui->stackedWidget_window->setCurrentWidget(ui->login_page);
+    }
 }

@@ -62,6 +62,8 @@ private slots:
 
     void on_leave_button_released();
 
+    void on_logout_button_released();
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;

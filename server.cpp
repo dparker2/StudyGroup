@@ -67,8 +67,22 @@ bool server::create_account(QString& username, QString& password, QString& email
 {
     // Socket connected at this point, pass through info
     my_socket->write(format_socket_request("CACC", QString(username+" "+password+" "+email)));
+    QString message;
+    bool ret = read_socket_helper(message);
+    if(ret)
+    {
+        QMessageBox success_box;
+        success_box.setText(message);
+        success_box.exec();
+    }
+    return ret;
+}
+
+bool server::logout()
+{
+    my_socket->write(format_socket_request("LOGT", ""));
     QString _str;
-    return read_socket_helper(_str); // Nothing returned as reply
+    return read_socket_helper(_str);
 }
 
 /*

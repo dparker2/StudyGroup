@@ -49,7 +49,7 @@
        <string notr="true">background-color: none;</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="login_page">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -980,22 +980,6 @@ padding: 8px 12px 8px 12px;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <spacer name="horizontalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Maximum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="0" column="2">
          <widget class="QPushButton" name="join_button">
           <property name="enabled">
@@ -1018,7 +1002,7 @@ padding: 8px 12px 8px 12px;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="9">
+        <item row="0" column="12">
          <widget class="QPushButton" name="settings_button">
           <property name="enabled">
            <bool>true</bool>
@@ -1039,7 +1023,30 @@ padding-left: 3px;</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0" rowspan="2" colspan="13">
+        <item row="0" column="15">
+         <widget class="QLabel" name="inner_label_logo">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <spacer name="horizontalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>1054</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" rowspan="2" colspan="16">
          <widget class="QStackedWidget" name="stackedWidget_inner">
           <property name="currentIndex">
            <number>0</number>
@@ -1895,44 +1902,30 @@ border-style:none;</string>
           </widget>
          </widget>
         </item>
-        <item row="0" column="12">
-         <widget class="QLabel" name="inner_label_logo">
-          <property name="text">
-           <string/>
+        <item row="0" column="7">
+         <widget class="QPushButton" name="leave_button">
+          <property name="enabled">
+           <bool>true</bool>
           </property>
-          <property name="scaledContents">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="visible">
            <bool>false</bool>
           </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: #ff6247;
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;</string>
+          </property>
+          <property name="text">
+           <string>Leave Group</string>
+          </property>
          </widget>
-        </item>
-        <item row="0" column="6">
-         <spacer name="horizontalSpacer_9">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>1054</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="3">
-         <spacer name="horizontalSpacer_26">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Maximum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item row="0" column="4">
          <widget class="QPushButton" name="back_to_group_button">
@@ -1959,8 +1952,56 @@ padding: 8px 12px 8px 12px;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="7">
-         <widget class="QPushButton" name="leave_button">
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>5</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="11">
+         <spacer name="horizontalSpacer_28">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>5</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="8">
+         <spacer name="horizontalSpacer_27">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>5</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="10">
+         <widget class="QPushButton" name="logout_button">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -1970,9 +2011,6 @@ padding: 8px 12px 8px 12px;</string>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="visible">
-           <bool>false</bool>
-          </property>
           <property name="styleSheet">
            <string notr="true">background-color: #ff6247;
 color: white; 
@@ -1980,21 +2018,21 @@ font:bold;
 padding: 8px 12px 8px 12px;</string>
           </property>
           <property name="text">
-           <string>Leave Group</string>
+           <string>Logout</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="8">
-         <spacer name="horizontalSpacer_27">
+        <item row="0" column="3">
+         <spacer name="horizontalSpacer_26">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Maximum</enum>
+           <enum>QSizePolicy::Fixed</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>20</width>
+            <width>5</width>
             <height>20</height>
            </size>
           </property>
