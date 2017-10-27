@@ -58,6 +58,10 @@ private slots:
 
     void on_join_group_button_released();
 
+    void on_forgot_password_released();
+
+    void on_forgot_username_released();
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
