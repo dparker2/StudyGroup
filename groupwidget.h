@@ -19,7 +19,7 @@ class GroupWidget : public QWidget
     Q_OBJECT
 public:
     explicit GroupWidget(QWidget *parent = nullptr);
-
+    QString get_groupID();
 
 signals:
     void send_chat(QString& groupID, QString& message);
@@ -28,7 +28,6 @@ public slots:
     void new_chat(QString username, QString time, QString message);
     void users_changed();
     void user_joined(QString username);
-    void user_left(QString username);
 
     void set_groupID(QString& groupID);
 

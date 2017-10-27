@@ -17,6 +17,7 @@ public:
     // Group Functions
     bool create_group(QString& group_name, QString& group_id);
     bool join_group(QString& group_id);
+    bool leave_group(QString& group_id);
 
 signals:
     void disconnected();

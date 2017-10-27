@@ -89,6 +89,13 @@ bool server::join_group(QString &group_id)
     return read_socket_helper(_str);
 }
 
+bool server::leave_group(QString &group_id)
+{
+    my_socket->write(format_socket_request("LGRP", QString(group_id)));
+    QString _str;
+    return read_socket_helper(_str);
+}
+
 /*
  *
  *
