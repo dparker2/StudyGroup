@@ -319,3 +319,13 @@ void MainWindow::on_join_group_button_released()
         connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
     }
 }
+
+void MainWindow::on_forgot_password_released()
+{
+
+}
+
+void MainWindow::on_forgot_username_released()
+{
+
+}
