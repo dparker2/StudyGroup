@@ -63,6 +63,10 @@ private slots:
     void on_leave_button_released();
 
     void on_logout_button_released();
+    
+    void on_forgot_password_released();
+
+    void on_forgot_username_released();
 
 private:
     Ui::MainWindow *ui;

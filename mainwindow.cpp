@@ -367,3 +367,13 @@ void MainWindow::on_logout_button_released()
         ui->stackedWidget_window->setCurrentWidget(ui->login_page);
     }
 }
+
+void MainWindow::on_forgot_password_released()
+{
+
+}
+
+void MainWindow::on_forgot_username_released()
+{
+
+}
