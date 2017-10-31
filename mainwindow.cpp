@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
+    set_settings_btn();
+
     // check/X icons are hidden initially
     ui->label_username_check->hide();
     ui->label_username_error->hide();
@@ -27,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // UI Connections
-    connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
+    connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings(clicked())));
 
     // TEST STUFF
     std::vector<QString> testusers1;
@@ -267,8 +269,9 @@ void MainWindow::on_settings_button_released()
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
 }
 
-void MainWindow::exit_settings()
+void MainWindow::exit_settings(bool checked)
 {
+
     ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
 }
 
@@ -318,4 +321,33 @@ void MainWindow::on_join_group_button_released()
         connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
         connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
     }
+}
+
+void MainWindow::on_lineEdit_password_returnPressed()
+{
+    on_signin_button_clicked();
+}
+void MainWindow::set_settings_btn(){
+
+    QPixmap wrench(":/resources/img/settings.png");
+    QIcon ButtonIcon(wrench);
+    ui->settings_button->setIcon(ButtonIcon);
+    ui->settings_button->setIconSize(QSize(25,25));
+
+}
+void MainWindow::set_exit_btn(){
+
+    ui->settings_button->setIcon(QIcon());
+
+    QPixmap exit(":/resources/img/exit_settings.png");
+    QIcon ButtonIcon(exit);
+    ui->settings_button->setIcon(ButtonIcon);
+    ui->settings_button->setIconSize(QSize(25,25));
+    ui->settings_button->setStyleSheet("background-color: rgb(165,165,165)");
+}
+
+void MainWindow::on_settings_button_clicked(bool checked)
+{
+    qDebug() << "Pressed? " << checked << endl;
+    set_exit_btn();
 }

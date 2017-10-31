@@ -4,5 +4,8 @@
         <file>img/GSLogoName1.png</file>
         <file>img/check_mark.png</file>
         <file>img/x_mark.png</file>
+        <file>img/wrench.png</file>
+        <file>img/settings.png</file>
+        <file>img/exit_settings.png</file>
     </qresource>
 </RCC>

@@ -44,7 +44,7 @@ private slots:
     void on_singup_button_clicked();
 
     void on_settings_button_released();
-    void exit_settings();
+    void exit_settings(bool);
 
     void on_join_button_released();
 
@@ -59,6 +59,12 @@ private slots:
     void on_join_group_button_released();
 
     void on_lineEdit_password_returnPressed();
+
+
+    void on_settings_button_clicked(bool checked);
+
+    void set_exit_btn();
+    void set_settings_btn();
 
 private:
     Ui::MainWindow *ui;
