@@ -67,8 +67,22 @@ bool server::create_account(QString& username, QString& password, QString& email
 {
     // Socket connected at this point, pass through info
     my_socket->write(format_socket_request("CACC", QString(username+" "+password+" "+email)));
+    QString message;
+    bool ret = read_socket_helper(message);
+    if(ret)
+    {
+        QMessageBox success_box;
+        success_box.setText(message);
+        success_box.exec();
+    }
+    return ret;
+}
+
+bool server::logout()
+{
+    my_socket->write(format_socket_request("LOGT", ""));
     QString _str;
-    return read_socket_helper(_str); // Nothing returned as reply
+    return read_socket_helper(_str);
 }
 
 /*
@@ -85,6 +99,13 @@ bool server::create_group(QString& group_name, QString& group_id)
 bool server::join_group(QString &group_id)
 {
     my_socket->write(format_socket_request("JGRP", QString(group_id)));
+    QString _str;
+    return read_socket_helper(_str);
+}
+
+bool server::leave_group(QString &group_id)
+{
+    my_socket->write(format_socket_request("LGRP", QString(group_id)));
     QString _str;
     return read_socket_helper(_str);
 }
@@ -160,6 +181,14 @@ void server::read_socket_send_signal()
             QString new_username = message_stream.readAll();
             qDebug() << "New user: " << new_username;
             emit user_joined(new_username);
+        }
+        else if (server_code == "NCHT")
+        {
+            QString message = message_stream.readAll();
+            QString username = message.section(' ', 0, 0);
+            QString time = message.section(' ', 1, 1);
+            QString chat = message.section(' ', 2, -1);
+            emit new_chat(username, time, chat);
         }
     }
 

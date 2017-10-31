@@ -14,13 +14,15 @@ public:
     // Account Functions
     bool login(QString& username, QString& password);
     bool create_account(QString& username, QString& password, QString& email);
+    bool logout();
     // Group Functions
     bool create_group(QString& group_name, QString& group_id);
     bool join_group(QString& group_id);
+    bool leave_group(QString& group_id);
 
 signals:
     void disconnected();
-    void new_chat(QString);
+    void new_chat(QString,QString,QString);
     void users_changed();
     void user_joined(QString);
     void user_left(QString);
