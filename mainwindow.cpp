@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_username_error->hide();
     ui->label_email_check->hide();
 
+    ui->back_to_group_button->hide();
+    ui->leave_button->hide();
+
     my_serv = new server();
     my_serv->connect_server();
     connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost

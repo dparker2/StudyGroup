@@ -277,7 +277,7 @@ border-style:none;</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #ff6247;
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;
 </string>
@@ -855,7 +855,7 @@ border-style:none;</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #ff6247;
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;
 </string>
@@ -971,7 +971,7 @@ padding: 8px 12px 8px 12px;
           </property>
           <property name="styleSheet">
            <string notr="true">background-color: tomato;
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;</string>
           </property>
@@ -993,7 +993,7 @@ padding: 8px 12px 8px 12px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">background-color: #ff6247;
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;</string>
           </property>
@@ -1015,7 +1015,7 @@ padding: 8px 12px 8px 12px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">background-color: rgba(226,87,76);
-padding-bottom:5px;	
+padding-bottom:5px;
 padding-left: 3px;</string>
           </property>
           <property name="text">
@@ -1195,7 +1195,7 @@ border-style:none;</string>
                         </property>
                         <property name="styleSheet">
                          <string notr="true">background-color:rgba(20,150,220);
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;
 margin-left: 10px;
@@ -1537,7 +1537,7 @@ border-style:none;</string>
                       </property>
                       <property name="styleSheet">
                        <string notr="true">background-color:rgba(20,150,220);
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;
 margin-left: 10px;
@@ -1913,12 +1913,9 @@ border-style:none;</string>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="visible">
-           <bool>false</bool>
-          </property>
           <property name="styleSheet">
            <string notr="true">background-color: #ff6247;
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;</string>
           </property>
@@ -1938,12 +1935,9 @@ padding: 8px 12px 8px 12px;</string>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="visible">
-           <bool>false</bool>
-          </property>
           <property name="styleSheet">
            <string notr="true">background-color: #ff6247;
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;</string>
           </property>
@@ -2013,7 +2007,7 @@ padding: 8px 12px 8px 12px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">background-color: #ff6247;
-color: white; 
+color: white;
 font:bold;
 padding: 8px 12px 8px 12px;</string>
           </property>
@@ -2051,7 +2045,7 @@ padding: 8px 12px 8px 12px;</string>
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
