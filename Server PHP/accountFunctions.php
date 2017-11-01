@@ -143,15 +143,7 @@ function logoutAccount($username, $sock) {
 }
 
 
-
-
-
-
-
-
-
-
-//unfinished code to change a users password
+//unfinished code to change a users password, need client input
 function changePassword($username, $password, $sock) {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
@@ -234,5 +226,18 @@ function recoveryQset($username, $question, $sock) {
 
   if ($connection->close()) {
     echo "Database Closed \n";
-  }
+}
+  
+  
+  // upon a user hitting the forgot username button and correctly answering their recovery question, 
+  // this function returns the username of the account tied to that recovery question.
+function rememberUsername (%sock) {
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
+  // Check connection
+  if ($connection -> connect_error)
+    die("Connection failed: " . $conn->connect_error);
+  else
+    echo "Connected to database \n";   
+}
+  
 ?>
