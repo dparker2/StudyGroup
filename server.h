@@ -35,6 +35,8 @@ public slots:
 
 private:
     QTcpSocket* my_socket;
+    bool reconnecting;
+
     QString username;
     bool success_flag; // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.
     bool fail_flag;    // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.

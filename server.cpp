@@ -28,6 +28,7 @@ server::server(QObject *parent) : QObject(parent)
     success_flag = false;
     fail_flag = false;
     success_message = nullptr;
+    reconnecting = false;
 }
 
 /***
@@ -81,8 +82,7 @@ bool server::create_account(QString& username, QString& password, QString& email
 bool server::logout()
 {
     my_socket->write(format_socket_request("LOGT", ""));
-    QString _str;
-    return read_socket_helper(_str);
+    return true;
 }
 
 /*
@@ -118,8 +118,8 @@ bool server::leave_group(QString &group_id)
  *
  */
 
-void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
-
+void server::reconnect_socket(QAbstractSocket::SocketState current_state)
+{
     qDebug() << current_state;
 
     if(QAbstractSocket::UnconnectedState == current_state)
@@ -127,10 +127,29 @@ void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
         // Here because connection with the server was severed
         // Either by server going offline or client internet going out
         // So, try to continually reconnect until successful.
-        emit disconnected();
+        if(reconnecting == false) {
+            // First time we are trying to reconnect
+            emit disconnected();
+            // Show error message only initally
+            QMessageBox reconnect_box;
+            reconnect_box.setText("No internet connection to server.");
+            reconnect_box.setIcon(QMessageBox::Warning);
+            reconnect_box.exec();
+        }
+        reconnecting = true;
 
         qDebug() << "Trying to reconnect...";
         connect_server();
+    }
+
+    if(QAbstractSocket::ConnectedState == current_state)
+    {
+        if(reconnecting == true) {
+            QMessageBox connected_box;
+            connected_box.setText("Connection to server has been reestablished.");
+            connected_box.exec();
+            reconnecting = false;
+        }
     }
 }
 
@@ -226,7 +245,7 @@ bool server::read_socket_helper(QString& out_message)
     success_flag = false;
     fail_flag = false;
     success_message = nullptr;
-    if(my_socket->waitForReadyRead(5000))
+    if((QAbstractSocket::ConnectedState == my_socket->state()) && (my_socket->waitForReadyRead(5000)))
     {
         if(success_flag)
         {

@@ -352,7 +352,8 @@ void MainWindow::_setup_group_stuff(QString &group_id)
 
 void MainWindow::on_logout_button_released()
 {
-    if(my_serv->logout())
+    // Sanity check: if we aren't even logged in yet (if login_page is active), don't do anything!
+    if((ui->stackedWidget_window->currentWidget() != ui->login_page) && (my_serv->logout()))
     {
         if(group_widget != nullptr)
         {
