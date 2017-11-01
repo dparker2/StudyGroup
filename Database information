@@ -1,7 +1,6 @@
 database: StudyGroup
-current tables: UserInfo(username, pass, email), Groups(Gpassword, user, userlist, clock, message, moderator)
-             -> FriendListTest(username), GroupTest(CreatorName, GroupName, Clock, user, Message)
-             -> testgroup_9588(CreatorName, userList, user, Clock, Message), AccountRecovery(email, rID)
+current tables: UserInfo(Username, Pass, Email, Status), Groups(Gpassword, user, userlist, clock, message, moderator)
+             -> FriendListTest(username), AccountRecovery(email, question, username, QAnswer)
 
 [quick database howtos]
 SHOW databases; - to see all databases
