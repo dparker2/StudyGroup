@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_username_error->hide();
     ui->label_email_check->hide();
 
+    ui->back_to_group_button->hide();
+    ui->leave_button->hide();
+
     my_serv = new server();
     my_serv->connect_server();
     connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
@@ -352,7 +355,8 @@ void MainWindow::_setup_group_stuff(QString &group_id)
 
 void MainWindow::on_logout_button_released()
 {
-    if(my_serv->logout())
+    // Sanity check: if we aren't even logged in yet (if login_page is active), don't do anything!
+    if((ui->stackedWidget_window->currentWidget() != ui->login_page) && (my_serv->logout()))
     {
         if(group_widget != nullptr)
         {
