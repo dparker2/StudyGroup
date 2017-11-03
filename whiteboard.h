@@ -2,9 +2,6 @@
 #define WHITEBOARD_H
 
 #include <QScrollArea>
-#include <QPainter>
-
-class my_whiteboard;
 
 class Whiteboard : public QScrollArea
 {
@@ -13,13 +10,15 @@ public:
     explicit Whiteboard(QWidget *parent = nullptr);
 
 signals:
+    void line_drawn(const QPoint&, const QPoint&);
 
 public slots:
+    void draw_line(const QPoint& point1, const QPoint& point2);
 
 protected:
 
 private:
-    my_whiteboard* drawing_board;
+    QWidget* drawing_board;
 };
 
 #endif // WHITEBOARD_H

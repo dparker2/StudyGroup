@@ -22,15 +22,21 @@ public:
 
 signals:
     void disconnected();
+    // Group Signals
     void new_chat(QString,QString,QString);
     void users_changed();
     void user_joined(QString);
     void user_left(QString);
+    // Whiteboard
+    void whiteboard_draw_line(QPoint&, QPoint&);
 
 public slots:
+    // Socket helper functions
     void reconnect_socket(QAbstractSocket::SocketState);
     void read_socket_send_signal();
+    // Group Slots
     void send_chat(QString& groupID, QString& message);
+    void send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2);
     void error(QAbstractSocket::SocketError);
 
 private:
