@@ -28,6 +28,7 @@ server::server(QObject *parent) : QObject(parent)
     success_flag = false;
     fail_flag = false;
     success_message = nullptr;
+    reconnecting = false;
 }
 
 /***
@@ -67,8 +68,21 @@ bool server::create_account(QString& username, QString& password, QString& email
 {
     // Socket connected at this point, pass through info
     my_socket->write(format_socket_request("CACC", QString(username+" "+password+" "+email)));
-    QString _str;
-    return read_socket_helper(_str); // Nothing returned as reply
+    QString message;
+    bool ret = read_socket_helper(message);
+    if(ret)
+    {
+        QMessageBox success_box;
+        success_box.setText(message);
+        success_box.exec();
+    }
+    return ret;
+}
+
+bool server::logout()
+{
+    my_socket->write(format_socket_request("LOGT", ""));
+    return true;
 }
 
 /*
@@ -89,6 +103,13 @@ bool server::join_group(QString &group_id)
     return read_socket_helper(_str);
 }
 
+bool server::leave_group(QString &group_id)
+{
+    my_socket->write(format_socket_request("LGRP", QString(group_id)));
+    QString _str;
+    return read_socket_helper(_str);
+}
+
 /*
  *
  *
@@ -97,8 +118,8 @@ bool server::join_group(QString &group_id)
  *
  */
 
-void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
-
+void server::reconnect_socket(QAbstractSocket::SocketState current_state)
+{
     qDebug() << current_state;
 
     if(QAbstractSocket::UnconnectedState == current_state)
@@ -106,10 +127,29 @@ void server::reconnect_socket(QAbstractSocket::SocketState current_state) {
         // Here because connection with the server was severed
         // Either by server going offline or client internet going out
         // So, try to continually reconnect until successful.
-        emit disconnected();
+        if(reconnecting == false) {
+            // First time we are trying to reconnect
+            emit disconnected();
+            // Show error message only initally
+            QMessageBox reconnect_box;
+            reconnect_box.setText("No internet connection to server.");
+            reconnect_box.setIcon(QMessageBox::Warning);
+            reconnect_box.exec();
+        }
+        reconnecting = true;
 
         qDebug() << "Trying to reconnect...";
         connect_server();
+    }
+
+    if(QAbstractSocket::ConnectedState == current_state)
+    {
+        if(reconnecting == true) {
+            QMessageBox connected_box;
+            connected_box.setText("Connection to server has been reestablished.");
+            connected_box.exec();
+            reconnecting = false;
+        }
     }
 }
 
@@ -161,6 +201,14 @@ void server::read_socket_send_signal()
             qDebug() << "New user: " << new_username;
             emit user_joined(new_username);
         }
+        else if (server_code == "NCHT")
+        {
+            QString message = message_stream.readAll();
+            QString username = message.section(' ', 0, 0);
+            QString time = message.section(' ', 1, 1);
+            QString chat = message.section(' ', 2, -1);
+            emit new_chat(username, time, chat);
+        }
     }
 
     return;
@@ -169,7 +217,7 @@ void server::read_socket_send_signal()
 
 void server::send_chat(QString& groupID, QString& message)
 {
-    my_socket->write(format_socket_request("CHAT", QString(groupID+" "+message)));
+    my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
     QString _str;
     read_socket_helper(_str);
 }
@@ -197,7 +245,7 @@ bool server::read_socket_helper(QString& out_message)
     success_flag = false;
     fail_flag = false;
     success_message = nullptr;
-    if(my_socket->waitForReadyRead(5000))
+    if((QAbstractSocket::ConnectedState == my_socket->state()) && (my_socket->waitForReadyRead(5000)))
     {
         if(success_flag)
         {

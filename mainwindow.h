@@ -58,6 +58,16 @@ private slots:
 
     void on_join_group_button_released();
 
+    void on_back_to_group_button_released();
+
+    void on_leave_button_released();
+
+    void on_logout_button_released();
+    
+    void on_forgot_password_released();
+
+    void on_forgot_username_released();
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
@@ -65,6 +75,8 @@ private:
 
     QWidget* exit_settings_to;
     GroupWidget* group_widget;
+
+    void _setup_group_stuff(QString& group_id);
 };
 
 #endif // MAINWINDOW_H
