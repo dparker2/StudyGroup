@@ -10,8 +10,10 @@ public:
     explicit Whiteboard(QWidget *parent = nullptr);
 
 signals:
+    void line_drawn(const QPoint&, const QPoint&);
 
 public slots:
+    void draw_line(const QPoint& point1, const QPoint& point2);
 
 protected:
 
