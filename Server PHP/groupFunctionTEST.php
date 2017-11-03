@@ -1,7 +1,7 @@
 <?php
 include_once 'db_credentials.php';
 include 'utilityFunctions.php';
-
+date_default_timezone_set('UTC');
 //CREATE GROUP FUNCTION
 function createGroup($groupname, $ip, $clients, $sock)
 {
@@ -132,16 +132,16 @@ function updateGroupList($connection, $ip, $clients, $groupID, $sock) {
     $resultUsers = mysqli_query($connection, $return_userList); //runs and stores results of all usernames in the group currently
     $num_user = $resultUsers->num_rows;//stores number of usernames
     $rowIP = mysqli_fetch_array($resultIP); //Fetches first IP as an array.
-    echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
+    //echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
     $keyIP = $rowIP[0]; //Stores the key IP address:Port for use of $clients dict.
     $keySock = $clients[$keyIP][0]; //Uses the above to access the socket client of the IP address to write back to.
-    echo "Debugging: This is keySock we're writing to: $keySock \n";
+    //echo "Debugging: This is keySock we're writing to: $keySock \n";
     fwrite($keySock, "00004USCH"); //Notifies client that wave of new users will be updated.
 
     for($n_user = $num_user; $n_user > 0; $n_user = $n_user - 1){ //For loop that iterates through lists of username to writeback to client.
       $row=mysqli_fetch_array($resultUsers); //Fetches first username into array
       $name = $row[0]; //Stores name into variable
-      echo "Debugging: We are writing $row[0] to $keyIP with socket $keySock \n";
+      echo "Debugging: We are writing User: $row[0] to $keyIP with socket $keySock \n";
       $message = "NUSR$name"; //Appends CODE NUSR to username
       $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read
       fwrite($keySock,"{$messageSize}{$message}"); //Writes back to client.
@@ -161,7 +161,32 @@ function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
   else
     echo "Connected to database \n";
 
+
+  fwrite($sock, "00004SUCC");
   $username = $clients[$ip][1];
+  $timestamp = date("h:i:s");
+  $fullmessage = "$username $timestamp $message";
+  echo "DEBUG: This is the full message $fullmessage \n";
+  $return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
+  $resultIP = mysqli_query($connection, $return_ipList); //Returns list of current IP addresses i.e. current user list connected.
+  $num_ip = $resultIP->num_rows; //Stores number of people currently connected for while loop iteration.
+  while($num_ip > 0) { //Loops through each active client, printing out the current user list in order to update ui
+    //Entire section below is to keep track of sockets we're writing to.
+    $rowIP = mysqli_fetch_array($resultIP); //Fetches first IP as an array.
+    //echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
+    $keyIP = $rowIP[0]; //Stores the key IP address:Port for use of $clients dict.
+    $keySock = $clients[$keyIP][0]; //Uses the above to access the socket client of the IP address to write back to.
+    //echo "Debugging: This is keySock we're writing to: $keySock \n";
+    fwrite($keySock, "00004UCHT"); //Notifies client that wave of new users will be updated.
+    //$messages = "$row[0] $row[1] $row[2]"; //Stores user clock message into variable
+    echo "Debugging: We are writing $fullmessage to $keyIP with socket $keySock \n";
+    $message1 = "NCHT$fullmessage"; //Appends CODE NCHT to chat message
+    $messageSize = str_pad((string)strlen($message1), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read
+    fwrite($keySock,"{$messageSize}{$message1}"); //Writes back to client.
+    echo "Debugging: Client should be receiving: {$messageSize}{$message1} \n";
+
+    $num_ip = $num_ip - 1; //Goes to next IP address/User in group
+  }//end while Loops
   //SQL Commands
   echo "DEBUG: $username and $message being put into $groupID \n";
   $insertChat = "INSERT INTO $groupID (user, Clock, Message)
@@ -169,14 +194,13 @@ function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
   if (!mysqli_query($connection, $insertChat)) {
     die(mysqli_error($connection));
   }
-  fwrite($sock, "00004SUCC");
-  singleGroupMessage($connection, $ip, $clients, $groupID, $sock);
+  //singleGroupMessage($connection, $ip, $clients, $groupID, $sock);
 
   if($connection->close()) {
     echo "Database closed\n";
   }
 }
-
+/*
 function singleGroupMessage($connection, $ip, $clients, $groupID, $sock) {
   //SQL Commands
   $return_Messages = "SELECT user, Clock, Message
@@ -192,13 +216,13 @@ function singleGroupMessage($connection, $ip, $clients, $groupID, $sock) {
   while($num_ip > 0) { //Loops through each active client, printing out the current user list in order to update ui
     //Entire section below is to keep track of sockets we're writing to.
     $rowIP = mysqli_fetch_array($resultIP); //Fetches first IP as an array.
-    echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
+    //echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
     $keyIP = $rowIP[0]; //Stores the key IP address:Port for use of $clients dict.
     $keySock = $clients[$keyIP][0]; //Uses the above to access the socket client of the IP address to write back to.
-    echo "Debugging: This is keySock we're writing to: $keySock \n";
+    //echo "Debugging: This is keySock we're writing to: $keySock \n";
     fwrite($keySock, "00004UCHT"); //Notifies client that wave of new users will be updated.
     $messages = "$row[0] $row[1] $row[2]"; //Stores user clock message into variable
-    echo "Debugging: We are writing $row[0] to $keyIP with socket $keySock \n";
+    echo "Debugging: We are writing $messages to $keyIP with socket $keySock \n";
     $message = "NCHT$messages"; //Appends CODE NUSR to username
     $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read
     fwrite($keySock,"{$messageSize}{$message}"); //Writes back to client.
@@ -206,7 +230,7 @@ function singleGroupMessage($connection, $ip, $clients, $groupID, $sock) {
 
     $num_ip = $num_ip - 1; //Goes to next IP address/User in group
   }//end while Loops
-}
+}*/
 
 
 function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
@@ -216,10 +240,10 @@ function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
                         WHERE Message IS NOT NULL";
   $resultMessages = mysqli_query($connection, $return_Messages); //runs and stores results of all messages in the group currently.
   $num_Messages = $resultMessages->num_rows;//stores number of messages
-  echo "We are writing to current user joining group: $ip who's socket should be $sock \n";
+  //echo "We are writing to current user joining group: $ip who's socket should be $sock \n";
   fwrite($sock, "00004UCHT"); //Notifies Client that wave of chat is going to be returned
 
-  echo "Debugging: What is the number of messages: $num_Messages \n";
+  //echo "Debugging: What is the number of messages: $num_Messages \n";
   for($n_messages = $num_Messages; $n_messages > 0; $n_messages = $n_messages - 1){ //For loop that iterates through lists of messages to writeback to client.
     $row=mysqli_fetch_array($resultMessages); //Fetches first message into array
     $messages = "$row[0] $row[1] $row[2]"; //Stores user clock message into variable
