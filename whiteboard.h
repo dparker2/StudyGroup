@@ -2,9 +2,6 @@
 #define WHITEBOARD_H
 
 #include <QScrollArea>
-#include <QPainter>
-
-class my_whiteboard;
 
 class Whiteboard : public QScrollArea
 {
@@ -19,7 +16,7 @@ public slots:
 protected:
 
 private:
-    my_whiteboard* drawing_board;
+    QWidget* drawing_board;
 };
 
 #endif // WHITEBOARD_H

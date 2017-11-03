@@ -29,14 +29,16 @@ SOURCES += \
     user_account_check.cpp \
     server.cpp \
     groupwidget.cpp \
-    whiteboard.cpp
+    whiteboard.cpp \
+    whiteboard_p.cpp
 
 HEADERS += \
         mainwindow.h \
     user_account_check.h \
     server.h \
     groupwidget.h \
-    whiteboard.h
+    whiteboard.h \
+    whiteboard_p.h
 
 FORMS += \
         mainwindow.ui \
