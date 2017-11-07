@@ -150,7 +150,7 @@ function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
   if ($connection->connect_error)
     die("Connection failed: " . $connection->connect_error);
 
-  $escMessage = mysqli_escape_string($message); //escape handles single quotes and such.
+  $escMessage = mysqli_escape_string($connection, $message); //escape handles single quotes and such.
   fwrite($sock, "00004SUCC");
   $username = $clients[$ip][1];
   $timestamp = date("h:i:s");
@@ -166,7 +166,6 @@ function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
     $keyIP = $rowIP[0]; //Stores the key IP address:Port for use of $clients dict.
     $keySock = $clients[$keyIP][0]; //Uses the above to access the socket client of the IP address to write back to.
     //echo "Debugging: This is keySock we're writing to: $keySock \n";
-    fwrite($keySock, "00004UCHT"); //Notifies client that wave of new users will be updated.
     //$messages = "$row[0] $row[1] $row[2]"; //Stores user clock message into variable
     //echo "Debugging: We are writing $fullmessage to $keyIP with socket $keySock \n";
     $message1 = "NCHT$fullmessage"; //Appends CODE NCHT to chat message
@@ -200,8 +199,6 @@ function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
   $resultMessages = mysqli_query($connection, $return_Messages); //runs and stores results of all messages in the group currently.
   $num_Messages = $resultMessages->num_rows;//stores number of messages
   //echo "We are writing to current user joining group: $ip who's socket should be $sock \n";
-  fwrite($sock, "00004UCHT"); //Notifies Client that wave of chat is going to be returned
-
   //echo "Debugging: What is the number of messages: $num_Messages \n";
   for($n_messages = $num_Messages; $n_messages > 0; $n_messages = $n_messages - 1){ //For loop that iterates through lists of messages to writeback to client.
     $row=mysqli_fetch_array($resultMessages); //Fetches first message into array
@@ -232,7 +229,7 @@ function updateWhiteBoard($groupID, $point1, $point2, $ip, $clients, $sock) {
     $keySock = $clients[$keyIP][0]; //Uses the above to access the socket client of the IP address to write back to.
     if ($keySock != $sock) { // Makes sure doesn't write back to original socket.
       //echo "Debugging: This is keySock we're writing to: $keySock \n";
-      $message = "WBLN$point1 $point2"; 
+      $message = "WBLN$point1 $point2";
       $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //Pads left of code  with length of string so client knows how much to read
       fwrite($keySock,"{$messageSize}{$message}"); //Writes back to client.
       //echo "Debugging: Client should be receiving: {$messageSize}{$message} \n";
