@@ -78,7 +78,9 @@ void GroupWidget::set_groupID(QString &groupID)
 void GroupWidget::on_submit_chat_released()
 {
     QString chat_message = ui->chat_input->text();
-    ui->chat_input->setText("");
-    QString groupID = group_id;
-    emit send_chat(groupID, chat_message); // Send the chat signal
+    if(chat_message != "") {
+        ui->chat_input->setText("");
+        QString groupID = group_id;
+        emit send_chat(groupID, chat_message); // Send the chat signal
+    }
 }
