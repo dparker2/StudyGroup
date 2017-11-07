@@ -209,6 +209,19 @@ void server::read_socket_send_signal()
             QString chat = message.section(' ', 2, -1);
             emit new_chat(username, time, chat);
         }
+        else if (server_code  == "WBLN")
+        {
+            QString line_str = message_stream.readAll();
+            qDebug() << line_str;
+            QString x1 = line_str.section(' ', 0, 0);
+            QString y1 = line_str.section(' ', 1, 1);
+            QString x2 = line_str.section(' ', 2, 2);
+            QString y2 = line_str.section(' ', 3, -1);
+            QPoint point1(x1.toInt(), y1.toInt());
+            QPoint point2(x2.toInt(), y2.toInt());
+            qDebug() << point1 << point2;
+            emit whiteboard_draw_line(point1, point2);
+        }
     }
 
     return;
@@ -220,6 +233,15 @@ void server::send_chat(QString& groupID, QString& message)
     my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
     QString _str;
     read_socket_helper(_str);
+}
+
+void server::send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2)
+{
+    my_socket->write(format_socket_request("WBLN", QString(groupID+" "+
+                                                           QString::number(point1.x())+" "+
+                                                           QString::number(point1.y())+" "+
+                                                           QString::number(point2.x())+" "+
+                                                           QString::number(point2.y()))));
 }
 
 /*
@@ -257,14 +279,15 @@ bool server::read_socket_helper(QString& out_message)
         {
             return false; // Wrong info
         }
+        return true; // Don't care
+    } else {
+        QMessageBox timeout_box;
+        timeout_box.setText("Network Operation Timeout");
+        timeout_box.setInformativeText("Either you aren't connected to the internet, or the server is down.");
+        timeout_box.setIcon(QMessageBox::Warning);
+        timeout_box.exec();
+        return false; // Timeout
     }
-
-    QMessageBox timeout_box;
-    timeout_box.setText("Network Operation Timeout");
-    timeout_box.setInformativeText("Either you aren't connected to the internet, or the server is down.");
-    timeout_box.setIcon(QMessageBox::Warning);
-    timeout_box.exec();
-    return false; // Timeout
 }
 
 void server::error(QAbstractSocket::SocketError err)
