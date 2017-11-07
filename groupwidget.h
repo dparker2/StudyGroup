@@ -24,7 +24,7 @@ public:
 signals:
     void send_chat(QString& groupID, QString& message);
     void line_drawn(QString& groupID, const QPoint& first_mouse_pos, const QPoint& second_mouse_pos);
-    void whiteboard_draw_line(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos);
+    void whiteboard_draw_line(QPoint& first_mouse_pos, QPoint& second_mouse_pos);
 
 public slots:
     void new_chat(QString username, QString time, QString message);

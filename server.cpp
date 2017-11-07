@@ -212,12 +212,14 @@ void server::read_socket_send_signal()
         else if (server_code  == "WBLN")
         {
             QString line_str = message_stream.readAll();
+            qDebug() << line_str;
             QString x1 = line_str.section(' ', 0, 0);
             QString y1 = line_str.section(' ', 1, 1);
             QString x2 = line_str.section(' ', 2, 2);
             QString y2 = line_str.section(' ', 3, -1);
             QPoint point1(x1.toInt(), y1.toInt());
             QPoint point2(x2.toInt(), y2.toInt());
+            qDebug() << point1 << point2;
             emit whiteboard_draw_line(point1, point2);
         }
     }
@@ -235,7 +237,11 @@ void server::send_chat(QString& groupID, QString& message)
 
 void server::send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2)
 {
-    my_socket->write(format_socket_request("WBLN", QString(groupID+" "+point1.x()+" "+point1.y()+" "+point2.x()+" "+point2.y())));
+    my_socket->write(format_socket_request("WBLN", QString(groupID+" "+
+                                                           QString::number(point1.x())+" "+
+                                                           QString::number(point1.y())+" "+
+                                                           QString::number(point2.x())+" "+
+                                                           QString::number(point2.y()))));
 }
 
 /*

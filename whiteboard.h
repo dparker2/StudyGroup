@@ -13,7 +13,7 @@ signals:
     void line_drawn(const QPoint&, const QPoint&);
 
 public slots:
-    void draw_line(const QPoint& point1, const QPoint& point2);
+    void draw_line(QPoint& point1, QPoint& point2);
 
 protected:
 
