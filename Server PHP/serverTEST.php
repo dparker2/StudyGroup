@@ -99,8 +99,10 @@ while(true) {
             leaveGroup($loginArray[0], $ip, $clients, $sock);
           }
           elseif ($code == "GCHT") {
-            echo "Debugging: GROUP CHAT array[0] = $loginArray[0] and array[1] = $loginArray[1] \n";
             sendChatMessage($loginArray[0], $loginArray[1], $ip, $clients, $sock);
+          }
+          elseif ($code == "WBNL") {
+            updateWhiteBoard($loginArray[0], $loginArray[1], $ip, $clients, $sock);
           }
           elseif ($code == "CHPW") {
             changePassword($client[$ip][1], $loginArray[1], $sock);
