@@ -12,6 +12,7 @@ public:
     explicit my_whiteboard(QWidget* parent = nullptr);
     void draw_line(const QPoint& point1, const QPoint& point2, bool from_here = true);
 
+
 signals:
     void line_drawn(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos);
 

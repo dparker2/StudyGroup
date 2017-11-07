@@ -279,14 +279,15 @@ bool server::read_socket_helper(QString& out_message)
         {
             return false; // Wrong info
         }
+        return true; // Don't care
+    } else {
+        QMessageBox timeout_box;
+        timeout_box.setText("Network Operation Timeout");
+        timeout_box.setInformativeText("Either you aren't connected to the internet, or the server is down.");
+        timeout_box.setIcon(QMessageBox::Warning);
+        timeout_box.exec();
+        return false; // Timeout
     }
-
-    QMessageBox timeout_box;
-    timeout_box.setText("Network Operation Timeout");
-    timeout_box.setInformativeText("Either you aren't connected to the internet, or the server is down.");
-    timeout_box.setIcon(QMessageBox::Warning);
-    timeout_box.exec();
-    return false; // Timeout
 }
 
 void server::error(QAbstractSocket::SocketError err)
