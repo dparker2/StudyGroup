@@ -13,7 +13,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
     whiteboard = new Whiteboard();
 
     connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint)), this, SLOT(send_line_drawn(QPoint,QPoint)));
-    connect(this, SIGNAL(whiteboard_draw_line(QPoint,QPoint)), whiteboard, SLOT(draw_line(QPoint,QPoint)));
+    connect(this, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), whiteboard, SLOT(draw_line(QPoint&,QPoint&)));
 
     ui->study_mode->addWidget(whiteboard);
     ui->study_mode->setCurrentWidget(whiteboard);

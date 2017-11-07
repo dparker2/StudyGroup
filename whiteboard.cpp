@@ -14,7 +14,7 @@ Whiteboard::Whiteboard(QWidget *parent) : QScrollArea(parent)
     this->setWidget(drawing_board);
 }
 
-void Whiteboard::draw_line(const QPoint &point1, const QPoint &point2)
+void Whiteboard::draw_line(QPoint &point1, QPoint &point2)
 {
     dynamic_cast<my_whiteboard*>(drawing_board)->draw_line(point1, point2, false);
 }

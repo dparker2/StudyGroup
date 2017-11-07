@@ -55,6 +55,7 @@ void MainWindow::on_signin_button_clicked()
         user_info->setUsername(username);
         user_info->setPassword(password);
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
+        ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
     }
 }
 
