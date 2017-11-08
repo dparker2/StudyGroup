@@ -17,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
+    QPixmap gear(":/resources/img/gear.png");
+    QIcon settingBtn(gear);
+    ui->settings_button->setIcon(settingBtn);
+    ui->settings_button->setIconSize(QSize(31,31));
+
     // check/X icons are hidden initially
     ui->label_username_check->hide();
     ui->label_username_error->hide();
