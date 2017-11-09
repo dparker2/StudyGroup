@@ -37,7 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // UI Connections
-    connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
+    // Wasn't working with settings button functionality
+    //connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
 }
 
 MainWindow::~MainWindow()
@@ -272,8 +273,27 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
 
 void MainWindow::on_settings_button_released()
 {
-    exit_settings_to = ui->stackedWidget_inner->currentWidget(); // Save previous page to exit to after
-    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+    QWidget* curr_page = ui->stackedWidget_inner->currentWidget();
+     // Save previous page to exit to after
+    if(curr_page->objectName() == "stackedPage_Settings"){
+        QPixmap gear(":/resources/img/gear.png");
+        QIcon settingBtn(gear);
+        ui->settings_button->setIcon(settingBtn);
+        ui->settings_button->setIconSize(QSize(31,31));
+        ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
+
+        exit_settings();
+    }
+    else{
+        exit_settings_to = ui->stackedWidget_inner->currentWidget();
+        ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+
+        QPixmap gear(":/resources/img/exit.png");
+        QIcon settingBtn(gear);
+        ui->settings_button->setIcon(settingBtn);
+        ui->settings_button->setIconSize(QSize(25,25));
+        ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
+    }
 }
 
 void MainWindow::exit_settings()
