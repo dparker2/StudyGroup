@@ -420,12 +420,3 @@ void MainWindow::on_forgot_username_released()
 
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-
-}
-
-void MainWindow::on_pushButton_2_clicked()
-{
-
-}
