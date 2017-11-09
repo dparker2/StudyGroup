@@ -276,23 +276,14 @@ void MainWindow::on_settings_button_released()
     QWidget* curr_page = ui->stackedWidget_inner->currentWidget();
      // Save previous page to exit to after
     if(curr_page->objectName() == "stackedPage_Settings"){
-        QPixmap gear(":/resources/img/gear.png");
-        QIcon settingBtn(gear);
-        ui->settings_button->setIcon(settingBtn);
-        ui->settings_button->setIconSize(QSize(31,31));
-        ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
+        set_settings_btn_icon(0);
 
         exit_settings();
     }
     else{
         exit_settings_to = ui->stackedWidget_inner->currentWidget();
         ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
-
-        QPixmap gear(":/resources/img/exit.png");
-        QIcon settingBtn(gear);
-        ui->settings_button->setIcon(settingBtn);
-        ui->settings_button->setIconSize(QSize(25,25));
-        ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
+        set_settings_btn_icon(1);;
     }
 }
 
@@ -301,13 +292,32 @@ void MainWindow::exit_settings()
     ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
 }
 
+void MainWindow::set_settings_btn_icon(int icon){
+    if(icon){   // if true sets icon to an X
+        QPixmap exit(":/resources/img/exit.png");
+        QIcon settingBtn(exit);
+        ui->settings_button->setIcon(settingBtn);
+        ui->settings_button->setIconSize(QSize(25,25));
+        ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
+    }
+    else{      // sets button to an gear
+        QPixmap gear(":/resources/img/gear.png");
+        QIcon settingBtn(gear);
+        ui->settings_button->setIcon(settingBtn);
+        ui->settings_button->setIconSize(QSize(31,31));
+        ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
+    }
+}
+
 void MainWindow::on_join_button_released()
 {
+    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
 }
 
 void MainWindow::on_create_button_released()
 {
+    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_CreateGroup);
 }
 
