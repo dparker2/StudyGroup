@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Make the login page always the first one
     ui->stackedWidget_window->setCurrentWidget(ui->login_page);
+    ui->tabWidget->setCurrentWidget(ui->tab_sign_in);
 
 
     // UI Connections
