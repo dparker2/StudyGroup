@@ -55,13 +55,13 @@ void MainWindow::on_signin_button_clicked()
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
 
-    //if(my_serv->login(username, password))
-    //{
+    if(my_serv->login(username, password))
+    {
         // Now logged in!
         user_info->setUsername(username);
         user_info->setPassword(password);
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
-    //}
+    }
 }
 
 void MainWindow::on_singup_button_clicked()
@@ -325,10 +325,10 @@ void MainWindow::on_create_group_button_released()
 {
     QString group_name = ui->create_group_lineEdit->text();
     QString group_id;
-    //if(my_serv->create_group(group_name, group_id))
-    //{
+    if(my_serv->create_group(group_name, group_id))
+    {
         _setup_group_stuff(group_id);
-    //}
+    }
 }
 
 void MainWindow::on_join_group_button_released()
