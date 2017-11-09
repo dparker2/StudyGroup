@@ -49,12 +49,22 @@
        <string notr="true">background-color: none;</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="login_page">
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="4" column="4">
-         <spacer name="verticalSpacer">
+        <item row="1" column="4">
+         <widget class="QLabel" name="label_logo">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -64,23 +74,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>220</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="4">
-         <spacer name="verticalSpacer_5">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>25</height>
+            <height>140</height>
            </size>
           </property>
          </spacer>
@@ -101,8 +95,8 @@
           </property>
          </spacer>
         </item>
-        <item row="0" column="4">
-         <spacer name="verticalSpacer_2">
+        <item row="4" column="4">
+         <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -112,7 +106,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>140</height>
+            <height>220</height>
            </size>
           </property>
          </spacer>
@@ -133,15 +127,21 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="4">
-         <widget class="QLabel" name="label_logo">
-          <property name="text">
-           <string/>
+        <item row="2" column="4">
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+          <property name="sizeType">
+           <enum>QSizePolicy::Minimum</enum>
           </property>
-         </widget>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>25</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item row="3" column="4">
          <widget class="QTabWidget" name="tabWidget">
@@ -164,8 +164,11 @@
            <string notr="true">color: black;
 background-color: #283035;</string>
           </property>
+          <property name="tabPosition">
+           <enum>QTabWidget::North</enum>
+          </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tab_sign_in">
            <attribute name="title">
@@ -472,7 +475,7 @@ border-style:none;</string>
              </widget>
             </item>
             <item row="6" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <layout class="QHBoxLayout" name="password_layout">
               <item>
                <widget class="QLineEdit" name="lineEdit_password1">
                 <property name="sizePolicy">
@@ -550,7 +553,7 @@ border-style:none;</string>
              </layout>
             </item>
             <item row="4" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <layout class="QHBoxLayout" name="username_layout">
               <item>
                <widget class="QLineEdit" name="lineEdit_username_signup">
                 <property name="sizePolicy">
@@ -625,7 +628,7 @@ border-style:none;</string>
              </layout>
             </item>
             <item row="2" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <layout class="QHBoxLayout" name="email_layout">
               <item>
                <widget class="QLineEdit" name="lineEdit_email">
                 <property name="sizePolicy">
@@ -722,7 +725,7 @@ border-style:none;</string>
              </spacer>
             </item>
             <item row="8" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_12">
+             <layout class="QHBoxLayout" name="verify_password_layout">
               <item>
                <widget class="QLineEdit" name="lineEdit_password2">
                 <property name="sizePolicy">
@@ -931,6 +934,338 @@ padding: 8px 12px 8px 12px;
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="tab_recover_account">
+           <attribute name="title">
+            <string>Recover Account</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_14">
+            <item row="6" column="5">
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <spacer name="horizontalSpacer_46">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="styleSheet">
+                 <string notr="true">background-color: #ff6247;
+color: white; 
+font:bold;
+</string>
+                </property>
+                <property name="text">
+                 <string>Enter</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="0">
+             <spacer name="horizontalSpacer_41">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="11" column="5">
+             <spacer name="verticalSpacer_34">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="4" column="5">
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <item>
+               <widget class="QLabel" name="label_14">
+                <property name="styleSheet">
+                 <string notr="true">color:rgba(10,190,110);</string>
+                </property>
+                <property name="text">
+                 <string>enter your recovery answer:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_43">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_2">
+                <property name="styleSheet">
+                 <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="6">
+             <spacer name="horizontalSpacer_42">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="7" column="5">
+             <spacer name="verticalSpacer_33">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="0" column="5">
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <spacer name="horizontalSpacer_48">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_7">
+                <property name="font">
+                 <font>
+                  <pointsize>20</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color:rgba(10,190,110);</string>
+                </property>
+                <property name="text">
+                 <string>Recover password</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_49">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="9" column="5">
+             <layout class="QHBoxLayout" name="horizontalLayout_14">
+              <item>
+               <widget class="QLabel" name="label_15">
+                <property name="styleSheet">
+                 <string notr="true">color:rgba(10,190,110);</string>
+                </property>
+                <property name="text">
+                 <string>enter your password:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_45">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_3">
+                <property name="styleSheet">
+                 <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="8" column="5">
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <spacer name="horizontalSpacer_50">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_10">
+                <property name="font">
+                 <font>
+                  <pointsize>20</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color:rgba(10,190,110);</string>
+                </property>
+                <property name="text">
+                 <string>Remember username</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_51">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="5">
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QLabel" name="label_11">
+                <property name="maximumSize">
+                 <size>
+                  <width>1000</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color:rgba(10,190,110);</string>
+                </property>
+                <property name="text">
+                 <string>enter your email</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_44">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit">
+                <property name="styleSheet">
+                 <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="10" column="5">
+             <layout class="QHBoxLayout" name="horizontalLayout_15">
+              <item>
+               <spacer name="horizontalSpacer_47">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_2">
+                <property name="styleSheet">
+                 <string notr="true">background-color: #ff6247;
+color: white; 
+font:bold;
+</string>
+                </property>
+                <property name="text">
+                 <string>Enter</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -940,7 +1275,9 @@ padding: 8px 12px 8px 12px;
         <item row="3" column="0" colspan="2">
          <widget class="QStackedWidget" name="stackedWidget_inner">
           <property name="currentIndex">
-           <number>0</number>
+
+           <number>1</number>
+
           </property>
           <widget class="QWidget" name="stackedPage_JoinGroup">
            <layout class="QGridLayout" name="gridLayout_6">
@@ -1336,7 +1673,7 @@ GroupIDs look like this: GroupName_####. Or, hit the &quot;Create Group&quot; bu
                   </font>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">color:rgba(10,190,110);</string>
+                  <string notr="true">color:rgba(10,190,140);</string>
                  </property>
                  <property name="text">
                   <string>Join a StudyGroup!</string>
@@ -1486,7 +1823,7 @@ GroupIDs look like this: GroupName_####. Or, hit the &quot;Create Group&quot; bu
                   </font>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">color:rgba(10,190,110);</string>
+                  <string notr="true">color:rgba(10,190,140);</string>
                  </property>
                  <property name="text">
                   <string>Welcome to StudyGroup!</string>
@@ -1828,7 +2165,7 @@ padding-right: 20px;
                       </font>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">color:rgba(10,190,110);</string>
+                      <string notr="true">color:rgba(10,190,140);</string>
                      </property>
                      <property name="text">
                       <string>Profile Information</string>
@@ -2219,7 +2556,7 @@ border-style:none;</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(20,150,220, 0.7);
+             <string notr="true">background-color: rgb(0,127,177);
 color: white; 
 font:bold;
 padding: 8px 12px 8px 12px;</string>
@@ -2272,7 +2609,8 @@ padding: 8px 12px 8px 12px;</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(20,150,220, 0.7);
+             <string notr="true">background-color: rgba(0,127,177);
+/*rgba(20,150,220, 0.7);*/
 /*rgba(80,100,140);*/
 color: white; 
 font:bold;
@@ -2364,7 +2702,13 @@ padding: 8px 12px 8px 12px;</string>
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>50</height>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>34</height>
              </size>
             </property>
             <property name="font">
@@ -2377,7 +2721,7 @@ padding: 8px 12px 8px 12px;</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(20,150,220, 0.7);
+             <string notr="true">background-color: rgba(0,127,177);
 /*rgba(80,100,140);*/
 color: white; 
 font:bold;
@@ -2422,7 +2766,7 @@ padding: 8px 12px 8px 12px;</string>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(20,150,220, 0.7);
+             <string notr="true">background-color: rgba(0,127,177);
 /*rgba(226,87,76);*/
 
 background-image: center center;</string>
@@ -2466,7 +2810,7 @@ background-image: center center;</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(20,150,220, 0.7);
+             <string notr="true">background-color: rgba(0,127,177);
 /*rgba(80,100,140);*/
 color: white; 
 font:bold;
@@ -2474,13 +2818,6 @@ padding: 8px 12px 8px 12px;</string>
             </property>
             <property name="text">
              <string>Sign out</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="exit_settings_button">
-            <property name="text">
-             <string>X</string>
             </property>
            </widget>
           </item>
@@ -2515,7 +2852,9 @@ padding: 8px 12px 8px 12px;</string>
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>26</height>
+
+     <height>22</height>
+
     </rect>
    </property>
   </widget>

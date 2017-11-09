@@ -17,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
+    QPixmap gear(":/resources/img/gear.png");
+    QIcon settingBtn(gear);
+    ui->settings_button->setIcon(settingBtn);
+    ui->settings_button->setIconSize(QSize(31,31));
+
     // check/X icons are hidden initially
     ui->label_username_check->hide();
     ui->label_username_error->hide();
@@ -30,9 +35,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
 
+    // Make the login page always the first one
+    ui->stackedWidget_window->setCurrentWidget(ui->login_page);
+
 
     // UI Connections
-    connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
+    // Wasn't working with settings button functionality
+    //connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
 }
 
 MainWindow::~MainWindow()
@@ -268,8 +277,18 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
 
 void MainWindow::on_settings_button_released()
 {
-    exit_settings_to = ui->stackedWidget_inner->currentWidget(); // Save previous page to exit to after
-    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+    QWidget* curr_page = ui->stackedWidget_inner->currentWidget();
+     // Save previous page to exit to after
+    if(curr_page->objectName() == "stackedPage_Settings"){
+        set_settings_btn_icon(0);
+
+        exit_settings();
+    }
+    else{
+        exit_settings_to = ui->stackedWidget_inner->currentWidget();
+        ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+        set_settings_btn_icon(1);;
+    }
 }
 
 void MainWindow::exit_settings()
@@ -277,13 +296,32 @@ void MainWindow::exit_settings()
     ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
 }
 
+void MainWindow::set_settings_btn_icon(int icon){
+    if(icon){   // if true sets icon to an X
+        QPixmap exit(":/resources/img/exit.png");
+        QIcon settingBtn(exit);
+        ui->settings_button->setIcon(settingBtn);
+        ui->settings_button->setIconSize(QSize(25,25));
+        ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
+    }
+    else{      // sets button to an gear
+        QPixmap gear(":/resources/img/gear.png");
+        QIcon settingBtn(gear);
+        ui->settings_button->setIcon(settingBtn);
+        ui->settings_button->setIconSize(QSize(31,31));
+        ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
+    }
+}
+
 void MainWindow::on_join_button_released()
 {
+    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
 }
 
 void MainWindow::on_create_button_released()
 {
+    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_CreateGroup);
 }
 
@@ -386,3 +424,4 @@ void MainWindow::on_forgot_username_released()
 {
 
 }
+
