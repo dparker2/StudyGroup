@@ -69,6 +69,7 @@ private slots:
     void on_forgot_username_released();
 
     void set_settings_btn_icon(int);
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
