@@ -68,6 +68,10 @@ private slots:
 
     void on_forgot_username_released();
 
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
