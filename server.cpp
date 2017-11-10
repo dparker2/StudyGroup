@@ -56,12 +56,11 @@ void server::connect_server()
  * ACCOUNTS
  */
 
-bool server::login(QString& username, QString& password)
+bool server::login(QString& username, QString& password, QString& email)
 {
     // Socket connected at this point, pass through info
     my_socket->write(format_socket_request("LOGN", QString(username+" "+password)));
-    QString reply;
-    return read_socket_helper(reply); // TODO: Handle receiving the email when it is passed back in reply
+    return read_socket_helper(email); // TODO: Handle receiving the email when it is passed back in reply
 }
 
 bool server::create_account(QString& username, QString& password, QString& email)
