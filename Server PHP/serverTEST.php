@@ -1,6 +1,6 @@
 <?php
 include 'accountFunctions.php';
-include 'groupFunctions.php';
+include 'groupFunctionTEST.php';
 
 // $socket_tuple = ($socket, $username)
 $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage);

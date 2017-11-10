@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Make the login page always the first one
     ui->stackedWidget_window->setCurrentWidget(ui->login_page);
+    ui->tabWidget->setCurrentWidget(ui->tab_sign_in);
 
 
     // UI Connections
@@ -64,6 +65,7 @@ void MainWindow::on_signin_button_clicked()
         user_info->setUsername(username);
         user_info->setPassword(password);
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
+        ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
     }
 }
 
@@ -385,10 +387,14 @@ void MainWindow::_setup_group_stuff(QString &group_id)
     ui->back_to_group_button->setText(group_id);
     ui->leave_button->setVisible(true);
 
+    // ALL THE CONNECTIONS!!!
     connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
     connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
     connect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
+    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), group_widget, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)));
+
     connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
+    connect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
 }
 
 void MainWindow::on_logout_button_released()
