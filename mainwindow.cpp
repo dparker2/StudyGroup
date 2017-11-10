@@ -58,12 +58,20 @@ void MainWindow::on_signin_button_clicked()
 {
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
+    QString email;
 
-    if(my_serv->login(username, password))
+    if(my_serv->login(username, password, email))
     {
         // Now logged in!
+        ui->lineEdit_username->setText("");
+        ui->lineEdit_password->setText("");
+        // Set username and password
         user_info->setUsername(username);
         user_info->setPassword(password);
+        // Update settings page
+        ui->settings_email->setText(email);
+        ui->settings_username->setText(user_info->getUsername());
+
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
         ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
     }
@@ -89,7 +97,13 @@ void MainWindow::on_singup_button_clicked()
         QString username = user_info->getUsername();
 
 
-        my_serv->create_account(email, username, password);
+        if(my_serv->create_account(email, username, password))
+        {
+            ui->lineEdit_email->setText("");
+            ui->lineEdit_username_signup->setText("");
+            ui->lineEdit_password1->setText("");
+            ui->lineEdit_password2->setText("");
+        }
 
         qDebug() << "Ready To Send";
     }
@@ -332,6 +346,7 @@ void MainWindow::on_create_group_button_released()
     QString group_id;
     if(my_serv->create_group(group_name, group_id))
     {
+        ui->create_group_lineEdit->setText("");
         _setup_group_stuff(group_id);
     }
 }
@@ -341,6 +356,7 @@ void MainWindow::on_join_group_button_released()
     QString group_id = ui->join_group_lineEdit->text();
     if(my_serv->join_group(group_id))
     {
+        ui->join_group_lineEdit->setText("");
         _setup_group_stuff(group_id);
     }
 }
@@ -375,7 +391,7 @@ void MainWindow::on_leave_button_released()
  */
 
 void MainWindow::_setup_group_stuff(QString &group_id)
-{
+{   
     group_widget = new GroupWidget();
     ui->stackedWidget_inner->addWidget(group_widget);
     ui->stackedWidget_inner->setCurrentWidget(group_widget);

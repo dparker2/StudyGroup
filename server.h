@@ -12,7 +12,7 @@ public:
     explicit server(QObject *parent = nullptr);
     void connect_server();
     // Account Functions
-    bool login(QString& username, QString& password);
+    bool login(QString& username, QString& password, QString& email);
     bool create_account(QString& username, QString& password, QString& email);
     bool logout();
     // Group Functions
