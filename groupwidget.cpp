@@ -32,6 +32,11 @@ QString GroupWidget::get_groupID()
     return group_id;
 }
 
+Whiteboard* GroupWidget::whiteboard_ptr()
+{
+    return whiteboard;
+}
+
 /********
  *
  * SLOTS

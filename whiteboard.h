@@ -11,9 +11,12 @@ public:
 
 signals:
     void line_drawn(const QPoint&, const QPoint&);
+    void send_whiteboard(QString&, QByteArray*);
 
 public slots:
     void draw_line(QPoint& point1, QPoint& point2);
+    void get_whiteboard(QString ip);
+    void update_whiteboard(QByteArray* wb_data);
 
 protected:
 

@@ -29,6 +29,8 @@ signals:
     void user_left(QString);
     // Whiteboard
     void whiteboard_draw_line(QPoint&, QPoint&);
+    void get_whiteboard(QString);
+    void update_whiteboard(QByteArray*);
 
 public slots:
     // Socket helper functions
@@ -36,7 +38,9 @@ public slots:
     void read_socket_send_signal();
     // Group Slots
     void send_chat(QString& groupID, QString& message);
+    // Whiteboard Slots
     void send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2);
+    void send_whiteboard(QString& ip, QByteArray* whiteboard);
     void error(QAbstractSocket::SocketError);
 
 private:

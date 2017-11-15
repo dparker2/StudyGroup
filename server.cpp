@@ -1,6 +1,7 @@
 #include "server.h"
 #include <QDebug>
 #include <QMessageBox>
+#include <QDataStream>
 
 // Testing changes
 // More changes
@@ -80,7 +81,7 @@ bool server::create_account(QString& username, QString& password, QString& email
 
 bool server::logout()
 {
-    my_socket->write(format_socket_request("LOGT", ""));
+    my_socket->write(format_socket_request("LOGT", QString("")));
     return true;
 }
 
@@ -109,10 +110,34 @@ bool server::leave_group(QString &group_id)
     return read_socket_helper(_str);
 }
 
+void server::send_chat(QString& groupID, QString& message)
+{
+    my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
+    // No success
+}
+
+void server::send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2)
+{
+    my_socket->write(format_socket_request("WBLN", QString(groupID+" "+
+                                                           QString::number(point1.x())+" "+
+                                                           QString::number(point1.y())+" "+
+                                                           QString::number(point2.x())+" "+
+                                                           QString::number(point2.y()))));
+    // No success message
+}
+
+void server::send_whiteboard(QString& ip, QByteArray* whiteboard)
+{
+    QString image_data = QTextCodec::codecForMib(1015)->toUnicode(*whiteboard);
+    my_socket->write(format_socket_request("UPWB", QString(ip+" "+image_data)));
+    delete whiteboard; // Delete the byte array from heap
+    // No success message
+}
+
 /*
  *
  *
- * SLOTS
+ * SOCKET SLOTS
  *
  *
  */
@@ -221,26 +246,21 @@ void server::read_socket_send_signal()
             qDebug() << point1 << point2;
             emit whiteboard_draw_line(point1, point2);
         }
+        else if (server_code == "NUWB")
+        {
+            QString user_needs_wb = message_stream.readAll();
+            emit get_whiteboard(user_needs_wb);
+        }
+        else if (server_code == "WBUP")
+        {
+            QString wb_string = message_stream.readAll();
+            QByteArray wb_data = QTextCodec::codecForMib(1015)->fromUnicode(wb_string);
+            emit update_whiteboard(&wb_data);
+        }
     }
 
     return;
     // TODO: Implement if statements and send signals based on what was received.
-}
-
-void server::send_chat(QString& groupID, QString& message)
-{
-    my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
-    QString _str;
-    read_socket_helper(_str);
-}
-
-void server::send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2)
-{
-    my_socket->write(format_socket_request("WBLN", QString(groupID+" "+
-                                                           QString::number(point1.x())+" "+
-                                                           QString::number(point1.y())+" "+
-                                                           QString::number(point2.x())+" "+
-                                                           QString::number(point2.y()))));
 }
 
 /*
@@ -278,7 +298,6 @@ bool server::read_socket_helper(QString& out_message)
         {
             return false; // Wrong info
         }
-        return true; // Don't care
     } else {
         QMessageBox timeout_box;
         timeout_box.setText("Network Operation Timeout");
