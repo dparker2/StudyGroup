@@ -179,7 +179,7 @@ void server::reconnect_socket(QAbstractSocket::SocketState current_state)
 
 void server::read_socket_send_signal()
 {
-    while(!my_socket->atEnd())
+    while(my_socket->bytesAvailable() > 5)
     {
         qDebug() << "Receiving info...";
         QString message_size_str = my_socket->read(5);  // Read first 5 bytes, which is the serialized message size
@@ -192,6 +192,9 @@ void server::read_socket_send_signal()
         }
 
         int message_size = message_size_str.toInt();    // Convert the size to an integer
+        while(my_socket->bytesAvailable() < message_size) {
+            // Do nothing until the right amount is available!
+        }
         QTextStream message_stream(my_socket->read(message_size));   // Read the message, which is the next size bytes
         QString server_code = message_stream.read(4);   // Get the server code
         qDebug() << "Server code: " << server_code;
@@ -249,6 +252,7 @@ void server::read_socket_send_signal()
         else if (server_code == "NUWB")
         {
             QString user_needs_wb = message_stream.readAll();
+            qDebug() << "server.cpp NUWB";
             emit get_whiteboard(user_needs_wb);
         }
         else if (server_code == "WBUP")

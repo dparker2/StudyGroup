@@ -7,7 +7,7 @@ class Whiteboard : public QScrollArea
 {
     Q_OBJECT
 public:
-    explicit Whiteboard(QWidget *parent = nullptr);
+    explicit Whiteboard(QWidget *parent = nullptr, QWidget* save_button = nullptr);
 
 signals:
     void line_drawn(const QPoint&, const QPoint&);
@@ -22,6 +22,8 @@ protected:
 
 private:
     QWidget* drawing_board;
+    QWidget* save_button;
+    bool saved;
 };
 
 #endif // WHITEBOARD_H

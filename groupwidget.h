@@ -40,6 +40,9 @@ public slots:
 
     void on_submit_chat_released();
 
+private slots:
+    void save_whiteboard_button_released();
+
 private:
     Ui::GroupWidget* ui;
     Whiteboard* whiteboard;
