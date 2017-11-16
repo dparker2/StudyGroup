@@ -18,3 +18,13 @@ void Whiteboard::draw_line(QPoint &point1, QPoint &point2)
 {
     dynamic_cast<my_whiteboard*>(drawing_board)->draw_line(point1, point2, false);
 }
+
+void Whiteboard::get_whiteboard(QString ip)
+{
+    emit send_whiteboard(ip, dynamic_cast<my_whiteboard*>(drawing_board)->get_whiteboard());
+}
+
+void Whiteboard::update_whiteboard(QByteArray *wb_data)
+{
+    dynamic_cast<my_whiteboard*>(drawing_board)->update_whiteboard(wb_data);
+}
