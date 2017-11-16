@@ -90,7 +90,9 @@ void GroupWidget::on_submit_chat_released()
     }
 }
 
-void GroupWidget::save_whiteboard_button_released()
+void GroupWidget::on_save_whiteboard_button_released()
 {
-
+    qDebug() << "saving_whiteboard";
+    emit save_whiteboard(group_id, whiteboard->whiteboard_ba());
+    ui->save_whiteboard_button->setEnabled(false);
 }

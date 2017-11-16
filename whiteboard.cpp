@@ -5,6 +5,7 @@
 Whiteboard::Whiteboard(QWidget *parent, QWidget* save_button) : QScrollArea(parent)
 {
     this->setStyleSheet("background-color: #ababab");
+    this->setFrameShadow(QFrame::Plain);
     drawing_board = new my_whiteboard;
     drawing_board->resize(2000, 1000);
     this->save_button = save_button;
@@ -16,12 +17,13 @@ Whiteboard::Whiteboard(QWidget *parent, QWidget* save_button) : QScrollArea(pare
     this->setWidget(drawing_board);
 }
 
+QByteArray* Whiteboard::whiteboard_ba()
+{
+    return dynamic_cast<my_whiteboard*>(drawing_board)->get_whiteboard();
+}
+
 void Whiteboard::draw_line(QPoint &point1, QPoint &point2)
 {
-    if (saved) {
-        saved = false;
-
-    }
     dynamic_cast<my_whiteboard*>(drawing_board)->draw_line(point1, point2, false);
 }
 

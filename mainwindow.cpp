@@ -380,19 +380,8 @@ void MainWindow::on_leave_button_released()
             ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
             ui->back_to_group_button->setVisible(false);
             ui->leave_button->setVisible(false);
-
-            // ALL THE CONNECTIONS!!!
-            disconnect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-            disconnect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
-            disconnect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
-
-            disconnect(my_serv, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), group_widget, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)));
-            disconnect(my_serv, SIGNAL(get_whiteboard(QString)), group_widget->whiteboard_ptr(), SLOT(get_whiteboard(QString)));
-            disconnect(group_widget->whiteboard_ptr(), SIGNAL(send_whiteboard(QString&,QByteArray*)), my_serv, SLOT(send_whiteboard(QString&,QByteArray*)));
-            disconnect(my_serv, SIGNAL(update_whiteboard(QByteArray*)), group_widget->whiteboard_ptr(), SLOT(update_whiteboard(QByteArray*)));
-
-            disconnect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
-            disconnect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
+            group_widget->deleteLater();
+            group_widget = nullptr;
         }
     }
 }
@@ -428,6 +417,7 @@ void MainWindow::_setup_group_stuff(QString &group_id)
 
     connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
     connect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
+    connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
 }
 
 void MainWindow::on_logout_button_released()

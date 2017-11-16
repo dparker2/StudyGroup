@@ -48,6 +48,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="save_whiteboard_button">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="styleSheet">
         <string notr="true">background-color: rgba(20,150,220, 0.7);
 color: white; 
