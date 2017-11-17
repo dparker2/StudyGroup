@@ -269,7 +269,7 @@ function rememberPassword ($username, $email, $sock){
   $find_pass_two = "SELECT Password FROM UserInfor WHERE Userame = '$username'";
   $resultUser = mysqli_query($connection, $find_pass); //runs find_user
   $obj = $resultUser->fetch_object();
-  $returnUser = $obj->Username; // returnUser == return value of find_user
+  $returnUser = $obj->Password; // returnUser == return value of find_user
   $message = "SUCC{$returnUser}";
   echo "Debug: Returning $message to client \n";
   $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //might need tuning
