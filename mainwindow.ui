@@ -1149,7 +1149,7 @@ border-style:none;</string>
                  <string notr="true">color:rgba(10,190,110);</string>
                 </property>
                 <property name="text">
-                 <string>enter your password:</string>
+                 <string>enter your email:</string>
                 </property>
                </widget>
               </item>

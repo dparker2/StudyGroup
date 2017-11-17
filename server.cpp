@@ -85,6 +85,12 @@ bool server::recover_user(QString& email){
     return read_socket_helper(user);
 }
 
+bool server::recover_password(QString& username, QString& email){
+    my_socket->write(format_socket_request("RUSP", QString(username+" "+email)));
+    QString pass;
+    return read_socket_helper(pass);
+}
+
 bool server::logout()
 {
     my_socket->write(format_socket_request("LOGT", QString("")));

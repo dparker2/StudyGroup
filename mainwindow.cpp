@@ -329,6 +329,36 @@ void MainWindow::set_settings_btn_icon(int icon){
     }
 }
 
+void MainWindow::on_pushButton_recover_pass_clicked()
+{
+    QString username = ui->lineEdit_recover_pass_1->text();
+    QString email = ui->lineEdit_recover_pass_2->text();
+
+    QString pass;
+
+    if (my_serv->recover_password(username, email)){
+        QMessageBox password_box;
+        password_box.setText ("Your password is: ");
+        password_box.setInformativeText(pass); // placeholder
+        password_box.exec();
+    }
+
+}
+
+void MainWindow::on_pushButton_recover_user_clicked()
+{
+    QString email = ui->lineEdit_recover_user->text();
+    QString user;
+    if (my_serv->recover_user(email)){
+        // QString username = user;
+        QMessageBox username_box;
+        username_box.setText("Your username is: ");
+        username_box.setInformativeText(user); //placeholder
+        username_box.exec();
+    }
+
+}
+
 void MainWindow::on_join_button_released()
 {
     set_settings_btn_icon(0);    // sets the button icon back to a gear
@@ -435,25 +465,4 @@ void MainWindow::on_logout_button_released()
         // Change widget
         ui->stackedWidget_window->setCurrentWidget(ui->login_page);
     }
-}
-
-void MainWindow::on_pushButton_recover_pass_clicked()
-{
-    QString username = ui->lineEdit_recover_pass_1->text();
-    QString email = ui->lineEdit_recover_pass_2->text();
-
-}
-
-void MainWindow::on_pushButton_recover_user_clicked()
-{
-    QString email = ui->lineEdit_recover_user->text();
-
-    if (my_serv->recover_user(email)){
-        // QString username = user;
-        QMessageBox username_box;
-        username_box.setText("Your username is:");
-        username_box.setInformativeText(email); //placeholder
-        username_box.exec();
-    }
-
 }
