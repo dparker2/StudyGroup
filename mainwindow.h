@@ -63,12 +63,12 @@ private slots:
     void on_leave_button_released();
 
     void on_logout_button_released();
-    
-    void on_forgot_password_released();
-
-    void on_forgot_username_released();
 
     void set_settings_btn_icon(int);
+
+    void on_pushButton_recover_pass_clicked();
+
+    void on_pushButton_recover_user_clicked();
 
 private:
     Ui::MainWindow *ui;

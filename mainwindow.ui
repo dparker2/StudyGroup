@@ -49,7 +49,7 @@
        <string notr="true">background-color: none;</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="login_page">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -168,7 +168,7 @@ background-color: #283035;</string>
            <enum>QTabWidget::North</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tab_sign_in">
            <attribute name="title">
@@ -991,7 +991,7 @@ padding: 8px 12px 8px 12px;
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="pushButton_recover_pass">
                 <property name="styleSheet">
                  <string notr="true">background-color: #ff6247;
 color: white; 
@@ -1039,7 +1039,7 @@ font:bold;
                  <string notr="true">color:rgba(10,190,110);</string>
                 </property>
                 <property name="text">
-                 <string>enter your recovery answer:</string>
+                 <string>enter your email:</string>
                 </property>
                </widget>
               </item>
@@ -1057,7 +1057,7 @@ font:bold;
                </spacer>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_2">
+               <widget class="QLineEdit" name="lineEdit_recover_pass_2">
                 <property name="styleSheet">
                  <string notr="true">background-color: #545454;
 color:white;
@@ -1167,7 +1167,7 @@ border-style:none;</string>
                </spacer>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_3">
+               <widget class="QLineEdit" name="lineEdit_recover_user">
                 <property name="styleSheet">
                  <string notr="true">background-color: #545454;
 color:white;
@@ -1239,7 +1239,7 @@ border-style:none;</string>
                  <string notr="true">color:rgba(10,190,110);</string>
                 </property>
                 <property name="text">
-                 <string>enter your email</string>
+                 <string>enter your username:</string>
                 </property>
                </widget>
               </item>
@@ -1257,7 +1257,7 @@ border-style:none;</string>
                </spacer>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit">
+               <widget class="QLineEdit" name="lineEdit_recover_pass_1">
                 <property name="styleSheet">
                  <string notr="true">background-color: #545454;
 color:white;
@@ -1286,7 +1286,7 @@ border-style:none;</string>
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_2">
+               <widget class="QPushButton" name="pushButton_recover_user">
                 <property name="styleSheet">
                  <string notr="true">background-color: #ff6247;
 color: white; 

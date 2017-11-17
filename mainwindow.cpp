@@ -6,6 +6,7 @@
 #include <QString>
 #include <QDebug>
 #include <QObject>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -436,13 +437,23 @@ void MainWindow::on_logout_button_released()
     }
 }
 
-void MainWindow::on_forgot_password_released()
+void MainWindow::on_pushButton_recover_pass_clicked()
 {
+    QString username = ui->lineEdit_recover_pass_1->text();
+    QString email = ui->lineEdit_recover_pass_2->text();
 
 }
 
-void MainWindow::on_forgot_username_released()
+void MainWindow::on_pushButton_recover_user_clicked()
 {
+    QString email = ui->lineEdit_recover_user->text();
+
+    if (my_serv->recover_user(email)){
+        // QString username = user;
+        QMessageBox username_box;
+        username_box.setText("Your username is:");
+        username_box.setInformativeText(email); //placeholder
+        username_box.exec();
+    }
 
 }
-
