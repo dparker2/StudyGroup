@@ -139,8 +139,8 @@ void server::send_whiteboard(QString& ip, QByteArray* whiteboard)
 
 void server::save_whiteboard(QString& group_id, QByteArray *whiteboard)
 {
-    group_id.append(" ");
-    QByteArray arg = group_id.toLatin1();
+    QString group_arg = group_id+" ";
+    QByteArray arg = group_arg.toLatin1();
     arg += *whiteboard;
     my_socket->write(format_socket_request("SVWB", arg));
     delete whiteboard;

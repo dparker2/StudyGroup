@@ -35,5 +35,6 @@ void Whiteboard::get_whiteboard(QString ip)
 
 void Whiteboard::update_whiteboard(QByteArray *wb_data)
 {
+    qDebug() << "hello from whiteboard.cpp update_whiteboard";
     dynamic_cast<my_whiteboard*>(drawing_board)->update_whiteboard(wb_data);
 }

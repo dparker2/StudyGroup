@@ -52,6 +52,7 @@ void my_whiteboard::update_whiteboard(QByteArray* wb_data)
 {
     image = QImage::fromData(*wb_data, "PNG"); // reads bytes into an image in PNG format
     update(image.rect());
+    qDebug() << "Whiteboard is updated!";
 }
 
 /*****
