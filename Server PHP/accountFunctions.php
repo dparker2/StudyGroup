@@ -230,10 +230,9 @@ function recoveryQset($username, $question, $sock) {
 }
   
   
-  // upon a user hitting the forgot username button and correctly answering their recovery question, 
-  // this function returns the username of the account tied to that recovery question.
-  // UNFINISHED
-function rememberUsername ($password, $sock) {
+  // upon a user hitting the forgot username button and correctly entering their email, 
+  // this function returns the username of the account tied to that email.
+function rememberUsername ($email, $sock) {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
   if ($connection -> connect_error)
@@ -241,9 +240,7 @@ function rememberUsername ($password, $sock) {
   else
     echo "Connected to database \n";   
   
-  // what if two users have the same question and answer? might need some sort of user ID to differentiate
-  // not sure how to do an if / else check for question existing. dont have email, username, or password to check against
-  $find_user = "SELECT Username FROM UserInfo WHERE Password = '$password'";  //finds a username tied to recovery answer
+  $find_user = "SELECT Username FROM UserInfo WHERE Email = '$email'";  //finds a username tied to a email
   $resultUser = mysqli_query($connection, $find_user); //runs find_user
   $obj = $resultUser->fetch_object();
   $returnUser = $obj->Username; // returnUser == return value of find_user
