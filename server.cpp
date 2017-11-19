@@ -274,7 +274,6 @@ void server::read_socket_send_signal()
         {
             QByteArray wb_string = message_ba;
             qDebug() << "wb string size: " << wb_string.size();
-            qDebug() << "wb string: " << wb_string;
             emit update_whiteboard(&wb_string);
         }
     }

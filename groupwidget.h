@@ -19,7 +19,6 @@ class GroupWidget : public QWidget
     Q_OBJECT
 public:
     explicit GroupWidget(QWidget *parent = nullptr);
-    ~GroupWidget() { delete whiteboard; }
     QString get_groupID();
     Whiteboard* whiteboard_ptr();
 

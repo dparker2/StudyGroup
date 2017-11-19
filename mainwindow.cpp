@@ -344,20 +344,28 @@ void MainWindow::on_create_group_button_released()
 {
     QString group_name = ui->create_group_lineEdit->text();
     QString group_id;
+    _initialize_group();
     if(my_serv->create_group(group_name, group_id))
     {
         ui->create_group_lineEdit->setText("");
-        _setup_group_stuff(group_id);
+        _activate_group(group_id);
+    }
+    else {
+        group_widget->deleteLater();
     }
 }
 
 void MainWindow::on_join_group_button_released()
 {
     QString group_id = ui->join_group_lineEdit->text();
+    _initialize_group();
     if(my_serv->join_group(group_id))
     {
         ui->join_group_lineEdit->setText("");
-        _setup_group_stuff(group_id);
+        _activate_group(group_id);
+    }
+    else {
+        group_widget->deleteLater();
     }
 }
 
@@ -380,6 +388,7 @@ void MainWindow::on_leave_button_released()
             ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
             ui->back_to_group_button->setVisible(false);
             ui->leave_button->setVisible(false);
+            group_widget->whiteboard_ptr()->deleteLater();
             group_widget->deleteLater();
             group_widget = nullptr;
         }
@@ -392,18 +401,9 @@ void MainWindow::on_leave_button_released()
  *
  */
 
-void MainWindow::_setup_group_stuff(QString &group_id)
-{   
+void MainWindow::_initialize_group()
+{
     group_widget = new GroupWidget();
-    ui->stackedWidget_inner->addWidget(group_widget);
-    ui->stackedWidget_inner->setCurrentWidget(group_widget);
-    QString name = user_info->getUsername();
-    group_widget->user_joined(name);
-    group_widget->set_groupID(group_id);
-
-    ui->back_to_group_button->setVisible(true);
-    ui->back_to_group_button->setText(group_id);
-    ui->leave_button->setVisible(true);
 
     // ALL THE CONNECTIONS!!!
     connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
@@ -418,6 +418,19 @@ void MainWindow::_setup_group_stuff(QString &group_id)
     connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
     connect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
     connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
+}
+
+void MainWindow::_activate_group(QString &group_id)
+{
+    ui->stackedWidget_inner->addWidget(group_widget);
+    ui->stackedWidget_inner->setCurrentWidget(group_widget);
+    QString name = user_info->getUsername();
+    group_widget->user_joined(name);
+    group_widget->set_groupID(group_id);
+
+    ui->back_to_group_button->setVisible(true);
+    ui->back_to_group_button->setText(group_id);
+    ui->leave_button->setVisible(true);
 }
 
 void MainWindow::on_logout_button_released()

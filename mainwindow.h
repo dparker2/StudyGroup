@@ -78,7 +78,8 @@ private:
     QWidget* exit_settings_to;
     GroupWidget* group_widget;
 
-    void _setup_group_stuff(QString& group_id);
+    void _initialize_group();
+    void _activate_group(QString& group_id);
 };
 
 #endif // MAINWINDOW_H
