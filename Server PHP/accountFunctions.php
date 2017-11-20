@@ -1,6 +1,6 @@
 <?php
 //Functions for Account Creation
-//Create Account, LOGIN, LOGOUT, change password, recover account using email / recovery questions.
+//Create Account, LOGIN, LOGOUT, change password, remember username, remember password
 include_once 'db_credentials.php';
 
 function createAccount($email, $username, $password, $sock) {
@@ -155,15 +155,7 @@ function logoutAccount($username, $sock) {
 }
 
 
-
-
-
-
-
-
-
-
-//unfinished code to change a users password
+//unfinished code to change a users password, need client input
 function changePassword($username, $password, $sock) {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
@@ -188,7 +180,7 @@ function changePassword($username, $password, $sock) {
 }
 
 
-// unfinised account recovery using email method
+// unfinised account recovery using email method. outdated, unused, unloved
 function recoverAccount($email, $password, $sock) {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
@@ -227,10 +219,11 @@ if ($connection->close()){
 >>>>>>> f444aee96b88f9ea5f8c74e021c29fe863deb20f
 }
 
+
 // account recovery using recovery question method.
 // requires UserInfo table to be updated with Question column
 // should recovery question itself be stored somewhere?
-// if recovery questions are mandatory, this function can be included in account creation
+// if recovery questions are mandatory, this function can be included/called in account creation function
 function recoveryQset($username, $question, $sock) {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   // Check connection
@@ -247,8 +240,60 @@ function recoveryQset($username, $question, $sock) {
   else {
     fwrite($sock, "FAIL\n");
   }
-
+  
   if ($connection->close()) {
     echo "Database Closed \n";
   }
+}
+  
+  
+  // upon a user hitting the forgot username button and correctly entering their email, 
+  // this function returns the username of the account tied to that email.
+function rememberUsername ($email, $sock) {
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
+  // Check connection
+  if ($connection -> connect_error)
+    die("Connection failed: " . $conn->connect_error);
+  else
+    echo "Connected to database \n";   
+  
+  $find_user = "SELECT Username FROM UserInfo WHERE Email = '$email'";  //finds a username tied to a email
+  $resultUser = mysqli_query($connection, $find_user); //runs find_user
+  $obj = $resultUser->fetch_object();
+  $returnUser = $obj->Username; // returnUser == return value of find_user
+  $message = "SUCC{$returnUser}";
+  echo "Debug: Returning $message to client \n";
+  $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //might need tuning
+  fwrite($sock, "{$messageSize}{$message}"); //writes to the socket 
+  
+  if ($connection->close()) {
+    echo "Database Closed \n";
+  }
+}
+
+// not sure if i even need the username
+// almost a copy of rememberUsername
+function rememberPassword ($username, $email, $sock){
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
+  // Check connection
+  if ($connection -> connect_error)
+    die("Connection failed: " . $conn->connect_error);
+  else
+    echo "Connected to database \n"; 
+  
+  $find_pass = "SELECT Password FROM UserInfor WHERE Email = '$email'";
+  $find_pass_two = "SELECT Password FROM UserInfor WHERE Userame = '$username'";
+  $resultUser = mysqli_query($connection, $find_pass); //runs find_user
+  $obj = $resultUser->fetch_object();
+  $returnUser = $obj->Password; // returnUser == return value of find_user
+  $message = "SUCC{$returnUser}";
+  echo "Debug: Returning $message to client \n";
+  $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //might need tuning
+  fwrite($sock, "{$messageSize}{$message}"); //writes to the socket 
+  
+  if ($connection->close()) {
+    echo "Database Closed \n";
+  }
+}
+  
 ?>

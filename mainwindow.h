@@ -20,6 +20,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+
 private slots:
     void on_signin_button_clicked();
 
@@ -57,6 +58,18 @@ private slots:
 
     void on_join_group_button_released();
 
+    void on_back_to_group_button_released();
+
+    void on_leave_button_released();
+
+    void on_logout_button_released();
+
+    void set_settings_btn_icon(int);
+
+    void on_pushButton_recover_pass_clicked();
+
+    void on_pushButton_recover_user_clicked();
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
@@ -64,6 +77,9 @@ private:
 
     QWidget* exit_settings_to;
     GroupWidget* group_widget;
+
+    void _initialize_group();
+    void _activate_group(QString& group_id);
 };
 
 #endif // MAINWINDOW_H

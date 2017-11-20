@@ -28,16 +28,21 @@ SOURCES += \
         mainwindow.cpp \
     user_account_check.cpp \
     server.cpp \
-    groupwidget.cpp
+    groupwidget.cpp \
+    whiteboard.cpp \
+    whiteboard_p.cpp
 
 HEADERS += \
         mainwindow.h \
     user_account_check.h \
     server.h \
-    groupwidget.h
+    groupwidget.h \
+    whiteboard.h \
+    whiteboard_p.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    groupwidget.ui
 
 RESOURCES += \
     resource.qrc

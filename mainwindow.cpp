@@ -6,20 +6,22 @@
 #include <QString>
 #include <QDebug>
 #include <QObject>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    group_widget = nullptr;
     ui->setupUi(this);
 
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(300,350,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
 
-    QPixmap wrench(":/resources/img/wrench.png");    // StudyGroup2 logo
-    QIcon setting_btn(wrench);
-    ui->settings_button->setIcon(setting_btn);
-    ui->settings_button->setIconSize(QSize(30,30));    // Resize to fit
+    QPixmap gear(":/resources/img/gear.png");
+    QIcon settingBtn(gear);
+    ui->settings_button->setIcon(settingBtn);
+    ui->settings_button->setIconSize(QSize(31,31));
 
 
     // check/X icons are hidden initially
@@ -27,21 +29,30 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_username_error->hide();
     ui->label_email_check->hide();
 
+    ui->back_to_group_button->hide();
+    ui->leave_button->hide();
+
     my_serv = new server();
     my_serv->connect_server();
+    connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
 
+    // Make the login page always the first one
+    ui->stackedWidget_window->setCurrentWidget(ui->login_page);
+    ui->tabWidget->setCurrentWidget(ui->tab_sign_in);
+
+
     // UI Connections
-    connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
-
-    // TEST STUFF
-    std::vector<QString> testusers1;
-    testusers1.push_back("TestName1"); testusers1.push_back("XxXNoScopeTest"); testusers1.push_back("LelNameTest");
-
+    // Wasn't working with settings button functionality
+    //connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
 }
 
 MainWindow::~MainWindow()
 {
+    on_logout_button_released();
+
+    delete user_info;
+    delete my_serv;
     delete ui;
 }
 
@@ -49,14 +60,22 @@ void MainWindow::on_signin_button_clicked()
 {
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
+    QString email;
 
-    if(my_serv->login(username, password)) {
+    if(my_serv->login(username, password, email))
+    {
         // Now logged in!
+        ui->lineEdit_username->setText("");
+        ui->lineEdit_password->setText("");
+        // Set username and password
         user_info->setUsername(username);
         user_info->setPassword(password);
+        // Update settings page
+        ui->settings_email->setText(email);
+        ui->settings_username->setText(user_info->getUsername());
+
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
-        ui->settings_username->setText(username);
-        ui->settings_email->setText("mail@mail.com");
+        ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
     }
     else{
         ui->label_signin_error->setText("Unable to connect. Try again.");
@@ -84,7 +103,13 @@ void MainWindow::on_singup_button_clicked()
         QString username = user_info->getUsername();
 
 
-        my_serv->create_account(email, username, password);
+        if(my_serv->create_account(email, username, password))
+        {
+            ui->lineEdit_email->setText("");
+            ui->lineEdit_username_signup->setText("");
+            ui->lineEdit_password1->setText("");
+            ui->lineEdit_password2->setText("");
+        }
 
         //qDebug() << "Ready To Send";
     }
@@ -273,8 +298,18 @@ void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStri
 
 void MainWindow::on_settings_button_released()
 {
-    exit_settings_to = ui->stackedWidget_inner->currentWidget(); // Save previous page to exit to after
-    ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+    QWidget* curr_page = ui->stackedWidget_inner->currentWidget();
+     // Save previous page to exit to after
+    if(curr_page->objectName() == "stackedPage_Settings"){
+        set_settings_btn_icon(0);
+
+        exit_settings();
+    }
+    else{
+        exit_settings_to = ui->stackedWidget_inner->currentWidget();
+        ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
+        set_settings_btn_icon(1);;
+    }
 }
 
 void MainWindow::exit_settings()
@@ -282,50 +317,173 @@ void MainWindow::exit_settings()
     ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
 }
 
+void MainWindow::set_settings_btn_icon(int icon){
+    if(icon){   // if true sets icon to an X
+        QPixmap exit(":/resources/img/exit.png");
+        QIcon settingBtn(exit);
+        ui->settings_button->setIcon(settingBtn);
+        ui->settings_button->setIconSize(QSize(25,25));
+        ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
+    }
+    else{      // sets button to an gear
+        QPixmap gear(":/resources/img/gear.png");
+        QIcon settingBtn(gear);
+        ui->settings_button->setIcon(settingBtn);
+        ui->settings_button->setIconSize(QSize(31,31));
+        ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
+    }
+}
+
+void MainWindow::on_pushButton_recover_pass_clicked()
+{
+    QString username = ui->lineEdit_recover_pass_1->text();
+    QString email = ui->lineEdit_recover_pass_2->text();
+
+    QString pass;
+
+    if (my_serv->recover_password(username, email)){
+        QMessageBox password_box;
+        password_box.setText ("Your password is: ");
+        password_box.setInformativeText(pass); // placeholder
+        password_box.exec();
+    }
+
+}
+
+void MainWindow::on_pushButton_recover_user_clicked()
+{
+    QString email = ui->lineEdit_recover_user->text();
+    QString user;
+    if (my_serv->recover_user(email)){
+        // QString username = user;
+        QMessageBox username_box;
+        username_box.setText("Your username is: ");
+        username_box.setInformativeText(user); //placeholder
+        username_box.exec();
+    }
+
+}
+
 void MainWindow::on_join_button_released()
 {
+    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
 }
 
 void MainWindow::on_create_button_released()
 {
+    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_CreateGroup);
 }
 
 void MainWindow::on_create_group_button_released()
 {
     QString group_name = ui->create_group_lineEdit->text();
-    QString group_id = group_name + "_0000";
+    QString group_id;
+    _initialize_group();
     if(my_serv->create_group(group_name, group_id))
     {
-        group_widget = new GroupWidget();
-        ui->stackedWidget_inner->addWidget(group_widget);
-        ui->stackedWidget_inner->setCurrentWidget(group_widget);
-        QString name = user_info->getUsername();
-        group_widget->user_joined(name);
-
-        ui->groupid_label->setText("GroupID: "+group_id);
-
-        connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-        connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+        ui->create_group_lineEdit->setText("");
+        _activate_group(group_id);
     }
-
+    else {
+        group_widget->deleteLater();
+    }
 }
 
 void MainWindow::on_join_group_button_released()
 {
     QString group_id = ui->join_group_lineEdit->text();
+    _initialize_group();
     if(my_serv->join_group(group_id))
     {
-        group_widget = new GroupWidget();
-        ui->stackedWidget_inner->addWidget(group_widget);
+        ui->join_group_lineEdit->setText("");
+        _activate_group(group_id);
+    }
+    else {
+        group_widget->deleteLater();
+    }
+}
+
+void MainWindow::on_back_to_group_button_released()
+{
+    if(group_widget != nullptr) // Sanity check, check if even in a group
+    {
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
-        QString name = user_info->getUsername();
-        group_widget->user_joined(name);
+    }
+}
 
-        ui->groupid_label->setText("GroupID: "+group_id);
+void MainWindow::on_leave_button_released()
+{
+    if(group_widget != nullptr) // Check if even in a group
+    {
+        QString group_id = group_widget->get_groupID();
+        if(my_serv->leave_group(group_id))
+        {
+            ui->stackedWidget_inner->removeWidget(group_widget);
+            ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+            ui->back_to_group_button->setVisible(false);
+            ui->leave_button->setVisible(false);
+            group_widget->whiteboard_ptr()->deleteLater();
+            group_widget->deleteLater();
+            group_widget = nullptr;
+        }
+    }
+}
 
-        connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-        connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+/**************
+ *
+ * PRIVATE
+ *
+ */
+
+void MainWindow::_initialize_group()
+{
+    group_widget = new GroupWidget();
+
+    // ALL THE CONNECTIONS!!!
+    connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
+    connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+    connect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
+
+    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), group_widget, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)));
+    connect(my_serv, SIGNAL(get_whiteboard(QString)), group_widget->whiteboard_ptr(), SLOT(get_whiteboard(QString)));
+    connect(group_widget->whiteboard_ptr(), SIGNAL(send_whiteboard(QString&,QByteArray*)), my_serv, SLOT(send_whiteboard(QString&,QByteArray*)));
+    connect(my_serv, SIGNAL(update_whiteboard(QByteArray*)), group_widget->whiteboard_ptr(), SLOT(update_whiteboard(QByteArray*)));
+
+    connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
+    connect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
+    connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
+}
+
+void MainWindow::_activate_group(QString &group_id)
+{
+    ui->stackedWidget_inner->addWidget(group_widget);
+    ui->stackedWidget_inner->setCurrentWidget(group_widget);
+    QString name = user_info->getUsername();
+    group_widget->user_joined(name);
+    group_widget->set_groupID(group_id);
+
+    ui->back_to_group_button->setVisible(true);
+    ui->back_to_group_button->setText(group_id);
+    ui->leave_button->setVisible(true);
+}
+
+void MainWindow::on_logout_button_released()
+{
+    // Sanity check: if we aren't even logged in yet (if login_page is active), don't do anything!
+    if((ui->stackedWidget_window->currentWidget() != ui->login_page) && (my_serv->logout()))
+    {
+        if(group_widget != nullptr)
+        {
+            // Leave group if still in it
+            this->on_leave_button_released();
+        }
+        // Clear username info
+        delete user_info;
+        user_info = new UserAccount();
+
+        // Change widget
+        ui->stackedWidget_window->setCurrentWidget(ui->login_page);
     }
 }
