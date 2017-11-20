@@ -43,6 +43,7 @@ public slots:
     // Whiteboard Slots
     void send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2);
     void send_whiteboard(QString& ip, QByteArray* whiteboard);
+    void save_whiteboard(QString& group_id, QByteArray* whiteboard);
     void error(QAbstractSocket::SocketError);
 
 private:
@@ -55,6 +56,7 @@ private:
     QString success_message; // ***Always set this to nullptr before checking, ONLY to be set by the read_socket_send_signal() function.
 
     QByteArray format_socket_request(const QString& request_code, QString request_arg);
+    QByteArray format_socket_request(const QString &request_code, const QByteArray& request_arg);
     bool read_socket_helper(QString& out_message);
 };
 

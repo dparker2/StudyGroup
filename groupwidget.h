@@ -26,6 +26,7 @@ signals:
     void send_chat(QString& groupID, QString& message);
     void line_drawn(QString& groupID, const QPoint& first_mouse_pos, const QPoint& second_mouse_pos);
     void whiteboard_draw_line(QPoint& first_mouse_pos, QPoint& second_mouse_pos);
+    void save_whiteboard(QString&, QByteArray*);
 
 public slots:
     void new_chat(QString username, QString time, QString message);
@@ -39,6 +40,9 @@ public slots:
     void set_groupID(QString& groupID);
 
     void on_submit_chat_released();
+
+private slots:
+    void on_save_whiteboard_button_released();
 
 private:
     Ui::GroupWidget* ui;
