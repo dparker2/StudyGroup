@@ -48,6 +48,7 @@ void server::connect_server()
 {
     // Connect the socket to the host
     my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
+    //my_socket->connectToHost("localhost", 9001);
     // If it ever disconnects (including while trying this), the socket will
     // continuously try to reconnect. See reconnect_socket().
 }
@@ -103,51 +104,15 @@ bool server::logout()
 bool server::create_group(QString& group_name, QString& group_id)
 {
     // Pass through info
-    my_socket->write(QString("CREATEGRP "+group_name+" "+this->username).toLatin1());
-    qDebug() << "Sending info...";
-    success_flag = false;
-    fail_flag = false;
-    success_message = nullptr;
-    if(my_socket->waitForReadyRead(5000))
-    {
-        if(success_flag)
-        {
-            group_id = success_message; // Return the group ID given from server
-            return true;
-        }
-
-        if(fail_flag)
-        {
-            return false; // Wrong info
-        }
-    }
-
-    return false;
+    my_socket->write(format_socket_request("CGRP", QString(group_name)));
+    return read_socket_helper(group_id);
 }
 
 bool server::join_group(QString &group_id)
 {
-    my_socket->write(QString("JOINGRP "+group_id+" "+this->username).toLatin1());
-    qDebug() << "Sending info...";
-    success_flag = false;
-    fail_flag = false;
-    success_message = nullptr;
-    if(my_socket->waitForReadyRead(5000))
-    {
-        if(success_flag)
-        {
-            group_id = success_message; // Return the group ID given from server
-            return true;
-        }
-
-        if(fail_flag)
-        {
-            return false; // Wrong info
-        }
-    }
-
-    return false;
-
+    my_socket->write(format_socket_request("JGRP", QString(group_id)));
+    QString _str;
+    return read_socket_helper(_str);
 }
 
 bool server::leave_group(QString &group_id)
@@ -261,19 +226,6 @@ void server::read_socket_send_signal()
         message_ba.remove(0, 4); // Remove the server code
         qDebug() << "Server code: " << server_code;
 
-<<<<<<< HEAD
-    // Hinge on server_code
-    if (server_code == "SUCC")      // Success code
-    {
-        // Set the success flag and message
-        success_flag = true;
-        success_message = message_stream.readAll();
-    }
-    else if (server_code == "FAIL") // Fail code
-    {
-        // Set the fail flag
-        fail_flag = true;
-=======
         // Hinge on server_code
         if (server_code == "SUCC")      // Success code
         {
