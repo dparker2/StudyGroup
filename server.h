@@ -14,6 +14,8 @@ public:
     // Account Functions
     bool login(QString& username, QString& password, QString& email);
     bool create_account(QString& username, QString& password, QString& email);
+    bool recover_user(QString& email);
+    bool recover_password(QString& username, QString& email);
     bool logout();
     // Group Functions
     bool create_group(QString& group_name, QString& group_id);
@@ -29,6 +31,8 @@ signals:
     void user_left(QString);
     // Whiteboard
     void whiteboard_draw_line(QPoint&, QPoint&);
+    void get_whiteboard(QString);
+    void update_whiteboard(QByteArray*);
 
 public slots:
     // Socket helper functions
@@ -36,7 +40,10 @@ public slots:
     void read_socket_send_signal();
     // Group Slots
     void send_chat(QString& groupID, QString& message);
+    // Whiteboard Slots
     void send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2);
+    void send_whiteboard(QString& ip, QByteArray* whiteboard);
+    void save_whiteboard(QString& group_id, QByteArray* whiteboard);
     void error(QAbstractSocket::SocketError);
 
 private:
@@ -49,6 +56,7 @@ private:
     QString success_message; // ***Always set this to nullptr before checking, ONLY to be set by the read_socket_send_signal() function.
 
     QByteArray format_socket_request(const QString& request_code, QString request_arg);
+    QByteArray format_socket_request(const QString &request_code, const QByteArray& request_arg);
     bool read_socket_helper(QString& out_message);
 };
 

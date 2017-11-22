@@ -6,6 +6,7 @@
 #include <QString>
 #include <QDebug>
 #include <QObject>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -328,6 +329,36 @@ void MainWindow::set_settings_btn_icon(int icon){
     }
 }
 
+void MainWindow::on_pushButton_recover_pass_clicked()
+{
+    QString username = ui->lineEdit_recover_pass_1->text();
+    QString email = ui->lineEdit_recover_pass_2->text();
+
+    QString pass;
+
+    if (my_serv->recover_password(username, email)){
+        QMessageBox password_box;
+        password_box.setText ("Your password is: ");
+        password_box.setInformativeText(pass); // placeholder
+        password_box.exec();
+    }
+
+}
+
+void MainWindow::on_pushButton_recover_user_clicked()
+{
+    QString email = ui->lineEdit_recover_user->text();
+    QString user;
+    if (my_serv->recover_user(email)){
+        // QString username = user;
+        QMessageBox username_box;
+        username_box.setText("Your username is: ");
+        username_box.setInformativeText(user); //placeholder
+        username_box.exec();
+    }
+
+}
+
 void MainWindow::on_join_button_released()
 {
     set_settings_btn_icon(0);    // sets the button icon back to a gear
@@ -344,20 +375,28 @@ void MainWindow::on_create_group_button_released()
 {
     QString group_name = ui->create_group_lineEdit->text();
     QString group_id;
+    _initialize_group();
     if(my_serv->create_group(group_name, group_id))
     {
         ui->create_group_lineEdit->setText("");
-        _setup_group_stuff(group_id);
+        _activate_group(group_id);
+    }
+    else {
+        group_widget->deleteLater();
     }
 }
 
 void MainWindow::on_join_group_button_released()
 {
     QString group_id = ui->join_group_lineEdit->text();
+    _initialize_group();
     if(my_serv->join_group(group_id))
     {
         ui->join_group_lineEdit->setText("");
-        _setup_group_stuff(group_id);
+        _activate_group(group_id);
+    }
+    else {
+        group_widget->deleteLater();
     }
 }
 
@@ -380,6 +419,9 @@ void MainWindow::on_leave_button_released()
             ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
             ui->back_to_group_button->setVisible(false);
             ui->leave_button->setVisible(false);
+            group_widget->whiteboard_ptr()->deleteLater();
+            group_widget->deleteLater();
+            group_widget = nullptr;
         }
     }
 }
@@ -390,9 +432,27 @@ void MainWindow::on_leave_button_released()
  *
  */
 
-void MainWindow::_setup_group_stuff(QString &group_id)
-{   
+void MainWindow::_initialize_group()
+{
     group_widget = new GroupWidget();
+
+    // ALL THE CONNECTIONS!!!
+    connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
+    connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
+    connect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
+
+    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), group_widget, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)));
+    connect(my_serv, SIGNAL(get_whiteboard(QString)), group_widget->whiteboard_ptr(), SLOT(get_whiteboard(QString)));
+    connect(group_widget->whiteboard_ptr(), SIGNAL(send_whiteboard(QString&,QByteArray*)), my_serv, SLOT(send_whiteboard(QString&,QByteArray*)));
+    connect(my_serv, SIGNAL(update_whiteboard(QByteArray*)), group_widget->whiteboard_ptr(), SLOT(update_whiteboard(QByteArray*)));
+
+    connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
+    connect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
+    connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
+}
+
+void MainWindow::_activate_group(QString &group_id)
+{
     ui->stackedWidget_inner->addWidget(group_widget);
     ui->stackedWidget_inner->setCurrentWidget(group_widget);
     QString name = user_info->getUsername();
@@ -402,15 +462,6 @@ void MainWindow::_setup_group_stuff(QString &group_id)
     ui->back_to_group_button->setVisible(true);
     ui->back_to_group_button->setText(group_id);
     ui->leave_button->setVisible(true);
-
-    // ALL THE CONNECTIONS!!!
-    connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-    connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
-    connect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
-    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), group_widget, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)));
-
-    connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
-    connect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
 }
 
 void MainWindow::on_logout_button_released()
@@ -431,14 +482,3 @@ void MainWindow::on_logout_button_released()
         ui->stackedWidget_window->setCurrentWidget(ui->login_page);
     }
 }
-
-void MainWindow::on_forgot_password_released()
-{
-
-}
-
-void MainWindow::on_forgot_username_released()
-{
-
-}
-

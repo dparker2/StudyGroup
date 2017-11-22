@@ -111,7 +111,10 @@ while(true) {
             recoverAccount($loginArray[0], $loginArray[1], $sock);
           }
           elseif ($code == "RARQ") {
-              recoveryQset($loginArray[0], $loginArray[1], $sock);
+            recoveryQset($loginArray[0], $loginArray[1], $sock);
+          }
+          elseif ($code == "RUSR") {
+            rememberUsername($loginArray[0], $loginArray[1], $sock);
           }
       }//Closes else
     }//Closes foreach

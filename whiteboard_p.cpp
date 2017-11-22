@@ -1,5 +1,6 @@
 #include "whiteboard_p.h"
 #include <QDebug>
+#include <QBuffer>
 
 my_whiteboard::my_whiteboard(QWidget *parent) : QWidget(parent)
 {
@@ -10,6 +11,12 @@ my_whiteboard::my_whiteboard(QWidget *parent) : QWidget(parent)
 
 void my_whiteboard::draw_line(const QPoint& point1, const QPoint& point2, bool from_here)
 {
+    QByteArray* image_bytes = new QByteArray();
+    QBuffer buffer(image_bytes);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "PNG"); // writes image into image_bytes in PNG format
+    qDebug() << image_bytes->size();
+
     // emit a signal if this function was called from our own mouse events.
     // This is captured by the server and sent to all other clients for drawing.
     if(from_here) {
@@ -26,6 +33,26 @@ void my_whiteboard::draw_line(const QPoint& point1, const QPoint& point2, bool f
         painter.drawLine(point1, point2);
     }
     update(QRect(point1, point2).normalized().adjusted(-7, -7, 7, 7));
+}
+
+QByteArray* my_whiteboard::get_whiteboard()
+{
+    qDebug() << "Getting whiteboard;";
+    // Here because server has requested a copy of the whiteboard, in the form of a string
+    QByteArray* image_bytes = new QByteArray();
+    QBuffer buffer(image_bytes);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "PNG"); // writes image into image_bytes in PNG format
+    qDebug() << image_bytes->size();
+    qDebug() << "Whiteboard & " << image_bytes;
+    return image_bytes;
+}
+
+void my_whiteboard::update_whiteboard(QByteArray* wb_data)
+{
+    image = QImage::fromData(*wb_data, "PNG"); // reads bytes into an image in PNG format
+    update(image.rect());
+    qDebug() << "Whiteboard is updated!";
 }
 
 /*****

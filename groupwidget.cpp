@@ -10,7 +10,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
     ui->setupUi(this);
 
     // Begin set whiteboard
-    whiteboard = new Whiteboard();
+    whiteboard = new Whiteboard(ui->save_whiteboard_button);
 
     connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint)), this, SLOT(send_line_drawn(QPoint,QPoint)));
     connect(this, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), whiteboard, SLOT(draw_line(QPoint&,QPoint&)));
@@ -30,6 +30,11 @@ GroupWidget::GroupWidget(QWidget *parent) :
 QString GroupWidget::get_groupID()
 {
     return group_id;
+}
+
+Whiteboard* GroupWidget::whiteboard_ptr()
+{
+    return whiteboard;
 }
 
 /********
@@ -83,4 +88,11 @@ void GroupWidget::on_submit_chat_released()
         QString groupID = group_id;
         emit send_chat(groupID, chat_message); // Send the chat signal
     }
+}
+
+void GroupWidget::on_save_whiteboard_button_released()
+{
+    qDebug() << "saving_whiteboard";
+    emit save_whiteboard(group_id, whiteboard->whiteboard_ba());
+    ui->save_whiteboard_button->setEnabled(false);
 }
