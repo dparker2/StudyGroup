@@ -30,7 +30,7 @@ signals:
     void user_joined(QString);
     void user_left(QString);
     // Whiteboard
-    void whiteboard_draw_line(QPoint&, QPoint&);
+    void whiteboard_draw_line(const QPoint&, const QPoint&, const QColor&, const int&);
     void get_whiteboard(QString);
     void update_whiteboard(QByteArray*);
 
@@ -41,7 +41,7 @@ public slots:
     // Group Slots
     void send_chat(QString& groupID, QString& message);
     // Whiteboard Slots
-    void send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2);
+    void send_whiteboard_line(const QString& groupID, const QPoint& point1, const QPoint& point2, const QColor& pen_color, const int& pen_size);
     void send_whiteboard(QString& ip, QByteArray* whiteboard);
     void save_whiteboard(QString& group_id, QByteArray* whiteboard);
     void error(QAbstractSocket::SocketError);

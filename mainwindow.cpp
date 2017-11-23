@@ -441,13 +441,13 @@ void MainWindow::_initialize_group()
     connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
     connect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
 
-    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), group_widget, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)));
+    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), group_widget, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)));
     connect(my_serv, SIGNAL(get_whiteboard(QString)), group_widget->whiteboard_ptr(), SLOT(get_whiteboard(QString)));
     connect(group_widget->whiteboard_ptr(), SIGNAL(send_whiteboard(QString&,QByteArray*)), my_serv, SLOT(send_whiteboard(QString&,QByteArray*)));
     connect(my_serv, SIGNAL(update_whiteboard(QByteArray*)), group_widget->whiteboard_ptr(), SLOT(update_whiteboard(QByteArray*)));
 
     connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
-    connect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
+    connect(group_widget, SIGNAL(line_drawn(QString,QPoint,QPoint,QColor,int)), my_serv, SLOT(send_whiteboard_line(QString,QPoint,QPoint,QColor,int)));
     connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
 }
 
