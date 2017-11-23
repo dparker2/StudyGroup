@@ -70,6 +70,8 @@ private slots:
 
     void on_pushButton_recover_user_clicked();
 
+    void on_stackedWidget_inner_currentChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;

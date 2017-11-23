@@ -2,6 +2,7 @@
 #include "ui_groupwidget.h"
 #include <QTime>
 #include <QDebug>
+#include <QLine>
 
 GroupWidget::GroupWidget(QWidget *parent) :
     QWidget(parent),
@@ -62,11 +63,10 @@ void GroupWidget::users_changed()
 void GroupWidget::user_joined(QString username)
 {
     QLabel* username_label = new QLabel(username);
-    username_label->setStyleSheet("color: white; font-size: 20px;");
+    username_label->setStyleSheet("color: white");
+    username_label->setFont(QFont("Trebuchet MS", 20));
     ui->username_layout->addWidget(username_label);
 }
-
-
 
 void GroupWidget::set_groupID(QString &groupID)
 {

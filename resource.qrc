@@ -6,5 +6,6 @@
         <file>img/x_mark.png</file>
         <file>img/exit.png</file>
         <file>img/gear.png</file>
+        <file>img/down-arrow.png</file>
     </qresource>
 </RCC>
