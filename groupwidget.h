@@ -24,8 +24,8 @@ public:
 
 signals:
     void send_chat(QString& groupID, QString& message);
-    void line_drawn(QString& groupID, const QPoint& first_mouse_pos, const QPoint& second_mouse_pos);
-    void whiteboard_draw_line(QPoint& first_mouse_pos, QPoint& second_mouse_pos);
+    void line_drawn(QString groupID, const QPoint& first_mouse_pos, const QPoint& second_mouse_pos, const QColor& pen_color, const int& pen_size);
+    void whiteboard_draw_line(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos, const QColor& pen_color, const int& pen_size);
     void save_whiteboard(QString&, QByteArray*);
 
 public slots:
@@ -33,9 +33,7 @@ public slots:
     void users_changed();
     void user_joined(QString username);
     // Whiteboard
-    void send_line_drawn(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos) {
-        emit line_drawn(group_id, first_mouse_pos, second_mouse_pos);
-    }
+    void send_line_drawn(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos, const QColor& pen_color, const int& pen_size);
 
     void set_groupID(QString& groupID);
 
@@ -43,6 +41,10 @@ public slots:
 
 private slots:
     void on_save_whiteboard_button_released();
+
+    void on_comboBox_pen_color_currentTextChanged(const QString &arg1);
+
+    void on_comboBox_pen_size_currentTextChanged(const QString &arg1);
 
 private:
     Ui::GroupWidget* ui;

@@ -6,27 +6,27 @@ my_whiteboard::my_whiteboard(QWidget *parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_StaticContents);
     drawing = false;
+    erasing = false;
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
 
-void my_whiteboard::draw_line(const QPoint& point1, const QPoint& point2, bool from_here)
+void my_whiteboard::draw_line(const QPoint& point1, const QPoint& point2, const QColor& pen_color_arg, const int& pen_size_arg, const bool& from_here)
 {
     QByteArray* image_bytes = new QByteArray();
     QBuffer buffer(image_bytes);
     buffer.open(QIODevice::WriteOnly);
     image.save(&buffer, "PNG"); // writes image into image_bytes in PNG format
-    qDebug() << image_bytes->size();
 
     // emit a signal if this function was called from our own mouse events.
     // This is captured by the server and sent to all other clients for drawing.
     if(from_here) {
-        emit line_drawn(point1, point2);
+        emit line_drawn(point1, point2, pen_color_arg, pen_size_arg);
     }
     // Create a painter for the image, set the pen settings, and draw onto the image.
     // The update function forces a paintEvent, passing the rectangle around the draw
     // allows the paint event to not have to copy the entire image over.
     QPainter painter(&image);
-    painter.setPen(QPen(QBrush(QColor(0, 0, 0)), 10, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter.setPen(QPen(QBrush(pen_color_arg), pen_size_arg, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     if (point1 == point2) {
         painter.drawPoint(point1);
     } else {
@@ -68,7 +68,14 @@ void my_whiteboard::mousePressEvent(QMouseEvent *event)
     {
         // Store the location of the click, initalize a line draw and also draw a point
         prev_mouse_pos = event->pos();
+        draw_line(prev_mouse_pos, event->pos(), pen_color, pen_size);
         drawing = true;
+    }
+    if(event->button() == Qt::RightButton)
+    {
+        prev_mouse_pos = event->pos();
+        draw_line(prev_mouse_pos, event->pos(), QColor("#fff"), pen_size);
+        erasing = true;
     }
 }
 
@@ -77,7 +84,12 @@ void my_whiteboard::mouseMoveEvent(QMouseEvent *event)
     // If currently set to draw, draw a line from the previous position to here
     if(drawing)
     {
-        draw_line(prev_mouse_pos, event->pos());
+        draw_line(prev_mouse_pos, event->pos(), pen_color, pen_size);
+        prev_mouse_pos = event->pos();
+    }
+    if(erasing)
+    {
+        draw_line(prev_mouse_pos, event->pos(), QColor("#fff"), pen_size);
         prev_mouse_pos = event->pos();
     }
 }
@@ -88,8 +100,11 @@ void my_whiteboard::mouseReleaseEvent(QMouseEvent *event)
     if(event->button() == Qt::LeftButton && drawing)
     {
         // Draw the final line to this point, and reset drawing to false.
-        draw_line(prev_mouse_pos, event->pos());
         drawing = false;
+    }
+    if(event->button() == Qt::RightButton && erasing)
+    {
+        erasing = true;
     }
 }
 
