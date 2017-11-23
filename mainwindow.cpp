@@ -25,7 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // check/X icons are hidden initially
     ui->label_username_check->hide();
-    ui->label_username_error->hide();
+    ui->label_password1_check->hide();
+    ui->label_password2_check->hide();
     ui->label_email_check->hide();
 
     ui->back_to_group_button->hide();
@@ -143,7 +144,6 @@ void MainWindow::on_lineEdit_username_signup_editingFinished()
 void MainWindow::on_lineEdit_username_signup_textEdited()
 {
     ui->label_username_check->hide();
-    //ui->label_username_error->hide();
     user_info->set_info_complete(1,0);
     on_lineEdit_username_signup_cursorPositionChanged();
 }
@@ -296,14 +296,11 @@ void MainWindow::on_settings_button_released()
     QWidget* curr_page = ui->stackedWidget_inner->currentWidget();
      // Save previous page to exit to after
     if(curr_page->objectName() == "stackedPage_Settings"){
-        set_settings_btn_icon(0);
-
         exit_settings();
     }
     else{
         exit_settings_to = ui->stackedWidget_inner->currentWidget();
         ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
-        set_settings_btn_icon(1);;
     }
 }
 
@@ -318,14 +315,16 @@ void MainWindow::set_settings_btn_icon(int icon){
         QIcon settingBtn(exit);
         ui->settings_button->setIcon(settingBtn);
         ui->settings_button->setIconSize(QSize(25,25));
-        ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
+        ui->settings_button->setChecked(true);
+        //ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
     }
     else{      // sets button to an gear
         QPixmap gear(":/resources/img/gear.png");
         QIcon settingBtn(gear);
         ui->settings_button->setIcon(settingBtn);
         ui->settings_button->setIconSize(QSize(31,31));
-        ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
+        ui->settings_button->setChecked(false);
+        //ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
     }
 }
 
@@ -361,14 +360,14 @@ void MainWindow::on_pushButton_recover_user_clicked()
 
 void MainWindow::on_join_button_released()
 {
-    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+    ui->join_button->setChecked(true);
 }
 
 void MainWindow::on_create_button_released()
 {
-    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_CreateGroup);
+    ui->create_button->setChecked(true);
 }
 
 void MainWindow::on_create_group_button_released()
@@ -405,6 +404,7 @@ void MainWindow::on_back_to_group_button_released()
     if(group_widget != nullptr) // Sanity check, check if even in a group
     {
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
+        ui->back_to_group_button->setChecked(true);
     }
 }
 
@@ -480,5 +480,35 @@ void MainWindow::on_logout_button_released()
 
         // Change widget
         ui->stackedWidget_window->setCurrentWidget(ui->login_page);
+    }
+}
+
+void MainWindow::on_stackedWidget_inner_currentChanged(int)
+{
+    ui->join_button->setChecked(false);
+    ui->create_button->setChecked(false);
+    ui->back_to_group_button->setChecked(false);
+    set_settings_btn_icon(0);
+    if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_JoinGroup)
+    {
+        ui->join_button->setChecked(true);
+    }
+    else if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_CreateGroup)
+    {
+        ui->create_button->setChecked(true);
+    }
+    else if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_Settings)
+    {
+        set_settings_btn_icon(1);
+        if(exit_settings_to == ui->stackedPage_JoinGroup)
+            ui->join_button->setChecked(true);
+        if(exit_settings_to == ui->stackedPage_CreateGroup)
+            ui->create_button->setChecked(true);
+        if(exit_settings_to == group_widget)
+            ui->back_to_group_button->setChecked(true);
+    }
+    else if(ui->stackedWidget_inner->currentWidget() == group_widget)
+    {
+        ui->back_to_group_button->setChecked(true);
     }
 }
