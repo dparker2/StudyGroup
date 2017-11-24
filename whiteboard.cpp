@@ -27,7 +27,7 @@ QByteArray* Whiteboard::whiteboard_ba()
 void Whiteboard::draw_line(const QPoint &point1, const QPoint &point2, const QColor& pen_color, const int& pen_size)
 {
     save_button->setEnabled(true);
-    dynamic_cast<my_whiteboard*>(drawing_board)->draw_line(point1, point2, pen_color, pen_size, false);
+    dynamic_cast<my_whiteboard*>(drawing_board)->draw_line(point1, point2, pen_color, pen_size);
 }
 
 void Whiteboard::get_whiteboard(QString ip)
