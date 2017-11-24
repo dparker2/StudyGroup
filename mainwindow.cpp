@@ -462,6 +462,7 @@ void MainWindow::_activate_group(QString &group_id)
     ui->back_to_group_button->setVisible(true);
     ui->back_to_group_button->setText(group_id);
     ui->leave_button->setVisible(true);
+    ui->leave_button->setChecked(false);
 }
 
 void MainWindow::on_logout_button_released()

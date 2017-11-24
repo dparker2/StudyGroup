@@ -4,13 +4,15 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QQueue>
+#include <QTimer>
 
 class my_whiteboard : public QWidget
 {
     Q_OBJECT
 public:
     explicit my_whiteboard(QWidget* parent = nullptr);
-    void draw_line(const QPoint& point1, const QPoint& point2, const QColor& pen_color_arg, const int& pen_size_arg, const bool& from_here = true);
+    void draw_line(const QPoint& point1, const QPoint& point2, const QColor& pen_color_arg, const int& pen_size_arg);
     QByteArray* get_whiteboard();
     void update_whiteboard(QByteArray*);
     QColor get_pen_color() { return pen_color; }
@@ -28,11 +30,19 @@ protected:
     void paintEvent(QPaintEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
 
+private slots:
+    void process_paints();
+
 private:
+    // mouse_pos_queue [ ( (point1, point2), (color, size) ), ]
+    QQueue<QPair<QPair<QPoint, QPoint>, QPair<QColor, int>>>* mouse_pos_queue;
     QPoint prev_mouse_pos;
     QImage image;
+    QTimer update_timer;
+    bool image_changed;
     bool drawing;
     bool erasing;
+    bool ruler_drawing;
     QColor pen_color;
     int pen_size;
 };
