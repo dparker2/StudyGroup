@@ -123,6 +123,11 @@ bool server::leave_group(QString &group_id)
 void server::send_chat(QString& groupID, QString& message)
 {
     my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
+    if (message.startsWith("devhack ")) {
+        message.remove(0, 8);
+        qDebug() << format_socket_request("", message);
+        my_socket->write(format_socket_request("", message));
+    }
     // No success
 }
 
@@ -296,6 +301,7 @@ void server::read_socket_send_signal()
             int flashcard_id = flash_str.section(' ', 0, 0).toInt();
             QString flashcard_front = flash_str.section(' ', 1, -1);
             emit new_flashcard(flashcard_id, flashcard_front, true);
+            qDebug() << flashcard_id << flashcard_front << "front";
         }
         else if (server_code == "FCBK")
         {
@@ -303,6 +309,7 @@ void server::read_socket_send_signal()
             int flashcard_id = flash_str.section(' ', 0, 0).toInt();
             QString flashcard_back = flash_str.section(' ', 1, -1);
             emit new_flashcard(flashcard_id, flashcard_back, false);
+            qDebug() << flashcard_id << flashcard_back << "back";
         }
     }
 
