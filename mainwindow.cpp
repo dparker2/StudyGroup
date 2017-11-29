@@ -335,11 +335,16 @@ void MainWindow::on_pushButton_recover_pass_clicked()
 
     QString pass;
 
-    if (my_serv->recover_password(username, email)){
+    if (my_serv->recover_pass(username, email, pass)){
         QMessageBox password_box;
         password_box.setText ("Your password is: ");
         password_box.setInformativeText(pass); // placeholder
         password_box.exec();
+    }
+    else {
+        QMessageBox error_box;
+        error_box.critical (0, "Error", "An error has occured! ");
+        error_box.setFixedSize(500,200);
     }
 
 }
@@ -348,12 +353,18 @@ void MainWindow::on_pushButton_recover_user_clicked()
 {
     QString email = ui->lineEdit_recover_user->text();
     QString user;
-    if (my_serv->recover_user(email)){
+
+    if (my_serv->recover_user(email, user)){
         // QString username = user;
         QMessageBox username_box;
         username_box.setText("Your username is: ");
         username_box.setInformativeText(user); //placeholder
         username_box.exec();
+    }
+    else {
+        QMessageBox error_box;
+        error_box.critical (0, "Error", "An error has occured! ");
+        error_box.setFixedSize(500,200);
     }
 
 }

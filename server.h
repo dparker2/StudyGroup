@@ -14,8 +14,8 @@ public:
     // Account Functions
     bool login(QString& username, QString& password, QString& email);
     bool create_account(QString& username, QString& password, QString& email);
-    bool recover_user(QString& email);
-    bool recover_password(QString& username, QString& email);
+    bool recover_user(QString& email, QString& user);
+    bool recover_pass(QString& username, QString& email, QString& pass);
     bool logout();
     // Group Functions
     bool create_group(QString& group_name, QString& group_id);

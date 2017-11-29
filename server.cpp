@@ -79,15 +79,13 @@ bool server::create_account(QString& username, QString& password, QString& email
     return ret;
 }
 
-bool server::recover_user(QString& email){
+bool server::recover_user(QString& email, QString& user){
     my_socket->write(format_socket_request("RUSR", QString(email)));
-    QString user;
     return read_socket_helper(user);
 }
 
-bool server::recover_password(QString& username, QString& email){
+bool server::recover_pass(QString& username, QString& email, QString& pass){
     my_socket->write(format_socket_request("RUSP", QString(username+" "+email)));
-    QString pass;
     return read_socket_helper(pass);
 }
 
