@@ -116,6 +116,9 @@ while(true) {
           elseif ($code == "RUSR") {
             rememberUsername($loginArray[0], $sock);
           }
+          elseif ($code == "RUSP") {
+            rememberPassword($loginArray[0],  $sock);
+          }
       }//Closes else
     }//Closes foreach
 }//Closes while
