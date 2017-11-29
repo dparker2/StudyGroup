@@ -33,6 +33,8 @@ signals:
     void whiteboard_draw_line(const QPoint&, const QPoint&, const QColor&, const int&);
     void get_whiteboard(QString);
     void update_whiteboard(QByteArray*);
+    // Flashcard
+    void new_flashcard(const int id, const QString&, const bool front);
 
 public slots:
     // Socket helper functions
