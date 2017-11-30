@@ -484,12 +484,17 @@ void MainWindow::on_logout_button_released()
         if(group_widget != nullptr)
         {
             // Leave group if still in it
-            this->on_leave_button_released();
+            ui->stackedWidget_inner->removeWidget(group_widget);
+            ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+            ui->back_to_group_button->setVisible(false);
+            ui->leave_button->setVisible(false);
+            group_widget->whiteboard_ptr()->deleteLater();
+            group_widget->deleteLater();
+            group_widget = nullptr;
         }
         // Clear username info
         delete user_info;
         user_info = new UserAccount();
-
         // Change widget
         ui->stackedWidget_window->setCurrentWidget(ui->login_page);
     }
