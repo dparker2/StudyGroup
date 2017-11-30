@@ -14,8 +14,8 @@ public:
     // Account Functions
     bool login(QString& username, QString& password, QString& email);
     bool create_account(QString& username, QString& password, QString& email);
-    bool recover_user(QString& email);
-    bool recover_password(QString& username, QString& email);
+    bool recover_user(QString& email, QString& user);
+    bool recover_pass(QString& username, QString& email, QString& pass);
     bool logout();
     // Group Functions
     bool create_group(QString& group_name, QString& group_id);
@@ -30,9 +30,11 @@ signals:
     void user_joined(QString);
     void user_left(QString);
     // Whiteboard
-    void whiteboard_draw_line(QPoint&, QPoint&);
+    void whiteboard_draw_line(const QPoint&, const QPoint&, const QColor&, const int&);
     void get_whiteboard(QString);
     void update_whiteboard(QByteArray*);
+    // Flashcard
+    void new_flashcard(const int id, const QString&, const bool front);
 
 public slots:
     // Socket helper functions
@@ -41,7 +43,7 @@ public slots:
     // Group Slots
     void send_chat(QString& groupID, QString& message);
     // Whiteboard Slots
-    void send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2);
+    void send_whiteboard_line(const QString& groupID, const QPoint& point1, const QPoint& point2, const QColor& pen_color, const int& pen_size);
     void send_whiteboard(QString& ip, QByteArray* whiteboard);
     void save_whiteboard(QString& group_id, QByteArray* whiteboard);
     void error(QAbstractSocket::SocketError);

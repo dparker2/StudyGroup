@@ -79,15 +79,13 @@ bool server::create_account(QString& username, QString& password, QString& email
     return ret;
 }
 
-bool server::recover_user(QString& email){
+bool server::recover_user(QString& email, QString& user){
     my_socket->write(format_socket_request("RUSR", QString(email)));
-    QString user;
     return read_socket_helper(user);
 }
 
-bool server::recover_password(QString& username, QString& email){
+bool server::recover_pass(QString& username, QString& email, QString& pass){
     my_socket->write(format_socket_request("RUSP", QString(username+" "+email)));
-    QString pass;
     return read_socket_helper(pass);
 }
 
@@ -125,12 +123,19 @@ bool server::leave_group(QString &group_id)
 void server::send_chat(QString& groupID, QString& message)
 {
     my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
+    if (message.startsWith("devhack ")) {
+        message.remove(0, 8);
+        qDebug() << format_socket_request("", message);
+        my_socket->write(format_socket_request("", message));
+    }
     // No success
 }
 
-void server::send_whiteboard_line(QString& groupID, QPoint point1, QPoint point2)
+void server::send_whiteboard_line(const QString &groupID, const QPoint &point1, const QPoint &point2, const QColor &pen_color, const int &pen_size)
 {
     my_socket->write(format_socket_request("WBLN", QString(groupID+" "+
+                                                           pen_color.name()+" "+
+                                                           QString::number(pen_size)+" "+
                                                            QString::number(point1.x())+" "+
                                                            QString::number(point1.y())+" "+
                                                            QString::number(point2.x())+" "+
@@ -267,14 +272,16 @@ void server::read_socket_send_signal()
         {
             QString line_str = message_ba;
             qDebug() << line_str;
-            QString x1 = line_str.section(' ', 0, 0);
-            QString y1 = line_str.section(' ', 1, 1);
-            QString x2 = line_str.section(' ', 2, 2);
-            QString y2 = line_str.section(' ', 3, -1);
+            QColor pen_color(line_str.section(' ', 0, 0));
+            int pen_size = line_str.section(' ', 1, 1).toInt();
+            QString x1 = line_str.section(' ', 2, 2);
+            QString y1 = line_str.section(' ', 3, 3);
+            QString x2 = line_str.section(' ', 4, 4);
+            QString y2 = line_str.section(' ', 5, -1);
             QPoint point1(x1.toInt(), y1.toInt());
             QPoint point2(x2.toInt(), y2.toInt());
             qDebug() << point1 << point2;
-            emit whiteboard_draw_line(point1, point2);
+            emit whiteboard_draw_line(point1, point2, pen_color, pen_size);
         }
         else if (server_code == "NUWB")
         {
@@ -287,6 +294,22 @@ void server::read_socket_send_signal()
             QByteArray wb_string = message_ba;
             qDebug() << "wb string size: " << wb_string.size();
             emit update_whiteboard(&wb_string);
+        }
+        else if (server_code == "FCFT")
+        {
+            QString flash_str = message_ba;
+            int flashcard_id = flash_str.section(' ', 0, 0).toInt();
+            QString flashcard_front = flash_str.section(' ', 1, -1);
+            emit new_flashcard(flashcard_id, flashcard_front, true);
+            qDebug() << flashcard_id << flashcard_front << "front";
+        }
+        else if (server_code == "FCBK")
+        {
+            QString flash_str = message_ba;
+            int flashcard_id = flash_str.section(' ', 0, 0).toInt();
+            QString flashcard_back = flash_str.section(' ', 1, -1);
+            emit new_flashcard(flashcard_id, flashcard_back, false);
+            qDebug() << flashcard_id << flashcard_back << "back";
         }
     }
 
@@ -307,7 +330,7 @@ QByteArray server::format_socket_request(const QString &request_code, QString re
     QString full_request = request_code + request_arg;
     QString request_length = QString::number(full_request.size());
     full_request = full_request.prepend(request_length.rightJustified(5, '0', true));
-    qDebug() << "Sending: " << full_request;
+    //qDebug() << "Sending: " << full_request;
     return full_request.toLatin1();
 }
 
