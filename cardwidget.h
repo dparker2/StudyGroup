@@ -7,7 +7,6 @@
 
 #include "flashcard.h"
 #include "ui_cardwidget.h"
-#include "user_account_check.h"
 
 namespace Ui {
 class CardWidget;
@@ -19,7 +18,6 @@ class CardWidget : public QWidget
 public:
     explicit CardWidget(QWidget *parent = nullptr);
     void insertCard(QString, QString, int);
-    //void setDeckName(QString);
     Flashcard* getCard(int index);
 
     //Flashcard* getNextCard(int index);
@@ -40,12 +38,9 @@ private slots:
 private:
     Ui::CardWidget *ui;
     QHBoxLayout *layout;
-    server* my_serv;
-
     QList<Flashcard*> deck;
     Flashcard* flashcard;
     int card_num;
-    //QString deck_name;
 };
 
 #endif // CARDWIDGET_H

@@ -12,6 +12,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
 
     // Begin set whiteboard
     whiteboard = new Whiteboard(ui->save_whiteboard_button);
+    flashcard = new CardWidget();
 
     qDebug() << connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint,QColor,int)), this, SLOT(send_line_drawn(QPoint,QPoint,QColor,int)));
     qDebug() << connect(this, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), whiteboard, SLOT(draw_line(QPoint,QPoint,QColor,int)));
@@ -24,6 +25,10 @@ GroupWidget::GroupWidget(QWidget *parent) :
     whiteboard->set_pen_size(pen_string.toInt());
     //ui->study_mode->setStyleSheet("background-color: #ffffff;");
     // End set whiteboard
+
+    ui->study_mode->addWidget(flashcard);
+    setFlashcardUI();
+
 }
 
 /********
@@ -132,4 +137,21 @@ void GroupWidget::on_comboBox_pen_size_currentTextChanged(const QString &pen_siz
     QString p_size = pen_size;
     p_size.chop(2);
     whiteboard->set_pen_size(p_size.toInt());
+}
+
+
+
+void GroupWidget::setFlashcardUI(){
+    //flashcard->card_label->hide();
+}
+
+void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
+{
+    qDebug() << "INDEX " << index << endl;
+    if(index){
+        ui->study_mode->setCurrentWidget(flashcard);
+    }
+    else{
+        ui->study_mode->setCurrentWidget(whiteboard);
+    }
 }

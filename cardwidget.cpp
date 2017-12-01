@@ -28,7 +28,6 @@ void CardWidget::deleteCard(int index){
     deck.pop_back();
 }
 
-
 void CardWidget::on_addCardBtn_clicked()
 {    
     ui->save_deck_btn->show();
@@ -38,8 +37,6 @@ void CardWidget::on_addCardBtn_clicked()
     //flashcard = new Flashcard();
     flashcard->setCardNum(card_num++);
     deck.push_back(flashcard);
-
-    //my_serv->send_card_front("username");
 }
 
 void CardWidget::on_save_deck_btn_clicked()

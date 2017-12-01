@@ -20,7 +20,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(237,243,254);</string>
+   <string notr="true">background-color: rgb(246,246,246);</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -80,9 +80,6 @@
              <widget class="QWidget" name="card_container" native="true"/>
             </item>
            </layout>
-           <zorder></zorder>
-           <zorder>verticalSpacer_2</zorder>
-           <zorder>card_container</zorder>
           </widget>
          </widget>
         </item>

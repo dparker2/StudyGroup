@@ -1,22 +1,262 @@
-<?xml version='1.0'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>Flashcard</class>
  <widget class="QWidget" name="Flashcard">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>240</height>
+    <width>621</width>
+    <height>380</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>480</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>700</width>
+    <height>400</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QStackedWidget" name="card_widget">
+     <property name="styleSheet">
+      <string notr="true">background-color: skyblue;</string>
+     </property>
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="card_front">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="0">
+        <widget class="QLabel" name="card_text_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Trebuchet MS</family>
+           <pointsize>16</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QPushButton" name="edit_card_btn">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+background-color: rgb(50,117,181);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}</string>
+           </property>
+           <property name="text">
+            <string>Edit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::MinimumExpanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>50</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="flip_card_btn">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+background-color: rgb(50,117,181);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}</string>
+           </property>
+           <property name="text">
+            <string>Flip &gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QLabel" name="card_number">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="card_edit">
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0">
+        <widget class="QLabel" name="current_side">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Trebuchet MS</family>
+           <pointsize>20</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Front</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QTextEdit" name="card_textEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QTextEdit{
+	border-style: none;
+	background-color: white;
+
+}
+</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QPushButton" name="set_front_btn">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+background-color: rgb(50,117,181);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}</string>
+           </property>
+           <property name="text">
+            <string>Set Front</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_3">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+background-color: rgb(50,117,181);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}</string>
+           </property>
+           <property name="text">
+            <string>Cancel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
- <pixmapfunction/>
+ <resources/>
  <connections/>
 </ui>

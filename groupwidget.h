@@ -9,6 +9,7 @@
 #include <QPushButton>
 
 #include "whiteboard.h"
+#include "cardwidget.h"
 
 namespace Ui {
 class GroupWidget;
@@ -39,6 +40,8 @@ public slots:
 
     void on_submit_chat_released();
 
+    void setFlashcardUI();
+
 private slots:
     void on_save_whiteboard_button_released();
 
@@ -46,9 +49,13 @@ private slots:
 
     void on_comboBox_pen_size_currentTextChanged(const QString &arg1);
 
+
+    void on_comboBox_study_mode_currentIndexChanged(int index);
+
 private:
     Ui::GroupWidget* ui;
     Whiteboard* whiteboard;
+    CardWidget* flashcard;
     QString group_id;
 };
 

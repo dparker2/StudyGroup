@@ -176,7 +176,7 @@ QComboBox::down-arrow {
                  <bool>false</bool>
                 </property>
                 <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::AdjustToContents</enum>
+                 <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
                 </property>
                 <item>
                  <property name="text">
