@@ -53,6 +53,16 @@ void server::connect_server()
     // continuously try to reconnect. See reconnect_socket().
 }
 
+void server::setTimestamps(char arg)
+{
+    if(arg == server::timestamp_local) {
+        timestamps.setTimeSpec(Qt::LocalTime);
+    }
+    else if(arg == server::timestamp_utc) {
+        timestamps.setTimeSpec(Qt::UTC);
+    }
+}
+
 /*
  * ACCOUNTS
  */
@@ -203,6 +213,7 @@ void server::reconnect_socket(QAbstractSocket::SocketState current_state)
             connected_box.exec();
             reconnecting = false;
         }
+        emit connected();
     }
 }
 
