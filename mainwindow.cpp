@@ -62,8 +62,8 @@ void MainWindow::on_signin_button_clicked()
     QString password = ui->lineEdit_password->text();
     QString email;
 
-    if(my_serv->login(username, password, email))
-    {
+    //if(my_serv->login(username, password, email))
+    //{
         // Now logged in!
         ui->lineEdit_username->setText("");
         ui->lineEdit_password->setText("");
@@ -76,7 +76,7 @@ void MainWindow::on_signin_button_clicked()
 
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
         ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
-    }
+    //}
 }
 
 void MainWindow::on_singup_button_clicked()
@@ -375,14 +375,14 @@ void MainWindow::on_create_group_button_released()
     QString group_name = ui->create_group_lineEdit->text();
     QString group_id;
     _initialize_group();
-    if(my_serv->create_group(group_name, group_id))
-    {
+    //if(my_serv->create_group(group_name, group_id))
+    //{
         ui->create_group_lineEdit->setText("");
         _activate_group(group_id);
-    }
-    else {
-        group_widget->deleteLater();
-    }
+    //}
+    //else {
+    //    group_widget->deleteLater();
+    //}
 }
 
 void MainWindow::on_join_group_button_released()

@@ -132,173 +132,36 @@ color: rgb(255, 255, 255);</string>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
-               <widget class="QComboBox" name="comboBox_pen_color">
+               <widget class="QStackedWidget" name="study_menu">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>Trebuchet MS</family>
-                  <pointsize>10</pointsize>
-                  <weight>75</weight>
-                  <italic>false</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QComboBox {
-background-color: rgb(50, 54, 63);
-color: white; 
-font:bold;
-border: 0px;
-padding-top: 1px;
-padding-left: 4px;
-padding-right: 0px;
-}
-
-QComboBox:hover {
-	background-color: rgba(0, 127, 177, 0.6);
-}
-
-QComboBox::drop-down {
-   border: 0px;
-}
-
-QComboBox::down-arrow {
-	image: url(:/resources/img/down-arrow.png);
-}
-</string>
-                </property>
-                <property name="editable">
-                 <bool>false</bool>
-                </property>
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>Black</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Red</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Green</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Blue</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="comboBox_pen_size">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>Trebuchet MS</family>
-                  <pointsize>10</pointsize>
-                  <weight>75</weight>
-                  <italic>false</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QComboBox {
-background-color: rgb(50, 54, 63);
-color: white; 
-font:bold;
-border: 0px;
-padding-top: 1px;
-padding-left: 4px;
-padding-right: 0px;
-}
-
-QComboBox:hover {
-	background-color: rgba(0, 127, 177, 0.6);
-}
-
-QComboBox::drop-down {
-   border: 0px;
-}
-
-QComboBox::down-arrow {
-	image: url(:/resources/img/down-arrow.png);
-}
-</string>
-                </property>
-                <property name="editable">
-                 <bool>false</bool>
                 </property>
                 <property name="currentIndex">
-                 <number>4</number>
+                 <number>0</number>
                 </property>
-                <property name="sizeAdjustPolicy">
-                 <enum>QComboBox::AdjustToContents</enum>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>2px</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>4px</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>6px</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>8px</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>10px</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QToolButton" name="save_whiteboard_button">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>Trebuchet MS</family>
-                  <pointsize>10</pointsize>
-                  <weight>75</weight>
-                  <italic>false</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QToolButton {
+                <widget class="QWidget" name="whiteboard_menu">
+                 <layout class="QHBoxLayout" name="horizontalLayout_11">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_10">
+                    <item>
+                     <widget class="QToolButton" name="save_whiteboard_button">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Trebuchet MS</family>
+                        <pointsize>10</pointsize>
+                        <weight>75</weight>
+                        <italic>false</italic>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QToolButton {
 background-color: rgb(50, 54, 63);
 color: white; 
 font:bold;
@@ -308,44 +171,37 @@ border: 0px;
 QToolButton:hover {
 	background-color: rgba(0, 127, 177, 0.6);
 }</string>
-                </property>
-                <property name="text">
-                 <string>Save Whiteboard</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_3">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>0</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QComboBox" name="comboBox_study_mode">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>Trebuchet MS</family>
-                  <pointsize>10</pointsize>
-                  <weight>75</weight>
-                  <italic>false</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QComboBox {
+                      </property>
+                      <property name="text">
+                       <string>Save Whiteboard</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="comboBox_pen_size">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Trebuchet MS</family>
+                        <pointsize>10</pointsize>
+                        <weight>75</weight>
+                        <italic>false</italic>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QComboBox {
 background-color: rgb(50, 54, 63);
 color: white; 
 font:bold;
@@ -367,20 +223,219 @@ QComboBox::down-arrow {
 	image: url(:/resources/img/down-arrow.png);
 }
 </string>
-                </property>
-                <property name="editable">
-                 <bool>false</bool>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>Whiteboard</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Flashcards</string>
-                 </property>
-                </item>
+                      </property>
+                      <property name="editable">
+                       <bool>false</bool>
+                      </property>
+                      <property name="currentIndex">
+                       <number>4</number>
+                      </property>
+                      <property name="sizeAdjustPolicy">
+                       <enum>QComboBox::AdjustToContents</enum>
+                      </property>
+                      <item>
+                       <property name="text">
+                        <string>2px</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>4px</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>6px</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>8px</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>10px</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="comboBox_pen_color">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Trebuchet MS</family>
+                        <pointsize>10</pointsize>
+                        <weight>75</weight>
+                        <italic>false</italic>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QComboBox {
+background-color: rgb(50, 54, 63);
+color: white; 
+font:bold;
+border: 0px;
+padding-top: 1px;
+padding-left: 4px;
+padding-right: 0px;
+}
+
+QComboBox:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QComboBox::drop-down {
+   border: 0px;
+}
+
+QComboBox::down-arrow {
+	image: url(:/resources/img/down-arrow.png);
+}
+</string>
+                      </property>
+                      <property name="editable">
+                       <bool>false</bool>
+                      </property>
+                      <property name="sizeAdjustPolicy">
+                       <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                      </property>
+                      <item>
+                       <property name="text">
+                        <string>Black</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Red</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Green</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Blue</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="comboBox_study_mode">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Trebuchet MS</family>
+                        <pointsize>10</pointsize>
+                        <weight>75</weight>
+                        <italic>false</italic>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QComboBox {
+background-color: rgb(50, 54, 63);
+color: white; 
+font:bold;
+border: 0px;
+padding-top: 1px;
+padding-left: 4px;
+padding-right: 0px;
+}
+
+QComboBox:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QComboBox::drop-down {
+   border: 0px;
+}
+
+QComboBox::down-arrow {
+	image: url(:/resources/img/down-arrow.png);
+}
+</string>
+                      </property>
+                      <property name="editable">
+                       <bool>false</bool>
+                      </property>
+                      <item>
+                       <property name="text">
+                        <string>Whiteboard</string>
+                       </property>
+                      </item>
+                      <item>
+                       <property name="text">
+                        <string>Flashcards</string>
+                       </property>
+                      </item>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_3">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                 <zorder>comboBox_study_mode</zorder>
+                 <zorder>comboBox_pen_color</zorder>
+                 <zorder>comboBox_pen_size</zorder>
+                 <zorder>save_whiteboard_button</zorder>
+                 <zorder>horizontalLayoutWidget</zorder>
+                 <zorder>horizontalSpacer_3</zorder>
+                </widget>
+                <widget class="QWidget" name="flashcard_menu">
+                 <layout class="QHBoxLayout" name="horizontalLayout_13">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_12">
+                    <item>
+                     <widget class="QPushButton" name="pushButton">
+                      <property name="text">
+                       <string>Open Deck</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_2">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Add Card</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
                </widget>
               </item>
              </layout>
@@ -405,6 +460,21 @@ QComboBox::down-arrow {
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
+              <widget class="QWidget" name="flashcard_page">
+               <widget class="QPushButton" name="butt">
+                <property name="geometry">
+                 <rect>
+                  <x>140</x>
+                  <y>270</y>
+                  <width>113</width>
+                  <height>32</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>PushButton</string>
+                </property>
+               </widget>
+              </widget>
              </widget>
             </item>
            </layout>

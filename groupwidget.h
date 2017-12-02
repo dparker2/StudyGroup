@@ -42,6 +42,7 @@ public slots:
 
     void setFlashcardUI();
 
+
 private slots:
     void on_save_whiteboard_button_released();
 

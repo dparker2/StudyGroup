@@ -10,7 +10,6 @@ CardWidget::CardWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     flashcard = new Flashcard();
-    ui->save_deck_btn->hide();
     layout = new QHBoxLayout(ui->card_container);
     card_num = 0;
 }
@@ -29,8 +28,7 @@ void CardWidget::deleteCard(int index){
 }
 
 void CardWidget::on_addCardBtn_clicked()
-{    
-    ui->save_deck_btn->show();
+{
     QWidget* new_card = new Flashcard();
     layout->addWidget(new_card);
 

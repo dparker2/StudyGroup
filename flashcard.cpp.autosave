@@ -101,5 +101,4 @@ void Flashcard::on_flip_card_btn_clicked()
         ui->card_text_label->setText(front_text);
         ui->card_widget->setStyleSheet("background-color: rgb(0,169,210)");
     }
-
 }

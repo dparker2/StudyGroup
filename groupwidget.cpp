@@ -3,6 +3,7 @@
 #include <QTime>
 #include <QDebug>
 #include <QLine>
+#include <QVBoxLayout>
 
 GroupWidget::GroupWidget(QWidget *parent) :
     QWidget(parent),
@@ -11,8 +12,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
     ui->setupUi(this);
 
     // Begin set whiteboard
-    whiteboard = new Whiteboard(ui->save_whiteboard_button);
-    flashcard = new CardWidget();
+    whiteboard = new Whiteboard(ui->save_whiteboard_button);    
 
     qDebug() << connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint,QColor,int)), this, SLOT(send_line_drawn(QPoint,QPoint,QColor,int)));
     qDebug() << connect(this, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), whiteboard, SLOT(draw_line(QPoint,QPoint,QColor,int)));
@@ -26,8 +26,12 @@ GroupWidget::GroupWidget(QWidget *parent) :
     //ui->study_mode->setStyleSheet("background-color: #ffffff;");
     // End set whiteboard
 
-    ui->study_mode->addWidget(flashcard);
+    // Flaschard
+
+    flashcard = new CardWidget();
+    ui->study_mode->insertWidget(1, flashcard);
     setFlashcardUI();
+
 
 }
 
