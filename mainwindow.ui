@@ -1947,115 +1947,7 @@ border-style:none;</string>
                  </property>
                 </widget>
                </item>
-               <item row="9" column="1">
-                <widget class="QComboBox" name="settings_timestamps">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <family>Trebuchet MS</family>
-                   <pointsize>12</pointsize>
-                   <weight>75</weight>
-                   <italic>false</italic>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="focusPolicy">
-                  <enum>Qt::TabFocus</enum>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QComboBox {
-background-color: rgb(50, 54, 63);
-color: white; 
-font:bold;
-border: 0px;
-padding-top: 1px;
-padding-left: 4px;
-padding-right: 0px;
-}
-
-QComboBox QListView {
-	color: white;
-}
-
-QComboBox:hover {
-	background-color: rgba(0, 127, 177, 0.6);
-}
-
-QComboBox::drop-down {
-   border: 0px;
-}
-
-QComboBox::down-arrow {
-	image: url(:/resources/img/down-arrow.png);
-}
-</string>
-                 </property>
-                 <property name="sizeAdjustPolicy">
-                  <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>Use Local Time</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Use UTC</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item row="11" column="0">
-                <widget class="QLabel" name="label_11">
-                 <property name="minimumSize">
-                  <size>
-                   <width>200</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <family>Trebuchet MS</family>
-                   <pointsize>16</pointsize>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">color:rgba(20,150,220);
-</string>
-                 </property>
-                 <property name="text">
-                  <string>Remember Login</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="11" column="1">
-                <widget class="QCheckBox" name="settings_remember_login">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="focusPolicy">
-                  <enum>Qt::TabFocus</enum>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="14" column="0" colspan="2">
+               <item row="15" column="0" colspan="2">
                 <spacer name="verticalSpacer_32">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -2104,6 +1996,146 @@ QComboBox::down-arrow {
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QComboBox" name="settings_timestamps">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Trebuchet MS</family>
+                     <pointsize>12</pointsize>
+                     <weight>75</weight>
+                     <italic>false</italic>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="focusPolicy">
+                    <enum>Qt::TabFocus</enum>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QComboBox {
+background-color: rgb(50, 54, 63);
+color: white; 
+font:bold;
+border: 0px;
+padding-top: 1px;
+padding-left: 4px;
+padding-right: 0px;
+}
+
+QComboBox QListView {
+	color: white;
+}
+
+QComboBox:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QComboBox::drop-down {
+   border: 0px;
+}
+
+QComboBox::down-arrow {
+	image: url(:/resources/img/down-arrow.png);
+}
+</string>
+                   </property>
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>Use Local Time</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Use UTC</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_10">
+                   <property name="minimumSize">
+                    <size>
+                     <width>200</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Trebuchet MS</family>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color:rgba(20,150,220);
+</string>
+                   </property>
+                   <property name="text">
+                    <string>(Requires application restart)</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="10" column="0">
+                <widget class="QLabel" name="label_11">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>Trebuchet MS</family>
+                   <pointsize>16</pointsize>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color:rgba(20,150,220);
+</string>
+                 </property>
+                 <property name="text">
+                  <string>Remember Login</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="1">
+                <widget class="QCheckBox" name="settings_remember_login">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::TabFocus</enum>
+                 </property>
+                 <property name="text">
+                  <string/>
                  </property>
                 </widget>
                </item>

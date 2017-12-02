@@ -66,7 +66,8 @@ MainWindow::MainWindow(QWidget *parent) :
         qDebug() << (qint64)user_data_size;
         if((user_read_size == 2) && (user_data_size != -1))
         {
-            QByteArray user_data(config.read((qint64)user_data_size));
+            QByteArray user_data;
+            user_data = config.read((qint64)user_data_size);
             if(user_data.length() > 0)
             {
                 ui->lineEdit_username->setText(QString(user_data));
@@ -76,7 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
             qDebug() << (qint64)pass_data_size;
             if(pass_read_size == 2)
             {
-                QByteArray pass_data(config.read((qint64)pass_data_size));
+                QByteArray pass_data;
+                pass_data = config.read((qint64)pass_data_size);
                 if(pass_data.length() > 0)
                 {
                     ui->lineEdit_password->setText(QString(pass_data));
@@ -86,7 +88,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 }
             }
         }
-        config.close();
     }
 }
 
@@ -94,9 +95,9 @@ MainWindow::~MainWindow()
 {
     on_logout_button_released();
 
-    delete user_info;
-    delete my_serv;
     delete ui;
+    my_serv->deleteLater();
+    group_widget->deleteLater();
 }
 
 void MainWindow::on_signin_button_clicked()
@@ -523,13 +524,13 @@ void MainWindow::on_logout_button_released()
             ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
             ui->back_to_group_button->setVisible(false);
             ui->leave_button->setVisible(false);
-            group_widget->whiteboard_ptr()->deleteLater();
             group_widget->deleteLater();
             group_widget = nullptr;
         }
         // Clear username info
-        delete user_info;
-        user_info = new UserAccount();
+        user_info->setEmail("");
+        user_info->setUsername("");
+        user_info->setPassword("");
         // Change widget
         ui->stackedWidget_window->setCurrentWidget(ui->login_page);
     }
@@ -576,7 +577,6 @@ void MainWindow::on_settings_timestamps_currentIndexChanged(int index)
     if(config.open(QIODevice::WriteOnly | QIODevice::Append)) {
         config.seek(0);
         config.write(&data, 1);
-        config.close();
     }
 }
 
@@ -598,7 +598,6 @@ void MainWindow::on_settings_remember_login_toggled(bool checked)
             config.write(&ch_psl, 2);
             config.write(pass_data, pass_data_length);
             qDebug() << "DONE WRITING";
-            config.close();
         }
     }
     else if((!checked) && (ui->stackedWidget_window->currentWidget() == ui->main_page)) {

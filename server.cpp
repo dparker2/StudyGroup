@@ -274,10 +274,15 @@ void server::read_socket_send_signal()
         else if (server_code == "NCHT")
         {
             QString message = message_ba;
+            qDebug() << message;
             QString username = message.section(' ', 0, 0);
-            QString time = message.section(' ', 1, 1);
-            QString chat = message.section(' ', 2, -1);
-            emit new_chat(username, time, chat);
+            QString str_date_time = message.section(' ', 1, 2);
+            QDateTime date_time = QDateTime::fromString(str_date_time, "yyyy-MM-dd HH:mm:ss");
+            date_time.setTimeSpec(Qt::UTC);
+            QDateTime updated_date_time(date_time.toTimeSpec(timestamps.timeSpec()));
+            QString updated_time = updated_date_time.toString("yyyy-MM-dd hh:mm:ss AP");
+            QString chat = message.section(' ', 3, -1);
+            emit new_chat(username, updated_time, chat);
         }
         else if (server_code  == "WBLN")
         {

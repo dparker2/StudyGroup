@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QSpacerItem>
 #include <QPushButton>
+#include <QDate>
 
 #include "whiteboard.h"
 
@@ -50,6 +51,8 @@ private:
     Ui::GroupWidget* ui;
     Whiteboard* whiteboard;
     QString group_id;
+
+    QDate last_date_printed;
 };
 
 #endif // GROUPWIDGET_H

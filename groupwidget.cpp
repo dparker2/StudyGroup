@@ -51,6 +51,16 @@ Whiteboard* GroupWidget::whiteboard_ptr()
 void GroupWidget::new_chat(QString username, QString time, QString message)
 {
     qDebug() << message;
+    QDate new_date = QDate::fromString(time.section(' ', 0, 0), "yyyy-MM-dd");
+    qDebug() << time.section(' ', 0, 0);
+    time.remove(0, 11);
+    qDebug() << new_date.toString("dddd MMM dd yyyy");
+    qDebug() << last_date_printed.toString("dddd MMM dd yyyy");
+    if(new_date != last_date_printed)
+    {
+        ui->chat_box->append(new_date.toString("dddd MMM dd yyyy"));
+        last_date_printed = new_date;
+    }
     ui->chat_box->append(time+" - "+username+": "+message);
 }
 
