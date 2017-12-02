@@ -159,6 +159,10 @@ padding-left: 4px;
 padding-right: 0px;
 }
 
+QComboBox QListView {
+	color: white;
+}
+
 QComboBox:hover {
 	background-color: rgba(0, 127, 177, 0.6);
 }
@@ -232,6 +236,10 @@ border: 0px;
 padding-top: 1px;
 padding-left: 4px;
 padding-right: 0px;
+}
+
+QComboBox QListView {
+	color: white;
 }
 
 QComboBox:hover {
@@ -353,6 +361,10 @@ border: 0px;
 padding-top: 1px;
 padding-left: 4px;
 padding-right: 0px;
+}
+
+QComboBox QListView {
+	color: white;
 }
 
 QComboBox:hover {
@@ -478,7 +490,7 @@ border-style:none;</string>
             <property name="font">
              <font>
               <family>Trebuchet MS</family>
-              <pointsize>12</pointsize>
+              <pointsize>10</pointsize>
               <weight>75</weight>
               <italic>false</italic>
               <bold>true</bold>

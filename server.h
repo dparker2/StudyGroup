@@ -4,13 +4,17 @@
 #include <QObject>
 #include <QtNetwork>
 #include <QTimer>
+#include <QDateTime>
 
 class server : public QObject
 {
     Q_OBJECT
 public:
+    const static char timestamp_utc = 2;
+    const static char timestamp_local = 1;
     explicit server(QObject *parent = nullptr);
     void connect_server();
+    void setTimestamps(char arg);
     // Account Functions
     bool login(QString& username, QString& password, QString& email);
     bool create_account(QString& username, QString& password, QString& email);
@@ -24,6 +28,7 @@ public:
 
 signals:
     void disconnected();
+    void connected();
     // Group Signals
     void new_chat(QString,QString,QString);
     void users_changed();
@@ -51,7 +56,7 @@ public slots:
 private:
     QTcpSocket* my_socket;
     bool reconnecting;
-
+    QDateTime timestamps;
     QString username;
     bool success_flag; // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.
     bool fail_flag;    // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.
