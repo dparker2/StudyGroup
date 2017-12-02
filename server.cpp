@@ -357,3 +357,16 @@ void server::error(QAbstractSocket::SocketError err)
 {
    qDebug() << my_socket->errorString();
 }
+
+
+void server::send_card(QString groupID, QString card_text, int card_num, int card_side)
+{
+    if(card_side){
+        my_socket->write(format_socket_request("FCFT" + groupID, QString(card_num) + card_text));
+    }
+    else{
+        my_socket->write(format_socket_request("FCBK" + groupID, QString(card_num) + card_text));
+    }
+
+}
+
