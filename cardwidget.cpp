@@ -9,6 +9,8 @@ CardWidget::CardWidget(QWidget *parent) :
     ui(new Ui::CardWidget)
 {
     ui->setupUi(this);
+    //my_serv = new server();
+    //my_serv->connect_server();
     flashcard = new Flashcard();
     layout = new QHBoxLayout(ui->card_container);
     card_num = 0;
@@ -18,8 +20,16 @@ void CardWidget::insertCard(QString question, QString answer, int cardNum){
     deck.push_back(card);
 }
 Flashcard* CardWidget::getCard(int index){
-    return deck[index];
+    return flashcard;
 }
+
+int CardWidget::get_card_number(){
+    return flashcard->getCardNum();
+}
+QString CardWidget::get_card_text(){
+    //return flashcard->get_card_text();
+}
+
 void CardWidget::deleteCard(int index){
     Flashcard* temp = deck[index];
     deck[index] =deck[deck.size()-1];
@@ -46,3 +56,4 @@ int CardWidget::getDeckSize()
 {
     return deck.size();
 }
+

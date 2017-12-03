@@ -165,10 +165,17 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
 
 void GroupWidget::on_add_card_button_clicked()
 {
+    int card_number = flashcard->get_card_number();
+    QString card_text = flashcard->get_card_text();
     flashcard->on_addCardBtn_clicked();
 }
 
 void GroupWidget::on_quiz_button_clicked()
 {
     qDebug() << "DECK SIZE: "<< flashcard->getDeckSize() << endl;
+}
+
+void GroupWidget::set_front(QString front, int card_num){
+    QString groupID = get_groupID();
+    emit send_card(groupID, front, card_num, 0);
 }

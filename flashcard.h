@@ -15,17 +15,18 @@ public:
     explicit Flashcard(QWidget *parent = nullptr);
     ~Flashcard();
     Flashcard(QString, QString, int);
-    void setQuestion(QString);
-    void setAnswer(QString);
+    void setFront(QString);
+    void setBack(QString);
     void setCardNum(int);
-    QString getQuestion();
-    QString getAnswer();
+    QString getFront();
+    QString getBack();
     int getCardNum();
 
     void setEditBtn();
 
 
 signals:
+    void set_front(QString front, int cardNum);
 
 public slots:
 

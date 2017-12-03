@@ -23,21 +23,20 @@ Flashcard::Flashcard(QString q, QString a, int num){
     back_text = a;
     cardNum = num;
 }
-void Flashcard::setQuestion(QString q){
+void Flashcard::setFront(QString q){
     front_text = q;
 }
-void Flashcard::setAnswer(QString a){
+void Flashcard::setBack(QString a){
     back_text = a;
 }
-QString Flashcard::getQuestion(){
+QString Flashcard::getFront(){
     return front_text;
 }
-QString Flashcard::getAnswer(){
+QString Flashcard::getBack(){
     return back_text;
 }
-void Flashcard::setCardNum(int n){
-    cardNum = n;   // don't think this is needed
-    ui->card_number->setText("hello");
+void Flashcard::setCardNum(int num){
+    cardNum = num;   // don't think this is needed
 }
 int Flashcard::getCardNum(){
     return cardNum;
@@ -74,12 +73,14 @@ void Flashcard::on_set_front_btn_clicked()
         ui->current_side->setText("Back");
         ui->set_front_btn->setText("Set Back");
         ui->card_textEdit->setPlainText(back_text);
+        emit set_front(front_text, cardNum);
     }
     else{
         back_text = ui->card_textEdit->toPlainText();
         ui->card_widget->setCurrentWidget(ui->card_front);
         ui->current_side->setText("Front");
         ui->set_front_btn->setText("Set Front");
+        emit set_front(back_text, cardNum);
     }
     ui->flip_card_btn->show();
 }

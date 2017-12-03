@@ -28,8 +28,10 @@ signals:
     void line_drawn(QString groupID, const QPoint& first_mouse_pos, const QPoint& second_mouse_pos, const QColor& pen_color, const int& pen_size);
     void whiteboard_draw_line(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos, const QColor& pen_color, const int& pen_size);
     void save_whiteboard(QString&, QByteArray*);
+    void send_card(QString&, QString&, int&, int);
 
 public slots:
+    void set_front(QString front, int cardNum);
     void new_chat(QString username, QString time, QString message);
     void users_changed();
     void user_joined(QString username);
