@@ -53,6 +53,12 @@ private slots:
 
     void on_comboBox_study_mode_currentIndexChanged(int index);
 
+    void on_add_card_button_clicked();
+
+
+
+    void on_quiz_button_clicked();
+
 private:
     Ui::GroupWidget* ui;
     Whiteboard* whiteboard;

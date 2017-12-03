@@ -25,15 +25,18 @@ public:
 
     //void shuffleDeck();
     void deleteCard(int index);
+    void on_addCardBtn_clicked();
+    int getDeckSize();
 
 signals:
 
 public slots:
 
 private slots:
-    void on_addCardBtn_clicked();
 
     void on_save_deck_btn_clicked();
+
+
 
 private:
     Ui::CardWidget *ui;

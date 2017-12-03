@@ -140,7 +140,7 @@ color: rgb(255, 255, 255);</string>
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="whiteboard_menu">
                  <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -413,22 +413,48 @@ QComboBox::down-arrow {
                   <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_12">
                     <item>
-                     <widget class="QPushButton" name="pushButton">
-                      <property name="text">
-                       <string>Open Deck</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="pushButton_2">
+                     <widget class="QPushButton" name="add_card_button">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+background-color: rgb(50,117,181);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}</string>
+                      </property>
                       <property name="text">
                        <string>Add Card</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="quiz_button">
+                      <property name="styleSheet">
+                       <string notr="true">QPushButton {
+background-color: rgb(50,117,181);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}</string>
+                      </property>
+                      <property name="text">
+                       <string>Quiz</string>
                       </property>
                      </widget>
                     </item>
@@ -460,21 +486,7 @@ QComboBox::down-arrow {
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
-              <widget class="QWidget" name="flashcard_page">
-               <widget class="QPushButton" name="butt">
-                <property name="geometry">
-                 <rect>
-                  <x>140</x>
-                  <y>270</y>
-                  <width>113</width>
-                  <height>32</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>PushButton</string>
-                </property>
-               </widget>
-              </widget>
+              <widget class="QWidget" name="flashcard_page"/>
              </widget>
             </item>
            </layout>

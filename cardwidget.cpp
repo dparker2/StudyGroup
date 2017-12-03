@@ -41,3 +41,8 @@ void CardWidget::on_save_deck_btn_clicked()
 {
     qDebug() << "DECK SIZE: " << deck.size() << endl;
 }
+
+int CardWidget::getDeckSize()
+{
+    return deck.size();
+}

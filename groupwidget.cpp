@@ -19,6 +19,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
 
     ui->study_mode->addWidget(whiteboard);
     ui->study_mode->setCurrentWidget(whiteboard);
+    ui->study_menu->setCurrentIndex(0);
     whiteboard->set_pen_color(QColor("#000"));
     QString pen_string = ui->comboBox_pen_size->currentText();
     pen_string.chop(2);
@@ -154,8 +155,20 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
     qDebug() << "INDEX " << index << endl;
     if(index){
         ui->study_mode->setCurrentWidget(flashcard);
+        ui->study_menu->setCurrentIndex(1);
     }
     else{
         ui->study_mode->setCurrentWidget(whiteboard);
+        ui->study_menu->setCurrentIndex(0);
     }
+}
+
+void GroupWidget::on_add_card_button_clicked()
+{
+    flashcard->on_addCardBtn_clicked();
+}
+
+void GroupWidget::on_quiz_button_clicked()
+{
+    qDebug() << "DECK SIZE: "<< flashcard->getDeckSize() << endl;
 }
