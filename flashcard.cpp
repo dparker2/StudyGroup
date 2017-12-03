@@ -12,6 +12,10 @@ Flashcard::Flashcard(QWidget *parent) :
     ui->flip_card_btn->hide();
     ui->card_number->hide();
 
+    QString front = "front_text";
+    int side = 0;
+
+
 }
 Flashcard::~Flashcard()
 {
@@ -67,22 +71,28 @@ void Flashcard::on_edit_card_btn_clicked()
 
 void Flashcard::on_set_front_btn_clicked()
 {
+    ui->flip_card_btn->show();
     if(ui->current_side->text() == "Front"){
         front_text = ui->card_textEdit->toPlainText();
         ui->card_text_label->setText(front_text);
         ui->current_side->setText("Back");
         ui->set_front_btn->setText("Set Back");
         ui->card_textEdit->setPlainText(back_text);
-        emit set_front(front_text, cardNum);
+        QString front = front_text;
+        int side = 0;
+        emit check_set_card(front, cardNum, side);
     }
     else{
         back_text = ui->card_textEdit->toPlainText();
         ui->card_widget->setCurrentWidget(ui->card_front);
         ui->current_side->setText("Front");
         ui->set_front_btn->setText("Set Front");
-        emit set_front(back_text, cardNum);
+        //return false;
+        QString back = back_text;
+        int side = 1;
+        emit check_set_card(back, cardNum, side);
     }
-    ui->flip_card_btn->show();
+
 }
 
 void Flashcard::on_pushButton_3_clicked()

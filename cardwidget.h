@@ -31,9 +31,14 @@ public:
     int get_card_number();
     QString get_card_text();
 
+
 signals:
+    void set_card(QString&, int&);
 
 public slots:
+
+    void check_set_card(QString&, int&, int&);
+
 
 
 private slots:

@@ -44,7 +44,7 @@
       <string notr="true">background-color: rgba(0,169,210);</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="card_front">
       <layout class="QGridLayout" name="gridLayout_2">

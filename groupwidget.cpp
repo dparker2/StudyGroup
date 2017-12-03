@@ -33,6 +33,8 @@ GroupWidget::GroupWidget(QWidget *parent) :
     ui->study_mode->insertWidget(1, flashcard);
     setFlashcardUI();
 
+    connect(flashcard, SIGNAL(set_card(QString&, int&)), this, SLOT(set_card(QString&, int&)));
+
 
 }
 
@@ -175,7 +177,10 @@ void GroupWidget::on_quiz_button_clicked()
     qDebug() << "DECK SIZE: "<< flashcard->getDeckSize() << endl;
 }
 
-void GroupWidget::set_front(QString front, int card_num){
+void GroupWidget::set_card(QString& front, int& card_num){
     QString groupID = get_groupID();
-    emit send_card(groupID, front, card_num, 0);
+    int number = card_num;
+    int side = 0;
+    qDebug() << "SET FRONT" << endl;
+    emit send_card(groupID, front, number, side);
 }

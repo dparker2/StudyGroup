@@ -359,9 +359,10 @@ void server::error(QAbstractSocket::SocketError err)
 }
 
 
-void server::send_card(QString groupID, QString card_text, int card_num, int card_side)
+void server::send_card(QString& groupID, QString& card_text, int& card_num, int& card_side)
 {
-    if(card_side){
+    qDebug() << "SEND CARD" << endl;
+    if(card_side == 0){
         my_socket->write(format_socket_request("FCFT " + groupID, QString(card_num)+ " " + card_text));
     }
     else{

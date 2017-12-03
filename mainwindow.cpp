@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // UI Connections
     // Wasn't working with settings button functionality
     //connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
+
+    connect(group_widget, SIGNAL(send_card(QString&, QString&, int&, int&)), my_serv, SLOT(send_card(QString&, QString&, int&, int&)));
 }
 
 MainWindow::~MainWindow()
@@ -449,6 +451,8 @@ void MainWindow::_initialize_group()
     connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
     connect(group_widget, SIGNAL(line_drawn(QString,QPoint,QPoint,QColor,int)), my_serv, SLOT(send_whiteboard_line(QString,QPoint,QPoint,QColor,int)));
     connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
+
+
 }
 
 void MainWindow::_activate_group(QString &group_id)

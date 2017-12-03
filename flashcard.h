@@ -26,7 +26,9 @@ public:
 
 
 signals:
-    void set_front(QString front, int cardNum);
+
+
+    void check_set_card(QString&, int&, int&);
 
 public slots:
 

@@ -12,6 +12,8 @@ CardWidget::CardWidget(QWidget *parent) :
     flashcard = new Flashcard();
     layout = new QHBoxLayout(ui->card_container);
     card_num = 0;
+
+    connect(flashcard, SIGNAL(check_set_card(QString&,int&,int&)), this, SLOT(check_set_card(QString&,int&,int&)));
 }
 void CardWidget::insertCard(QString question, QString answer, int cardNum){
     Flashcard* card = new Flashcard(question, answer, cardNum);
@@ -55,3 +57,12 @@ int CardWidget::getDeckSize()
     return deck.size();
 }
 
+void CardWidget::check_set_card(QString &front_text, int& card_num, int& side){
+    qDebug() << "CHECK_SET_CARD" << endl;
+    if(side == 0){
+        emit set_card(front_text, card_num);
+    }
+    else{
+        emit set_card(front_text, card_num);
+    }
+}
