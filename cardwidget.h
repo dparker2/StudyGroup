@@ -46,7 +46,6 @@ private:
     Ui::CardWidget *ui;
     QHBoxLayout *layout;
     QList<Flashcard*> deck;
-    //server* my_serv;
     Flashcard* flashcard;
     int card_num;
 };

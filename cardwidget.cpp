@@ -9,8 +9,6 @@ CardWidget::CardWidget(QWidget *parent) :
     ui(new Ui::CardWidget)
 {
     ui->setupUi(this);
-    //my_serv = new server();
-    //my_serv->connect_server();
     flashcard = new Flashcard();
     layout = new QHBoxLayout(ui->card_container);
     card_num = 0;
