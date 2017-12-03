@@ -97,6 +97,7 @@ void Flashcard::on_flip_card_btn_clicked()
     if(ui->card_text_label->text() == front_text){
         ui->card_text_label->setText(back_text);
         ui->card_widget->setStyleSheet("background-color: rgb(0,191,143)");
+        //add back to flip
     }
     else{
         ui->card_text_label->setText(front_text);

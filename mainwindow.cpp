@@ -62,8 +62,8 @@ void MainWindow::on_signin_button_clicked()
     QString password = ui->lineEdit_password->text();
     QString email;
 
-    //if(my_serv->login(username, password, email))
-    //{
+    if(my_serv->login(username, password, email))
+    {
         // Now logged in!
         ui->lineEdit_username->setText("");
         ui->lineEdit_password->setText("");
@@ -76,7 +76,7 @@ void MainWindow::on_signin_button_clicked()
 
         ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
         ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
-    //}
+    }
 }
 
 void MainWindow::on_singup_button_clicked()
