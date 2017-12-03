@@ -9,13 +9,15 @@ CardWidget::CardWidget(QWidget *parent) :
     ui(new Ui::CardWidget)
 {
     ui->setupUi(this);
-    layout = new QHBoxLayout(ui->card_container);
+    ui->next_btn->hide();
+    ui->prev_btn->hide();
+
     card_num = 0;
 }
-void CardWidget::insertCard(QString question, QString answer, int cardNum){
-    Flashcard* card = new Flashcard(question, answer, cardNum);
+void CardWidget::insertCard(QString front, QString back, int cardNum){
+    Flashcard* card = new Flashcard(front, back, cardNum);
     deck.push_back(card);
-    connect(card, SIGNAL(check_set_card(QString&,int&,int&)), this, SLOT(check_set_card(QString&,int&,int&)));
+    connect(card, SIGNAL(check_set_card(QString,int,int)), this, SLOT(check_set_card(QString,int,int)));
 }
 Flashcard* CardWidget::getCard(int index){
     return flashcard;
@@ -38,25 +40,36 @@ void CardWidget::deleteCard(int index){
 void CardWidget::on_addCardBtn_clicked()
 {
     Flashcard* new_card = new Flashcard();
-    connect(new_card, SIGNAL(check_set_card(QString&,int&,int&)), this, SLOT(check_set_card(QString&,int&,int&)));
-    layout->addWidget(new_card);
+    //connect(new_card, SIGNAL(check_set_card(QString&,int&,int&)), this, SLOT(check_set_card(QString&,int&,int&)));
 
-    //flashcard = new Flashcard();
+    if(deck.size() > 1){
+
+        ui->next_btn->show();
+        ui->prev_btn->show();
+    }
+    if(!deck.isEmpty()){
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget(deck[card_num-1]);
+        ui->gridLayout_4->removeWidget(deck[card_num-1]);
+        deck[card_num-1]->hide();
+        ui->gridLayout_4->addWidget(new_card);
+
+    }
+    else{
+        ui->gridLayout_4->addWidget(new_card);
+    }
+
     new_card->setCardNum(card_num++);
     deck.push_back(new_card);
 }
-
-/*void CardWidget::on_save_deck_btn_clicked()
-{
-    qDebug() << "DECK SIZE: " << deck.size() << endl;
-}*/
 
 int CardWidget::getDeckSize()
 {
     return deck.size();
 }
 
-void CardWidget::check_set_card(QString &front_text, int &card_num, int &side)
+void CardWidget::check_set_card(QString front_text, int card_num, int side)
 {
     qDebug() << "CHECK_SET_CARD" << endl;
     if(side == 0){
@@ -65,4 +78,18 @@ void CardWidget::check_set_card(QString &front_text, int &card_num, int &side)
     else{
         emit set_card(front_text, card_num, side);
     }
+}
+
+void CardWidget::on_prev_btn_clicked()
+{
+    qDebug() << "previous" << deck.size() << " " << card_num <<  endl;
+    card_num--;
+    if(card_num > 0 && card_num < deck.size()){
+
+        ui->gridLayout_4->replaceWidget(deck[card_num], deck[--card_num]);
+        deck[card_num]->show();
+        //ui->gridLayout_4->addWidget(deck[--card_num]);
+    }
+    // error message
+
 }

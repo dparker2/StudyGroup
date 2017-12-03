@@ -45,7 +45,6 @@ public slots:
     void setFlashcardUI();
 
 
-
 private slots:
     void on_save_whiteboard_button_released();
 
@@ -61,6 +60,8 @@ private slots:
 
 
     void on_quiz_button_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::GroupWidget* ui;

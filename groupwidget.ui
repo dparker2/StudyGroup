@@ -140,7 +140,7 @@ color: rgb(255, 255, 255);</string>
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="whiteboard_menu">
                  <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -401,11 +401,6 @@ QComboBox::down-arrow {
                    </spacer>
                   </item>
                  </layout>
-                 <zorder>comboBox_study_mode</zorder>
-                 <zorder>comboBox_pen_color</zorder>
-                 <zorder>comboBox_pen_size</zorder>
-                 <zorder>save_whiteboard_button</zorder>
-                 <zorder>horizontalLayoutWidget</zorder>
                  <zorder>horizontalSpacer_3</zorder>
                 </widget>
                 <widget class="QWidget" name="flashcard_menu">
@@ -415,10 +410,22 @@ QComboBox::down-arrow {
                     <item>
                      <widget class="QPushButton" name="add_card_button">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>120</width>
+                        <height>16777215</height>
+                       </size>
                       </property>
                       <property name="styleSheet">
                        <string notr="true">QPushButton {
@@ -440,6 +447,24 @@ QPushButton:hover {
                     </item>
                     <item>
                      <widget class="QPushButton" name="quiz_button">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>120</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
                       <property name="styleSheet">
                        <string notr="true">QPushButton {
 background-color: rgb(50,117,181);
@@ -459,6 +484,54 @@ QPushButton:hover {
                      </widget>
                     </item>
                    </layout>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_4">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                     <enum>QSizePolicy::Expanding</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>100</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButton">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>35</width>
+                      <height>35</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+background-color: rgb(50,117,181);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>X</string>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </widget>

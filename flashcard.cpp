@@ -10,12 +10,6 @@ Flashcard::Flashcard(QWidget *parent) :
     ui->setupUi(this);
     ui->card_widget->setCurrentWidget(ui->card_front);
     ui->flip_card_btn->hide();
-    ui->card_number->hide();
-
-    QString front = "front_text";
-    int side = 0;
-
-
 }
 Flashcard::~Flashcard()
 {
@@ -45,6 +39,7 @@ void Flashcard::setCardNum(int num){
 int Flashcard::getCardNum(){
     return cardNum;
 }
+
 void Flashcard::setEditBtn(){
     /*qDebug() << "TEST";
     QPixmap pencil(":/resources/img/exit.png");
@@ -56,25 +51,24 @@ void Flashcard::setEditBtn(){
 
 void Flashcard::on_edit_card_btn_clicked()
 {
-    if(ui->card_text_label->text() == front_text){
-        ui->card_widget->setCurrentWidget(ui->card_edit);
+    ui->bottom_buttons->setCurrentIndex(1);
+    if(ui->card_widget->currentIndex() == 0){
         ui->card_textEdit->setPlainText(front_text);
         ui->current_side->setText("Front");
     }
     else{
-        ui->card_widget->setCurrentWidget(ui->card_edit);
         ui->card_textEdit->setPlainText(back_text);
         ui->current_side->setText("Back");
     }
+    ui->card_widget->setCurrentIndex(2);
 
 }
 
 void Flashcard::on_set_front_btn_clicked()
 {
-    ui->flip_card_btn->show();
     if(ui->current_side->text() == "Front"){
         front_text = ui->card_textEdit->toPlainText();
-        ui->card_text_label->setText(front_text);
+        ui->front_label->setText(front_text);
         ui->current_side->setText("Back");
         ui->set_front_btn->setText("Set Back");
         ui->card_textEdit->setPlainText(back_text);
@@ -82,35 +76,40 @@ void Flashcard::on_set_front_btn_clicked()
         int side = 0;
         emit check_set_card(front, cardNum, side);
     }
-    else{
+    else {
         back_text = ui->card_textEdit->toPlainText();
-        ui->card_widget->setCurrentWidget(ui->card_front);
+        ui->back_label->setText(back_text);
+       // ui->card_widget->setCurrentWidget(0);
         ui->current_side->setText("Front");
         ui->set_front_btn->setText("Set Front");
-        //return false;
-        QString back = back_text;
-        int side = 1;
-        emit check_set_card(back, cardNum, side);
+        ui->card_widget->setCurrentIndex(0);
+        ui->bottom_buttons->setCurrentIndex(0);
+        ui->flip_card_btn->show();
+        emit check_set_card(back_text, cardNum, 1);
     }
 
 }
 
-void Flashcard::on_pushButton_3_clicked()
+void Flashcard::on_cancel_btn_clicked()
 {
-    ui->card_widget->setCurrentWidget(ui->card_front);
+    ui->card_widget->setCurrentIndex(0);
+    ui->bottom_buttons->setCurrentIndex(0);
+    ui->flip_card_btn->show();
 }
 
 void Flashcard::on_flip_card_btn_clicked()
 {
     //ui->card_widget->setStyleSheet("background-image:url(:/resources/img/index_card.png); background-repeat: no-repeat");
 
-    if(ui->card_text_label->text() == front_text){
-        ui->card_text_label->setText(back_text);
+    if(ui->card_widget->currentIndex() == 0){
+        ui->card_widget->setCurrentIndex(1);
         ui->card_widget->setStyleSheet("background-color: rgb(0,191,143)");
-        //add back to flip
+        ui->frame->setStyleSheet("background-color: rgb(0,191,143)");
     }
     else{
-        ui->card_text_label->setText(front_text);
+        qDebug() << "FLIP TO FONT" << endl;
+        ui->card_widget->setCurrentIndex(0);
         ui->card_widget->setStyleSheet("background-color: rgb(0,169,210)");
+        ui->frame->setStyleSheet("background-color: rgb(0,169,210)");
     }
 }

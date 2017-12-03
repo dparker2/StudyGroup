@@ -28,7 +28,7 @@ public:
 signals:
 
 
-    void check_set_card(QString&, int&, int&);
+    void check_set_card(QString, int, int);
 
 public slots:
 
@@ -37,7 +37,7 @@ private slots:
 
     void on_set_front_btn_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_cancel_btn_clicked();
 
     void on_flip_card_btn_clicked();
 

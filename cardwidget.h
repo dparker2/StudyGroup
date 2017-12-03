@@ -34,12 +34,11 @@ public:
 
 signals:
     void set_card(QString&, int&, int&);
+    void display_card(Flashcard*);
 
 public slots:
 
-    void check_set_card(QString&, int&, int&);
-
-
+    void check_set_card(QString, int, int);
 
 private slots:
 
@@ -47,9 +46,12 @@ private slots:
 
 
 
+
+    void on_prev_btn_clicked();
+
 private:
     Ui::CardWidget *ui;
-    QHBoxLayout *layout;
+    QVBoxLayout *layout;
     QList<Flashcard*> deck;
     Flashcard* flashcard;
     int card_num;

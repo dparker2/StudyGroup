@@ -154,7 +154,6 @@ void GroupWidget::setFlashcardUI(){
 
 void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
 {
-    qDebug() << "INDEX " << index << endl;
     if(index){
         ui->study_mode->setCurrentWidget(flashcard);
         ui->study_menu->setCurrentIndex(1);
@@ -167,8 +166,6 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
 
 void GroupWidget::on_add_card_button_clicked()
 {
-    //int card_number = flashcard->get_card_number();
-   // QString card_text = flashcard->get_card_text();
     flashcard->on_addCardBtn_clicked();
 }
 
@@ -182,4 +179,12 @@ void GroupWidget::set_card(QString& front, int& card_num, int& side){
     int number = card_num;
     qDebug() << "SET FRONT" << endl;
     emit send_card(groupID, front, number, side);
+}
+
+
+void GroupWidget::on_pushButton_clicked()
+{
+    ui->study_menu->setCurrentIndex(0);
+    ui->study_mode->setCurrentWidget(whiteboard);
+    ui->comboBox_study_mode->setCurrentIndex(0);
 }
