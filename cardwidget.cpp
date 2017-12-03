@@ -45,10 +45,10 @@ void CardWidget::on_addCardBtn_clicked()
     deck.push_back(flashcard);
 }
 
-void CardWidget::on_save_deck_btn_clicked()
+/*void CardWidget::on_save_deck_btn_clicked()
 {
     qDebug() << "DECK SIZE: " << deck.size() << endl;
-}
+}*/
 
 int CardWidget::getDeckSize()
 {

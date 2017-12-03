@@ -165,8 +165,8 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
 
 void GroupWidget::on_add_card_button_clicked()
 {
-    int card_number = flashcard->get_card_number();
-    QString card_text = flashcard->get_card_text();
+    //int card_number = flashcard->get_card_number();
+   // QString card_text = flashcard->get_card_text();
     flashcard->on_addCardBtn_clicked();
 }
 
