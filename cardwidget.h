@@ -33,7 +33,7 @@ public:
 
 
 signals:
-    void set_card(QString&, int&);
+    void set_card(QString&, int&, int&);
 
 public slots:
 

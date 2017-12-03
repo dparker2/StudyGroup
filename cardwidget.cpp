@@ -9,15 +9,13 @@ CardWidget::CardWidget(QWidget *parent) :
     ui(new Ui::CardWidget)
 {
     ui->setupUi(this);
-    flashcard = new Flashcard();
     layout = new QHBoxLayout(ui->card_container);
     card_num = 0;
-
-    connect(flashcard, SIGNAL(check_set_card(QString&,int&,int&)), this, SLOT(check_set_card(QString&,int&,int&)));
 }
 void CardWidget::insertCard(QString question, QString answer, int cardNum){
     Flashcard* card = new Flashcard(question, answer, cardNum);
     deck.push_back(card);
+    connect(card, SIGNAL(check_set_card(QString&,int&,int&)), this, SLOT(check_set_card(QString&,int&,int&)));
 }
 Flashcard* CardWidget::getCard(int index){
     return flashcard;
@@ -39,12 +37,13 @@ void CardWidget::deleteCard(int index){
 
 void CardWidget::on_addCardBtn_clicked()
 {
-    QWidget* new_card = new Flashcard();
+    Flashcard* new_card = new Flashcard();
+    connect(new_card, SIGNAL(check_set_card(QString&,int&,int&)), this, SLOT(check_set_card(QString&,int&,int&)));
     layout->addWidget(new_card);
 
     //flashcard = new Flashcard();
-    flashcard->setCardNum(card_num++);
-    deck.push_back(flashcard);
+    new_card->setCardNum(card_num++);
+    deck.push_back(new_card);
 }
 
 /*void CardWidget::on_save_deck_btn_clicked()
@@ -57,12 +56,13 @@ int CardWidget::getDeckSize()
     return deck.size();
 }
 
-void CardWidget::check_set_card(QString &front_text, int& card_num, int& side){
+void CardWidget::check_set_card(QString &front_text, int &card_num, int &side)
+{
     qDebug() << "CHECK_SET_CARD" << endl;
     if(side == 0){
-        emit set_card(front_text, card_num);
+        emit set_card(front_text, card_num, side);
     }
     else{
-        emit set_card(front_text, card_num);
+        emit set_card(front_text, card_num, side);
     }
 }

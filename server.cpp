@@ -292,6 +292,22 @@ void server::read_socket_send_signal()
             qDebug() << "wb string size: " << wb_string.size();
             emit update_whiteboard(&wb_string);
         }
+        else if (server_code == "FCFT")
+        {
+            QString flash_str = message_ba;
+            int flashcard_id = flash_str.section(' ', 0, 0).toInt();
+            QString flashcard_front = flash_str.section(' ', 1, -1);
+            emit new_flashcard(flashcard_id, flashcard_front, true);
+            qDebug() << flashcard_id << flashcard_front << "front";
+        }
+        else if (server_code == "FCBK")
+        {
+            QString flash_str = message_ba;
+            int flashcard_id = flash_str.section(' ', 0, 0).toInt();
+            QString flashcard_back = flash_str.section(' ', 1, -1);
+            emit new_flashcard(flashcard_id, flashcard_back, false);
+            qDebug() << flashcard_id << flashcard_back << "back";
+        }
     }
 
     return;
@@ -311,7 +327,7 @@ QByteArray server::format_socket_request(const QString &request_code, QString re
     QString full_request = request_code + request_arg;
     QString request_length = QString::number(full_request.size());
     full_request = full_request.prepend(request_length.rightJustified(5, '0', true));
-    //qDebug() << "Sending: " << full_request;
+    qDebug() << "Sending: " << full_request;
     return full_request.toLatin1();
 }
 
@@ -321,7 +337,7 @@ QByteArray server::format_socket_request(const QString &request_code, const QByt
     qDebug() << full_request;
     QString request_length = QString::number(full_request.size());
     full_request = full_request.prepend(request_length.rightJustified(5, '0', true).toLatin1());
-    qDebug() << "Sending: " << full_request;
+    //qDebug() << "Sending: " << full_request;
     return full_request;
 }
 
@@ -363,10 +379,10 @@ void server::send_card(QString& groupID, QString& card_text, int& card_num, int&
 {
     qDebug() << "SEND CARD" << endl;
     if(card_side == 0){
-        my_socket->write(format_socket_request("FCFT " + groupID, QString(card_num)+ " " + card_text));
+        my_socket->write(format_socket_request("FCFT", groupID+" "+QString::number(card_num)+" "+card_text));
     }
     else{
-        my_socket->write(format_socket_request("FCBK " + groupID, QString(card_num) + " " + card_text));
+        my_socket->write(format_socket_request("FCBK", groupID+" "+QString::number(card_num)+" "+card_text));
     }
 
 }
