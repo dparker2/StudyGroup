@@ -384,6 +384,9 @@ void server::send_card(QString& groupID, QString& card_text, int& card_num, int&
     else{
         my_socket->write(format_socket_request("FCBK", groupID+" "+QString::number(card_num)+" "+card_text));
     }
-
+    QString returned_index;
+    read_socket_helper(returned_index);
+    card_num = returned_index.toInt();
+    qDebug() << card_num;
 }
 

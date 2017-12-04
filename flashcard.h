@@ -13,8 +13,8 @@ class Flashcard : public QWidget
     Q_OBJECT
 public:
     explicit Flashcard(QWidget *parent = nullptr);
+    explicit Flashcard(QString, int, QWidget *parent = nullptr);
     ~Flashcard();
-    Flashcard(QString, QString, int);
     void setFront(QString);
     void setBack(QString);
     void setCardNum(int);
@@ -23,12 +23,12 @@ public:
     int getCardNum();
 
     void setEditBtn();
-
+    void emit_init_signal();
 
 signals:
 
 
-    void check_set_card(QString, int, int);
+    void check_set_card(Flashcard*, QString&, int&, int);
 
 public slots:
 

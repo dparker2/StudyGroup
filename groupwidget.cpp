@@ -176,11 +176,19 @@ void GroupWidget::on_quiz_button_clicked()
 
 void GroupWidget::set_card(QString& front, int& card_num, int& side){
     QString groupID = get_groupID();
-    int number = card_num;
     qDebug() << "SET FRONT" << endl;
-    emit send_card(groupID, front, number, side);
+    emit send_card(groupID, front, card_num, side);
 }
 
+void GroupWidget::incoming_card(int card_index, QString text, bool front)
+{
+    if(front) {
+        flashcard->insertCard(card_index, text);
+    }
+    else {
+        flashcard->editCard(card_index, text);
+    }
+}
 
 void GroupWidget::on_pushButton_clicked()
 {

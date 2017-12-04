@@ -451,7 +451,7 @@ void MainWindow::_initialize_group()
     connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
 
     connect(group_widget, SIGNAL(send_card(QString&, QString&, int&, int&)), my_serv, SLOT(send_card(QString&, QString&, int&, int&)));
-
+    connect(my_serv, SIGNAL(new_flashcard(int,QString,bool)), group_widget, SLOT(incoming_card(int,QString,bool)));
 }
 
 void MainWindow::_activate_group(QString &group_id)

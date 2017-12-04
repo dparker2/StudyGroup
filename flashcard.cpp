@@ -8,24 +8,36 @@ Flashcard::Flashcard(QWidget *parent) :
     ui(new Ui::Flashcard)
 {
     ui->setupUi(this);
-    ui->card_widget->setCurrentWidget(ui->card_front);
     ui->flip_card_btn->hide();
+    cardNum = -1;
+    ui->bottom_buttons->setCurrentIndex(0);
+    ui->card_widget->setCurrentIndex(0);
 }
 Flashcard::~Flashcard()
 {
     delete ui;
 }
 
-Flashcard::Flashcard(QString q, QString a, int num){
-    front_text = q;
-    back_text = a;
+Flashcard::Flashcard(QString text, int num, QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Flashcard)
+{
+    ui->setupUi(this);
+    front_text = text;
     cardNum = num;
+    ui->front_label->setText(front_text);
+    ui->card_widget->setCurrentIndex(0);
+    ui->bottom_buttons->setCurrentIndex(0);
+    ui->flip_card_btn->show();
 }
 void Flashcard::setFront(QString q){
     front_text = q;
+    ui->front_label->setText(front_text);
 }
 void Flashcard::setBack(QString a){
     back_text = a;
+    ui->back_label->setText(back_text);
+    qDebug() << "I AM HERE";
 }
 QString Flashcard::getFront(){
     return front_text;
@@ -48,6 +60,16 @@ void Flashcard::setEditBtn(){
     //ui->edit_card_btn->setIconSize(QSize(31,31));
     */
 }
+
+void Flashcard::emit_init_signal()
+{
+    QString _s = "";
+    emit check_set_card(this, _s, cardNum, 0);
+}
+
+/**
+ * PRIVATE/SLOTS
+ */
 
 void Flashcard::on_edit_card_btn_clicked()
 {
@@ -74,7 +96,8 @@ void Flashcard::on_set_front_btn_clicked()
         ui->card_textEdit->setPlainText(back_text);
         QString front = front_text;
         int side = 0;
-        emit check_set_card(front, cardNum, side);
+        emit check_set_card(this, front, cardNum, side);
+        qDebug() << "cardNum: " << cardNum;
     }
     else {
         back_text = ui->card_textEdit->toPlainText();
@@ -85,7 +108,7 @@ void Flashcard::on_set_front_btn_clicked()
         ui->card_widget->setCurrentIndex(0);
         ui->bottom_buttons->setCurrentIndex(0);
         ui->flip_card_btn->show();
-        emit check_set_card(back_text, cardNum, 1);
+        emit check_set_card(this, back_text, cardNum, 1);
     }
 
 }

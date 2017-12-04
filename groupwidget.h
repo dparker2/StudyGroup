@@ -32,6 +32,7 @@ signals:
 
 public slots:
     void set_card(QString& front, int& cardNum, int& side);
+    void incoming_card(int card_index, QString text, bool front);
     void new_chat(QString username, QString time, QString message);
     void users_changed();
     void user_joined(QString username);

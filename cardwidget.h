@@ -18,7 +18,8 @@ class CardWidget : public QWidget
     Q_OBJECT
 public:
     explicit CardWidget(QWidget *parent = nullptr);
-    void insertCard(QString, QString, int);
+    void insertCard(int index, QString front_text);
+    void editCard(int index, QString back_text = nullptr, QString front_text = nullptr);
     Flashcard* getCard(int index);
 
     //Flashcard* getNextCard(int index);
@@ -38,7 +39,7 @@ signals:
 
 public slots:
 
-    void check_set_card(QString, int, int);
+    void check_set_card(Flashcard*, QString&, int&, int);
 
 private slots:
 
@@ -49,12 +50,14 @@ private slots:
 
     void on_prev_btn_clicked();
 
+    void on_next_btn_clicked();
+
 private:
     Ui::CardWidget *ui;
     QVBoxLayout *layout;
     QList<Flashcard*> deck;
     Flashcard* flashcard;
-    int card_num;
+    int current_index;
 };
 
 #endif // CARDWIDGET_H
