@@ -80,7 +80,9 @@ void CardWidget::check_set_card(Flashcard* card, QString& front_text, int& index
     if(side == 0){
         emit set_card(front_text, index, side); // The index returned is index
         qDebug() << index << deck.size();
-        deck.insert(index, card);
+        if(deck.indexOf(card) == -1) {
+            deck.insert(index, card);
+        }
         qDebug() << index << deck.size();
     }
     else{

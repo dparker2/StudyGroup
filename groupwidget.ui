@@ -140,10 +140,22 @@ color: rgb(255, 255, 255);</string>
                  </sizepolicy>
                 </property>
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="whiteboard_menu">
                  <layout class="QHBoxLayout" name="horizontalLayout_11">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
                   <item>
                    <widget class="QComboBox" name="comboBox_pen_color">
                     <property name="sizePolicy">
@@ -155,7 +167,7 @@ color: rgb(255, 255, 255);</string>
                     <property name="font">
                      <font>
                       <family>Trebuchet MS</family>
-                      <pointsize>10</pointsize>
+                      <pointsize>12</pointsize>
                       <weight>75</weight>
                       <italic>false</italic>
                       <bold>true</bold>
@@ -234,7 +246,7 @@ QComboBox::down-arrow {
                     <property name="font">
                      <font>
                       <family>Trebuchet MS</family>
-                      <pointsize>10</pointsize>
+                      <pointsize>12</pointsize>
                       <weight>75</weight>
                       <italic>false</italic>
                       <bold>true</bold>
@@ -312,7 +324,7 @@ QComboBox::down-arrow {
                     <property name="font">
                      <font>
                       <family>Trebuchet MS</family>
-                      <pointsize>10</pointsize>
+                      <pointsize>12</pointsize>
                       <weight>75</weight>
                       <italic>false</italic>
                       <bold>true</bold>
@@ -356,6 +368,18 @@ QToolButton:hover {
                 </widget>
                 <widget class="QWidget" name="flashcard_menu">
                  <layout class="QHBoxLayout" name="horizontalLayout_13">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
                   <item>
                    <widget class="QToolButton" name="add_card_button">
                     <property name="enabled">
@@ -364,7 +388,7 @@ QToolButton:hover {
                     <property name="font">
                      <font>
                       <family>Trebuchet MS</family>
-                      <pointsize>10</pointsize>
+                      <pointsize>12</pointsize>
                       <weight>75</weight>
                       <italic>false</italic>
                       <bold>true</bold>
@@ -395,7 +419,7 @@ QToolButton:hover {
                     <property name="font">
                      <font>
                       <family>Trebuchet MS</family>
-                      <pointsize>10</pointsize>
+                      <pointsize>12</pointsize>
                       <weight>75</weight>
                       <italic>false</italic>
                       <bold>true</bold>
@@ -449,7 +473,7 @@ QToolButton:hover {
                 <property name="font">
                  <font>
                   <family>Trebuchet MS</family>
-                  <pointsize>10</pointsize>
+                  <pointsize>12</pointsize>
                   <weight>75</weight>
                   <italic>false</italic>
                   <bold>true</bold>
@@ -601,10 +625,18 @@ border-style:none;</string>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: #ff6247;
+             <string notr="true">QPushButton {
+background-color: rgba(255, 98, 71, 0.6);
 color: white; 
 font:bold;
-padding: 8px 12px 8px 12px;</string>
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(255, 98, 71, 1);
+}
+</string>
             </property>
             <property name="text">
              <string>Chat!</string>

@@ -126,13 +126,11 @@ void Flashcard::on_flip_card_btn_clicked()
 
     if(ui->card_widget->currentIndex() == 0){
         ui->card_widget->setCurrentIndex(1);
-        ui->card_widget->setStyleSheet("background-color: rgb(0,191,143)");
-        ui->frame->setStyleSheet("background-color: rgb(0,191,143)");
+        ui->frame->setStyleSheet("background-color: rgba(0, 190, 144)");
     }
     else{
         qDebug() << "FLIP TO FONT" << endl;
         ui->card_widget->setCurrentIndex(0);
-        ui->card_widget->setStyleSheet("background-color: rgb(0,169,210)");
-        ui->frame->setStyleSheet("background-color: rgb(0,169,210)");
+        ui->frame->setStyleSheet("background-color: rgba(2, 128, 173)");
     }
 }

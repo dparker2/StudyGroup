@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+   <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -22,22 +22,25 @@
     <height>0</height>
    </size>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>700</width>
-    <height>400</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget{
-	border-radius: 10px;
-
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QFrame" name="frame">
      <property name="sizePolicy">
@@ -47,7 +50,7 @@
       </sizepolicy>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgba(0,169,210);</string>
+      <string notr="true">background-color: rgba(2, 128, 173);</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -65,7 +68,7 @@
          </sizepolicy>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgba(0,169,210);</string>
+         <string notr="true"/>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -74,20 +77,11 @@
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
            <widget class="QLabel" name="front_label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
             <property name="font">
              <font>
               <family>Trebuchet MS</family>
               <pointsize>16</pointsize>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string/>
@@ -105,6 +99,7 @@
            <widget class="QLabel" name="back_label">
             <property name="font">
              <font>
+              <family>Trebuchet MS</family>
               <pointsize>16</pointsize>
              </font>
             </property>
@@ -122,11 +117,11 @@
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="1" column="0">
            <widget class="QTextEdit" name="card_textEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+            <property name="font">
+             <font>
+              <family>Trebuchet MS</family>
+              <pointsize>12</pointsize>
+             </font>
             </property>
             <property name="styleSheet">
              <string notr="true">QTextEdit{
@@ -140,18 +135,6 @@
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="current_side">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>20</height>
-             </size>
-            </property>
             <property name="font">
              <font>
               <family>Trebuchet MS</family>
@@ -179,7 +162,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="page_5">
          <layout class="QGridLayout" name="gridLayout_8">
@@ -197,7 +180,7 @@
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-background-color: rgb(50,117,181);
+background-color: rgba(255, 98, 71, 0.6);
 color: white; 
 font:bold;
 padding: 8px 12px 8px 12px;
@@ -205,12 +188,10 @@ border: 0px;
 }
 
 QPushButton:hover {
-	background-color: rgba(0, 127, 177, 0.6);
+	background-color: rgba(255, 98, 71, 1);
 }
 
-QPushButton:checked {
-	background-color: rgb(0, 127, 177);
-}</string>
+</string>
               </property>
               <property name="text">
                <string>Edit</string>
@@ -237,7 +218,7 @@ QPushButton:checked {
              <widget class="QPushButton" name="flip_card_btn">
               <property name="styleSheet">
                <string notr="true">QPushButton {
-background-color: rgb(50,117,181);
+background-color: rgba(255, 98, 71, 0.6);
 color: white; 
 font:bold;
 padding: 8px 12px 8px 12px;
@@ -245,12 +226,10 @@ border: 0px;
 }
 
 QPushButton:hover {
-	background-color: rgba(0, 127, 177, 0.6);
+	background-color: rgba(255, 98, 71, 1);
 }
 
-QPushButton:checked {
-	background-color: rgb(0, 127, 177);
-}</string>
+</string>
               </property>
               <property name="text">
                <string>Flip</string>
@@ -270,7 +249,7 @@ QPushButton:checked {
              <widget class="QPushButton" name="set_front_btn">
               <property name="styleSheet">
                <string notr="true">QPushButton {
-background-color: rgb(50,117,181);
+background-color: rgba(255, 98, 71, 0.6);
 color: white; 
 font:bold;
 padding: 8px 12px 8px 12px;
@@ -278,12 +257,10 @@ border: 0px;
 }
 
 QPushButton:hover {
-	background-color: rgba(0, 127, 177, 0.6);
+	background-color: rgba(255, 98, 71, 1);
 }
 
-QPushButton:checked {
-	background-color: rgb(0, 127, 177);
-}</string>
+</string>
               </property>
               <property name="text">
                <string>Set Front</string>

@@ -850,7 +850,7 @@ QPushButton:hover {
         <item row="3" column="0" colspan="2">
          <widget class="QStackedWidget" name="stackedWidget_inner">
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="stackedPage_JoinGroup">
            <layout class="QGridLayout" name="gridLayout_6">
@@ -1210,10 +1210,18 @@ border-style:none;</string>
                        </font>
                       </property>
                       <property name="styleSheet">
-                       <string notr="true">background-color:tomato;
+                       <string notr="true">QPushButton {
+background-color: rgba(255, 98, 71, 0.6);
 color: white; 
 font:bold;
 padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(255, 98, 71, 1);
+}
+
 </string>
                       </property>
                       <property name="text">
@@ -1594,10 +1602,18 @@ border-style:none;</string>
                        </font>
                       </property>
                       <property name="styleSheet">
-                       <string notr="true">background-color:tomato;
+                       <string notr="true">QPushButton {
+background-color: rgba(255, 98, 71, 0.6);
 color: white; 
 font:bold;
 padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(255, 98, 71, 1);
+}
+
 </string>
                       </property>
                       <property name="text">
