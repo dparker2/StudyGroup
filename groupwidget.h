@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QSpacerItem>
 #include <QPushButton>
+#include <QDate>
 
 #include "whiteboard.h"
 #include "cardwidget.h"
@@ -69,6 +70,8 @@ private:
     Whiteboard* whiteboard;
     CardWidget* flashcard;
     QString group_id;
+
+    QDate last_date_printed;
 };
 
 #endif // GROUPWIDGET_H
