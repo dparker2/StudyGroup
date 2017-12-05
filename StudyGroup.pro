@@ -30,7 +30,9 @@ SOURCES += \
     server.cpp \
     groupwidget.cpp \
     whiteboard.cpp \
-    whiteboard_p.cpp
+    whiteboard_p.cpp \
+    cardwidget.cpp\
+    flashcard.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,11 +40,15 @@ HEADERS += \
     server.h \
     groupwidget.h \
     whiteboard.h \
-    whiteboard_p.h
+    whiteboard_p.h\
+    cardwidget.h \
+    flashcard.h
 
 FORMS += \
         mainwindow.ui \
-    groupwidget.ui
+    groupwidget.ui\
+    cardwidget.ui\
+    flashcard.ui
 
 RESOURCES += \
     resource.qrc

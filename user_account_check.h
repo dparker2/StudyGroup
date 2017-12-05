@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <regex>
+#include <QFile>
 
 
 class UserAccount : public QMainWindow

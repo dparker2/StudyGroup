@@ -25,7 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // check/X icons are hidden initially
     ui->label_username_check->hide();
-    ui->label_username_error->hide();
+    ui->label_password1_check->hide();
+    ui->label_password2_check->hide();
     ui->label_email_check->hide();
 
     ui->back_to_group_button->hide();
@@ -40,19 +41,63 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stackedWidget_window->setCurrentWidget(ui->login_page);
     ui->tabWidget->setCurrentWidget(ui->tab_sign_in);
 
+    // Read the config file
+    QFile config(".sg"); // Initialize config file
+    if(config.open(QIODevice::ReadWrite)) { // Open config file
+        char timezone_data;
+        int read_size = config.read(&timezone_data, 1); // Read one byte (timezone)
+        qDebug() << read_size << timezone_data;
+        if(read_size != 1) {
+            qDebug() << "error reading config file";
+        }
+        if((timezone_data == server::timestamp_local) || (timezone_data == server::timestamp_utc)) {
+            ui->settings_timestamps->setCurrentIndex(timezone_data - 1);
+            my_serv->setTimestamps(timezone_data);
+        } else {
+            config.seek(config.pos() - 1); // Move I/O pos 1 backwards
+            char default_time = server::timestamp_local;
+            config.write(&default_time, 1); // Reset to deault (local) if odd value
+            qDebug() << "wrote" << default_time << "to config";
+            my_serv->setTimestamps(server::timestamp_local);
+        }
 
-    // UI Connections
-    // Wasn't working with settings button functionality
-    //connect(ui->exit_settings_button, SIGNAL(released()), this, SLOT(exit_settings()));
+        char user_data_size;
+        qint64 user_read_size = config.read(&user_data_size, 2);
+        qDebug() << (qint64)user_data_size;
+        if((user_read_size == 2) && (user_data_size != -1))
+        {
+            QByteArray user_data;
+            user_data = config.read((qint64)user_data_size);
+            if(user_data.length() > 0)
+            {
+                ui->lineEdit_username->setText(QString(user_data));
+            }
+            char pass_data_size;
+            qint64 pass_read_size = config.read(&pass_data_size, 2);
+            qDebug() << (qint64)pass_data_size;
+            if(pass_read_size == 2)
+            {
+                QByteArray pass_data;
+                pass_data = config.read((qint64)pass_data_size);
+                if(pass_data.length() > 0)
+                {
+                    ui->lineEdit_password->setText(QString(pass_data));
+                    ui->settings_remember_login->setChecked(true);
+                } else {
+                    ui->lineEdit_username->setText("");
+                }
+            }
+        }
+    }
 }
 
 MainWindow::~MainWindow()
 {
     on_logout_button_released();
 
-    delete user_info;
-    delete my_serv;
     delete ui;
+    my_serv->deleteLater();
+    group_widget->deleteLater();
 }
 
 void MainWindow::on_signin_button_clicked()
@@ -126,16 +171,15 @@ void MainWindow::on_lineEdit_username_signup_editingFinished()
                                                                         // with error msg if not valid
     //qDebug() << valid;   testing
     if(username.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_username_signup->setStyleSheet("color:black; background-color:white");
+        ui->lineEdit_username_signup->setStyleSheet("color: white; background-color: #545454; border-style: none;");
     }
     if(valid){                         // sets valid username to UserAccounts username member
         user_info->setUsername(username);
         user_info->set_info_complete(1,1);
-        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, error_msg, valid);
     }
     // sets correct icon
     // green: valid, X otherwise
-
+    set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, error_msg, valid);
 }
 /*
  * Hides the icons when the user edits the line
@@ -143,7 +187,6 @@ void MainWindow::on_lineEdit_username_signup_editingFinished()
 void MainWindow::on_lineEdit_username_signup_textEdited()
 {
     ui->label_username_check->hide();
-    //ui->label_username_error->hide();
     user_info->set_info_complete(1,0);
     on_lineEdit_username_signup_cursorPositionChanged();
 }
@@ -152,7 +195,7 @@ void MainWindow::on_lineEdit_username_signup_textEdited()
  */
 void MainWindow::on_lineEdit_username_signup_cursorPositionChanged()
 {
-    ui->lineEdit_username_signup->setStyleSheet("color:black; background-color:white");
+    ui->lineEdit_username_signup->setStyleSheet("color: white; background-color: #545454; border-style: none;");
 }
 /*
  * Sign Up Check - Email
@@ -167,15 +210,15 @@ void MainWindow::on_lineEdit_email_editingFinished()
     bool valid = user_info->emailValidation(email, error_msg);      // returns if email is valid or not
                                                                     // with error msg if not valid
     if(email.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_email->setStyleSheet("color:black; background-color:white");
+        ui->lineEdit_email->setStyleSheet("color: white; background-color: #545454; border-style: none;");
     }
     else if(valid){                      // sets valid email to UserAccounts email member
         user_info->setEmail(email);
         user_info->set_info_complete(0,1);
-        // sets correct icon
-        // green: valid, X otherwise
-        set_valid_icons(ui->label_email_check, ui->lineEdit_email, error_msg, valid);
     }
+    // sets correct icon
+    // green: valid, X otherwise
+    set_valid_icons(ui->label_email_check, ui->lineEdit_email, error_msg, valid);
 }
 /*
  * Hides the icons when the user edits the line
@@ -192,7 +235,7 @@ void MainWindow::on_lineEdit_email_textEdited()
  */
 void MainWindow::on_lineEdit_email_cursorPositionChanged()
 {
-    ui->lineEdit_email->setStyleSheet("color: black; background-color:white");
+    ui->lineEdit_email->setStyleSheet("color: white; background-color: #545454; border-style: none;");
 }
 /*
  * Sign Up Check - Password
@@ -206,14 +249,14 @@ void MainWindow::on_lineEdit_password1_editingFinished()
     bool valid = user_info->passwordValidtion(password,  error_msg);       // returns if password is valid or not
                                                                             // with error msg if not valid
     if(password.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_password1->setStyleSheet("color:black; background-color:white");
+        ui->lineEdit_password1->setStyleSheet("color: white; background-color: #545454; border-style: none;");
     }
     else if(valid){                        // sets valid password to UserAccounts password member
         user_info->setPassword(password);
-        // sets correct icon
-        // green: valid, X otherwise
-        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, error_msg, valid);
     }
+    // sets correct icon
+    // green: valid, X otherwise
+    set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, error_msg, valid);
 
 }
 /*
@@ -230,7 +273,7 @@ void MainWindow::on_lineEdit_password1_textEdited()
  */
 void MainWindow::on_lineEdit_password1_cursorPositionChanged()
 {
-    ui->lineEdit_email->setStyleSheet("color: black; background-color:white");
+    ui->lineEdit_password1->setStyleSheet("color: white; background-color: #545454; border-style: none;");
 }
 /*
  * Sign Up Check - Password (Second Input)
@@ -241,7 +284,7 @@ void MainWindow::on_lineEdit_password2_editingFinished()
 {
     QString password = ui->lineEdit_password2->text();
     if(password.isEmpty()){
-        ui->lineEdit_password2->setStyleSheet("color: black; background-color: white");
+        ui->lineEdit_password2->setStyleSheet("color: white; background-color: #545454; border-style: none;");
     }
     else if(password == user_info->getPassword()){
         set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, "", 1);
@@ -262,16 +305,7 @@ void MainWindow::on_lineEdit_password2_textEdited()
 }
 void MainWindow::on_lineEdit_password2_cursorPositionChanged()
 {
-    ui->lineEdit_password2->setStyleSheet("color: black; background-color:white");
-}
-/*
- * Sets the stylesheet colors for invalid input
- */
-void MainWindow::invalid_label_stylesheet(QLabel* this_label, QLineEdit *this_line, QString error_msg){
-    this_label->show();                           // becomes visible (hidden in constructor)
-    this_label->setStyleSheet("color:white");
-    this_label->setText(error_msg);
-    this_line->setStyleSheet("color:white; background-color: rgb(20, 230, 180)");
+    ui->lineEdit_password2->setStyleSheet("color: white; background-color: #545454; border-style: none;");
 }
 /*
  * Sets green check/X accordingly with given valid input. Outputs error message if needed
@@ -279,14 +313,14 @@ void MainWindow::invalid_label_stylesheet(QLabel* this_label, QLineEdit *this_li
 void MainWindow::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid){
     if(valid){
         QPixmap check_mark(":/resources/img/check_mark.png");
-        this_label->setPixmap(check_mark.scaled(31,31,Qt::KeepAspectRatio,Qt::SmoothTransformation));
-        this_line->setStyleSheet("color: black; background-color:white");
+        this_label->setPixmap(check_mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        this_line->setStyleSheet("color: white; background-color: #545454; border-style: none;");
         this_label->show();
      }
      else{
-        invalid_label_stylesheet(this_label, this_line, error_msg);
+        this_line->setStyleSheet("color: white; background-color: rgb(230, 80, 80); border-style: none;");
         QPixmap x_mark(":/resources/img/x_mark.png");
-        this_label->setPixmap(x_mark.scaled(20,20,Qt::KeepAspectRatio,Qt::SmoothTransformation));
+        this_label->setPixmap(x_mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         this_label->show();
      }
 }
@@ -296,14 +330,11 @@ void MainWindow::on_settings_button_released()
     QWidget* curr_page = ui->stackedWidget_inner->currentWidget();
      // Save previous page to exit to after
     if(curr_page->objectName() == "stackedPage_Settings"){
-        set_settings_btn_icon(0);
-
         exit_settings();
     }
     else{
         exit_settings_to = ui->stackedWidget_inner->currentWidget();
         ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_Settings); // Change active page to settings
-        set_settings_btn_icon(1);;
     }
 }
 
@@ -318,14 +349,16 @@ void MainWindow::set_settings_btn_icon(int icon){
         QIcon settingBtn(exit);
         ui->settings_button->setIcon(settingBtn);
         ui->settings_button->setIconSize(QSize(25,25));
-        ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
+        ui->settings_button->setChecked(true);
+        //ui->settings_button->setStyleSheet("background-color: rgb(163,163,163);");
     }
     else{      // sets button to an gear
         QPixmap gear(":/resources/img/gear.png");
         QIcon settingBtn(gear);
         ui->settings_button->setIcon(settingBtn);
         ui->settings_button->setIconSize(QSize(31,31));
-        ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
+        ui->settings_button->setChecked(false);
+        //ui->settings_button->setStyleSheet("background-color: rgb(39,125,176);");
     }
 }
 
@@ -336,11 +369,15 @@ void MainWindow::on_pushButton_recover_pass_clicked()
 
     QString pass;
 
-    if (my_serv->recover_password(username, email)){
+    if (my_serv->recover_pass(username, email, pass)){
         QMessageBox password_box;
-        password_box.setText ("Your password is: ");
-        password_box.setInformativeText(pass); // placeholder
+        password_box.setText ("Email Sent!");
         password_box.exec();
+    }
+    else {
+        QMessageBox error_box;
+        error_box.critical (0, "Error", "An error has occured! ");
+        error_box.setFixedSize(500,200);
     }
 
 }
@@ -349,26 +386,32 @@ void MainWindow::on_pushButton_recover_user_clicked()
 {
     QString email = ui->lineEdit_recover_user->text();
     QString user;
-    if (my_serv->recover_user(email)){
+
+    if (my_serv->recover_user(email, user)){
         // QString username = user;
         QMessageBox username_box;
         username_box.setText("Your username is: ");
         username_box.setInformativeText(user); //placeholder
         username_box.exec();
     }
+    else {
+        QMessageBox error_box;
+        error_box.critical (0, "Error", "An error has occured! ");
+        error_box.setFixedSize(500,200);
+    }
 
 }
 
 void MainWindow::on_join_button_released()
 {
-    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+    ui->join_button->setChecked(true);
 }
 
 void MainWindow::on_create_button_released()
 {
-    set_settings_btn_icon(0);    // sets the button icon back to a gear
     ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_CreateGroup);
+    ui->create_button->setChecked(true);
 }
 
 void MainWindow::on_create_group_button_released()
@@ -405,6 +448,7 @@ void MainWindow::on_back_to_group_button_released()
     if(group_widget != nullptr) // Sanity check, check if even in a group
     {
         ui->stackedWidget_inner->setCurrentWidget(group_widget);
+        ui->back_to_group_button->setChecked(true);
     }
 }
 
@@ -441,14 +485,17 @@ void MainWindow::_initialize_group()
     connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
     connect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
 
-    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)), group_widget, SIGNAL(whiteboard_draw_line(QPoint&,QPoint&)));
+    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), group_widget, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)));
     connect(my_serv, SIGNAL(get_whiteboard(QString)), group_widget->whiteboard_ptr(), SLOT(get_whiteboard(QString)));
     connect(group_widget->whiteboard_ptr(), SIGNAL(send_whiteboard(QString&,QByteArray*)), my_serv, SLOT(send_whiteboard(QString&,QByteArray*)));
     connect(my_serv, SIGNAL(update_whiteboard(QByteArray*)), group_widget->whiteboard_ptr(), SLOT(update_whiteboard(QByteArray*)));
 
     connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
-    connect(group_widget, SIGNAL(line_drawn(QString&,QPoint,QPoint)), my_serv, SLOT(send_whiteboard_line(QString&,QPoint,QPoint)));
+    connect(group_widget, SIGNAL(line_drawn(QString,QPoint,QPoint,QColor,int)), my_serv, SLOT(send_whiteboard_line(QString,QPoint,QPoint,QColor,int)));
     connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
+
+    connect(group_widget, SIGNAL(send_card(QString&, QString&, int&, int&)), my_serv, SLOT(send_card(QString&, QString&, int&, int&)));
+    connect(my_serv, SIGNAL(new_flashcard(int,QString,bool)), group_widget, SLOT(incoming_card(int,QString,bool)));
 }
 
 void MainWindow::_activate_group(QString &group_id)
@@ -462,6 +509,7 @@ void MainWindow::_activate_group(QString &group_id)
     ui->back_to_group_button->setVisible(true);
     ui->back_to_group_button->setText(group_id);
     ui->leave_button->setVisible(true);
+    ui->leave_button->setChecked(false);
 }
 
 void MainWindow::on_logout_button_released()
@@ -472,13 +520,93 @@ void MainWindow::on_logout_button_released()
         if(group_widget != nullptr)
         {
             // Leave group if still in it
-            this->on_leave_button_released();
+            QString id = group_widget->get_groupID();
+            my_serv->leave_group(id);
+            ui->stackedWidget_inner->removeWidget(group_widget);
+            ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+            ui->back_to_group_button->setVisible(false);
+            ui->leave_button->setVisible(false);
+            group_widget->deleteLater();
+            group_widget = nullptr;
         }
         // Clear username info
-        delete user_info;
-        user_info = new UserAccount();
-
+        user_info->setEmail("");
+        user_info->setUsername("");
+        user_info->setPassword("");
         // Change widget
         ui->stackedWidget_window->setCurrentWidget(ui->login_page);
+    }
+}
+
+void MainWindow::on_stackedWidget_inner_currentChanged(int)
+{
+    ui->join_button->setChecked(false);
+    ui->create_button->setChecked(false);
+    ui->back_to_group_button->setChecked(false);
+    set_settings_btn_icon(0);
+    if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_JoinGroup)
+    {
+        ui->join_button->setChecked(true);
+    }
+    else if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_CreateGroup)
+    {
+        ui->create_button->setChecked(true);
+    }
+    else if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_Settings)
+    {
+        set_settings_btn_icon(1);
+        if(exit_settings_to == ui->stackedPage_JoinGroup)
+            ui->join_button->setChecked(true);
+        if(exit_settings_to == ui->stackedPage_CreateGroup)
+            ui->create_button->setChecked(true);
+        if(exit_settings_to == group_widget)
+            ui->back_to_group_button->setChecked(true);
+    }
+    else if(ui->stackedWidget_inner->currentWidget() == group_widget)
+    {
+        ui->back_to_group_button->setChecked(true);
+    }
+}
+
+void MainWindow::on_settings_timestamps_currentIndexChanged(int index)
+{
+    QFile config(".sg"); // Initialize config file
+    char data;
+    if(index == 0)
+        data = server::timestamp_local;
+    else if(index == 1)
+        data = server::timestamp_utc;
+    if(config.open(QIODevice::WriteOnly | QIODevice::Append)) {
+        config.seek(0);
+        config.write(&data, 1);
+    }
+}
+
+void MainWindow::on_settings_remember_login_toggled(bool checked)
+{
+    QFile config(".sg"); // Initialize config file
+    if((checked) && (ui->stackedWidget_window->currentWidget() == ui->main_page)) {
+        qint64 user_data_length = user_info->getUsername().length();
+        const char* user_data = user_info->getUsername().toStdString().c_str();
+        qint64 pass_data_length = user_info->getPassword().length();
+        const char* pass_data = user_info->getPassword().toStdString().c_str();
+        if(config.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            config.seek(1);
+            qDebug() << "WRITING";
+            char ch_udl = user_data_length;
+            char ch_psl = pass_data_length;
+            config.write(&ch_udl, 2);
+            config.write(user_data, user_data_length);
+            config.write(&ch_psl, 2);
+            config.write(pass_data, pass_data_length);
+            qDebug() << "DONE WRITING";
+        }
+    }
+    else if((!checked) && (ui->stackedWidget_window->currentWidget() == ui->main_page)) {
+        if(config.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            config.seek(1);
+            char nope = -1;
+            config.write(&nope, 1);
+        }
     }
 }

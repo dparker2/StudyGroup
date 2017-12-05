@@ -38,7 +38,6 @@ private slots:
 
     void on_lineEdit_password2_editingFinished();
 
-    void invalid_label_stylesheet(QLabel* this_label, QLineEdit *this_line, QString error_msg);
     void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
 
     void on_singup_button_clicked();
@@ -70,10 +69,17 @@ private slots:
 
     void on_pushButton_recover_user_clicked();
 
+    void on_stackedWidget_inner_currentChanged(int arg1);
+
+    void on_settings_timestamps_currentIndexChanged(int index);
+
+    void on_settings_remember_login_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
     server *my_serv;
     UserAccount *user_info;
+    bool auto_login;
 
     QWidget* exit_settings_to;
     GroupWidget* group_widget;

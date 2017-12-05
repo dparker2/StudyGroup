@@ -265,15 +265,14 @@ function rememberPassword ($username, $email, $sock){
   else
     echo "Connected to database \n"; 
   
-  $find_pass = "SELECT Password FROM UserInfo WHERE Email = '$email'";
-  $find_pass_two = "SELECT Password FROM UserInfo WHERE Userame = '$username'";
+  $find_pass = "SELECT Pass FROM UserInfo WHERE (Email = '$email' AND Username = '$username')";
   $resultPass = mysqli_query($connection, $find_pass); //runs find_pass
-  $obj = $resultUser->fetch_object();
-  $returnPass = $obj->Password; // returnPass == return value of find_pass
+  $obj = $resultPass->fetch_object();
+  $returnPass = $obj->Pass; // returnUser == return value of find_Pass
   $message = "SUCC{$returnPass}";
   echo "Debug: Returning $message to client \n";
   $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //might need tuning
-  fwrite($sock, "{$messageSize}{$message}"); //writes to the socket 
+  fwrite($sock, "{$messageSize}{$message}"); //writes to the socket
   
   if ($connection->close()) {
     echo "Database Closed \n";
