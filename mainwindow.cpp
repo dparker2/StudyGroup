@@ -371,8 +371,7 @@ void MainWindow::on_pushButton_recover_pass_clicked()
 
     if (my_serv->recover_pass(username, email, pass)){
         QMessageBox password_box;
-        password_box.setText ("Your password is: ");
-        password_box.setInformativeText(pass); // placeholder
+        password_box.setText ("Email Sent!");
         password_box.exec();
     }
     else {
