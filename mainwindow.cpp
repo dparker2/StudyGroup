@@ -423,6 +423,8 @@ void MainWindow::on_create_group_button_released()
     {
         ui->create_group_lineEdit->setText("");
         _activate_group(group_id);
+        QString name = user_info->getUsername();
+        group_widget->user_joined(name);
     }
     else {
         group_widget->deleteLater();
@@ -502,8 +504,6 @@ void MainWindow::_activate_group(QString &group_id)
 {
     ui->stackedWidget_inner->addWidget(group_widget);
     ui->stackedWidget_inner->setCurrentWidget(group_widget);
-    QString name = user_info->getUsername();
-    group_widget->user_joined(name);
     group_widget->set_groupID(group_id);
 
     ui->back_to_group_button->setVisible(true);
