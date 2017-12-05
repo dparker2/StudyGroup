@@ -346,7 +346,7 @@ QByteArray server::format_socket_request(const QString &request_code, QString re
     QString full_request = request_code + request_arg;
     QString request_length = QString::number(full_request.size());
     full_request = full_request.prepend(request_length.rightJustified(5, '0', true));
-    //qDebug() << "Sending: " << full_request;
+    qDebug() << "Sending: " << full_request;
     return full_request.toLatin1();
 }
 
