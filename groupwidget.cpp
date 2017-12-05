@@ -12,7 +12,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
     ui->setupUi(this);
 
     // Begin set whiteboard
-    whiteboard = new Whiteboard(ui->save_whiteboard_button);    
+    whiteboard = new Whiteboard(nullptr, ui->save_whiteboard_button);
 
     qDebug() << connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint,QColor,int)), this, SLOT(send_line_drawn(QPoint,QPoint,QColor,int)));
     qDebug() << connect(this, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), whiteboard, SLOT(draw_line(QPoint,QPoint,QColor,int)));
@@ -33,7 +33,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
     ui->study_mode->insertWidget(1, flashcard);
     setFlashcardUI();
 
-    connect(flashcard, SIGNAL(set_card(QString&,int&,int&)), this, SLOT(set_card(QString&,int&,int&)));
+    connect(flashcard, SIGNAL(set_card(QString,int&,int)), this, SLOT(set_card(QString,int&,int)));
 
 
 }
@@ -177,7 +177,7 @@ void GroupWidget::on_add_card_button_clicked()
     flashcard->on_addCardBtn_clicked();
 }
 
-void GroupWidget::set_card(QString& front, int& card_num, int& side){
+void GroupWidget::set_card(QString front, int& card_num, int side){
     QString groupID = get_groupID();
     qDebug() << "SET FRONT" << endl;
     emit send_card(groupID, front, card_num, side);
@@ -185,13 +185,7 @@ void GroupWidget::set_card(QString& front, int& card_num, int& side){
 
 void GroupWidget::incoming_card(int card_index, QString text, bool front)
 {
-    if(front) {
-        flashcard->editCard(card_index, nullptr, text); // Will edit or create new card
-                                        // nullptr param does not edit the text
-    }
-    else { // back side
-        flashcard->editCard(card_index, text, nullptr);
-    }
+    flashcard->setCard(card_index, text, front); // Will edit or create new card
 }
 
 void GroupWidget::on_pushButton_clicked()

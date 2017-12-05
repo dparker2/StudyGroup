@@ -15,27 +15,35 @@ CardWidget::CardWidget(QWidget *parent) :
     current_index = -1;
     quiz = false;
 }
-void CardWidget::editCard(int index, QString back_text, QString front_text, Flashcard* new_card)
+
+// When a new card needs to be properly inserted/edited
+void CardWidget::setCard(int index, QString text, bool front_side)
 {
     // Is this a new card?
     if((index < deck.size()) && (deck.at(index) != nullptr)) { // Editing existing card
-        if(front_text != nullptr)
+        qDebug() << "Editing existing card" << index;
+        if(front_side)
         {
-            deck.at(index)->setFront(front_text);
+            deck.at(index)->setFront(text);
         }
-        if(back_text != nullptr)
-        {
-            deck.at(index)->setBack(back_text);
+        else {
+            deck.at(index)->setBack(text);
         }
     }
     else { // New card!
+        qDebug() << "Adding new card at" << index;
         while((deck.size() - 1) < index) { // If the index we get is out of range, put nullptrs in until we get to where we want
             deck.append(nullptr);
         }
-        if(new_card == nullptr) {
-            new_card = new Flashcard(front_text, back_text, index);
-            connect(new_card, SIGNAL(check_set_card(Flashcard*,QString&,int&,int)), this, SLOT(check_set_card(Flashcard*,QString&,int&,int)));
+        Flashcard* new_card;
+        if(front_side) {
+            new_card = new Flashcard(text, "", index);
         }
+        else {
+            new_card = new Flashcard("", text, index);
+        }
+        connect(new_card, SIGNAL(check_set_card(Flashcard*,QString&,int&,int)), this, SLOT(check_set_card(Flashcard*,QString&,int&,int)));
+
         deck[index] = new_card; // The above loop guarantees we are in the proper spot to append at the right index
                                 // even if the index was too high at first
         if(deck.size() > 1)
@@ -44,13 +52,12 @@ void CardWidget::editCard(int index, QString back_text, QString front_text, Flas
             ui->next_btn->show();
         } else {
             current_index = index; // If first card AND back is defined, set that in the stacked widget
-            if(back_text != nullptr) {
-                ui->stackedWidget_card_edit->addWidget(new_card);
-                ui->stackedWidget_card_edit->setCurrentWidget(new_card);
-            }
+            ui->stackedWidget_card_edit->addWidget(new_card);
+            ui->stackedWidget_card_edit->setCurrentWidget(new_card);
         }
     }
 }
+
 QString CardWidget::get_card_text(){
     //return flashcard->get_card_text();
 }
@@ -64,12 +71,30 @@ void CardWidget::deleteCard(int index){
 
 void CardWidget::on_addCardBtn_clicked()
 {
-    Flashcard* new_card = new Flashcard(nullptr, nullptr, -1);
-    connect(new_card, SIGNAL(check_set_card(Flashcard*,QString&,int&,int)), this, SLOT(check_set_card(Flashcard*,QString&,int&,int)));
-    new_card->emit_init_signal();
+    int new_index = -1;
+    emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
+    setCard(new_index, "", true); // Make new card
 
-    ui->stackedWidget_card_edit->addWidget(new_card);
-    ui->stackedWidget_card_edit->setCurrentWidget(new_card); // Put card on front to edit
+    ui->stackedWidget_card_edit->removeWidget(deck.at(current_index));
+    current_index = new_index;
+    ui->stackedWidget_card_edit->addWidget(deck.at(new_index));
+    ui->stackedWidget_card_edit->setCurrentWidget(deck.at(new_index));
+}
+
+// to be called only from here
+// When we want no chance of making a new card
+void CardWidget::editCard(int index, QString text, bool front_side)
+{
+    // Is this a new card?
+    if((index < deck.size()) && (deck.at(index) != nullptr)) { // Editing existing card
+        if(front_side)
+        {
+            deck.at(index)->setFront(text);
+        }
+        else {
+            deck.at(index)->setBack(text);
+        }
+    }
 }
 
 int CardWidget::getDeckSize()
@@ -82,13 +107,11 @@ void CardWidget::check_set_card(Flashcard* card, QString& text, int& index, int 
     qDebug() << "CHECK_SET_CARD" << endl;
     if(side == 0) { // Front
         emit set_card(text, index, side); // The index returned is index
-        card->setCardNum(index);
-        editCard(index, nullptr, text, card); // Edit/Make new card with proper index
+        editCard(index, text, true); // Edit card with proper index
     }
     else { // Back
         emit set_card(text, index, side);
-        card->setCardNum(index);
-        editCard(index, text, nullptr, card); // Edit/Make new card
+        editCard(index, text, false); // Edit
         if(ui->stackedWidget_card_edit->currentIndex() > 0) {
             ui->stackedWidget_card_edit->removeWidget(card); // Remove the card (done editing)
         }

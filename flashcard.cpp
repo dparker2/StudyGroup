@@ -52,6 +52,7 @@ QString Flashcard::getBack(){
 }
 void Flashcard::setCardNum(int num){
     cardNum = num;   // don't think this is needed
+    ui->card_index->setText(QString::number(num));
 }
 int Flashcard::getCardNum(){
     return cardNum;
@@ -102,7 +103,7 @@ void Flashcard::on_set_front_btn_clicked()
         QString front = front_text;
         int side = 0;
         emit check_set_card(this, front, cardNum, side);
-        ui->card_index->setText(QString::number(cardNum));
+        //ui->card_index->setText(QString::number(cardNum+1));
         qDebug() << "cardNum: " << cardNum;
     }
     else {
@@ -115,7 +116,7 @@ void Flashcard::on_set_front_btn_clicked()
         ui->bottom_buttons->setCurrentIndex(0);
         ui->flip_card_btn->show();
         emit check_set_card(this, back_text, cardNum, 1);
-        ui->card_index->setText(QString::number(cardNum));
+        //ui->card_index->setText(QString::number(cardNum));
     }
 
 }

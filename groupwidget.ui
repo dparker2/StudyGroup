@@ -437,7 +437,7 @@ QToolButton:hover {
 	background-color: rgba(0, 127, 177, 0.6);
 }
 
-QPushButton:checked {
+QToolButton:checked {
 	background-color: rgb(0, 127, 177);
 }</string>
                     </property>
