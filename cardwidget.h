@@ -18,11 +18,10 @@ class CardWidget : public QWidget
     Q_OBJECT
 public:
     explicit CardWidget(QWidget *parent = nullptr);
-    void insertCard(int index, QString front_text);
-    void editCard(int index, QString back_text = nullptr, QString front_text = nullptr);
+    void editCard(int index, QString back_text = nullptr, QString front_text = nullptr, Flashcard* new_card = nullptr);
     void deleteCard(int index);
     void on_addCardBtn_clicked();
-    void quiz();
+    void setQuiz(bool);
     int getDeckSize();
     int get_card_number();
     Flashcard* getCard(int index);
@@ -51,6 +50,7 @@ private:
     QList<Flashcard*> deck;
     Flashcard* flashcard;
     int current_index;
+    bool quiz;
 };
 
 #endif // CARDWIDGET_H

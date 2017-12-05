@@ -59,11 +59,9 @@ private slots:
 
     void on_add_card_button_clicked();
 
-
-
-    void on_quiz_button_clicked();
-
     void on_pushButton_clicked();
+
+    void on_quiz_button_toggled(bool checked);
 
 private:
     Ui::GroupWidget* ui;

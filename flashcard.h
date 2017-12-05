@@ -13,7 +13,7 @@ class Flashcard : public QWidget
     Q_OBJECT
 public:
     explicit Flashcard(QWidget *parent = nullptr);
-    explicit Flashcard(QString, int, QWidget *parent = nullptr);
+    explicit Flashcard(QString, QString, int, QWidget *parent = nullptr);
     ~Flashcard();
     void setFront(QString);
     void setBack(QString);

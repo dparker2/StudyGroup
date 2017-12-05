@@ -177,11 +177,6 @@ void GroupWidget::on_add_card_button_clicked()
     flashcard->on_addCardBtn_clicked();
 }
 
-void GroupWidget::on_quiz_button_clicked()
-{
-    flashcard->quiz();
-}
-
 void GroupWidget::set_card(QString& front, int& card_num, int& side){
     QString groupID = get_groupID();
     qDebug() << "SET FRONT" << endl;
@@ -191,10 +186,11 @@ void GroupWidget::set_card(QString& front, int& card_num, int& side){
 void GroupWidget::incoming_card(int card_index, QString text, bool front)
 {
     if(front) {
-        flashcard->insertCard(card_index, text);
+        flashcard->editCard(card_index, nullptr, text); // Will edit or create new card
+                                        // nullptr param does not edit the text
     }
-    else {
-        flashcard->editCard(card_index, text);
+    else { // back side
+        flashcard->editCard(card_index, text, nullptr);
     }
 }
 
@@ -203,4 +199,9 @@ void GroupWidget::on_pushButton_clicked()
     ui->study_menu->setCurrentIndex(0);
     ui->study_mode->setCurrentWidget(whiteboard);
     ui->comboBox_study_mode->setCurrentIndex(0);
+}
+
+void GroupWidget::on_quiz_button_toggled(bool checked)
+{
+    flashcard->setQuiz(checked);
 }

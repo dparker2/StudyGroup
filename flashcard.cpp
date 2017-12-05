@@ -18,13 +18,17 @@ Flashcard::~Flashcard()
     delete ui;
 }
 
-Flashcard::Flashcard(QString text, int num, QWidget *parent) :
+Flashcard::Flashcard(QString text1, QString text2, int num, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Flashcard)
 {
     ui->setupUi(this);
-    front_text = text;
+    if(text1 != nullptr)
+        front_text = text1;
     cardNum = num;
+    if(text2 != nullptr)
+        back_text = text2;
+    ui->back_label->setText(back_text);
     ui->front_label->setText(front_text);
     ui->card_widget->setCurrentIndex(0);
     ui->bottom_buttons->setCurrentIndex(0);
@@ -98,6 +102,7 @@ void Flashcard::on_set_front_btn_clicked()
         QString front = front_text;
         int side = 0;
         emit check_set_card(this, front, cardNum, side);
+        ui->card_index->setText(QString::number(cardNum));
         qDebug() << "cardNum: " << cardNum;
     }
     else {
@@ -110,6 +115,7 @@ void Flashcard::on_set_front_btn_clicked()
         ui->bottom_buttons->setCurrentIndex(0);
         ui->flip_card_btn->show();
         emit check_set_card(this, back_text, cardNum, 1);
+        ui->card_index->setText(QString::number(cardNum));
     }
 
 }
