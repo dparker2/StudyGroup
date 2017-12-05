@@ -52,6 +52,7 @@ public slots:
     void send_whiteboard(QString& ip, QByteArray* whiteboard);
     void save_whiteboard(QString& group_id, QByteArray* whiteboard);
     void error(QAbstractSocket::SocketError);
+    void send_card(QString&, QString&, int&, int&);
 
 private:
     QTcpSocket* my_socket;

@@ -371,8 +371,7 @@ void MainWindow::on_pushButton_recover_pass_clicked()
 
     if (my_serv->recover_pass(username, email, pass)){
         QMessageBox password_box;
-        password_box.setText ("Your password is: ");
-        password_box.setInformativeText(pass); // placeholder
+        password_box.setText ("Email Sent!");
         password_box.exec();
     }
     else {
@@ -494,6 +493,9 @@ void MainWindow::_initialize_group()
     connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
     connect(group_widget, SIGNAL(line_drawn(QString,QPoint,QPoint,QColor,int)), my_serv, SLOT(send_whiteboard_line(QString,QPoint,QPoint,QColor,int)));
     connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
+
+    connect(group_widget, SIGNAL(send_card(QString&, QString&, int&, int&)), my_serv, SLOT(send_card(QString&, QString&, int&, int&)));
+    connect(my_serv, SIGNAL(new_flashcard(int,QString,bool)), group_widget, SLOT(incoming_card(int,QString,bool)));
 }
 
 void MainWindow::_activate_group(QString &group_id)

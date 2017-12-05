@@ -356,7 +356,7 @@ QByteArray server::format_socket_request(const QString &request_code, const QByt
     qDebug() << full_request;
     QString request_length = QString::number(full_request.size());
     full_request = full_request.prepend(request_length.rightJustified(5, '0', true).toLatin1());
-    qDebug() << "Sending: " << full_request;
+    //qDebug() << "Sending: " << full_request;
     return full_request;
 }
 
@@ -392,3 +392,20 @@ void server::error(QAbstractSocket::SocketError err)
 {
    qDebug() << my_socket->errorString();
 }
+
+
+void server::send_card(QString& groupID, QString& card_text, int& card_num, int& card_side)
+{
+    qDebug() << "SEND CARD" << endl;
+    if(card_side == 0){
+        my_socket->write(format_socket_request("FCFT", groupID+" "+QString::number(card_num)+" "+card_text));
+    }
+    else{
+        my_socket->write(format_socket_request("FCBK", groupID+" "+QString::number(card_num)+" "+card_text));
+    }
+    QString returned_index;
+    read_socket_helper(returned_index);
+    card_num = returned_index.toInt();
+    qDebug() << card_num;
+}
+
