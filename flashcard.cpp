@@ -29,6 +29,7 @@ Flashcard::Flashcard(QString text, int num, QWidget *parent) :
     ui->card_widget->setCurrentIndex(0);
     ui->bottom_buttons->setCurrentIndex(0);
     ui->flip_card_btn->show();
+    ui->card_index->setText(QString::number(cardNum+1));
 }
 void Flashcard::setFront(QString q){
     front_text = q;

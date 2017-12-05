@@ -113,13 +113,28 @@ void CardWidget::on_prev_btn_clicked()
 
     ui->stackedWidget_card_edit->addWidget(deck.at(current_index)); // Add the widget at the new index
     ui->stackedWidget_card_edit->setCurrentWidget(deck.at(current_index)); // Make sure its the one being displayed
+
 }
 
 void CardWidget::on_next_btn_clicked()
 {
+
     ui->stackedWidget_card_edit->removeWidget(deck.at(current_index)); // Remove the widget currently displayed
     current_index = (current_index + 1) % deck.size(); // Update index, mod so it loops back to beginning if too far
+
+    if(quiz){  // not sure if we should do it like this, also do we need button for end quiz?
+        current_index = rand() % deck.size();
+    }
 
     ui->stackedWidget_card_edit->addWidget(deck.at(current_index)); // Add the widget at the new index
     ui->stackedWidget_card_edit->setCurrentWidget(deck.at(current_index)); // Make sure its the one being displayed
 }
+
+void CardWidget::quiz()
+{
+    quiz = true;
+    ui->stackedWidget_card_edit->removeWidget(deck[current_index]);  // remove current displayed widget
+    ui->stackedWidget_card_edit->addWidget(deck[rand() % deck.size()]);
+
+}
+

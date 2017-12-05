@@ -156,8 +156,6 @@ void GroupWidget::on_comboBox_pen_size_currentTextChanged(const QString &pen_siz
     whiteboard->set_pen_size(p_size.toInt());
 }
 
-
-
 void GroupWidget::setFlashcardUI(){
     //flashcard->card_label->hide();
 }
@@ -181,7 +179,7 @@ void GroupWidget::on_add_card_button_clicked()
 
 void GroupWidget::on_quiz_button_clicked()
 {
-    qDebug() << "DECK SIZE: "<< flashcard->getDeckSize() << endl;
+    flashcard->quiz();
 }
 
 void GroupWidget::set_card(QString& front, int& card_num, int& side){

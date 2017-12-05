@@ -51,6 +51,7 @@ private:
     QList<Flashcard*> deck;
     Flashcard* flashcard;
     int current_index;
+    bool quiz;
 };
 
 #endif // CARDWIDGET_H
