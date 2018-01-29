@@ -32,7 +32,12 @@ SOURCES += \
     whiteboard.cpp \
     whiteboard_p.cpp \
     cardwidget.cpp\
-    flashcard.cpp
+    flashcard.cpp \
+    startpage.cpp \
+    header.cpp \
+    joingrouppage.cpp \
+    creategrouppage.cpp \
+    settingspage.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,13 +47,23 @@ HEADERS += \
     whiteboard.h \
     whiteboard_p.h\
     cardwidget.h \
-    flashcard.h
+    flashcard.h \
+    startpage.h \
+    header.h \
+    joingrouppage.h \
+    creategrouppage.h \
+    settingspage.h
 
 FORMS += \
         mainwindow.ui \
     groupwidget.ui\
     cardwidget.ui\
-    flashcard.ui
+    flashcard.ui \
+    startpage.ui \
+    header.ui \
+    joingrouppage.ui \
+    creategrouppage.ui \
+    settingspage.ui
 
 RESOURCES += \
     resource.qrc
