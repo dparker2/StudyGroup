@@ -2,9 +2,11 @@
 include_once 'accountFunctions.php';
 include_once 'groupFunctions.php';
 include_once 'flashCardFunctions.php';
+include_once 'whiteboardFunctions.php';
 
 // $socket_tuple = ($socket, $username)
-$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage);
+//$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
+$server = stream_socket_server("tcp://127.0.0.1:1520", $errno, $errorMessage); //Localhost
 
 //Showing test commit hello
 //echo ++$argv[1];
@@ -55,8 +57,10 @@ while ($numGroups > 0) {
   $numGroups = $numGroups - 1;
   mysqli_query($connection, $removeNULL);
 }
-
 $connection->close();
+
+
+
 
 
 $clients = array(); // $ip => ($socket, $username)
@@ -84,7 +88,9 @@ while(true) {
         $new_client = stream_socket_accept($server);
         if ($new_client) {
           //print remote client information, ip and port number
-            echo 'Connection accepted from ' . stream_socket_get_name($new_client, true) . "\n";
+            echo 'Connection accepted from ' . stream_socket_get_name($new_client, true) . "\n";  //Prints out connection from IP address ^^
+
+            //Assigns ip address and blank username to the array
             $clients[stream_socket_get_name($new_client, true)] = array($new_client, "");
         }
         //delete the server socket from the read sockets

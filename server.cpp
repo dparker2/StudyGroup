@@ -23,7 +23,7 @@ server::server(QObject *parent) : QObject(parent)
     connect(my_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
     //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    //my_socket->connectToHost("localhost", 24680);
+    my_socket->connectToHost("127.0.0.1", 1520);
     //my_socket->connectToHost("52.53.198.189", 24680); // David's AWS server
 
     success_flag = false;
