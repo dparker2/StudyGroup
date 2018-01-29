@@ -6,25 +6,53 @@
 #include <QTimer>
 #include <QDateTime>
 
+#include <sgwidget.h>
+
+/***
+ *
+ * Purely static class used for interfacing with StudyGroup Server.
+ * This class needs to be initialized once in order to begin.
+ *
+ * It is meant to run in its own thread, and must be provided a <QString, SGWidget*> pair
+ * to notify a class of incoming events based on its QString key received from the server.
+ *
+ * Key formats **must** be consistent for this to work properly.
+ *
+ * Example: Incoming socket is a write to a whiteboard in biology_3485. This class will search
+ * its internal dictionary for this: <QString("biology_3485 whiteboard"), Whiteboard*> and
+ * add this message to the Whiteboard*'s work queue. The SGWidget*'s job is to interpret this message.
+ *
+ */
+
 class server : public QObject
 {
     Q_OBJECT
 public:
-    const static char timestamp_utc = 2;
-    const static char timestamp_local = 1;
-    explicit server(QObject *parent = nullptr);
-    void connect_server();
-    void setTimestamps(char arg);
+    const static char timestamp_utc = 2;  // Figure this out later
+    const static char timestamp_local = 1;  // Figure this out later
+    void connect_server();  // Old one
+    void initialize_connection();  // New one
+    void setTimestamps(char arg);  // Figure this out later
     // Account Functions
-    bool login(QString& username, QString& password, QString& email);
-    bool create_account(QString& username, QString& password, QString& email);
-    bool recover_user(QString& email, QString& user);
-    bool recover_pass(QString& username, QString& email, QString& pass);
-    bool logout();
-    // Group Functions
-    bool create_group(QString& group_name, QString& group_id);
-    bool join_group(QString& group_id);
-    bool leave_group(QString& group_id);
+    bool login(QString& username, QString& password, QString& email);  // Replace all of these with static functions
+    bool create_account(QString& username, QString& password, QString& email);  //  |
+    bool recover_user(QString& email, QString& user);                           //  |
+    bool recover_pass(QString& username, QString& email, QString& pass);        //  |
+    bool logout();                                                              //  |
+    // Group Functions                                                          //  |
+    bool create_group(QString& group_name, QString& group_id);                  //  |
+    bool join_group(QString& group_id);                                         //  |
+    bool leave_group(QString& group_id);                                        // <-
+
+    // New stuff
+    static void remove(QString class_key);  // Removes the key value pair from dict
+    static void remove(SGWidget* object_pointer);  // Removes all keys with that value
+    static void add(QString key, SGWidget* value);  // Adds key value to dict, overwriting if key already exists.
+    static void test(QString key, QString test_message);
+    //
+
+protected:
+    explicit server(QObject *parent = nullptr);  // Protect the constructor to prevent class instantiation
 
 signals:
     void disconnected();
@@ -44,7 +72,7 @@ signals:
 public slots:
     // Socket helper functions
     void reconnect_socket(QAbstractSocket::SocketState);
-    void read_socket_send_signal();
+    void read_socket_send_signal();  // These will be moved to custom TCPSocket class which is instantiated and so will send signals to this class
     // Group Slots
     void send_chat(QString& groupID, QString& message);
     // Whiteboard Slots
@@ -55,6 +83,10 @@ public slots:
     void send_card(QString&, QString&, int&, int&);
 
 private:
+    // New stuff
+    static QMap<QString, SGWidget*> _object_dictionary;
+    //
+
     QTcpSocket* my_socket;
     bool reconnecting;
     QDateTime timestamps;

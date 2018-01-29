@@ -7,6 +7,8 @@
 // More changes
 // TESTING
 
+QMap<QString, SGWidget*> server::_object_dictionary;
+
 server::server(QObject *parent) : QObject(parent)
 {
     // Initialize socket stuff
@@ -37,6 +39,30 @@ server::server(QObject *parent) : QObject(parent)
  * Functions
  * API
  */
+void server::add(QString key, SGWidget *value)
+{
+    server::_object_dictionary.insert(key, value);
+    qDebug() << "Server: added (" << key << "," << value << ")";
+}
+
+void server::remove(QString class_key)
+{
+    server::_object_dictionary.remove(class_key);
+}
+
+void server::remove(SGWidget *object_pointer)
+{
+    for (QMap<QString, SGWidget*>::iterator i = _object_dictionary.begin(); i != _object_dictionary.end(); i++) {
+        if (i.value() == object_pointer) {
+            _object_dictionary.remove(i.key());
+        }
+    }
+}
+
+void server::test(QString key, QString test_message)
+{
+    _object_dictionary[key]->enqueue(test_message);
+}
 
 /***
  * bool verifyUserInfo(QString& username, QString& password)

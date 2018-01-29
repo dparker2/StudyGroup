@@ -15,9 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     group_widget = nullptr;
     ui->setupUi(this);
 
-    my_serv = new server();
-    my_serv->connect_server();
-    connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
+    //my_serv = new server();
+    //my_serv->connect_server();
+    //connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
 
     // Make the login page always the first one

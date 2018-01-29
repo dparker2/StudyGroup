@@ -1,8 +1,9 @@
 #include "startpage.h"
 #include "ui_startpage.h"
+#include "server.h"
 
-StartPage::StartPage(QWidget *parent) :
-    QWidget(parent),
+StartPage::StartPage(QString name, QWidget *parent) :
+    SGWidget(name, parent),
     ui(new Ui::StartPage)
 {
     ui->setupUi(this);
@@ -24,11 +25,21 @@ StartPage::~StartPage()
     delete ui;
 }
 
+void StartPage::do_work()
+{
+    qDebug() << "workin";
+    while(!_work_queue.isEmpty()) {
+        qDebug() << _work_queue.dequeue();
+    }
+}
+
 void StartPage::on_signin_button_clicked()
 {
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
     QString email;
+
+    server::test("startpage", "this is from the signin slot");
 
     /*if(my_serv->login(username, password, email))
     {

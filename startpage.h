@@ -5,16 +5,18 @@
 #include <QLabel>
 #include <QLineEdit>
 
+#include <sgwidget.h>
+
 namespace Ui {
 class StartPage;
 }
 
-class StartPage : public QWidget
+class StartPage : public SGWidget
 {
     Q_OBJECT
 
 public:
-    explicit StartPage(QWidget *parent = 0);
+    explicit StartPage(QString name = "startpage", QWidget *parent = 0);
     ~StartPage();
 
 private slots:
@@ -45,6 +47,8 @@ private slots:
     void on_lineEdit_password2_textEdited();
 
     void on_lineEdit_password2_cursorPositionChanged();
+
+    void do_work();
 
 private:
     Ui::StartPage *ui;

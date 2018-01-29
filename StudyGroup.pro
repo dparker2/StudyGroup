@@ -37,7 +37,9 @@ SOURCES += \
     header.cpp \
     joingrouppage.cpp \
     creategrouppage.cpp \
-    settingspage.cpp
+    settingspage.cpp \
+    sgtcpsocket.cpp \
+    sgwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -52,7 +54,9 @@ HEADERS += \
     header.h \
     joingrouppage.h \
     creategrouppage.h \
-    settingspage.h
+    settingspage.h \
+    sgtcpsocket.h \
+    sgwidget.h
 
 FORMS += \
         mainwindow.ui \
