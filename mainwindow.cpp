@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     group_widget = nullptr;
     ui->setupUi(this);
 
-    server::initialize_connection();
+    server::initialize();
 
     //connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
@@ -84,8 +84,7 @@ MainWindow::~MainWindow()
     //on_logout_button_released();
 
     delete ui;
-    my_serv->deleteLater();
-    group_widget->deleteLater();
+    //group_widget->deleteLater();
 }
 /*
  * Sign Up Check - Username

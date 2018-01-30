@@ -9,6 +9,8 @@ class SGTCPSocket : public QObject
     Q_OBJECT
 public:
     explicit SGTCPSocket(QObject *parent = nullptr);
+    SGTCPSocket(const SGTCPSocket &sock);
+    ~SGTCPSocket();
     void connect_server();
 
 signals:
@@ -24,7 +26,7 @@ public slots:
 private:
     bool read_socket_helper(QString& out_message);
 
-    QTcpSocket* my_socket;
+    QTcpSocket* my_tcp_socket;
     bool success_flag; // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.
     bool fail_flag;    // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.
     QString success_message; // ***Always set this to nullptr before checking, ONLY to be set by the read_socket_send_signal() function.

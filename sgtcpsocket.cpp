@@ -4,10 +4,12 @@
 
 SGTCPSocket::SGTCPSocket(QObject *parent) : QObject(parent)
 {
-    //my_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
-    qDebug () << "connected";
-    connect(my_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(reconnect_socket(QAbstractSocket::SocketState)));
-    connect(my_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+    my_tcp_socket = new QTcpSocket();
+    qDebug() << my_tcp_socket;
+    connect(my_tcp_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(reconnect_socket(QAbstractSocket::SocketState)));
+    connect(my_tcp_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+    connect(my_tcp_socket, SIGNAL(readyRead()), this, SLOT(read_socket_send_signal()));
+    my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
 
     success_flag = false;
     fail_flag = false;
@@ -15,18 +17,29 @@ SGTCPSocket::SGTCPSocket(QObject *parent) : QObject(parent)
     reconnecting = false;
 }
 
+SGTCPSocket::SGTCPSocket(const SGTCPSocket &sock) : QObject()
+{
+    qDebug() << "UHHH";
+}
+
+SGTCPSocket::~SGTCPSocket()
+{
+    my_tcp_socket->deleteLater();
+}
+
 void SGTCPSocket::connect_server()
 {
+    qDebug() << my_tcp_socket;
     // Connect the socket to the host
-    //my_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
-    //my_socket->connectToHost("localhost", 9001);
+    //my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
+    //my_tcp_socket->connectToHost("localhost", 9001);
     // If it ever disconnects (including while trying this), the socket will
     // continuously try to reconnect. See reconnect_socket().
 }
 
 void SGTCPSocket::error(QAbstractSocket::SocketError err)
 {
-   qDebug() << my_socket->errorString();
+   qDebug() << my_tcp_socket->errorString();
 }
 
 void SGTCPSocket::reconnect_socket(QAbstractSocket::SocketState current_state)
@@ -50,7 +63,7 @@ void SGTCPSocket::reconnect_socket(QAbstractSocket::SocketState current_state)
         reconnecting = true;
 
         qDebug() << "Trying to reconnect...";
-        //connect_server();
+        my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
     }
 
     if(QAbstractSocket::ConnectedState == current_state)
@@ -71,7 +84,7 @@ bool SGTCPSocket::read_socket_helper(QString& out_message)
     success_flag = false;
     fail_flag = false;
     success_message = nullptr;
-    /*if((QAbstractSocket::ConnectedState == my_socket->state()) && (my_socket->waitForReadyRead(5000)))
+    /*if((QAbstractSocket::ConnectedState == my_tcp_socket->state()) && (my_tcp_socket->waitForReadyRead(5000)))
     {
         if(success_flag)
         {
@@ -95,10 +108,11 @@ bool SGTCPSocket::read_socket_helper(QString& out_message)
 
 void SGTCPSocket::read_socket_send_signal()
 {
-    while(my_socket->bytesAvailable() >= 5)
+    emit new_message();
+    while(my_tcp_socket->bytesAvailable() >= 5)
     {
         qDebug() << "Receiving info...";
-        QString message_size_str = my_socket->read(5);  // Read first 5 bytes, which is the serialized message size
+        QString message_size_str = my_tcp_socket->read(5);  // Read first 5 bytes, which is the serialized message size
         qDebug() << "Message size: " << message_size_str;
 
         if(message_size_str == "SUCC\n") // Until the messages are all updated. Backwards compatibility.
@@ -108,12 +122,12 @@ void SGTCPSocket::read_socket_send_signal()
         }
 
         int message_size = message_size_str.toInt();    // Convert the size to an integer
-        while((my_socket->bytesAvailable() < message_size) && (my_socket->waitForReadyRead())) {
-            qDebug() << "Message not here yet... bytes: " << my_socket->bytesAvailable();
-            my_socket->waitForBytesWritten();
+        while((my_tcp_socket->bytesAvailable() < message_size) && (my_tcp_socket->waitForReadyRead())) {
+            qDebug() << "Message not here yet... bytes: " << my_tcp_socket->bytesAvailable();
+            my_tcp_socket->waitForBytesWritten();
             // Do nothing until the right amount is available!
         }
-        QByteArray message_ba = my_socket->read(message_size); // Read the message, which is the next size bytes
+        QByteArray message_ba = my_tcp_socket->read(message_size); // Read the message, which is the next size bytes
         QString server_code = message_ba.left(4);   // Get the server code
         message_ba.remove(0, 4); // Remove the server code
         qDebug() << "Server code: " << server_code;

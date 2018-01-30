@@ -31,7 +31,7 @@ class server : public QObject
 public:
     const static char timestamp_utc = 2;  // Figure this out later
     const static char timestamp_local = 1;  // Figure this out later
-    static void initialize_connection();  // New one
+    static void initialize();  // New one
     void setTimestamps(char arg);  // Figure this out later
     // Account Functions
     bool login(QString& username, QString& password, QString& email);  // Replace all of these with static functions

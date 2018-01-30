@@ -8,7 +8,7 @@
 // TESTING
 
 QMap<QString, SGWidget*> server::_object_dictionary;
-SGTCPSocket server::my_socket;
+SGTCPSocket server::sg_socket;
 
 server::server(QObject *parent) : QObject(parent)
 {
@@ -22,7 +22,7 @@ server::server(QObject *parent) : QObject(parent)
  * Functions
  * API
  */
-void server::initialize_connection()
+void server::initialize()
 {
     connect(&sg_socket, SGTCPSocket::new_message, incoming_message);
 }
@@ -50,6 +50,7 @@ void server::remove(SGWidget *object_pointer)
 void server::test(QString key, QString test_message)
 {
     _object_dictionary[key]->enqueue(test_message);
+    sg_socket.connect_server();
 }
 
 /***
@@ -58,7 +59,7 @@ void server::test(QString key, QString test_message)
 
 void server::incoming_message()
 {
-
+    qDebug() << "INCOMGIN MESSAF";
 }
 
 /*********************************************************************************/
