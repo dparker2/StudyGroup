@@ -48,7 +48,7 @@ void server::connect_server()
 {
     // Connect the socket to the host
     //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    my_socket->connectToHost("localhost", 1520);
+    my_socket->connectToHost("127.0.0.1", 1520);
     // If it ever disconnects (including while trying this), the socket will
     // continuously try to reconnect. See reconnect_socket().
 }
