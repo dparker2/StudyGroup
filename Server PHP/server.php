@@ -88,7 +88,7 @@ while(true) {
         }
         //delete the server socket from the read sockets
         unset($read_socks[ array_search($server, $read_socks) ]);
-    }
+    } //close if(in_array)
 
     //message from existing client
     foreach($read_socks as $sock)
@@ -131,67 +131,67 @@ while(true) {
           }
           else {
             echo "THIS IS THE MESSAGE $code: $message \n"; }
+
           $limit = 3;
           if ($code == "GCHT" || $code == "UPWB" || $code == "SVWB") {
             $limit = 2;
           }
           $loginArray = explode(" ", $message, $limit);  //Puts message into array
 
-          if ($code == "CACC") {
-            createAccount($loginArray[0], $loginArray[1], $loginArray[2], $sock);
-          }
-          elseif ($code == "LOGN") {
-            if(loginAccount($loginArray[0], $loginArray[1], $sock))
-            {
-              $clients[$ip][1] = $loginArray[0]; // Set username to clients dict
-            }
-          }
-          elseif ($code == "LOGT") {
-            logoutAccount($clients[$ip][1], $sock);
-          }
-          elseif ($code == "CGRP") {
-            createGroup($loginArray[0], $ip, $clients, $sock);
-          }
-          elseif ($code == "JGRP") {
-            joinGroup($loginArray[0], $ip, $clients, $sock);
-          }
-          elseif ($code == "LGRP") {
-            leaveGroup($loginArray[0], $ip, $clients, $sock);
-          }
-          elseif ($code == "GCHT") {
-            sendChatMessage($loginArray[0], $loginArray[1], $ip, $clients, $sock);
-          }
-          elseif ($code == "WBLN") {
-            whiteboardLine($loginArray[0], $loginArray[1], $loginArray[2], $ip, $clients, $sock);
-          }
-          elseif ($code == "UPWB") {
-            updateWhiteBoard($loginArray[0], $loginArray[1], $clients, $sock);
-          }
-          elseif ($code == "SVWB") {
-            saveWhiteBoard($loginArray[0], $loginArray[1], $sock);
-          }
-          elseif ($code == "CHPW") {
-            changePassword($clients[$ip][1], $loginArray[1], $sock);
-          }
-          elseif ($code == "RACC") {
-            recoverAccount($loginArray[0], $loginArray[1], $sock);
-          }
-          elseif ($code == "RARQ") {
+          switch($code) {
+            case "CACC":
+              createAccount($loginArray[0], $loginArray[1], $loginArray[2], $sock);
+              break;
+            case "LOGN":
+              if(loginAccount($loginArray[0], $loginArray[1], $sock)) {
+                $clients[$ip][1] = $loginArray[0]; // Set username to clients dict
+              } break;
+            case "LOGT":
+              logoutAccount($clients[$ip][1], $sock);
+              break;
+            case "CGRP":
+              createGroup($loginArray[0], $ip, $clients, $sock);
+              break;
+            case "JGRP":
+              joinGroup($loginArray[0], $ip, $clients, $sock);
+              break;
+            case "LGRP":
+              leaveGroup($loginArray[0], $ip, $clients, $sock);
+              break;
+            case "GCHT":
+              sendChatMessage($loginArray[0], $loginArray[1], $ip, $clients, $sock);
+              break;
+            case "WBLN":
+              whiteboardLine($loginArray[0], $loginArray[1], $loginArray[2], $ip, $clients, $sock);
+              break;
+            case "UPWB":
+              updateWhiteBoard($loginArray[0], $loginArray[1], $clients, $sock);
+              break;
+            case "SVWB":
+              saveWhiteBoard($loginArray[0], $loginArray[1], $sock);
+              break;
+            case "CHPW":
+              changePassword($clients[$ip][1], $loginArray[1], $sock);
+              break;
+            case "RACC":
+              recoverAccount($loginArray[0], $loginArray[1], $sock);
+              break;
+            case "RARQ":
               recoveryQset($loginArray[0], $loginArray[1], $sock);
-          }
-          elseif ($code == "RUSR") {
-            rememberUsername($loginArray[0], $sock);
-          }
-          elseif ($code == "RUSP") {
-            rememberPassword($loginArray[0], $loginArray[1], $sock);
-          }
-          elseif ($code == "FCBK") {
-            addToSide2($loginArray[0], $loginArray[1], $loginArray[2], $ip, $clients, $sock);
-          }
-          elseif ($code == "FCFT") {
-            addToSide1($loginArray[0], $loginArray[1], $loginArray[2], $ip, $clients, $sock);
-		// 0 = groupID 1 = card id 2 = message
-          }
+              break;
+            case "RUSR":
+              rememberUsername($loginArray[0], $sock);
+              break;
+            case "RUSP":
+              rememberPassword($loginArray[0], $loginArray[1], $sock);
+              break;
+            case "FCBK":
+              addToSide2($loginArray[0], $loginArray[1], $loginArray[2], $ip, $clients, $sock);
+              break;
+            case "FCFT":
+              addToSide1($loginArray[0], $loginArray[1], $loginArray[2], $ip, $clients, $sock); // 0 = groupID 1 = card id 2 = message
+              break;
+          }//Switch Statement
       }//Closes else
     }//Closes foreach
 }//Closes while
