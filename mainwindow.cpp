@@ -15,8 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     group_widget = nullptr;
     ui->setupUi(this);
 
-    //my_serv = new server();
-    //my_serv->connect_server();
+    server::initialize_connection();
+
     //connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
 
@@ -163,7 +163,7 @@ void MainWindow::on_logout_button_released()
     }
 }
 
-void MainWindow::on_stackedWidget_inner_currentChanged(int)
+/*void MainWindow::on_stackedWidget_inner_currentChanged(int)
 {
     /*ui->join_button->setChecked(false);
     ui->create_button->setChecked(false);
@@ -191,7 +191,7 @@ void MainWindow::on_stackedWidget_inner_currentChanged(int)
     {
         ui->back_to_group_button->setChecked(true);
     }*/
-}
+//}
 
 /***
  *

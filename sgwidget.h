@@ -19,7 +19,7 @@ class SGWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SGWidget(QString name, QWidget *parent = nullptr, int work_interval_msec = 200);
+    explicit SGWidget(QString name, QWidget *parent = nullptr, int work_interval_msec = 500);
     ~SGWidget();
     void enqueue(QString work_message);
 

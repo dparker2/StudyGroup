@@ -8,30 +8,13 @@
 // TESTING
 
 QMap<QString, SGWidget*> server::_object_dictionary;
+SGTCPSocket server::my_socket;
 
 server::server(QObject *parent) : QObject(parent)
 {
-    // Initialize socket stuff
-    my_socket = new QTcpSocket(this);
-
-    // Try to reconnect socket whenever it disconnects
-    connect(my_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(reconnect_socket(QAbstractSocket::SocketState)));
-
-    // New information -> send appropriate signal
-    connect(my_socket, SIGNAL(readyRead()), this, SLOT(read_socket_send_signal()));
-
-
-    // Prints any socket errors to console
-    connect(my_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
-
     //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
     //my_socket->connectToHost("localhost", 24680);
     //my_socket->connectToHost("52.53.198.189", 24680); // David's AWS server
-
-    success_flag = false;
-    fail_flag = false;
-    success_message = nullptr;
-    reconnecting = false;
 }
 
 /***
@@ -39,6 +22,11 @@ server::server(QObject *parent) : QObject(parent)
  * Functions
  * API
  */
+void server::initialize_connection()
+{
+    connect(&sg_socket, SGTCPSocket::new_message, incoming_message);
+}
+
 void server::add(QString key, SGWidget *value)
 {
     server::_object_dictionary.insert(key, value);
@@ -65,19 +53,21 @@ void server::test(QString key, QString test_message)
 }
 
 /***
+ * SLOTS
+ */
+
+void server::incoming_message()
+{
+
+}
+
+/*********************************************************************************/
+
+/***
  * bool verifyUserInfo(QString& username, QString& password)
  *  returns true if found
  *          false if not
  */
-
-void server::connect_server()
-{
-    // Connect the socket to the host
-    my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    //my_socket->connectToHost("localhost", 9001);
-    // If it ever disconnects (including while trying this), the socket will
-    // continuously try to reconnect. See reconnect_socket().
-}
 
 void server::setTimestamps(char arg)
 {
@@ -96,38 +86,38 @@ void server::setTimestamps(char arg)
 bool server::login(QString& username, QString& password, QString& email)
 {
     // Socket connected at this point, pass through info
-    my_socket->write(format_socket_request("LOGN", QString(username+" "+password)));
-    return read_socket_helper(email); // TODO: Handle receiving the email when it is passed back in reply
+    //my_socket->write(format_socket_request("LOGN", QString(username+" "+password)));
+    //return read_socket_helper(email); // TODO: Handle receiving the email when it is passed back in reply
 }
 
 bool server::create_account(QString& username, QString& password, QString& email)
 {
     // Socket connected at this point, pass through info
-    my_socket->write(format_socket_request("CACC", QString(username+" "+password+" "+email)));
+    //my_socket->write(format_socket_request("CACC", QString(username+" "+password+" "+email)));
     QString message;
-    bool ret = read_socket_helper(message);
-    if(ret)
+    //bool ret = read_socket_helper(message);
+    //if(ret)
     {
         QMessageBox success_box;
         success_box.setText(message);
         success_box.exec();
     }
-    return ret;
+    //return ret;
 }
 
 bool server::recover_user(QString& email, QString& user){
-    my_socket->write(format_socket_request("RUSR", QString(email)));
-    return read_socket_helper(user);
+    //my_socket->write(format_socket_request("RUSR", QString(email)));
+    //return read_socket_helper(user);
 }
 
 bool server::recover_pass(QString& username, QString& email, QString& pass){
-    my_socket->write(format_socket_request("RUSP", QString(username+" "+email)));
-    return read_socket_helper(pass);
+    //my_socket->write(format_socket_request("RUSP", QString(username+" "+email)));
+    //return read_socket_helper(pass);
 }
 
 bool server::logout()
 {
-    my_socket->write(format_socket_request("LOGT", QString("")));
+    //my_socket->write(format_socket_request("LOGT", QString("")));
     return true;
 }
 
@@ -138,44 +128,44 @@ bool server::logout()
 bool server::create_group(QString& group_name, QString& group_id)
 {
     // Pass through info
-    my_socket->write(format_socket_request("CGRP", QString(group_name)));
-    return read_socket_helper(group_id);
+    //my_socket->write(format_socket_request("CGRP", QString(group_name)));
+    //return read_socket_helper(group_id);
 }
 
 bool server::join_group(QString &group_id)
 {
-    my_socket->write(format_socket_request("JGRP", QString(group_id)));
+    //my_socket->write(format_socket_request("JGRP", QString(group_id)));
     QString _str;
-    return read_socket_helper(_str);
+    //return read_socket_helper(_str);
 }
 
 bool server::leave_group(QString &group_id)
 {
-    my_socket->write(format_socket_request("LGRP", QString(group_id)));
+    //my_socket->write(format_socket_request("LGRP", QString(group_id)));
     QString _str;
-    return read_socket_helper(_str);
+    //return read_socket_helper(_str);
 }
 
 void server::send_chat(QString& groupID, QString& message)
 {
-    my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
+    //my_socket->write(format_socket_request("GCHT", QString(groupID+" "+message)));
     if (message.startsWith("devhack ")) {
         message.remove(0, 8);
         qDebug() << format_socket_request("", message);
-        my_socket->write(format_socket_request("", message));
+        //my_socket->write(format_socket_request("", message));
     }
     // No success
 }
 
 void server::send_whiteboard_line(const QString &groupID, const QPoint &point1, const QPoint &point2, const QColor &pen_color, const int &pen_size)
 {
-    my_socket->write(format_socket_request("WBLN", QString(groupID+" "+
+    /*my_socket->write(format_socket_request("WBLN", QString(groupID+" "+
                                                            pen_color.name()+" "+
                                                            QString::number(pen_size)+" "+
                                                            QString::number(point1.x())+" "+
                                                            QString::number(point1.y())+" "+
                                                            QString::number(point2.x())+" "+
-                                                           QString::number(point2.y()))));
+                                                           QString::number(point2.y()))));*/
     // No success message
 }
 
@@ -185,7 +175,7 @@ void server::send_whiteboard(QString& ip, QByteArray* whiteboard)
     ip.append(" ");
     QByteArray arg = ip.toLatin1();
     arg += *whiteboard;
-    my_socket->write(format_socket_request("UPWB", arg));
+    //my_socket->write(format_socket_request("UPWB", arg));
     delete whiteboard; // Delete the byte array from heap
     // No success message
 }
@@ -195,7 +185,7 @@ void server::save_whiteboard(QString& group_id, QByteArray *whiteboard)
     QString group_arg = group_id+" ";
     QByteArray arg = group_arg.toLatin1();
     arg += *whiteboard;
-    my_socket->write(format_socket_request("SVWB", arg));
+    //my_socket->write(format_socket_request("SVWB", arg));
     delete whiteboard;
 }
 
@@ -207,45 +197,9 @@ void server::save_whiteboard(QString& group_id, QByteArray *whiteboard)
  *
  */
 
-void server::reconnect_socket(QAbstractSocket::SocketState current_state)
-{
-    qDebug() << current_state;
-
-    if(QAbstractSocket::UnconnectedState == current_state)
-    {
-        // Here because connection with the server was severed
-        // Either by server going offline or client internet going out
-        // So, try to continually reconnect until successful.
-        if(reconnecting == false) {
-            // First time we are trying to reconnect
-            emit disconnected();
-            // Show error message only initally
-            QMessageBox reconnect_box;
-            reconnect_box.setText("No internet connection to server.");
-            reconnect_box.setIcon(QMessageBox::Warning);
-            reconnect_box.exec();
-        }
-        reconnecting = true;
-
-        qDebug() << "Trying to reconnect...";
-        connect_server();
-    }
-
-    if(QAbstractSocket::ConnectedState == current_state)
-    {
-        if(reconnecting == true) {
-            QMessageBox connected_box;
-            connected_box.setText("Connection to server has been reestablished.");
-            connected_box.exec();
-            reconnecting = false;
-        }
-        emit connected();
-    }
-}
-
-void server::read_socket_send_signal()
-{
-    while(my_socket->bytesAvailable() >= 5)
+//void server::read_socket_send_signal()
+//{
+    /*while(my_socket->bytesAvailable() >= 5)
     {
         qDebug() << "Receiving info...";
         QString message_size_str = my_socket->read(5);  // Read first 5 bytes, which is the serialized message size
@@ -356,8 +310,8 @@ void server::read_socket_send_signal()
     }
 
     return;
-    // TODO: Implement if statements and send signals based on what was received.
-}
+    // TODO: Implement if statements and send signals based on what was received.*/
+//}
 
 /*
  *
@@ -386,51 +340,18 @@ QByteArray server::format_socket_request(const QString &request_code, const QByt
     return full_request;
 }
 
-bool server::read_socket_helper(QString& out_message)
-{
-    qDebug() << "Sending info...";
-    success_flag = false;
-    fail_flag = false;
-    success_message = nullptr;
-    if((QAbstractSocket::ConnectedState == my_socket->state()) && (my_socket->waitForReadyRead(5000)))
-    {
-        if(success_flag)
-        {
-            out_message = success_message;
-            return true;
-        }
-
-        if(fail_flag)
-        {
-            return false; // Wrong info
-        }
-    } else {
-        QMessageBox timeout_box;
-        timeout_box.setText("Network Operation Timeout");
-        timeout_box.setInformativeText("Either you aren't connected to the internet, or the server is down.");
-        timeout_box.setIcon(QMessageBox::Warning);
-        timeout_box.exec();
-        return false; // Timeout
-    }
-}
-
-void server::error(QAbstractSocket::SocketError err)
-{
-   qDebug() << my_socket->errorString();
-}
-
 
 void server::send_card(QString& groupID, QString& card_text, int& card_num, int& card_side)
 {
     qDebug() << "SEND CARD" << endl;
     if(card_side == 0){
-        my_socket->write(format_socket_request("FCFT", groupID+" "+QString::number(card_num)+" "+card_text));
+        //my_socket->write(format_socket_request("FCFT", groupID+" "+QString::number(card_num)+" "+card_text));
     }
     else{
-        my_socket->write(format_socket_request("FCBK", groupID+" "+QString::number(card_num)+" "+card_text));
+        //my_socket->write(format_socket_request("FCBK", groupID+" "+QString::number(card_num)+" "+card_text));
     }
     QString returned_index;
-    read_socket_helper(returned_index);
+    //read_socket_helper(returned_index);
     card_num = returned_index.toInt();
     qDebug() << card_num;
 }

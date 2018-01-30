@@ -26,7 +26,7 @@ private slots:
 
     void on_logout_button_released();
 
-    void on_stackedWidget_inner_currentChanged(int arg1);
+    //void on_stackedWidget_inner_currentChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;
