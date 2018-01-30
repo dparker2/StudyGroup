@@ -20,6 +20,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void setStackedIndex(int index);
+    void changePage(QWidget* widget);
 
 private slots:
     void exit_settings();

@@ -24,6 +24,7 @@ server::server(QObject *parent) : QObject(parent)
  */
 void server::initialize()
 {
+    sg_socket.connect_server();
     connect(&sg_socket, SGTCPSocket::new_message, incoming_message);
 }
 
@@ -47,10 +48,15 @@ void server::remove(SGWidget *object_pointer)
     }
 }
 
+bool server::request_response(QString outgoing_message, QString &response)
+{
+    sg_socket.write(outgoing_message);
+    return sg_socket.read_socket_helper(response);
+}
+
 void server::test(QString key, QString test_message)
 {
     _object_dictionary[key]->enqueue(test_message);
-    sg_socket.connect_server();
 }
 
 /***

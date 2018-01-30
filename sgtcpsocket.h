@@ -12,6 +12,8 @@ public:
     SGTCPSocket(const SGTCPSocket &sock);
     ~SGTCPSocket();
     void connect_server();
+    void write(QString message);
+    bool read_socket_helper(QString& out_message);
 
 signals:
     void disconnected();
@@ -24,7 +26,6 @@ public slots:
     void error(QAbstractSocket::SocketError);
 
 private:
-    bool read_socket_helper(QString& out_message);
 
     QTcpSocket* my_tcp_socket;
     bool success_flag; // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.

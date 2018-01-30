@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     server::initialize();
+    connect(ui->login_page, SIGNAL(logged_in(QWidget*)), this, SLOT(changePage(QWidget*)));
 
     //connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
@@ -86,6 +87,18 @@ MainWindow::~MainWindow()
     delete ui;
     //group_widget->deleteLater();
 }
+
+void MainWindow::setStackedIndex(int index)
+{
+    ui->stackedWidget_window->setCurrentIndex(index);
+}
+
+void MainWindow::changePage(QWidget *widget)
+{
+    ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper);
+    //ui->page = widget;
+}
+
 /*
  * Sign Up Check - Username
  * Checks the username entered by the user and sets the green check/X icon

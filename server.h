@@ -48,6 +48,7 @@ public:
     static void remove(QString class_key);  // Removes the key value pair from dict
     static void remove(SGWidget* object_pointer);  // Removes all keys with that value
     static void add(QString key, SGWidget* value);  // Adds key value to dict, overwriting if key already exists.
+    static bool request_response(QString outgoing_message, QString& response);
     static void test(QString key, QString test_message);
     //
 

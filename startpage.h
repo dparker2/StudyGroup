@@ -19,6 +19,9 @@ public:
     explicit StartPage(QString name = "startpage", QWidget *parent = 0);
     ~StartPage();
 
+signals:
+    void logged_in(QWidget* widget);
+
 private slots:
     void on_signin_button_clicked();
 

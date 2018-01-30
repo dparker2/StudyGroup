@@ -1,6 +1,7 @@
 #include "startpage.h"
 #include "ui_startpage.h"
 #include "server.h"
+#include "joingrouppage.h"
 
 StartPage::StartPage(QString name, QWidget *parent) :
     SGWidget(name, parent),
@@ -35,27 +36,30 @@ void StartPage::do_work()
 
 void StartPage::on_signin_button_clicked()
 {
+    QString login_code = "LOGN";
     QString username = ui->lineEdit_username->text();
     QString password = ui->lineEdit_password->text();
     QString email;
 
     server::test("startpage", "this is from the signin slot");
+    QString full_string = login_code + username + " " + password;
 
-    /*if(my_serv->login(username, password, email))
+    if(server::request_response(full_string, email))
     {
         // Now logged in!
         ui->lineEdit_username->setText("");
         ui->lineEdit_password->setText("");
         // Set username and password
-        user_info->setUsername(username);
-        user_info->setPassword(password);
+        //user_info->setUsername(username);
+        //user_info->setPassword(password);
         // Update settings page
-        ui->settings_email->setText(email);
-        ui->settings_username->setText(user_info->getUsername());
+        //ui->settings_email->setText(email);
+        //ui->settings_username->setText(user_info->getUsername());
 
-        ui->stackedWidget_window->setCurrentWidget(ui->main_page); // Change main page
-        ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
-    }*/
+        JoinGroupPage* join_page = new JoinGroupPage();
+        emit logged_in(join_page); // Change main page
+        //ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+    }
 }
 
 void StartPage::on_singup_button_clicked()
