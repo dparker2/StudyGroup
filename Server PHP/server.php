@@ -30,10 +30,7 @@ if ($server[0] === false)
     die("Failed to bind to socket:  $errorMessage \n");
 }
 // Create connection
-$connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
-// Check connection
-if ($connection->connect_error)
-  die("Connection failed: " . $connection->connect_error);
+$connection =  connect();
 $makeoffline = "UPDATE UserInfo
 	   SET Status = 'Offline'
 	   WHERE Status = 'Online'";
@@ -57,11 +54,7 @@ while ($numGroups > 0) {
   $numGroups = $numGroups - 1;
   mysqli_query($connection, $removeNULL);
 }
-$connection->close();
-
-
-
-
+disconnect($connection);
 
 $clients = array(); // $ip => ($socket, $username)
 while(true) {

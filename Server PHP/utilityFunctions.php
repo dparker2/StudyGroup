@@ -20,6 +20,11 @@ function connect() {
   return $newConnect;
 }
 
+function disconnect($currConnect) {
+  if($currConnect->close()) {
+    echo "Database Closed \n";
+  }
+}
 
 class user {
   function __construct() {

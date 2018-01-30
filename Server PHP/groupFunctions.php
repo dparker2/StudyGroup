@@ -49,20 +49,13 @@ function createGroup($groupname, $ip, $clients, $sock)
       fwrite($clients[$ip][0], "{$messageSize}{$message}");
 
     }
-  if($connection->close()) {
-    echo "Database Closed\n";
-  }
+  disconnect($connection);
 }
 
 //JOIN GROUP FUNCTION
 function joinGroup($groupID, $ip, $clients, $sock) {
   // Create connection
-  $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
-  // Check connection
-  if ($connection->connect_error)
-    die("Connection failed: " . $connection->connect_error);
-  else
-    echo "Connected to database \n";
+  $connection = connect();
 
   //Checks group name if it exists in table.  Stores result in groupname_exists
   $check_groupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
@@ -132,9 +125,7 @@ function joinGroup($groupID, $ip, $clients, $sock) {
     fwrite($sock, "00023FAILGroup Doesn't Exist"); //Fail case that groupname doesn't exist
   }
 
-  if($connection->close()) {
-    echo "Database Closed\n";
-  }
+  disconnect($connection);
 }
 
 //LEAVE GROUP FUNCTION
