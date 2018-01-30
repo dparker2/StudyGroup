@@ -130,12 +130,7 @@ function joinGroup($groupID, $ip, $clients, $sock) {
 
 //LEAVE GROUP FUNCTION
 function leaveGroup($groupID, $ip, $clients, $sock) {
-  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
-
-  if ($connection->connect_error)
-    die("Connection failed: " . $connection->connect_error);
-  else
-    echo "Connected to database \n";
+  $connection = connect();
   //SQL Commands
   $username = $clients[$ip][1];
   $leaveGroup = "DELETE FROM $groupID
@@ -145,9 +140,7 @@ function leaveGroup($groupID, $ip, $clients, $sock) {
   mysqli_query($connection, $leaveGroup);
   fwrite($sock, "00004SUCC"); //writes back to current client success on leave
   updateGroupList($connection, $ip, $clients, $groupID, $sock);
-  if($connection->close()) {
-    echo "Database closed\n";
-  }
+  disconnect($connection);
 }
 
 //UPDATE GROUP LIST FUNCTION
@@ -186,12 +179,7 @@ function updateGroupList($connection, $ip, $clients, $groupID, $sock) {
 
 function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
   // Create connection
-  $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
-  // Check connection
-  if ($connection->connect_error)
-    die("Connection failed: " . $connection->connect_error);
-  else
-    echo "Connected to database \n";
+  $connection =  connect();
 
   $escMessage = mysqli_escape_string($connection, $message);
   fwrite($sock, "00004SUCC");
@@ -226,16 +214,11 @@ function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
   if (!mysqli_query($connection, $insertChat)) {
     die(mysqli_error($connection));
   }
-  if($connection->close()) {
-    echo "Database closed\n";
-  }
+  disconnect($connection);
 }
 
 function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
-  $connection =  new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
-  // Check connection
-  if ($connection->connect_error)
-    die("Connection failed: " . $connection->connect_error);
+  $connection =  connect();
   //SQL Commands
   $return_Messages = "SELECT user, Clock, Message
                         FROM $groupID
@@ -255,7 +238,7 @@ function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
     fwrite($sock,"{$messageSize}{$message}"); //Writes back to client.
     //echo "Debugging: Client should be receiving: {$messageSize}{$message} \n";
   } //closes for loop
-
+  disconnect($connection);
 }
 
 ?>
