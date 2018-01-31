@@ -12,7 +12,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
     ui->setupUi(this);
 
     // Begin set whiteboard
-    whiteboard = new Whiteboard(nullptr, ui->save_whiteboard_button);
+    /*whiteboard = new Whiteboard(nullptr, ui->save_whiteboard_button);
 
     qDebug() << connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint,QColor,int)), this, SLOT(send_line_drawn(QPoint,QPoint,QColor,int)));
     qDebug() << connect(this, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), whiteboard, SLOT(draw_line(QPoint,QPoint,QColor,int)));
@@ -33,7 +33,7 @@ GroupWidget::GroupWidget(QWidget *parent) :
     ui->study_mode->insertWidget(1, flashcard);
     setFlashcardUI();
 
-    connect(flashcard, SIGNAL(set_card(QString,int&,int)), this, SLOT(set_card(QString,int&,int)));
+    connect(flashcard, SIGNAL(set_card(QString,int&,int)), this, SLOT(set_card(QString,int&,int)));*/
 
 
 }

@@ -1,11 +1,20 @@
 #include "header.h"
 #include "ui_header.h"
+#include "joingrouppage.h"
+#include "creategrouppage.h"
+#include "groupwidget.h"
+#include "settingspage.h"
+#include "mainwindow.h"
 
 Header::Header(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Header)
 {
     ui->setupUi(this);
+
+    left_to_right_buttons.push_back(ui->create_button);
+    left_to_right_buttons.push_back(ui->join_button);
+    left_to_right_buttons.push_back(ui->back_to_group_button);
 
     QPixmap gear(":/resources/img/gear.png");
     QIcon settingBtn(gear);
@@ -19,6 +28,20 @@ Header::Header(QWidget *parent) :
 Header::~Header()
 {
     delete ui;
+}
+
+void Header::set_active_button(int index)
+{
+    if ((index < left_to_right_buttons.size()) && (index >= 0)) {
+        for (int i = 0; i < left_to_right_buttons.size(); i++) {
+            if (i == index) {
+                left_to_right_buttons.at(i)->setChecked(true);
+                left_to_right_buttons.at(i)->show();
+            } else {
+                left_to_right_buttons.at(i)->setChecked(false);
+            }
+        }
+    }
 }
 
 void Header::on_settings_button_released()

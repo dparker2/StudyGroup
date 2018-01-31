@@ -28,6 +28,11 @@ void server::initialize()
     connect(&sg_socket, SGTCPSocket::new_message, incoming_message);
 }
 
+void server::clear_memory()
+{
+
+}
+
 void server::add(QString key, SGWidget *value)
 {
     server::_object_dictionary.insert(key, value);
@@ -41,11 +46,18 @@ void server::remove(QString class_key)
 
 void server::remove(SGWidget *object_pointer)
 {
-    for (QMap<QString, SGWidget*>::iterator i = _object_dictionary.begin(); i != _object_dictionary.end(); i++) {
-        if (i.value() == object_pointer) {
-            _object_dictionary.remove(i.key());
-        }
+    QMap<QString, SGWidget*>::iterator i = _object_dictionary.begin();
+    while (i != _object_dictionary.end()) {
+        if (i.value() == object_pointer)
+            i = _object_dictionary.erase(i);
+        else
+            ++i;
     }
+}
+
+void server::send(const QString &outgoing_message)
+{
+    sg_socket.write(outgoing_message);
 }
 
 bool server::request_response(QString outgoing_message, QString &response)

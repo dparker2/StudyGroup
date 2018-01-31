@@ -75,7 +75,10 @@ QLabel {
          <widget class="Header" name="header" native="true"/>
         </item>
         <item>
-         <widget class="JoinGroupPage" name="page" native="true"/>
+         <widget class="QStackedWidget" name="page">
+          <widget class="CreateGroupPage" name="create_page"/>
+          <widget class="JoinGroupPage" name="join_page" native="true"/>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -90,7 +93,7 @@ QLabel {
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -113,6 +116,12 @@ QLabel {
    <class>JoinGroupPage</class>
    <extends>QWidget</extends>
    <header>joingrouppage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CreateGroupPage</class>
+   <extends>QWidget</extends>
+   <header>creategrouppage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

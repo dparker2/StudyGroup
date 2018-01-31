@@ -93,7 +93,7 @@ background-color: #283035;</string>
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_sign_in">
       <attribute name="title">

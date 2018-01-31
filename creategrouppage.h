@@ -2,12 +2,13 @@
 #define CREATEGROUPPAGE_H
 
 #include <QWidget>
+#include "groupmainpage.h"
 
 namespace Ui {
 class CreateGroupPage;
 }
 
-class CreateGroupPage : public QWidget
+class CreateGroupPage : public GroupMainPage
 {
     Q_OBJECT
 

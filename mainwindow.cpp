@@ -16,7 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     server::initialize();
-    connect(ui->login_page, SIGNAL(logged_in(QWidget*)), this, SLOT(changePage(QWidget*)));
+    connect(ui->login_page, SIGNAL(logged_in(int)), this, SLOT(changePage(int)));
+    connect(ui->join_page, SIGNAL(group_joined(QWidget*)), this, SLOT(changePage(QWidget*)));
+    connect(ui->create_page, SIGNAL(group_joined(QWidget*)), this, SLOT(changePage(QWidget*)));
 
     //connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
@@ -93,10 +95,19 @@ void MainWindow::setStackedIndex(int index)
     ui->stackedWidget_window->setCurrentIndex(index);
 }
 
-void MainWindow::changePage(QWidget *widget)
+void MainWindow::changePage(int index)
 {
     ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper);
-    //ui->page = widget;
+    ui->page->setCurrentIndex(index);
+    ui->header->set_active_button(index);
+}
+
+void MainWindow::changePage(QWidget *new_widget)
+{
+    ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper);
+    int new_index = ui->page->addWidget(new_widget);
+    ui->header->set_active_button(new_index);
+    ui->page->setCurrentIndex(new_index);
 }
 
 /*
@@ -117,7 +128,9 @@ void MainWindow::exit_settings()
 
 void MainWindow::_initialize_group()
 {
-    group_widget = new GroupWidget();
+    /*
+     * DONT THINK WE NEED ANYMORE...... JUST KEEPING FOR REFERENCE.
+     * group_widget = new GroupWidget();
 
     // ALL THE CONNECTIONS!!!
     connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
@@ -135,11 +148,13 @@ void MainWindow::_initialize_group()
 
     connect(group_widget, SIGNAL(send_card(QString&, QString&, int&, int&)), my_serv, SLOT(send_card(QString&, QString&, int&, int&)));
     connect(my_serv, SIGNAL(new_flashcard(int,QString,bool)), group_widget, SLOT(incoming_card(int,QString,bool)));
-}
+*/}
 
 void MainWindow::_activate_group(QString &group_id)
 {
-    /**ui->stackedWidget_inner->addWidget(group_widget);
+    /*
+     * DONT THINK WE NEED ANYMORE
+     * ui->stackedWidget_inner->addWidget(group_widget);
     ui->stackedWidget_inner->setCurrentWidget(group_widget);
     group_widget->set_groupID(group_id);
 

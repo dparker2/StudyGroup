@@ -1,8 +1,10 @@
 #include "creategrouppage.h"
 #include "ui_creategrouppage.h"
+#include "server.h"
+#include "groupwidget.h"
 
 CreateGroupPage::CreateGroupPage(QWidget *parent) :
-    QWidget(parent),
+    GroupMainPage(parent),
     ui(new Ui::CreateGroupPage)
 {
     ui->setupUi(this);
@@ -15,17 +17,18 @@ CreateGroupPage::~CreateGroupPage()
 
 void CreateGroupPage::on_create_group_button_released()
 {
-    /*QString group_name = ui->create_group_lineEdit->text();
-    QString group_id;
-    _initialize_group();
-    if(my_serv->create_group(group_name, group_id))
+    QString group_id = ui->create_group_lineEdit->text();
+    QString full_string = "CGRP" + group_id;
+    if(server::request_response(full_string, group_id))  // Group id replaced with the response (group name + code)
     {
+        GroupWidget* group_widget = new GroupWidget();
+        group_widget->set_groupID(group_id);
         ui->create_group_lineEdit->setText("");
-        _activate_group(group_id);
-        QString name = user_info->getUsername();
-        group_widget->user_joined(name);
+        emit group_joined(group_widget);
+
+        /*ui->back_to_group_button->setVisible(true);
+        ui->back_to_group_button->setText(group_id);
+        ui->leave_button->setVisible(true);
+        ui->leave_button->setChecked(false);*/
     }
-    else {
-        group_widget->deleteLater();
-    }*/
 }

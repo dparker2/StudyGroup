@@ -2,6 +2,7 @@
 #include "ui_startpage.h"
 #include "server.h"
 #include "joingrouppage.h"
+#include <QMessageBox>
 
 StartPage::StartPage(QString name, QWidget *parent) :
     SGWidget(name, parent),
@@ -37,12 +38,10 @@ void StartPage::do_work()
 void StartPage::on_signin_button_clicked()
 {
     QString login_code = "LOGN";
-    QString username = ui->lineEdit_username->text();
-    QString password = ui->lineEdit_password->text();
-    QString email;
+    QString email;  // Return parameter from the server response
 
     server::test("startpage", "this is from the signin slot");
-    QString full_string = login_code + username + " " + password;
+    QString full_string = login_code + ui->lineEdit_username->text() + " " + ui->lineEdit_password->text();
 
     if(server::request_response(full_string, email))
     {
@@ -50,215 +49,92 @@ void StartPage::on_signin_button_clicked()
         ui->lineEdit_username->setText("");
         ui->lineEdit_password->setText("");
         // Set username and password
-        //user_info->setUsername(username);
+        //user_info->setUsername(username);                     // FIX THESE WHEN USER CLASS IS DONE
         //user_info->setPassword(password);
         // Update settings page
-        //ui->settings_email->setText(email);
+        //ui->settings_email->setText(email);                   // FIX THESE WHEN SETTINGS CLASS IS DONE
         //ui->settings_username->setText(user_info->getUsername());
 
-        JoinGroupPage* join_page = new JoinGroupPage();
-        emit logged_in(join_page); // Change main page
-        //ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
+        emit logged_in(0); // Change main page
     }
 }
 
 void StartPage::on_singup_button_clicked()
 {
-    /*user_info->printReadyState();
-
-    bool ready_to_send = true;
-    int size = 3;
-
-    for(int i = 0; i < size; i++){
-        //qDebug() << user_info->get_info_complete(i);
-        if(user_info->get_info_complete(i) == false){
-            ready_to_send = false;
-            break;
-        }
+    QString create_code = "CACC";
+    QString full_string = create_code + ui->lineEdit_email->text() +
+            " " + ui->lineEdit_username_signup->text() +
+            " " + ui->lineEdit_password2->text();
+    QString response;
+    if(server::request_response(full_string, response))
+    {
+        QMessageBox success_box;
+        success_box.setText(response);
+        success_box.exec();
+        ui->lineEdit_email->setText("");
+        ui->lineEdit_username_signup->setText("");
+        ui->lineEdit_password1->setText("");
+        ui->lineEdit_password2->setText("");
     }
-    QString password = user_info->getPassword();
-    if(ready_to_send){
-        QString email = user_info->getEmail();
-        QString username = user_info->getUsername();
-
-
-        if(my_serv->create_account(email, username, password))
-        {
-            ui->lineEdit_email->setText("");
-            ui->lineEdit_username_signup->setText("");
-            ui->lineEdit_password1->setText("");
-            ui->lineEdit_password2->setText("");
-        }
-
-        qDebug() << "Ready To Send";
-    }
-    else{
-        qDebug() << "ready? "<< ready_to_send; // test
-        // error message sign up form not complete?
-    }*/
 }
 
-void StartPage::on_lineEdit_username_signup_editingFinished()
-{
-    QString username = ui->lineEdit_username_signup->text();
-    QString error_msg;
-    bool valid = true; //user_info->usernameValidation(username,  error_msg);   // returns if username is valid or not
-                                                                        // with error msg if not valid
-    //qDebug() << valid;   testing
-    if(username.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_username_signup->setStyleSheet("color: white; background-color: #545454; border-style: none;");
-    }
-    if(valid){                         // sets valid username to UserAccounts username member
-        //user_info->setUsername(username);
-        //user_info->set_info_complete(1,1);
-    }
-    // sets correct icon
-    // green: valid, X otherwise
-    set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, error_msg, valid);
-}
-/*
- * Hides the icons when the user edits the line
+/*****************************************************
+ * ACCOUNT SIGNUP
  */
-void StartPage::on_lineEdit_username_signup_textEdited()
-{
-    ui->label_username_check->hide();
-    //user_info->set_info_complete(1,0);
-    on_lineEdit_username_signup_cursorPositionChanged();
-}
-/*
- * Resets defaults to line edit style sheet anytime the user changes cursor to edit
- */
-void StartPage::on_lineEdit_username_signup_cursorPositionChanged()
-{
-    ui->lineEdit_username_signup->setStyleSheet("color: white; background-color: #545454; border-style: none;");
-}
-/*
- * Sign Up Check - Email
- * Checks the email entered by the user and sets the green check/X icon
- * accordingly. If email is valid it is set to the UserAccount email
- */
-void StartPage::on_lineEdit_email_editingFinished()
-{
 
-    QString email = ui->lineEdit_email->text();
-    QString error_msg;
-    bool valid = true; //user_info->emailValidation(email, error_msg);      // returns if email is valid or not
-                                                                    // with error msg if not valid
-    if(email.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_email->setStyleSheet("color: white; background-color: #545454; border-style: none;");
-    }
-    else if(valid){                      // sets valid email to UserAccounts email member
-        //user_info->setEmail(email);
-        //user_info->set_info_complete(0,1);
-    }
-    // sets correct icon
-    // green: valid, X otherwise
-    set_valid_icons(ui->label_email_check, ui->lineEdit_email, error_msg, valid);
-}
-/*
- * Hides the icons when the user edits the line
- */
-void StartPage::on_lineEdit_email_textEdited()
+void StartPage::on_lineEdit_email_textChanged(const QString &email)
 {
-    //user_info->set_info_complete(0,0);
-    ui->label_email_check->hide();               // hides the red X when user begins editing text
-    on_lineEdit_email_cursorPositionChanged();   // resets color when editing text
+    if (email == "") {
+        ui->label_email_check->hide();
+    } else {
+        QString error_msg;
+        bool valid = true; //user_info->usernameValidation(username,  error_msg);
+        set_valid_icons(ui->label_email_check, ui->lineEdit_email, error_msg, valid);
+    }
+}
 
-}
-/*
- * Resets defaults to line edit style sheet anytime the user changes cursor to edit
- */
-void StartPage::on_lineEdit_email_cursorPositionChanged()
+void StartPage::on_lineEdit_username_signup_textChanged(const QString &username)
 {
-    ui->lineEdit_email->setStyleSheet("color: white; background-color: #545454; border-style: none;");
+    if (username == "") {
+        ui->label_username_check->hide();
+    } else {
+        QString error_msg;
+        bool valid = true; //user_info->usernameValidation(username,  error_msg);
+        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, error_msg, valid);
+    }
 }
-/*
- * Sign Up Check - Password
- * Checks the password entered by the user and sets the green check/X icon
- * accordingly. If password is valid it is set to the UserAccount password
- */
-void StartPage::on_lineEdit_password1_editingFinished()
-{
-    QString password = ui->lineEdit_password1->text();
-    QString error_msg;
-    bool valid = true; //user_info->passwordValidtion(password,  error_msg);       // returns if password is valid or not
-                                                                            // with error msg if not valid
-    if(password.isEmpty()){            // resets the stylesheet of the lineEdit when it is clear
-        ui->lineEdit_password1->setStyleSheet("color: white; background-color: #545454; border-style: none;");
-    }
-    else if(valid){                        // sets valid password to UserAccounts password member
-        //user_info->setPassword(password);
-    }
-    // sets correct icon
-    // green: valid, X otherwise
-    set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, error_msg, valid);
 
-}
-/*
- * Hides the icons when the user edits the line
- */
-void StartPage::on_lineEdit_password1_textEdited()
+void StartPage::on_lineEdit_password1_textChanged(const QString &password1)
 {
-    //user_info->set_info_complete(2,0);
-    ui->label_password1_check->hide();               // hides the red X when user begins editing text
-    on_lineEdit_password1_cursorPositionChanged();   // resets color when editing text
-}
-/*
- * Resets defaults to line edit style sheet anytime the user changes cursor to edit
- */
-void StartPage::on_lineEdit_password1_cursorPositionChanged()
-{
-    ui->lineEdit_password1->setStyleSheet("color: white; background-color: #545454; border-style: none;");
-}
-/*
- * Sign Up Check - Password (Second Input)
- * Checks the password entered by the user and sets the green check/X icon
- * accordingly. If password is valid it is set to the UserAccount password
- */
-void StartPage::on_lineEdit_password2_editingFinished()
-{
-    /*QString password = ui->lineEdit_password2->text();
-    if(password.isEmpty()){
-        ui->lineEdit_password2->setStyleSheet("color: white; background-color: #545454; border-style: none;");
+    if (password1 == "") {
+        ui->label_password1_check->hide();
+    } else {
+        QString error_msg;
+        bool valid = true; //user_info->usernameValidation(username,  error_msg);
+        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, error_msg, valid);
     }
-    else if(password == user_info->getPassword()){
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, "", 1);
-        user_info->set_info_complete(2, 1);    // since it matches first entered password
-                                               // info_complete[2] is set to true (ready to send)
-    }
-    else{
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, "", 0);
-        user_info->set_info_complete(2,0);
-    }*/
 }
-void StartPage::on_lineEdit_password2_textEdited()
-{
 
-    ui->label_password2_check->hide();               // hides the red X when user begins editing text
-    //user_info->set_info_complete(2,0);
-    on_lineEdit_password2_cursorPositionChanged();   // resets color when editing text
-}
-void StartPage::on_lineEdit_password2_cursorPositionChanged()
+void StartPage::on_lineEdit_password2_textChanged(const QString &password2)
 {
-    ui->lineEdit_password2->setStyleSheet("color: white; background-color: #545454; border-style: none;");
+    if (password2 == "") {
+        ui->label_password2_check->hide();
+    } else {
+        QString error_msg;
+        bool valid = true; //user_info->usernameValidation(username,  error_msg);
+        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, error_msg, valid);
+    }
 }
-/*
- * Sets green check/X accordingly with given valid input. Outputs error message if needed
- */
+
 void StartPage::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid){
-    if(valid){
-        QPixmap check_mark(":/resources/img/check_mark.png");
-        this_label->setPixmap(check_mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        this_line->setStyleSheet("color: white; background-color: #545454; border-style: none;");
-        this_label->show();
-     }
-     else{
-        this_line->setStyleSheet("color: white; background-color: rgb(230, 80, 80); border-style: none;");
-        QPixmap x_mark(":/resources/img/x_mark.png");
-        this_label->setPixmap(x_mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        this_label->show();
-     }
+    QPixmap mark = valid ? QPixmap(":/resources/img/check_mark.png") : QPixmap(":/resources/img/x_mark.png");
+    this_label->setPixmap(mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    this_label->show();
 }
+
+/*****************************************************************
+ * ACCOUNT RECOVERY
+ */
 
 void StartPage::on_pushButton_recover_pass_clicked()
 {

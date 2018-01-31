@@ -22,7 +22,8 @@ public:
 
 public slots:
     void setStackedIndex(int index);
-    void changePage(QWidget* widget);
+    void changePage(int index);
+    void changePage(QWidget* new_widget);
 
 private slots:
     void exit_settings();

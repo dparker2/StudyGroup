@@ -289,7 +289,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLineEdit" name="create_group_lineEdit_2">
+            <widget class="QLineEdit" name="create_group_lineEdit">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -325,7 +325,7 @@ border-style:none;</string>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="create_group_button_2">
+            <widget class="QPushButton" name="create_group_button">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>

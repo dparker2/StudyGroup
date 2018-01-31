@@ -32,6 +32,7 @@ public:
     const static char timestamp_utc = 2;  // Figure this out later
     const static char timestamp_local = 1;  // Figure this out later
     static void initialize();  // New one
+    static void clear_memory();  // New thing
     void setTimestamps(char arg);  // Figure this out later
     // Account Functions
     bool login(QString& username, QString& password, QString& email);  // Replace all of these with static functions
@@ -48,6 +49,7 @@ public:
     static void remove(QString class_key);  // Removes the key value pair from dict
     static void remove(SGWidget* object_pointer);  // Removes all keys with that value
     static void add(QString key, SGWidget* value);  // Adds key value to dict, overwriting if key already exists.
+    static void send(const QString& outgoing_message);
     static bool request_response(QString outgoing_message, QString& response);
     static void test(QString key, QString test_message);
     //

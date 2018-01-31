@@ -2,12 +2,13 @@
 #define JOINGROUPPAGE_H
 
 #include <QWidget>
+#include "groupmainpage.h"
 
 namespace Ui {
 class JoinGroupPage;
 }
 
-class JoinGroupPage : public QWidget
+class JoinGroupPage : public GroupMainPage
 {
     Q_OBJECT
 

@@ -20,12 +20,12 @@ public:
     ~StartPage();
 
 signals:
-    void logged_in(QWidget* widget);
+    void logged_in(int);
 
 private slots:
     void on_signin_button_clicked();
 
-    void on_lineEdit_email_editingFinished();
+    /*void on_lineEdit_email_editingFinished();
     void on_lineEdit_email_cursorPositionChanged();
     void on_lineEdit_email_textEdited();
 
@@ -37,7 +37,7 @@ private slots:
     void on_lineEdit_password1_cursorPositionChanged();
     void on_lineEdit_password1_textEdited();
 
-    void on_lineEdit_password2_editingFinished();
+    void on_lineEdit_password2_editingFinished();*/
 
     void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
 
@@ -47,11 +47,19 @@ private slots:
 
     void on_pushButton_recover_user_clicked();
 
-    void on_lineEdit_password2_textEdited();
+    //void on_lineEdit_password2_textEdited();
 
-    void on_lineEdit_password2_cursorPositionChanged();
+    //void on_lineEdit_password2_cursorPositionChanged();
 
     void do_work();
+
+    void on_lineEdit_email_textChanged(const QString &arg1);
+
+    void on_lineEdit_username_signup_textChanged(const QString &arg1);
+
+    void on_lineEdit_password1_textChanged(const QString &arg1);
+
+    void on_lineEdit_password2_textChanged(const QString &arg1);
 
 private:
     Ui::StartPage *ui;
