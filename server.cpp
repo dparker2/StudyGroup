@@ -25,7 +25,7 @@ server::server(QObject *parent) : QObject(parent)
 void server::initialize()
 {
     sg_socket.connect_server();
-    connect(&sg_socket, SGTCPSocket::new_message, incoming_message);
+    connect(&sg_socket, &SGTCPSocket::new_message, incoming_message);
 }
 
 void server::clear_memory()

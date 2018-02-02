@@ -39,7 +39,10 @@ SOURCES += \
     settingspage.cpp \
     sgtcpsocket.cpp \
     sgwidget.cpp \
-    groupmainpage.cpp
+    groupmainpage.cpp \
+    deck.cpp \
+    fcfront.cpp \
+    fcback.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -56,7 +59,10 @@ HEADERS += \
     settingspage.h \
     sgtcpsocket.h \
     sgwidget.h \
-    groupmainpage.h
+    groupmainpage.h \
+    deck.h \
+    fcfront.h \
+    fcback.h
 
 FORMS += \
         mainwindow.ui \
@@ -66,7 +72,10 @@ FORMS += \
     startpage.ui \
     joingrouppage.ui \
     creategrouppage.ui \
-    settingspage.ui
+    settingspage.ui \
+    deck.ui \
+    fcfront.ui \
+    fcback.ui
 
 RESOURCES += \
     resource.qrc
