@@ -16,9 +16,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     server::initialize();
-    connect(ui->login_page, SIGNAL(logged_in(int)), this, SLOT(changePage(int)));
-    connect(ui->join_page, SIGNAL(group_joined(QWidget*)), this, SLOT(changePage(QWidget*)));
-    connect(ui->create_page, SIGNAL(group_joined(QWidget*)), this, SLOT(changePage(QWidget*)));
+    left_buttons_list.push_back(ui->create_button);
+    left_buttons_list.push_back(ui->join_button);
+
+    connect(ui->login_page, SIGNAL(logged_in(unsigned)), this, SLOT(changePage(unsigned)));
+
+    connect(ui->join_page, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
+    connect(ui->create_page, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
+
+    connect(ui->create_button, &QPushButton::released, [=] { changePage(0); });
+    connect(ui->join_button, &QPushButton::released, [=] { changePage(1); });
+
+    connect(ui->settings, &SettingsPage::exit_settings, [=] { ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper); });
+    QPixmap gear = QPixmap(":/resources/img/gear.png").scaled(35, 35, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    ui->settings_button->setIconSize(QSize(35, 35));
+    ui->settings_button->setIcon(QIcon(gear));
+
+
+    //connect(ui->header, SIGNAL(button_changed(unsigned)), this, SLOT(changePage(unsigned)));
+    //connect(ui->header, SIGNAL(leave_group()), this, SLOT(removeCurrentPage()));
 
     //connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
@@ -90,24 +106,35 @@ MainWindow::~MainWindow()
     //group_widget->deleteLater();
 }
 
-void MainWindow::setStackedIndex(int index)
+void MainWindow::setStackedIndex(unsigned index)
 {
     ui->stackedWidget_window->setCurrentIndex(index);
 }
 
-void MainWindow::changePage(int index)
+void MainWindow::changePage(unsigned index)
 {
+    show_leave_button(index > 1);
     ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper);
     ui->page->setCurrentIndex(index);
-    ui->header->set_active_button(index);
+    set_active_button(index);
 }
 
-void MainWindow::changePage(QWidget *new_widget)
+void MainWindow::newPage(QWidget* new_widget, QString title)
 {
     ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper);
     int new_index = ui->page->addWidget(new_widget);
-    ui->header->set_active_button(new_index);
+    show_leave_button(new_index);
     ui->page->setCurrentIndex(new_index);
+    append_left_button(title);
+    set_active_button(new_index);
+}
+
+void MainWindow::removeCurrentPage()
+{
+    QWidget* page = ui->page->currentWidget();
+    ui->page->removeWidget(page);
+    show_leave_button(ui->page->currentIndex() > 1);
+    page->deleteLater();
 }
 
 /*
@@ -116,15 +143,34 @@ void MainWindow::changePage(QWidget *new_widget)
  * accordingly. If username is valid it is set to the UserAccount email
  */
 
-void MainWindow::exit_settings()
-{
-    //ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
-}
+
+
 /**************
  *
  * PRIVATE
  *
  */
+
+void MainWindow::exit_settings()
+{
+    //ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
+}
+
+void MainWindow::on_settings_button_released()
+{
+    ui->stackedWidget_window->setCurrentWidget(ui->settings);
+}
+
+void MainWindow::on_leave_button_released()
+{
+    unsigned index = ui->page->currentIndex();
+    QString leave_code = "LGRP";
+    QString group_id = left_buttons_list.at(index)->text();
+    server::send(leave_code + group_id);
+    removeCurrentPage();
+    remove_button(index);
+    set_active_button(ui->page->currentIndex());
+}
 
 void MainWindow::_initialize_group()
 {
@@ -164,29 +210,61 @@ void MainWindow::_activate_group(QString &group_id)
     ui->leave_button->setChecked(false);**/
 }
 
+void MainWindow::set_active_button(unsigned index)
+{
+    for (unsigned i = 0; i < left_buttons_list.size(); i++) {
+        left_buttons_list.at(i)->setChecked(i == index);
+    }
+}
+
+void MainWindow::append_left_button(QString title)
+{
+    QPushButton* new_button = copy_button(ui->create_button);
+    new_button->setText(title);
+    left_buttons_list.push_back(new_button);
+    ui->left_buttons->addWidget(new_button);
+    connect(new_button, &QPushButton::released, [=] { changePage(left_buttons_list.indexOf(new_button)); });
+}
+
+QPushButton *MainWindow::copy_button(QPushButton* button)
+{
+    QPushButton* copied_button = new QPushButton();
+    copied_button->setStyleSheet(button->styleSheet());
+    copied_button->setFont(button->font());
+    copied_button->setMinimumHeight(button->height());
+    copied_button->setFocusPolicy(button->focusPolicy());
+    copied_button->setCheckable(button->isCheckable());
+    return copied_button;
+}
+
+void MainWindow::remove_button(unsigned index)
+{
+    QPushButton* button = left_buttons_list.takeAt(index);
+    ui->left_buttons->removeWidget(button);
+    button->deleteLater();
+}
+
+void MainWindow::show_leave_button(bool show)
+{
+    ui->leave_button->setVisible(show);
+}
+
 void MainWindow::on_logout_button_released()
 {
     // Sanity check: if we aren't even logged in yet (if login_page is active), don't do anything!
-    if((ui->stackedWidget_window->currentWidget() != ui->login_page) && (my_serv->logout()))
+    if((ui->stackedWidget_window->currentWidget() != ui->login_page))
     {
-        if(group_widget != nullptr)
-        {
-            // Leave group if still in it
-            QString id = group_widget->get_groupID();
-            my_serv->leave_group(id);
-            //ui->stackedWidget_inner->removeWidget(group_widget);
-            //ui->stackedWidget_inner->setCurrentWidget(ui->stackedPage_JoinGroup);
-            //ui->back_to_group_button->setVisible(false);
-            //ui->leave_button->setVisible(false);
-            group_widget->deleteLater();
-            group_widget = nullptr;
+        for (unsigned i = 2; i < left_buttons_list.size(); ) {
+            ui->page->setCurrentIndex(i);  // Change the page
+            on_leave_button_released();  // Simulate pressing leave group
         }
-        // Clear username info
-        user_info->setEmail("");
-        user_info->setUsername("");
-        user_info->setPassword("");
+        // Clear username info -- REDO WHEN DONE
+        //user_info->setEmail("");
+        //user_info->setUsername("");
+        //user_info->setPassword("");
         // Change widget
         ui->stackedWidget_window->setCurrentWidget(ui->login_page);
+        server::send("LOGT");
     }
 }
 

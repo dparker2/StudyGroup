@@ -11,7 +11,7 @@ public:
     explicit GroupMainPage(QWidget *parent = 0);
 
 signals:
-    void group_joined(QWidget*);
+    void group_joined(QWidget*, QString group_id);
 };
 
 #endif // GROUPMAINPAGE_H

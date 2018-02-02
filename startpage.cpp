@@ -29,7 +29,6 @@ StartPage::~StartPage()
 
 void StartPage::do_work()
 {
-    qDebug() << "workin";
     while(!_work_queue.isEmpty()) {
         qDebug() << _work_queue.dequeue();
     }

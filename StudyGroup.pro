@@ -34,7 +34,6 @@ SOURCES += \
     cardwidget.cpp\
     flashcard.cpp \
     startpage.cpp \
-    header.cpp \
     joingrouppage.cpp \
     creategrouppage.cpp \
     settingspage.cpp \
@@ -52,7 +51,6 @@ HEADERS += \
     cardwidget.h \
     flashcard.h \
     startpage.h \
-    header.h \
     joingrouppage.h \
     creategrouppage.h \
     settingspage.h \
@@ -66,7 +64,6 @@ FORMS += \
     cardwidget.ui\
     flashcard.ui \
     startpage.ui \
-    header.ui \
     joingrouppage.ui \
     creategrouppage.ui \
     settingspage.ui
