@@ -6,7 +6,6 @@
 #include <QList>
 
 #include "flashcard.h"
-#include "ui_cardwidget.h"
 //#include "server.h"
 
 namespace Ui {
@@ -41,7 +40,6 @@ public slots:
 private slots:
 
     void on_prev_btn_clicked();
-
     void on_next_btn_clicked();
 
 private:
