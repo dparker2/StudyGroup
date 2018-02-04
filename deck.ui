@@ -18,9 +18,9 @@
     <widget class="QStackedWidget" name="stackedWidget_card_edit"/>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="prev_btn_2">
+      <widget class="QPushButton" name="prev_btn">
        <property name="styleSheet">
         <string notr="true">QPushButton {
 background-color: rgb(30, 33, 36);
@@ -44,7 +44,7 @@ QPushButton:checked {
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="next_btn_2">
+      <widget class="QPushButton" name="next_btn">
        <property name="styleSheet">
         <string notr="true">QPushButton {
 background-color: rgb(30, 33, 36);

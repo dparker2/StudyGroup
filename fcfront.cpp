@@ -12,3 +12,7 @@ FCFront::~FCFront()
 {
     delete ui;
 }
+
+void FCFront::edit_front(QString text){
+    ui->front_text->setText(text);
+}

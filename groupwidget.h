@@ -66,7 +66,7 @@ private slots:
 private:
     Ui::GroupWidget* ui;
     Whiteboard* whiteboard;
-    Deck* flashcard;
+    Deck* deck;
     QString group_id;
 
     QDate last_date_printed;

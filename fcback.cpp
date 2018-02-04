@@ -12,3 +12,7 @@ FCBack::~FCBack()
 {
     delete ui;
 }
+
+void FCBack::edit_back(QString text){
+    ui->back_text->setText(text);
+}

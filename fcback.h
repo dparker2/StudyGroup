@@ -15,6 +15,8 @@ public:
     explicit FCBack(QWidget *parent = 0);
     ~FCBack();
 
+    void edit_back(QString);
+
 private:
     Ui::FCBack *ui;
 };
