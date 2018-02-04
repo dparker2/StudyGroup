@@ -10,7 +10,7 @@
 #include <QDate>
 
 #include "whiteboard.h"
-#include "cardwidget.h"
+#include "deck.h"
 
 namespace Ui {
 class GroupWidget;
@@ -66,7 +66,7 @@ private slots:
 private:
     Ui::GroupWidget* ui;
     Whiteboard* whiteboard;
-    CardWidget* flashcard;
+    Deck* deck;
     QString group_id;
 
     QDate last_date_printed;

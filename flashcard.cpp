@@ -12,6 +12,14 @@ Flashcard::Flashcard(QWidget *parent) :
     cardNum = -1;
     ui->bottom_buttons->setCurrentIndex(0);
     ui->card_widget->setCurrentIndex(0);
+
+    front = new FCFront();
+    back = new FCBack();
+
+    ui->test->addWidget(front);
+    ui->test->setCurrentWidget(front);
+
+
 }
 Flashcard::~Flashcard()
 {
@@ -79,14 +87,15 @@ void Flashcard::emit_init_signal()
 
 void Flashcard::on_edit_card_btn_clicked()
 {
-    ui->bottom_buttons->setCurrentIndex(1);
+    ui->bottom_buttons->setCurrentIndex(1);      // displays the "set front" button
     if(ui->card_widget->currentIndex() == 0){
-        ui->card_textEdit->setPlainText(front_text);
-        ui->current_side->setText("Front");
+        front->edit_front(front_text);
+        //ui->card_textEdit->setPlainText(front_text);
+        //ui->current_side->setText("Front");
     }
     else{
         ui->card_textEdit->setPlainText(back_text);
-        ui->current_side->setText("Back");
+        //ui->current_side->setText("Back");
     }
     ui->card_widget->setCurrentIndex(2);
 
@@ -97,7 +106,7 @@ void Flashcard::on_set_front_btn_clicked()
     if(ui->current_side->text() == "Front"){
         front_text = ui->card_textEdit->toPlainText();
         ui->front_label->setText(front_text);
-        ui->current_side->setText("Back");
+        //ui->current_side->setText("Back");
         ui->set_front_btn->setText("Set Back");
         ui->card_textEdit->setPlainText(back_text);
         QString front = front_text;
@@ -110,7 +119,7 @@ void Flashcard::on_set_front_btn_clicked()
         back_text = ui->card_textEdit->toPlainText();
         ui->back_label->setText(back_text);
        // ui->card_widget->setCurrentWidget(0);
-        ui->current_side->setText("Front");
+        //ui->current_side->setText("Front");
         ui->set_front_btn->setText("Set Front");
         ui->card_widget->setCurrentIndex(0);
         ui->bottom_buttons->setCurrentIndex(0);

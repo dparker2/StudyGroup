@@ -31,7 +31,6 @@ SOURCES += \
     groupwidget.cpp \
     whiteboard.cpp \
     whiteboard_p.cpp \
-    cardwidget.cpp\
     flashcard.cpp \
     startpage.cpp \
     joingrouppage.cpp \
@@ -51,7 +50,6 @@ HEADERS += \
     groupwidget.h \
     whiteboard.h \
     whiteboard_p.h\
-    cardwidget.h \
     flashcard.h \
     startpage.h \
     joingrouppage.h \
@@ -67,7 +65,6 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
     groupwidget.ui\
-    cardwidget.ui\
     flashcard.ui \
     startpage.ui \
     joingrouppage.ui \

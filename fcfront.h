@@ -15,6 +15,9 @@ public:
     explicit FCFront(QWidget *parent = 0);
     ~FCFront();
 
+    void edit_front(QString);
+
+
 private:
     Ui::FCFront *ui;
 };
