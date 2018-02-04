@@ -36,11 +36,10 @@ void StartPage::do_work()
 
 void StartPage::on_signin_button_clicked()
 {
-    QString login_code = "LOGN";
     QString email;  // Return parameter from the server response
 
     server::test("startpage", "this is from the signin slot");
-    QString full_string = login_code + ui->lineEdit_username->text() + " " + ui->lineEdit_password->text();
+    QString full_string = server::LOGIN + ui->lineEdit_username->text() + " " + ui->lineEdit_password->text();
 
     if(server::request_response(full_string, email))
     {
@@ -60,8 +59,7 @@ void StartPage::on_signin_button_clicked()
 
 void StartPage::on_singup_button_clicked()
 {
-    QString create_code = "CACC";
-    QString full_string = create_code + ui->lineEdit_email->text() +
+    QString full_string = server::CREATE_ACCOUNT + ui->lineEdit_email->text() +
             " " + ui->lineEdit_username_signup->text() +
             " " + ui->lineEdit_password2->text();
     QString response;
