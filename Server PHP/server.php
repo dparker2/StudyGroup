@@ -8,7 +8,6 @@ include_once 'utilityFunctions.php';
 // $socket_tuple = ($socket, $username)
 //$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
 $server = stream_socket_server("tcp://127.0.0.1:1520", $errno, $errorMessage); //Localhost
-
 //echo ++$argv[1];
 //$_ = $_SERVER['_'];;
 echo "This is the server socket: ";
@@ -23,9 +22,6 @@ register_shutdown_function(function () {
   fclose($server);
   pcntl_exec($_, $argv);
 });*/
-
-
-
 
 //Returns error message if we fail to bind
 if ($server[0] === false)
@@ -219,9 +215,6 @@ while(true) {
               break;
             case "RACC":
               recoverAccount($codeMessage[0], $codeMessage[1], $sock);
-              break;
-            case "RARQ":
-              recoveryQset($codeMessage[0], $codeMessage[1], $sock);
               break;
             case "RUSR":
               rememberUsername($codeMessage[0], $sock);

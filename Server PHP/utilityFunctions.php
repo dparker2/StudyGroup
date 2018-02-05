@@ -20,6 +20,15 @@ function connect() {
   return $newConnect;
 }
 
+function connect2() {
+  $newConnect = new mysqli(DB2_Server, DB2_User, DB2_Pass, DB2_Name);
+  if ($newConnect->connect_error)
+    die("Connection failed: " . $connect->connect_error);
+  else
+    echo "Connected to database \n";
+  return $newConnect;
+}
+
 function disconnect($currConnect) {
   if($currConnect->close()) {
     echo "Database Closed \n";
@@ -88,7 +97,6 @@ class User {
   function getEmail() {
     return $this->email;
   }
-
   function setName($Name) {
     $this->username = $Name;
   }
