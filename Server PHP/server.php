@@ -36,11 +36,12 @@ if ($server[0] === false)
 $connection =  connect();
 
 //Updates all users to offline on server startup.
+//connect DB2
 $makeoffline = "UPDATE UserInfo
 	   SET Status = 'Offline'
 	   WHERE Status = 'Online'";
 mysqli_query($connection, $makeoffline);
-
+//disconnect DB2
 //Deletes all users in groups just in case of crash.
 //Insures that no duplicate users would be printerd.
 $countGroups = "SELECT TABLE_NAME
