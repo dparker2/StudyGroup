@@ -26,6 +26,16 @@ function disconnect($currConnect) {
   }
 }
 
+function clearGroupMembers($connection, $numGroups) {
+  while ($numGroups > 0) {
+    $gArray = mysqli_fetch_array($resultGroups);
+    $gName = $gArray[0];
+    $removeNULL = "DELETE FROM $gName WHERE userList IS NOT NULL";
+    $numGroups = $numGroups - 1;
+    mysqli_query($connection, $removeNULL);
+  }
+}
+
 function getNumRows($connection, $query) {
   $queryResult = mysqli_query($connection, $query);
   $numRows = $resultGroups->num_rows;
@@ -43,7 +53,17 @@ function sendMessage($message, $socket) {
   fwrite($socket, "{$messageSize}{$message}");
 }
 
-class user {
+
+function getSocketList($classArray) {
+  $clientNum = count($classArray);
+  echo "DEBUG: In getSocketList, number of clients: ". $clientNum . "\n";
+  $newArray = array();
+  foreach ($classArray as $v) {
+    $newArray[$v->getIP()] = $v->getSocket();
+  }
+  return $newArray;
+}
+class User {
   function __construct() {
     echo "Constructing user class\n";
   }
