@@ -63,14 +63,14 @@ function sendMessage($message, $socket) {
 }
 
 
-function getSocketList($classArray) {
-  $clientNum = count($classArray);
+function getSocketList($clientList) {
+  $clientNum = count($clientList);
   echo "DEBUG: In getSocketList, number of clients: ". $clientNum . "\n";
-  $newArray = array();
-  foreach ($classArray as $v) {
-    $newArray[$v->getIP()] = $v->getSocket();
+  $socketList = array();
+  foreach ($clientList as $user) {
+    $socketList[$user->getIP()] = $user->getSocket();
   }
-  return $newArray;
+  return $socketList;
 }
 class User {
   function __construct() {
