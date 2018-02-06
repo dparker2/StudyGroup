@@ -47,7 +47,7 @@ function clearGroupMembers($connection, $numGroups) {
 
 function getNumRows($connection, $query) {
   $queryResult = mysqli_query($connection, $query);
-  $numRows = $resultGroups->num_rows;
+  $numRows = $queryResult->num_rows;
   return $numRows;
 }
 
