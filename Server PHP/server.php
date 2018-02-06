@@ -51,17 +51,17 @@ disconnect($connection);
 
 
 //Client streaming starts
-$clients = array(); // $ip => ($socket, $username)
+$clientList = array(); // $ip => ($socket, $username)
 while(true) {
     //echo "Listening \n";
     //prepare readable sockets
     echo "\n+++++++++++++++++++++++++\n";
     echo "At top of the while loop, current clients connected: \n";
     echo "Clients:\n";
-    var_dump($clients);
+    var_dump($clientList);
 
     //$read_socks = array_column($clients, 0);
-    $read_socks = getSocketList($clients);
+    $read_socks = getSocketList($clientList);
     echo "Sockets we have already read through, obtained by copying client array's resources(aka socket identifier)\n";
     var_dump($read_socks);
     echo "Attach server socket into readable socket\n";
@@ -87,14 +87,14 @@ while(true) {
             echo "Setting client[ip address]->index 0, to socket resource and index 1 to empty string(reserving for username)\n";
             //Assigns ip address and blank username to the array
             /*$clients[stream_socket_get_name($new_client, true)] = array($new_client, "");*/
-            var_dump($clients);
+            var_dump($clientList);
             echo "+++++++++++++++++++++++++++ \n";
             $user = stream_socket_get_name($new_client, true);
-            $clients[$user] = new User();
-            $clients[$user]->setIP(stream_socket_get_name($new_client, true));
-            $clients[$user]->setSocket($new_client);
-            echo "DEBUG: Verifying IP is " . $clients[$user]->getIP() . "\n";
-            echo "DEBUG: Verifying socket is " . $clients[$user]->getSocket() ."\n";
+            $clientList[$user] = new User();
+            $clientList[$user]->setIP(stream_socket_get_name($new_client, true));
+            $clientList[$user]->setSocket($new_client);
+            echo "DEBUG: Verifying IP is " . $clientList[$user]->getIP() . "\n";
+            echo "DEBUG: Verifying socket is " . $clientList[$user]->getSocket() ."\n";
         }
         //delete the server socket from the read sockets
         echo "DEBUG: Now showing our read sockets and unsetting server.. why?\n";
@@ -131,14 +131,14 @@ while(true) {
             echo "DATA DOES NOT EXIST, i.e. client disconnect, it will close their socket\n";
 
             echo "Here it prints out the array it's going to kill/the one that disconnected\n";
-            var_dump(array_search($sock, getSocketList($clients), true));
+            var_dump(array_search($sock, getSocketList($clientList), true));
             //var_dump(array_search($sock, array_column($clients, 0)));  //Array column returns values of index 0 of clients[], which is the socket.  array search looks at the list of sockets array_column returned for the $sock to close. This searches whatever client that disconnected, and returns its index so we know which to delete.
 
             echo "Unsetting/deleting the socket that just left from client array then closes it\n";
             //unset($clients[ array_search($sock, array_map(function($item){return $item[0];}, $clients)) ]);  //array_map applies the function return $item[0] to all clients.  so I guess that means it's returning the socket for all clients...? then it compares the sockets returned with array search, then the socket that matches array_search gets unset, it deletes it from the array. This searches array(2)?
-            unset($clients[ array_search($sock, getSocketList($clients), true)]);
+            unset($clientList[ array_search($sock, getSocketList($clientList), true)]);
             @fclose($sock); //closes the socket. @ supresses error messages
-            echo "A client disconnected. Now there are total ". count($clients) . " clients.\n";
+            echo "A client disconnected. Now there are total ". count($clientList) . " clients.\n";
             continue;
             /*
             echo "Hello, how are you doing\n";
@@ -151,7 +151,7 @@ while(true) {
         //send the message back to client
         else {
           echo "It passes the code through our switch statement \n";
-          $ip = $clients[$user]->getIP();
+          $ip = $clientList[$user]->getIP();
           //$ip = stream_socket_get_name($sock, true);
           //Takes in the first 5 bytes as to determine length of message.
           $code = substr($newestdata, 0, 4);
@@ -182,30 +182,30 @@ while(true) {
                 $clients[$user]->setName($codeMessage[0]);
               } break;
             case "LOGT":
-              logoutAccount($clients[$ip][1], $sock);
+              logoutAccount($clientList[$ip][1], $sock);
               break;
             case "CGRP":
               //createGroup($codeMessage[0], $ip, $clients, $sock);
-              createGroup($codeMessage[0], $clients[$user], $sock);
+              createGroup($codeMessage[0], $clientList[$user], $sock);
               break;
             case "JGRP":
-              joinGroup($codeMessage[0], $ip, $clients, $sock);
+              joinGroup($codeMessage[0], $ip, $clientList, $sock);
               //joinGroup($codeMessage[0], $clients[$user], $sock);
               break;
             case "LGRP":
               //leaveGroup($codeMessage[0], $ip, $clients, $sock);
-              leaveGroup($codeMessage[0], $clients[$user], $sock);
+              leaveGroup($codeMessage[0], $clientList[$user], $sock);
               break;
             case "GCHT":
               //sendChatMessage($codeMessage[0], $codeMessage[1], $ip, $clients, $sock);
-              sendChatMessage($codeMessage[0], $codeMessage[1], $clients[$user], $sock);
+              sendChatMessage($codeMessage[0], $codeMessage[1], $clientList[$user], $sock);
               break;
             case "WBLN":
               //whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $ip, $clients, $sock);
-              whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $clients[$user], $sock);
+              whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList[$user], $sock);
               break;
             case "UPWB":
-              updateWhiteBoard($codeMessage[0], $codeMessage[1], $clients, $sock);
+              updateWhiteBoard($codeMessage[0], $codeMessage[1], $clientList, $sock);
               break;
             case "SVWB":
               saveWhiteBoard($codeMessage[0], $codeMessage[1], $sock);
@@ -223,10 +223,10 @@ while(true) {
               rememberPassword($codeMessage[0], $codeMessage[1], $sock);
               break;
             case "FCBK":
-              addToSide2($codeMessage[0], $codeMessage[1], $codeMessage[2], $ip, $clients, $sock);
+              addToSide2($codeMessage[0], $codeMessage[1], $codeMessage[2], $ip, $clientList, $sock);
               break;
             case "FCFT":
-              addToSide1($codeMessage[0], $codeMessage[1], $codeMessage[2], $ip, $clients, $sock); // 0 = groupID 1 = card id 2 = message
+              addToSide1($codeMessage[0], $codeMessage[1], $codeMessage[2], $ip, $clientList, $sock); // 0 = groupID 1 = card id 2 = message
               break;
           }//Switch Statement
       }//Closes else
