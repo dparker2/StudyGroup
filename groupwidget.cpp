@@ -27,7 +27,6 @@ GroupWidget::GroupWidget(QString id, QWidget *parent) :
     whiteboard->set_pen_size(pen_string.toInt());
     //ui->study_mode->setStyleSheet("background-color: #ffffff;");
     // End set whiteboard
-*/
     // Flaschard
 
     deck = new Deck();
