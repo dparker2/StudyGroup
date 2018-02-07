@@ -35,12 +35,11 @@ function disconnect($currConnect) {
   }
 }
 
-function clearGroupMembers($connection, $numGroups) {
-  while ($numGroups > 0) {
-    $gArray = mysqli_fetch_array($resultGroups);
+function clearGroupMembers($connection, $countGroups) {
+  $groupsWithUsers = mysqli_query($connection, $countGroups);
+  while ($gArray = mysqli_fetch_array($groupsWithUsers)) {
     $gName = $gArray[0];
     $removeNULL = "DELETE FROM $gName WHERE userList IS NOT NULL";
-    $numGroups = $numGroups - 1;
     mysqli_query($connection, $removeNULL);
   }
 }
@@ -59,6 +58,7 @@ function getObjString($connection, $query) {
 
 function sendMessage($message, $socket) {
   $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
+  echo "DEBUG: This is the fwrite: $message \n";
   fwrite($socket, "{$messageSize}{$message}");
 }
 

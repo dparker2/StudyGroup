@@ -9,10 +9,11 @@ if (!$server)
 }
 else
 {
-    $out = "00019LOGNfuller testpass \n";
+    $out = "00018LOGNhello testpass";
     ///Send data
     fwrite($server, $out);
 
+    //fread($server, 1096);
     ///Receive data - in small chunks :)
     while (!feof($server))
     {

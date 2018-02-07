@@ -4,241 +4,210 @@ include_once 'utilityFunctions.php';
 include_once 'flashCardFunctions.php';
 date_default_timezone_set('UTC');
 /* Group Functions
-  function createGroup($groupname, $ip, $clients, $sock);
-  function joinGroup($groupID, $ip, $clients, $sock);
-  function leaveGroup($groupID, $ip, $clients, $sock);
-  function updateGroupList($connection, $ip, $clients, $groupID, $sock);
-  function sendChatMessage($groupID, $message, $ip, $clients, $sock);
-  function updateGroupChat($connection, $ip, $clients, $groupID, $sock);
-*/
-function createGroup($groupname, $ip, $clients, $sock)
+  function createGroup($groupname, $user, $sock)
+  function joinGroup($groupID, $user, $clientList, $sock)
+  function leaveGroup($groupID, $user, $clientList, $sock)
+  function updateGroupList($connection, $clientList, $groupID)
+  function sendChatMessage($groupID, $message, $user, $clientList, $sock)
+  function updateGroupChat($connection, $groupID, $sock) */
+
+//CREATE GROUP FUNCTION
+//Function creates group by comparing groupname to existing groups on database, if none found it will create a new group with the group name appended with a random 4 digits after, and sets the creator as Admin of the group
+function createGroup($groupname, $user, $sock)
 {
   $connection = connect();
+  $username = $user->getName();
+  $ip = $user->getIP();
   $rand4 = rand(1000, 9999);
-  $groupID = $groupname . "_" . $rand4; //Creates random groupname + 4 random digits.
-  // sql command to check if groupname table already exists
-  $check_groupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
-  //if group name exists, return failure. else, run query and create table for group
+  $groupID = $groupname . "_" . $rand4;
+  $flashGroupID = "$groupID" . "FC";
+
+  //SQL Statements to Query
+  $checkGroupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
   $createGroupTable = "CREATE TABLE $groupID (
     Admin varchar(50), userList varchar(20), ipAddress varchar(50),
-    User varchar(20), Clock datetime, Message varchar(255), Whiteboard LONGTEXT
-  )";
-  $username = $clients[$ip][1]; //Takes username from dict. $clients.
+    User varchar(20), Clock datetime, Message varchar(255), Whiteboard LONGTEXT)";
   $insertUserAdmin = "INSERT INTO $groupID (Admin) VALUES ('$username')";
   $insertUserList = "INSERT INTO $groupID (UserList, ipAddress) VALUES ('$username', '$ip')";
   $insertWBph = "INSERT INTO $groupID (Whiteboard) VALUES ('placeholder')";
-  $flashGroupID = "$groupID" . "FC";
-  // creates flash card table for each new table. id must be primary key for auto increment
   $createFlashCardTable = "CREATE TABLE $flashGroupID (
-    id INT NOT NULL AUTO_INCREMENT, user varchar(20), side1 varchar(255) , side2 varchar(255) , primary key (id)
-  )";
-  if (($groupID_exists = checkExists($connection, $check_groupID)) > 0) {
-    $sendback = "00024FAILGroup already exists";  //Sends back fail if group already exists.
-    fwrite($sock, $sendback);
+    id INT NOT NULL AUTO_INCREMENT, user varchar(20), side1 varchar(255) , side2 varchar(255) , primary key (id))";
+
+  //Returns Fail message if group already exits.
+  if (($groupIDExists = checkExists($connection, $checkGroupID)) > 0) {
+    $message = "FAILGroup already exists";
+    sendMessage($message, $sock);
   }
-  else { // Runs queries and creates group, adding the current user as the user admin/creator
+  //Else Creates group, makes creator admin, inserts it into user list, puts a blank placeholder for whiteboard, and creates the flash card table. Returns SUCC message to client.
+  else {
+      echo "DEBUG: Creating group $groupID ...\n";
       mysqli_query($connection, $createGroupTable);
       mysqli_query($connection, $insertUserAdmin);
       mysqli_query($connection, $insertUserList);
       mysqli_query($connection, $insertWBph);
       mysqli_query($connection, $createFlashCardTable);
-      $sendback = "SUCC";
-      $message = "{$sendback}{$groupID}";
-      echo "$message";
-      $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-      fwrite($clients[$ip][0], "{$messageSize}{$message}");
-
+      $message = "SUCC"."$groupID";
+      sendMessage($message, $sock);
     }
   disconnect($connection);
 }
 
 //JOIN GROUP FUNCTION
-function joinGroup($groupID, $ip, $clients, $sock) {
-  // Create connection
-  $connection = connect();
+//Function inserts user into group table and updates chat, whiteboard, flashcards, and userlist.
+function joinGroup($groupID, $user, $clientList, $sock)
+{
+  $connection = connect();        //Connect to group database.
+  $username = $user->getName();   //Gets username from object and assigns to username
+  $ip = $user->getIP();           //Get ip from object and assigns to ip
 
-  //Checks group name if it exists in table.  Stores result in groupname_exists
-  $check_groupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
-  $username = $clients[$ip][1]; //Using client dict. to store username
-  //SQL Commands
-  $return_userList = "SELECT userList FROM $groupID WHERE userList IS NOT NULL";
-  $join_group = "INSERT INTO $groupID (userList, ipAddress) VALUES ('$username', '$ip')";
+  //SQL Statements to Query
+  $checkGroupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
+  $returnUserList = "SELECT userList FROM $groupID WHERE userList IS NOT NULL";
+  $joinGroup = "INSERT INTO $groupID (userList, ipAddress) VALUES ('$username', '$ip')";
   $checkAdmin = "SELECT userList FROM $groupID WHERE (SELECT Admin FROM $groupID WHERE Admin IS NOT NULL) = userList";
   $selectAdmin = "SELECT Admin FROM $groupID WHERE Admin IS NOT NULL";
   $selectWBstring = "SELECT Whiteboard FROM $groupID WHERE Whiteboard IS NOT NULL";
-  $selectWBUser = "SELECT ipAddress FROM $groupID WHERE userList != '$username' LIMIT 1";
+  $selectExistingMember = "SELECT ipAddress FROM $groupID WHERE userList != '$username' LIMIT 1";
 
-  if (($groupID_exists = checkExists($connection, $check_groupID)) > 0) {
-    $result = mysqli_query($connection, $return_userList);
-    $row_count = $result->num_rows;
-    //Returns current admin into adminname as string to compare
-    if ($resultAdmin = mysqli_query($connection, $selectAdmin)) {
-      $obj = $resultAdmin->fetch_object();
-      $adminname = $obj->Admin;
-    }
-
-    if ($row_count < 5) { //Max group size currently set at 5.
-      if(($row_count == 4) && (($adminExists = checkExists($connection, $checkAdmin)) < 1) && ($adminname != $username) ) //Checks to see if admin is in group before max capacity
+  /*
+  Checks if group that user entered exists.
+  Returns Fail message if the group doesn't exists, or if the current user is the last person to join the group and the administrator hasn't joined yet.
+  Else, it will insert the user into the group, then update the group list, flash cards, group chat, then whitebaord.*/
+  if (($groupIDExists = checkExists($connection, $checkGroupID)) > 0) { // True if group does exist
+    $numUsers = getNumRows($connection, $returnUserList);        //Obtains curr number of users in group from database
+    $adminName = getObjString($connection, $selectAdmin)->Admin; //Obtains admin name for comparison
+    echo "DEBUG: Admin of $groupID is $adminName\n";
+    echo "DBUG: $username is joining group $groupID ... \n";
+    echo "DEBUG: Number of users in group: $numUsers \n";
+    if ($numUsers < 5) { //Max Group Size currently set to 5
+      if(($numUsers == 4) && (($adminExists = checkExists($connection, $checkAdmin)) < 1) && ($adminName != $username) ) //Checks to see if admin is in group before max capacity
         fwrite($sock, "00021FAILNo Admin in Group");
+        //If able to join, will insert user to group table and update client for group list, group chat, flash card, wb.
       else {
         fwrite($sock, "00004SUCC");
-        mysqli_query($connection, $join_group); //Inserts username and ip to list.
-        updateGroupList($connection, $ip, $clients, $groupID, $sock);
-        updateFlashCards($connection, $ip, $clients, $groupID, $sock);
-        updateGroupChat($connection, $ip, $clients, $groupID, $sock);
-        echo "Row count: $row_count \n";
-        if ($row_count == 0) { //if this is the first user joining
-          $result = mysqli_query($connection, $selectWBstring);
-          $object = $result->fetch_object();
+        mysqli_query($connection, $joinGroup);
+        updateGroupList($connection, $clientList, $groupID);
+        //updateFlashCards($connection, $ip, $clients, $groupID, $sock);
+        updateGroupChat($connection, $groupID, $sock);
+
+        echo "DEBUG: Determining whiteboard existence... \n";
+        //If this is the first user joining
+        if ($numUsers == 0) {
+          $object = getObjString($connection, $selectWBstring);
           $wbstring = (string)$object->Whiteboard;
-          echo "DEBUG: this is wbstring $wbstring";
-          if($wbstring == "" || $wbstring =="placeholder") {
-            echo "DEBUG: No whiteboard in Database, EMPTY\n";
-          }
+          //If WB is just empty or placeholder, nothing to update. Else send whiteboard to member
+          if($wbstring == "" || $wbstring =="placeholder")
+            echo "DEBUG: No whiteboard in Database or placeholder, nothing to send...\n";
           else {
             $message = "WBUP$wbstring";
-            $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-            echo "DEBUG: This is the string we're using from the database for first person: $messageSize ... \n";
-            fwrite($sock, "{$messageSize}{$message}");
-          }
-        }
+            echo "DEBUG: Whiteboard found in Database, updating for first user...\n";
+            sendMessage($message, $sock);
+          } // closes line 89 else statement
+        }   // closes line 82 numUsers if statement
+        //Else not first user joining, will get current whiteboard from existing member and send to member joining
         else {
-          $result = mysqli_query($connection, $selectWBUser);
-          $object = $result->fetch_object();
-          $existingWB = (string)$object->ipAddress; //Ip writing to
-          echo "DEBUG: This the ipAddress we're choosing to select from $existingWB\n";
-          $newsock = $clients[$existingWB][0];
-          echo "DEBUG: This should be the client we're writing to RESOURCE: $newsock\n";
+          echo "Requesting whiteboard from existing user to update joining member... \n";
+          $object = getObjString($connection, $selectExistingMember);
+          $existingMember = (string)$object->ipAddress;
+          $existingSocket = $clientList[$existingMember]->getSocket();
           $message = "NUWB$ip";
-          $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-          echo "DEBUG: This is the size of string we're using:  {$messageSize}{$message}\n";
-          fwrite($newsock, "{$messageSize}{$message}");
-        }
-
-      }
-    }//closes if statement for capacity
-    else {
-      fwrite($sock, "00016FAILMax Capacity"); //Fail case for max capcity.
-    }
-  }//closes if statement for group exists
-  else {
+          sendMessage($message, $existingSocket);
+        } //closes line 95 else statement
+      }   //closes line 74 else statement
+    }     //closes line 71 if statement for capacity
+    else
+      fwrite($sock, "00016FAILMax Capacity");      //Fail case for max capcity.
+  }       //closes line 66 if statement for group exists
+  else
     fwrite($sock, "00023FAILGroup Doesn't Exist"); //Fail case that groupname doesn't exist
-  }
-
   disconnect($connection);
 }
 
 //LEAVE GROUP FUNCTION
-function leaveGroup($groupID, $ip, $clients, $sock) {
+//Deletes user from group table and updates rest of members with udpated user list.
+function leaveGroup($groupID, $user, $clientList, $sock)
+{
   $connection = connect();
-  //SQL Commands
-  $username = $clients[$ip][1];
+  $username = $user->getName();
   $leaveGroup = "DELETE FROM $groupID
     WHERE userList = '$username'";
-  $return_userList = "SELECT userList FROM $groupID";
-  //Delete from database.
+  echo "DEBUG: $username Leaving Group... \n";
   mysqli_query($connection, $leaveGroup);
-  fwrite($sock, "00004SUCC"); //writes back to current client success on leave
-  updateGroupList($connection, $ip, $clients, $groupID, $sock);
+  fwrite($sock, "00004SUCC");             //writes back to current client success on leave
+  updateGroupList($connection, $clientList, $groupID);
   disconnect($connection);
 }
 
 //UPDATE GROUP LIST FUNCTION
-function updateGroupList($connection, $ip, $clients, $groupID, $sock) {
-  //SQL Commands
-  $return_userList = "SELECT userList FROM $groupID, UserInfo WHERE userList IS NOT NULL
+//Updates group members of user list
+function updateGroupList($connection, $clientList, $groupID)
+{
+  //SQL Statements to Query
+  $returnUserList = "SELECT userList FROM $groupID, UserInfo WHERE userList IS NOT NULL
   and userList = UserInfo.Username
   and UserInfo.Status = 'Online';";
-  $return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
-  $resultIP = mysqli_query($connection, $return_ipList); //Returns list of current IP addresses i.e. current user list connected.
-  $num_ip = $resultIP->num_rows; //Stores number of people currently connected for while loop iteration.
+  $returnIPList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
+  $ipList = mysqli_query($connection, $returnIPList); //Returns list of current IP
 
-  while($num_ip > 0) { //Loops through each active client, printing out the current user list in order to update ui
-    $resultUsers = mysqli_query($connection, $return_userList); //runs and stores results of all usernames in the group currently
-    $num_user = $resultUsers->num_rows;//stores number of usernames
-    $rowIP = mysqli_fetch_array($resultIP); //Fetches first IP as an array.
-    //echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
-    $keyIP = $rowIP[0]; //Stores the key IP address:Port for use of $clients dict.
-    $keySock = $clients[$keyIP][0]; //Uses the above to access the socket client of the IP address to write back to.
-    //echo "Debugging: This is keySock we're writing to: $keySock \n";
-    fwrite($keySock, "00004USCH"); //Notifies client that wave of new users will be updated.
-
-    for($n_user = $num_user; $n_user > 0; $n_user = $n_user - 1){ //For loop that iterates through lists of username to writeback to client.
-      $row=mysqli_fetch_array($resultUsers); //Fetches first username into array
-      $name = $row[0]; //Stores name into variable
-      echo "Debugging: We are writing User: $row[0] to $keyIP with socket $keySock \n";
-      $message = "NUSR$name"; //Appends CODE NUSR to username
-      $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read
-      fwrite($keySock,"{$messageSize}{$message}"); //Writes back to client.
-      echo "Debugging: Client should be receiving: {$messageSize}{$message} \n";
-    } //closes for loop
-
-    $num_ip = $num_ip - 1; //Goes to next IP address/User in group
-  }//end while Loops
+  echo "DEBUG: Updating Group List... \n";
+  while($rowIP = mysqli_fetch_array($ipList)) {  //Loops through each member one at a time.
+    $keyIP = $rowIP[0];                          //Stores one IP from current group list
+    $keySock = $clientList[$keyIP]->getSocket(); //Stores socket to write to.
+    fwrite($keySock, "00004USCH");               //Notifies client that wave of new users will be updated.
+    $resultUsers = mysqli_query($connection, $returnUserList); //Obtains userList to write to member
+    while($row=mysqli_fetch_array($resultUsers)) {             //Loops through each user and writes to member above.
+      $name = $row[0];                                         //Stores one member to $name
+      $message = "NUSR$name";                                  //Appends CODE NUSR to username so client can update.
+      sendMessage($message, $keySock);
+    } //closes for/while loop
+  }   //end while Loops
 }
-
-function sendChatMessage($groupID, $message, $ip, $clients, $sock) {
-  // Create connection
-  $connection =  connect();
-
+//SEND CHAT FUNCTION
+//Append username and timestamp to user message and returns to each member in group.
+function sendChatMessage($groupID, $message, $user, $clientList, $sock)
+{
+  $connection = connect();
   $escMessage = mysqli_escape_string($connection, $message);
   fwrite($sock, "00004SUCC");
-  $username = $clients[$ip][1];
+  $username = $user->getName();
   $timestamp = date("Y-m-d H:i:s");
-  $fullmessage = "$username $timestamp $message";
-  echo "DEBUG: This is the full message $message \n";
-  $return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
-  $resultIP = mysqli_query($connection, $return_ipList); //Returns list of current IP addresses i.e. current user list connected.
-  $num_ip = $resultIP->num_rows; //Stores number of people currently connected for while loop iteration.
-  while($num_ip > 0) { //Loops through each active client, printing out the current user list in order to update ui
-    //Entire section below is to keep track of sockets we're writing to.
-    $rowIP = mysqli_fetch_array($resultIP); //Fetches first IP as an array.
-    //echo "Debugging: This is keyIP we're using to index: $rowIP[0] \n";
-    $keyIP = $rowIP[0]; //Stores the key IP address:Port for use of $clients dict.
-    $keySock = $clients[$keyIP][0]; //Uses the above to access the socket client of the IP address to write back to.
-    //echo "Debugging: This is keySock we're writing to: $keySock \n";
-    //fwrite($keySock, "00004UCHT"); //Notifies client that wave of new users will be updated.
-    //$messages = "$row[0] $row[1] $row[2]"; //Stores user clock message into variable
-    echo "Debugging: We are writing $fullmessage to $keyIP with socket $keySock \n";
-    $message1 = "NCHT$fullmessage"; //Appends CODE NCHT to chat message
-    $messageSize = str_pad((string)strlen($message1), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read
-    fwrite($keySock,"{$messageSize}{$message1}"); //Writes back to client.
-    echo "Debugging: Client should be receiving: {$messageSize}{$message1} \n";
+  $fullmessage = "$username $timestamp $message";      //Full message that include username timestamp and the message
+  echo "DEBUG: Sending Message... \n";
+  echo "DEBUG: This is the full message $fullmessage \n";
 
-    $num_ip = $num_ip - 1; //Goes to next IP address/User in group
+  $return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
+  $ipList = mysqli_query($connection, $return_ipList); //Returns ip list of current members
+  while($rowIP = mysqli_fetch_array($ipList)) {        //Iterates through members and sends message
+    $keyIP = $rowIP[0];                                //Gets IP to obtain socket
+    $keySock = $clientList[$keyIP]->getSocket();       //Uses socket of existing member to send message
+    $newMessage = "NCHT$fullmessage";                  //Appends CODE NCHT to chat message for client use
+    sendMessage($newMessage, $keySock);
   }//end while Loops
-  //SQL Commands
-  echo "DEBUG: $username and $message being put into $groupID \n";
+
+  //Inserts chat into database for logging
   $insertChat = "INSERT INTO $groupID (user, Clock, Message)
                 VALUES ('$username', current_timestamp(), '$escMessage')";
-  if (!mysqli_query($connection, $insertChat)) {
+  if (!mysqli_query($connection, $insertChat))
     die(mysqli_error($connection));
-  }
   disconnect($connection);
 }
 
-function updateGroupChat($connection, $ip, $clients, $groupID, $sock) {
-  $connection =  connect();
-  //SQL Commands
-  $return_Messages = "SELECT user, Clock, Message
+//UPDATE GROUP CHAT FUNCTION
+//Gets group chat log from database and updates the socket calling it upon joining group
+function updateGroupChat($connection, $groupID, $sock)
+{
+  $returnMessageList = "SELECT user, Clock, Message
                         FROM $groupID
                         WHERE Message IS NOT NULL";
-  $resultMessages = mysqli_query($connection, $return_Messages); //runs and stores results of all messages in the group currently.
-  $num_Messages = $resultMessages->num_rows;//stores number of messages
-  //echo "We are writing to current user joining group: $ip who's socket should be $sock \n";
-  //fwrite($sock, "00004UCHT"); //Notifies Client that wave of chat is going to be returned
+  $messageList = mysqli_query($connection, $returnMessageList);
+  echo "DEBUG: Updating Group Chat... \n";
 
-  //echo "Debugging: What is the number of messages: $num_Messages \n";
-  for($n_messages = $num_Messages; $n_messages > 0; $n_messages = $n_messages - 1){ //For loop that iterates through lists of messages to writeback to client.
-    $row=mysqli_fetch_array($resultMessages); //Fetches first message into array
-    $messages = "$row[0] $row[1] $row[2]"; //Stores user clock message into variable
-    //echo "Debugging: We are writing $messages to ip $ip with socket $sock \n";
-    $message = "NCHT$messages"; //Appends CODE NUSR to username
-    $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read
-    fwrite($sock,"{$messageSize}{$message}"); //Writes back to client.
-    //echo "Debugging: Client should be receiving: {$messageSize}{$message} \n";
-  } //closes for loop
-  disconnect($connection);
+  //Sends chat log to requested socket
+  while($row = mysqli_fetch_array($messageList)) {
+    $messages = "$row[0] $row[1] $row[2]"; //Stores user: clock: message into variable
+    $message = "NCHT$messages";            //Appends CODE NCHT for client use
+    sendMessage($message, $sock);
+  } //closes while loop
 }
 
 ?>

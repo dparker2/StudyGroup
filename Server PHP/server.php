@@ -6,8 +6,8 @@ include_once 'whiteboardFunctions.php';
 include_once 'utilityFunctions.php';
 
 // $socket_tuple = ($socket, $username)
-//$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
-$server = stream_socket_server("tcp://127.0.0.1:1520", $errno, $errorMessage); //Localhost
+$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
+//$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
 //echo ++$argv[1];
 //$_ = $_SERVER['_'];;
 echo "This is the server socket: ";
@@ -28,11 +28,11 @@ if ($server[0] === false)
 {
     die("Failed to bind to socket:  $errorMessage \n");
 }
-// Create connection
-$connection =  connect();
+
 
 //Updates all users to offline on server startup.
 //connect DB2
+$connection =  connect();
 $makeoffline = "UPDATE UserInfo
 	   SET Status = 'Offline'
 	   WHERE Status = 'Online'";
@@ -44,9 +44,9 @@ $countGroups = "SELECT TABLE_NAME
               FROM information_schema.columns
               where table_schema = 'StudyGroup'
               and column_name = 'userList';";
-$numGroups = getNumRows($connection, $query);
+$numGroups = getNumRows($connection, $countGroups);
 echo "Number of groups in database: $numGroups \n";
-clearGroupMembers($connections, $numGroups);
+clearGroupMembers($connection, $countGroups);
 disconnect($connection);
 
 
@@ -62,13 +62,13 @@ while(true) {
 
     //$read_socks = array_column($clients, 0);
     $read_socks = getSocketList($clientList);
-    echo "Sockets we have already read through, obtained by copying client array's resources(aka socket identifier)\n";
+    /*echo "Sockets we have already read through, obtained by copying client array's resources(aka socket identifier)\n";
     var_dump($read_socks);
-    echo "Attach server socket into readable socket\n";
+    echo "Attach server socket into readable socket\n";*/
     $read_socks["Server Socket: "] = $server;
 
-    echo "Readable sockets:\n";
-    var_dump($read_socks);
+    //echo "Readable sockets:\n";
+    //var_dump($read_socks);
     echo "+++++++++++++++++++++++++\n \n";
 
     //start reading and use a large timeout
@@ -87,7 +87,7 @@ while(true) {
             echo "Setting client[ip address]->index 0, to socket resource and index 1 to empty string(reserving for username)\n";
             //Assigns ip address and blank username to the array
             /*$clients[stream_socket_get_name($new_client, true)] = array($new_client, "");*/
-            var_dump($clientList);
+            //var_dump($clientList);
             echo "+++++++++++++++++++++++++++ \n";
             $user = stream_socket_get_name($new_client, true);
             $clientList[$user] = new User();
@@ -97,13 +97,13 @@ while(true) {
             echo "DEBUG: Verifying socket is " . $clientList[$user]->getSocket() ."\n";
         }
         //delete the server socket from the read sockets
-        echo "DEBUG: Now showing our read sockets and unsetting server.. why?\n";
-        var_dump($read_socks);
+        //echo "DEBUG: Now showing our read sockets and unsetting server.. why?\n";
+        //var_dump($read_socks);
         unset($read_socks[ array_search($server, $read_socks) ]);
-        echo "DEBUG: Now showing what the read sockets look like after removing server from it\n";
-        var_dump($read_socks);
-        echo "Server's resource id should have disappeared \n \n";
-        echo "OH SHIET. It removes the server resource so it doesn't try to read data from that specific resource...? \n";
+        //echo "DEBUG: Now showing what the read sockets look like after removing server from it\n";
+        //var_dump($read_socks);
+        //echo "Server's resource id should have disappeared \n \n";
+        //echo "OH SHIET. It removes the server resource so it doesn't try to read data from that specific resource...? \n";
     } //close if(in_array)
 
     //message from existing client
@@ -136,9 +136,12 @@ while(true) {
 
             echo "Unsetting/deleting the socket that just left from client array then closes it\n";
             //unset($clients[ array_search($sock, array_map(function($item){return $item[0];}, $clients)) ]);  //array_map applies the function return $item[0] to all clients.  so I guess that means it's returning the socket for all clients...? then it compares the sockets returned with array search, then the socket that matches array_search gets unset, it deletes it from the array. This searches array(2)?
+            echo "Should be looking for: \n";
+            var_diump($sock);
             unset($clientList[ array_search($sock, getSocketList($clientList), true)]);
             @fclose($sock); //closes the socket. @ supresses error messages
             echo "A client disconnected. Now there are total ". count($clientList) . " clients.\n";
+            var_dump($clientList);
             continue;
             /*
             echo "Hello, how are you doing\n";
@@ -151,8 +154,12 @@ while(true) {
         //send the message back to client
         else {
           echo "It passes the code through our switch statement \n";
-          $ip = $clientList[$user]->getIP();
-          //$ip = stream_socket_get_name($sock, true);
+          $ip = stream_socket_get_name($sock, true); //Current user.
+          //echo "Current IP Before Messages: $ip \n";
+          $client = $clientList[$ip];
+          //$wat = $clientList[$ip]->getName();
+          //echo "Current User Before Messages: $wat\n";
+
           //Takes in the first 5 bytes as to determine length of message.
           $code = substr($newestdata, 0, 4);
           $message = substr($newestdata, 4, $bytes);
@@ -179,30 +186,30 @@ while(true) {
             case "LOGN":
               if(loginAccount($codeMessage[0], $codeMessage[1], $sock)) {
                 //$clients[$ip][1] = $codeMessage[0]; // Set username to clients dict
-                $clients[$user]->setName($codeMessage[0]);
+                $client->setName($codeMessage[0]);
               } break;
             case "LOGT":
-              logoutAccount($clientList[$ip][1], $sock);
+              logoutAccount($client->getName(), $sock);
               break;
             case "CGRP":
               //createGroup($codeMessage[0], $ip, $clients, $sock);
-              createGroup($codeMessage[0], $clientList[$user], $sock);
+              createGroup($codeMessage[0], $client, $sock);
               break;
             case "JGRP":
-              joinGroup($codeMessage[0], $ip, $clientList, $sock);
+              joinGroup($codeMessage[0], $client, $clientList, $sock);
               //joinGroup($codeMessage[0], $clients[$user], $sock);
               break;
             case "LGRP":
               //leaveGroup($codeMessage[0], $ip, $clients, $sock);
-              leaveGroup($codeMessage[0], $clientList[$user], $sock);
+              leaveGroup($codeMessage[0], $client, $clientList, $sock);
               break;
             case "GCHT":
               //sendChatMessage($codeMessage[0], $codeMessage[1], $ip, $clients, $sock);
-              sendChatMessage($codeMessage[0], $codeMessage[1], $clientList[$user], $sock);
+              sendChatMessage($codeMessage[0], $codeMessage[1], $client, $clientList, $sock);
               break;
             case "WBLN":
               //whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $ip, $clients, $sock);
-              whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList[$user], $sock);
+              whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList, $sock);
               break;
             case "UPWB":
               updateWhiteBoard($codeMessage[0], $codeMessage[1], $clientList, $sock);
