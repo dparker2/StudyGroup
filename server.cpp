@@ -25,7 +25,7 @@ server::server(QObject *parent) : QObject(parent)
 void server::initialize()
 {
     sg_socket.connect_server();
-    connect(&sg_socket, SGTCPSocket::new_message, incoming_message);
+    connect(&sg_socket, &SGTCPSocket::new_message, incoming_message);
 }
 
 void server::clear_memory()
@@ -68,14 +68,14 @@ bool server::request_response(QString outgoing_message, QString &response)
 
 void server::test(QString key, QString test_message)
 {
-    _object_dictionary[key]->enqueue(test_message);
+    //_object_dictionary[key]->enqueue(test_message);
 }
 
 /***
  * SLOTS
  */
 
-void server::incoming_message()
+void server::incoming_message(QString& object_name, QByteArray& work_message)
 {
     qDebug() << "INCOMGIN MESSAF";
 }

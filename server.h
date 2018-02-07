@@ -80,7 +80,7 @@ public slots:
     void send_card(QString&, QString&, int&, int&);
 
 private slots:
-    static void incoming_message();
+    static void incoming_message(QString& object_name, QByteArray& work_message);
 
 private:
     // New stuff

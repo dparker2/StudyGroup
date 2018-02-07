@@ -3,12 +3,12 @@
 #include <QDebug>
 #include <QCursor>
 
-Whiteboard::Whiteboard(QWidget *parent, QWidget* save_button) : QScrollArea(parent)
+Whiteboard::Whiteboard(QString name, QWidget *parent, QWidget* save_button) : QScrollArea(parent)
 {
     this->setStyleSheet("background-color: #ffffff");
     this->setFrameShadow(QFrame::Plain);
     this->setCursor(QCursor(Qt::CrossCursor));
-    drawing_board = new my_whiteboard;
+    drawing_board = new my_whiteboard(name);
     drawing_board->resize(2000, 1000);
     this->save_button = save_button;
     saved = true;
