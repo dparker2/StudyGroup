@@ -13,13 +13,6 @@ Flashcard::Flashcard(QWidget *parent) :
     ui->bottom_buttons->setCurrentIndex(0);
     ui->card_widget->setCurrentIndex(0);
 
-    front = new FCFront();
-    back = new FCBack();
-
-    ui->test->addWidget(front);
-    ui->test->setCurrentWidget(front);
-
-
 }
 Flashcard::~Flashcard()
 {
@@ -32,12 +25,15 @@ Flashcard::Flashcard(QString text1, QString text2, int num, QWidget *parent) :
 {
     ui->setupUi(this);
     if(text1 != nullptr)
-        front_text = text1;
+        //front_text = text1;
+        front = new FCFront(text1);
     cardNum = num;
     if(text2 != nullptr)
-        back_text = text2;
-    ui->back_label->setText(back_text);
-    ui->front_label->setText(front_text);
+        //back_text = text2;
+        back = new FCBack(text1);
+
+    //ui->back_label->setText(back_text);
+    //ui->front_label->setText(front_text);
     ui->card_widget->setCurrentIndex(0);
     ui->bottom_buttons->setCurrentIndex(0);
     ui->flip_card_btn->show();

@@ -1,7 +1,7 @@
 #include "fcback.h"
 #include "ui_fcback.h"
 
-FCBack::FCBack(QWidget *parent) :
+FCBack::FCBack(QString, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FCBack)
 {

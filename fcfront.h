@@ -12,10 +12,12 @@ class FCFront : public QWidget
     Q_OBJECT
 
 public:
-    explicit FCFront(QWidget *parent = 0);
+    explicit FCFront(QString, QWidget *parent = 0);
     ~FCFront();
 
     void edit_front(QString);
+    void display_front();
+    void display_edit_front();
 
 
 private:

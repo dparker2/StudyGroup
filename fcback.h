@@ -12,7 +12,7 @@ class FCBack : public QWidget
     Q_OBJECT
 
 public:
-    explicit FCBack(QWidget *parent = 0);
+    explicit FCBack(QString, QWidget *parent = 0);
     ~FCBack();
 
     void edit_back(QString);

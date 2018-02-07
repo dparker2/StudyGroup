@@ -81,7 +81,7 @@ void Deck::add_card()
 bool Deck::edit_card(int index, QString text, bool front_side)
 {
     // Is this a new card?
-    if((index > deck.size()) && (deck.at(index) != nullptr)) { // Editing existing card
+    if((index < deck.size()) && (deck.at(index) != nullptr)) { // Editing existing card
         if(front_side)
         {
             deck.at(index)->setFront(text);
