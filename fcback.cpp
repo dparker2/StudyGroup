@@ -14,5 +14,15 @@ FCBack::~FCBack()
 }
 
 void FCBack::edit_back(QString text){
-    ui->back_text->setText(text);
+    ui->back_text->setPlainText(text);
+    ui->back_label->setText(text);
 }
+// Displays back label
+void FCBack::display_back(){
+    ui->back_widget->setCurrentIndex(0);
+}
+// Displays the editing side of the back card
+void FCBack::display_edit_back(){
+    ui->back_widget->setCurrentIndex(1);
+}
+

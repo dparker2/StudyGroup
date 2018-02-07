@@ -14,7 +14,7 @@ FCFront::~FCFront()
     delete ui;
 }
 
-// Sets front label text box with flashcard text
+// Sets front label and text box with flashcard text
 void FCFront::edit_front(QString text){
     ui->front_text->setPlainText(text);
     ui->front_label->setText(text);

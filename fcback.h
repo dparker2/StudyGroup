@@ -16,6 +16,8 @@ public:
     ~FCBack();
 
     void edit_back(QString);
+    void display_back();
+    void display_edit_back();
 
 private:
     Ui::FCBack *ui;

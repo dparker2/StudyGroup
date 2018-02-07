@@ -25,7 +25,7 @@ void Deck::init_card(int index, QString text, bool front_side)
     else { // New card!
         qDebug() << "Deck size: "<< deck.size() <<endl;
         qDebug() << "Adding new card at" << index;
-        while(deck.size()-1 <= index) { // If the index we get is out of range, put nullptrs in until we get to where we want
+        while(deck.size()-1 < index) { // If the index we get is out of range, put nullptrs in until we get to where we want
             deck.append(nullptr);
         }
 
@@ -67,9 +67,9 @@ void Deck::add_card()
 {
     int new_index = -1;
     emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
-    init_card(new_index, "", true); // Make new card
+    init_card(0, "", true); // Make new card
 
-    ui->stackedWidget_card_edit->removeWidget(deck.at(current_index));
+    ui->stackedWidget_card_edit->removeWidget(deck.at(0));
     current_index = 0;
     ui->stackedWidget_card_edit->addWidget(deck.at(0));        // Hard coded index for testing card
     ui->stackedWidget_card_edit->setCurrentWidget(deck.at(0)); // ^
