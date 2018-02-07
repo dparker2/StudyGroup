@@ -65,23 +65,359 @@ QLabel {
       <property name="styleSheet">
        <string notr="true">background-color: none;</string>
       </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
       <property name="currentIndex">
        <number>1</number>
       </property>
       <widget class="StartPage" name="login_page"/>
       <widget class="QWidget" name="page_wrapper">
        <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="Header" name="header" native="true"/>
+         <widget class="QWidget" name="header" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <property name="topMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="left_buttons">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="create_button">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Trebuchet MS</family>
+                 <pointsize>16</pointsize>
+                 <weight>75</weight>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+background-color: rgb(30, 33, 36);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}</string>
+               </property>
+               <property name="text">
+                <string>Create Group</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="join_button">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Trebuchet MS</family>
+                 <pointsize>16</pointsize>
+                 <weight>75</weight>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+background-color: rgb(30, 33, 36);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}</string>
+               </property>
+               <property name="text">
+                <string> Join Group </string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="inner_label_logo">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>919</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="leave_button">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Trebuchet MS</family>
+               <pointsize>16</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+background-color: rgb(30, 33, 36);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:clicked {
+	background-color: rgb(0, 127, 177);
+}</string>
+             </property>
+             <property name="text">
+              <string>Leave Group</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="settings_button">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>50</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="acceptDrops">
+              <bool>false</bool>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+/*background-color: rgb(30, 33, 36);*/
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+background-image: center center;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}
+</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="logout_button">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Trebuchet MS</family>
+               <pointsize>14</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+background-color: rgb(30, 33, 36);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}</string>
+             </property>
+             <property name="text">
+              <string>Sign out</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
         <item>
          <widget class="QStackedWidget" name="page">
+          <property name="lineWidth">
+           <number>0</number>
+          </property>
           <widget class="CreateGroupPage" name="create_page"/>
-          <widget class="JoinGroupPage" name="join_page" native="true"/>
+          <widget class="JoinGroupPage" name="join_page"/>
          </widget>
         </item>
        </layout>
       </widget>
+      <widget class="SettingsPage" name="settings"/>
      </widget>
     </item>
    </layout>
@@ -93,7 +429,7 @@ QLabel {
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -107,12 +443,6 @@ QLabel {
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Header</class>
-   <extends>QWidget</extends>
-   <header>header.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>JoinGroupPage</class>
    <extends>QWidget</extends>
    <header>joingrouppage.h</header>
@@ -122,6 +452,12 @@ QLabel {
    <class>CreateGroupPage</class>
    <extends>QWidget</extends>
    <header>creategrouppage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SettingsPage</class>
+   <extends>QWidget</extends>
+   <header>settingspage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -18,12 +18,12 @@ CreateGroupPage::~CreateGroupPage()
 void CreateGroupPage::on_create_group_button_released()
 {
     QString group_id = ui->create_group_lineEdit->text();
-    QString full_string = "CGRP" + group_id;
+    QString full_string = server::GROUP_CREATE + group_id;
     if(server::request_response(full_string, group_id))  // Group id replaced with the response (group name + code)
     {
         GroupWidget* group_widget = new GroupWidget(group_id);
         ui->create_group_lineEdit->setText("");
-        emit group_joined(group_widget);
+        emit group_joined(group_widget, group_id);
 
         /*ui->back_to_group_button->setVisible(true);
         ui->back_to_group_button->setText(group_id);

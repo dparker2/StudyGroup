@@ -1,33 +1,32 @@
-#ifndef CARDWIDGET_H
-#define CARDWIDGET_H
+#ifndef DECK_H
+#define DECK_H
 
-#include <QObject>
 #include <QWidget>
-#include <QList>
-
 #include "flashcard.h"
-//#include "server.h"
 
 namespace Ui {
-class CardWidget;
+class Deck;
 }
 
-class CardWidget : public QWidget
+class Deck : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit CardWidget(QWidget *parent = nullptr);
+    explicit Deck(QWidget *parent = 0);
+    ~Deck();
+
     void deleteCard(int index);
-    void setCard(int index, QString text, bool front_side);
-    void on_addCardBtn_clicked();
-    void setQuiz(bool);
+    void add_card();
+    void init_card(int index, QString text, bool front_side);
+    //void set_new_card();
+    //void set_existing_card()
+
+    void set_quiz(bool);
     int getDeckSize();
     int get_card_number();
     Flashcard* getCard(int index);
     QString get_card_text();
-
-
-
 
 signals:
     void set_card(QString, int&, int);
@@ -44,8 +43,8 @@ private slots:
 
 private:
 
-    void editCard(int index, QString text, bool front_side);
-    Ui::CardWidget *ui;
+    bool edit_card(int index, QString text, bool front_side);
+    Ui::Deck *ui;
     QVBoxLayout *layout;
     QList<Flashcard*> deck;
     Flashcard* flashcard;
@@ -53,4 +52,4 @@ private:
     bool quiz;
 };
 
-#endif // CARDWIDGET_H
+#endif // DECK_H

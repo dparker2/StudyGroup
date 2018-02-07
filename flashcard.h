@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QHBoxLayout>
+#include "fcfront.h"
+#include "fcback.h"
 
 namespace Ui {
 class Flashcard;
@@ -43,9 +45,12 @@ private slots:
 
 private:
     Ui::Flashcard *ui;
+    FCFront* front;
+    FCBack* back;
     QString back_text;
     QString front_text;
     int cardNum;
+    int current_side;
 };
 
 #endif // FLASHCARD_H

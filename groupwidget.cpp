@@ -27,14 +27,14 @@ GroupWidget::GroupWidget(QString id, QWidget *parent) :
     whiteboard->set_pen_size(pen_string.toInt());
     //ui->study_mode->setStyleSheet("background-color: #ffffff;");
     // End set whiteboard
-
+*/
     // Flaschard
 
-    flashcard = new CardWidget();
-    ui->study_mode->insertWidget(1, flashcard);
+    deck = new Deck();
+    ui->study_mode->insertWidget(1, deck);
     setFlashcardUI();
 
-    //connect(flashcard, SIGNAL(set_card(QString,int&,int)), this, SLOT(set_card(QString,int&,int)));*/
+    connect(deck, SIGNAL(set_card(QString,int&,int)), this, SLOT(set_card(QString,int&,int)));
 
 
 }
@@ -158,13 +158,13 @@ void GroupWidget::on_comboBox_pen_size_currentTextChanged(const QString &pen_siz
 }
 
 void GroupWidget::setFlashcardUI(){
-    //flashcard->card_label->hide();
+    //deck->card_label->hide();
 }
 
 void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
 {
     if(index){
-        ui->study_mode->setCurrentWidget(flashcard);
+        ui->study_mode->setCurrentWidget(deck);
         ui->study_menu->setCurrentIndex(1);
     }
     else{
@@ -175,7 +175,7 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
 
 void GroupWidget::on_add_card_button_clicked()
 {
-    flashcard->on_addCardBtn_clicked();
+    deck->add_card();
 }
 
 void GroupWidget::set_card(QString front, int& card_num, int side){
@@ -186,7 +186,7 @@ void GroupWidget::set_card(QString front, int& card_num, int side){
 
 void GroupWidget::incoming_card(int card_index, QString text, bool front)
 {
-    flashcard->setCard(card_index, text, front); // Will edit or create new card
+    deck->init_card(card_index, text, front); // Will edit or create new card
 }
 
 void GroupWidget::on_pushButton_clicked()
@@ -198,5 +198,5 @@ void GroupWidget::on_pushButton_clicked()
 
 void GroupWidget::on_quiz_button_toggled(bool checked)
 {
-    flashcard->setQuiz(checked);
+    deck->set_quiz(checked);
 }

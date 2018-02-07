@@ -181,7 +181,7 @@ void SGTCPSocket::read_socket_send_signal()
 
         /*if (server_code == "USCH") // User List has CHANGED
         {
-            //emit users_changed();
+            // Notify the relevant group widget
         }
         else if (server_code == "NUSR") // New User code
         {
