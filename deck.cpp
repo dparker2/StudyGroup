@@ -25,10 +25,9 @@ void Deck::init_card(int index, QString text, bool front_side)
     else { // New card!
         qDebug() << "Deck size: "<< deck.size() <<endl;
         qDebug() << "Adding new card at" << index;
-        while(deck.size()-1 < index) { // If the index we get is out of range, put nullptrs in until we get to where we want
+        while((deck.size()-1) < index) { // If the index we get is out of range, put nullptrs in until we get to where we want
             deck.append(nullptr);
         }
-
         Flashcard* new_card;
         if(front_side) {
             new_card = new Flashcard(text, "", index);
@@ -38,7 +37,7 @@ void Deck::init_card(int index, QString text, bool front_side)
         }
 
         connect(new_card, SIGNAL(check_set_card(Flashcard*,QString&,int&,int)), this, SLOT(check_set_card(Flashcard*,QString&,int&,int)));
-        deck[++index] = new_card; // The above loop guarantees we are in the proper spot to append at the right index
+        deck[index] = new_card; // The above loop guarantees we are in the proper spot to append at the right index
                                   // even if the index was too high at first
         if(deck.size() > 1)
         {
@@ -65,6 +64,7 @@ void Deck::deleteCard(int index){
 
 void Deck::add_card()
 {
+    // Hard code index,**** CHANGE BACK WHEN DONE****
     int new_index = -1;
     emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
     init_card(0, "", true); // Make new card
