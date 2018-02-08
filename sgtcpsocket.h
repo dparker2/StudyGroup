@@ -13,6 +13,7 @@ public:
     ~SGTCPSocket();
     void connect_server();
     void write(QString message);
+    void write(QByteArray message);
     bool read_socket_helper(QString& out_message);
 
 signals:

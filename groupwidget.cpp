@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QLine>
 #include <QVBoxLayout>
+#include <whiteboard_wrapper.h>
 
 GroupWidget::GroupWidget(QString id, QWidget *parent) :
     QWidget(parent),
@@ -13,7 +14,7 @@ GroupWidget::GroupWidget(QString id, QWidget *parent) :
     group_id = id;
 
     // Begin set whiteboard
-    whiteboard = new Whiteboard(group_id + " whiteboard", nullptr, ui->save_whiteboard_button);
+    whiteboard = new Whiteboard_Wrapper(group_id + " whiteboard");
 
     //qDebug() << connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint,QColor,int)), this, SLOT(send_line_drawn(QPoint,QPoint,QColor,int)));
     //qDebug() << connect(this, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), whiteboard, SLOT(draw_line(QPoint,QPoint,QColor,int)));
@@ -22,9 +23,9 @@ GroupWidget::GroupWidget(QString id, QWidget *parent) :
     ui->study_mode->setCurrentWidget(whiteboard);
     ui->study_menu->setCurrentIndex(0);
     whiteboard->set_pen_color(QColor("#000"));
-    QString pen_string = ui->comboBox_pen_size->currentText();
-    pen_string.chop(2);
-    whiteboard->set_pen_size(pen_string.toInt());
+    //QString pen_string = ui->comboBox_pen_size->currentText();
+    //pen_string.chop(2);
+    //whiteboard->set_pen_size(pen_string.toInt());
     //ui->study_mode->setStyleSheet("background-color: #ffffff;");
     // End set whiteboard
     // Flaschard
@@ -49,7 +50,7 @@ QString GroupWidget::get_groupID()
     return group_id;
 }
 
-Whiteboard* GroupWidget::whiteboard_ptr()
+Whiteboard_Wrapper* GroupWidget::whiteboard_ptr()
 {
     return whiteboard;
 }
@@ -102,7 +103,7 @@ void GroupWidget::set_groupID(QString &groupID)
 
 void GroupWidget::send_line_drawn(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos, const QColor& pen_color, const int& pen_size)
 {
-    ui->save_whiteboard_button->setEnabled(true);
+    //ui->save_whiteboard_button->setEnabled(true);
     emit line_drawn(group_id, first_mouse_pos, second_mouse_pos, pen_color, pen_size);
 }
 
@@ -126,7 +127,7 @@ void GroupWidget::on_save_whiteboard_button_released()
 {
     qDebug() << "saving_whiteboard";
     emit save_whiteboard(group_id, whiteboard->whiteboard_ba());
-    ui->save_whiteboard_button->setEnabled(false);
+    //ui->save_whiteboard_button->setEnabled(false);
 }
 
 void GroupWidget::on_comboBox_pen_color_currentTextChanged(const QString &pen_color)

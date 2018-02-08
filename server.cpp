@@ -72,7 +72,19 @@ void server::remove(SGWidget *object_pointer)
 
 void server::send(const QString &outgoing_message)
 {
+    //qDebug() << "server sending" << outgoing_message;
     sg_socket.write(outgoing_message);
+}
+
+void server::send(const QByteArray &outgoing_message)
+{
+    sg_socket.write(outgoing_message);
+}
+
+void server::send(const char *outgoing_message)
+{
+    qDebug() << "server sending" << outgoing_message;
+    sg_socket.write(QString(outgoing_message));
 }
 
 bool server::request_response(QString outgoing_message, QString &response)
@@ -92,7 +104,13 @@ void server::test(QString key, QString test_message)
 
 void server::incoming_message(QString& object_name, QByteArray& work_message)
 {
-    qDebug() << "INCOMGIN MESSAF";
+    qDebug() << "Object name:" << object_name;
+    qDebug() << "Message:" << work_message;
+    qDebug() << "\n";
+    if (_object_dictionary.contains(object_name) && (_object_dictionary[object_name] != nullptr))
+    {
+        _object_dictionary[object_name]->enqueue(work_message);
+    }
 }
 
 /*********************************************************************************/

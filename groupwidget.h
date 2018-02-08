@@ -9,7 +9,7 @@
 #include <QPushButton>
 #include <QDate>
 
-#include "whiteboard.h"
+#include "whiteboard_old.h"
 #include "deck.h"
 
 namespace Ui {
@@ -22,7 +22,7 @@ class GroupWidget : public QWidget
 public:
     explicit GroupWidget(QString id, QWidget *parent = nullptr);
     QString get_groupID();
-    Whiteboard* whiteboard_ptr();
+    Whiteboard_Wrapper* whiteboard_ptr();
 
 signals:
     void send_chat(QString& groupID, QString& message);
@@ -65,7 +65,7 @@ private slots:
 
 private:
     Ui::GroupWidget* ui;
-    Whiteboard* whiteboard;
+    Whiteboard_Wrapper* whiteboard;
     Deck* deck;
     QString group_id;
 

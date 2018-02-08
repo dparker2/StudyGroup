@@ -42,6 +42,13 @@ void SGTCPSocket::write(QString message)
     my_tcp_socket->write(message.toLatin1());
 }
 
+void SGTCPSocket::write(QByteArray message)
+{
+    QByteArray message_length = QByteArray::number(message.size());
+    message = message.prepend(message_length.rightJustified(5, '0', true));
+    my_tcp_socket->write(message);
+}
+
 void SGTCPSocket::error(QAbstractSocket::SocketError err)
 {
     qDebug() << my_tcp_socket->errorString();
@@ -160,6 +167,7 @@ void SGTCPSocket::read_socket_send_signal()
         {
             // Set the success flag and message
             success_flag = true;
+            message_ba.remove(0, 4);
             success_message = message_ba;
             qDebug() << "Server message: " << success_message;
         }
@@ -167,6 +175,7 @@ void SGTCPSocket::read_socket_send_signal()
         {
             // Set the fail flag
             fail_flag = true;
+            message_ba.remove(0, 4);
             // Display the failure message to user
             QMessageBox timeout_box;
             timeout_box.setText("Error");

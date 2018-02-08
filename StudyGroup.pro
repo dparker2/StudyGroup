@@ -29,8 +29,6 @@ SOURCES += \
     user_account_check.cpp \
     server.cpp \
     groupwidget.cpp \
-    whiteboard.cpp \
-    whiteboard_p.cpp \
     flashcard.cpp \
     startpage.cpp \
     joingrouppage.cpp \
@@ -41,15 +39,15 @@ SOURCES += \
     groupmainpage.cpp \
     deck.cpp \
     fcfront.cpp \
-    fcback.cpp
+    fcback.cpp \
+    whiteboard_wrapper.cpp \
+    whiteboard.cpp
 
 HEADERS += \
         mainwindow.h \
     user_account_check.h \
     server.h \
     groupwidget.h \
-    whiteboard.h \
-    whiteboard_p.h\
     flashcard.h \
     startpage.h \
     joingrouppage.h \
@@ -60,7 +58,9 @@ HEADERS += \
     groupmainpage.h \
     deck.h \
     fcfront.h \
-    fcback.h
+    fcback.h \
+    whiteboard_wrapper.h \
+    whiteboard.h
 
 FORMS += \
         mainwindow.ui \
@@ -72,7 +72,8 @@ FORMS += \
     settingspage.ui \
     deck.ui \
     fcfront.ui \
-    fcback.ui
+    fcback.ui \
+    whiteboard.ui
 
 RESOURCES += \
     resource.qrc
