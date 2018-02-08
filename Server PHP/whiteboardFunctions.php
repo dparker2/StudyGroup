@@ -18,7 +18,7 @@ function whiteboardLine($groupID, $point1, $point2, $clientList, $sock) {
     $keyIP = $rowIP[0];                         //Stores IP for socket access
     $keySock = $clientList[$keyIP]->getSocket();//Uses IP to obtain socket that is going to be written to
     if ($keySock != $sock) {                    // Makes sure doesn't write back to original socket.
-      $message = "WBLN$point1 $point2";
+      $message = "WBLN$groupID $point1 $point2";
       sendMessage($message, $keySock);
     }//end if statement
   }  //end while Loops
@@ -27,10 +27,10 @@ function whiteboardLine($groupID, $point1, $point2, $clientList, $sock) {
 
 //UPDATE WHITEBOARD FUNCTION
 //Takes in the ipaddress requesting current whiteboard and returns whiteboard to update.
-function updateWhiteBoard($ipaddress, $wbstring, $clientList, $sock) {
+function updateWhiteBoard($ipaddress, $groupID, $wbstring, $clientList, $sock) {
   echo "Sending WB Update to new member...\n";
   $requestingClient = $clientList[$ipaddress]->getSocket();
-  $message = "WBUP$wbstring";
+  $message = "WBUP$groupID $wbstring";
   sendMessage($message, $requestingClient);
 }
 

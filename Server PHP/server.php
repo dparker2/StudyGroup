@@ -149,7 +149,7 @@ while(true) {
             echo "THIS IS THE MESSAGE $code: $message \n"; }
 
           $limit = 3;
-          if ($code == "GCHT" || $code == "UPWB" || $code == "SVWB") {
+          if ($code == "GCHT" || $code == "SVWB") {
             $limit = 2;
           }
           $codeMessage = explode(" ", $message, $limit);  //Puts message into array
@@ -181,7 +181,7 @@ while(true) {
               whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList, $sock);
               break;
             case "UPWB":
-              updateWhiteBoard($codeMessage[0], $codeMessage[1], $clientList, $sock);
+              updateWhiteBoard($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList, $sock);
               break;
             case "SVWB":
               saveWhiteBoard($codeMessage[0], $codeMessage[1], $sock);

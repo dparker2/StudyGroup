@@ -99,7 +99,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
           if($wbstring == "" || $wbstring =="placeholder")
             echo "DEBUG: No whiteboard in Database or placeholder, nothing to send...\n";
           else {
-            $message = "WBUP$wbstring";
+            $message = "WBUP$groupID $wbstring";
             echo "DEBUG: Whiteboard found in Database, updating for first user...\n";
             sendMessage($message, $sock);
           } // closes line 89 else statement
@@ -110,7 +110,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
           $object = getObjString($connection, $selectExistingMember);
           $existingMember = (string)$object->ipAddress;
           $existingSocket = $clientList[$existingMember]->getSocket();
-          $message = "NUWB$ip";
+          $message = "NUWB$groupID $ip";
           sendMessage($message, $existingSocket);
         } //closes line 95 else statement
       }   //closes line 74 else statement
@@ -153,11 +153,13 @@ function updateGroupList($connection, $clientList, $groupID)
   while($rowIP = mysqli_fetch_array($ipList)) {  //Loops through each member one at a time.
     $keyIP = $rowIP[0];                          //Stores one IP from current group list
     $keySock = $clientList[$keyIP]->getSocket(); //Stores socket to write to.
-    fwrite($keySock, "00004USCH");               //Notifies client that wave of new users will be updated.
+    $message = "USCH"."$groupID";
+    sendMessage($message, $keySock);
+             //Notifies client that wave of new users will be updated.
     $resultUsers = mysqli_query($connection, $returnUserList); //Obtains userList to write to member
     while($row=mysqli_fetch_array($resultUsers)) {             //Loops through each user and writes to member above.
       $name = $row[0];                                         //Stores one member to $name
-      $message = "NUSR$name";                                  //Appends CODE NUSR to username so client can update.
+      $message = "NUSR"."$groupID $name";                                  //Appends CODE NUSR to username so client can update.
       sendMessage($message, $keySock);
     } //closes for/while loop
   }   //end while Loops
@@ -171,7 +173,7 @@ function sendChatMessage($groupID, $message, $user, $clientList, $sock)
   fwrite($sock, "00004SUCC");
   $username = $user->getName();
   $timestamp = date("Y-m-d H:i:s");
-  $fullmessage = "$username $timestamp $message";      //Full message that include username timestamp and the message
+  $fullmessage = "$groupID $username $timestamp $message";      //Full message that include username timestamp and the message
   echo "DEBUG: Sending Message... \n";
   echo "DEBUG: This is the full message $fullmessage \n";
 
@@ -204,7 +206,7 @@ function updateGroupChat($connection, $groupID, $sock)
 
   //Sends chat log to requested socket
   while($row = mysqli_fetch_array($messageList)) {
-    $messages = "$row[0] $row[1] $row[2]"; //Stores user: clock: message into variable
+    $messages = "$groupID $row[0] $row[1] $row[2]"; //Stores user: clock: message into variable
     $message = "NCHT$messages";            //Appends CODE NCHT for client use
     sendMessage($message, $sock);
   } //closes while loop
