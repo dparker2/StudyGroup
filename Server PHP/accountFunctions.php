@@ -23,23 +23,17 @@ function createAccount($email, $username, $password, $sock) {
 
   if (($username_exists = checkExists($connection, $check_groupID)) > 0) { //returns failcase of username existing.
     $message = "FAILUsername exists, please try again.";
-    echo "Debug: $message";
-    $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-    fwrite($sock, "{$messageSize}{$message}");
+    sendMessage($message, $socket);
   }
   elseif (($email_exists = checkExists($connection, $check_groupID)) > 0) {//returns failcaise of email existing.
     $message = "FAILEmail exists, please try again.";
-    echo "Debug: $message";
-    $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-    fwrite($sock, "{$messageSize}{$message}");
+    sendMessage($message, $socket);
   }
   else {
     if (($result = mysqli_query($connection, $insert)) === TRUE){
       $message = "SUCCSuccess! User Account created.";
-      echo "Debug: $message";
+      sendMessage($message, $socket);
       sendRegEmail($email);
-      $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-      fwrite($sock, "{$messageSize}{$message}");
     }
   }
   disconnect($connection);
@@ -63,26 +57,20 @@ function loginAccount($username, $password, $sock) {
           $obj = $resultEmail->fetch_object();
           $returnEmail = $obj->Email;
           $message = "SUCC{$returnEmail}"; //Successful if matches and writes back email belonging to user for UI
-          echo "Debug: Returning $message to client \n";
-          $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-          fwrite($sock, "{$messageSize}{$message}");
+          sendMessage($message, $socket);
           $return_bool = true;
           mysqli_query($connection, $change_online);
         } //Closes password check.
         else{
           $message = "FAILPassword incorrect, please try again.";
-          echo "Debug: $message";
-          $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-          fwrite($sock, "{$messageSize}{$message}");
+          sendMessage($message, $socket);
         }
         mysqli_free_result($resultPass);
       }//Closes Password Access
     } //Closes Username Check
     else{
       $message = "FAILUser does not exist, please try again.";
-      echo "Debug: $message";
-      $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-      fwrite($sock, "{$messageSize}{$message}");
+      sendMessage($message, $socket);
     }
 
     mysqli_free_result($resultUser);
@@ -159,9 +147,7 @@ function rememberUsername ($email, $sock) {
   $obj = $resultUser->fetch_object();
   $returnUser = $obj->Username; // returnUser == return value of find_user
   $message = "SUCC{$returnUser}";
-  echo "Debug: Returning $message to client \n";
-  $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //might need tuning
-  fwrite($sock, "{$messageSize}{$message}"); //writes to the socket
+  sendMessage($message, $socket);
 
   disconnect($connection);
   }
@@ -177,9 +163,7 @@ function rememberPassword ($username, $email, $sock) {
   $returnPass = $obj->Pass; // returnUser == return value of find_Pass
   $message = "SUCC";
   recPWEmail($email, $username, $returnPass);
-  echo "Debug: Returning $message to client \n";
-  $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT); //might need tuning
-  fwrite($sock, "{$messageSize}{$message}"); //writes to the socket
+  sendMessage($message, $socket);
 
   disconnect($connection);
 }
