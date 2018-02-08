@@ -3,6 +3,7 @@ include_once 'db_credentials.php';
 include_once 'utilityFunctions.php';
 include_once 'flashCardFunctions.php';
 date_default_timezone_set('UTC');
+//SUP DAWG
 /* Group Functions
   function createGroup($groupname, $user, $sock)
   function joinGroup($groupID, $user, $clientList, $sock)
