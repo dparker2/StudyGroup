@@ -11,26 +11,26 @@ function checkExists($connection, $query) {
   }
 }
 
-function connect() {
-  $newConnect = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
-  if ($newConnect->connect_error)
-    die("Connection failed: " . $connect->connect_error);
+function connectGroup() {
+  $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
+  if ($connection->connect_error)
+    die("Connection failed: " . $connection->connect_error);
   else
     echo "Connected to database \n";
-  return $newConnect;
+  return $connection;
 }
 
-function connect2() {
-  $newConnect = new mysqli(DB2_Server, DB2_User, DB2_Pass, DB2_Name);
-  if ($newConnect->connect_error)
-    die("Connection failed: " . $connect->connect_error);
+function connectAccount() {
+  $connection = new mysqli(DB2_Server, DB2_User, DB2_Pass, DB2_Name);
+  if ($connection->connect_error)
+    die("Connection failed: " . $connection->connect_error);
   else
     echo "Connected to database \n";
-  return $newConnect;
+  return $connection;
 }
 
-function disconnect($currConnect) {
-  if($currConnect->close()) {
+function disconnect($connection) {
+  if($connection->close()) {
     echo "Database Closed \n";
   }
 }
