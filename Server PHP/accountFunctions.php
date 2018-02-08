@@ -21,11 +21,11 @@ function createAccount($email, $username, $password, $sock) {
   //Insert Query
   $insert = "INSERT INTO UserInfo (Username, Pass, Email) VALUES ('$username', '$password', '$email')";
 
-  if (($username_exists = checkExists($connection, $check_groupID)) > 0) { //returns failcase of username existing.
+  if (($username_exists = checkExists($connection, $check_username)) > 0) { //returns failcase of username existing.
     $message = "FAILUsername exists, please try again.";
     sendMessage($message, $socket);
   }
-  elseif (($email_exists = checkExists($connection, $check_groupID)) > 0) {//returns failcaise of email existing.
+  elseif (($email_exists = checkExists($connection, $check_email)) > 0) {//returns failcaise of email existing.
     $message = "FAILEmail exists, please try again.";
     sendMessage($message, $socket);
   }
@@ -57,7 +57,7 @@ function loginAccount($username, $password, $sock) {
 		  if($resultOnline = mysqli_query($connection, $check_online)) {
 		  	  $obj = $resultOnline->fetch_object();
 			  if ($obj->UserStatus == 'Online'){
-			    $message = "FAIL Account is already online";
+			    $message = "FAILAccount is already online";
 				sendMessage($message, $socket);
 				$return_bool = false;
 				return $return_bool;
