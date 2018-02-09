@@ -25,6 +25,7 @@ public:
 
 protected:
     QQueue<QByteArray> _work_queue;
+    QList<QByteArray> split(QByteArray& message, int max_split = 0);
 
 signals:
 

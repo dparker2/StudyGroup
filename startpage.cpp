@@ -46,6 +46,7 @@ void StartPage::on_signin_button_clicked()
         // Now logged in!
         ui->lineEdit_username->setText("");
         ui->lineEdit_password->setText("");
+        qDebug() << "Email:" << email;
         // Set username and password
         //user_info->setUsername(username);                     // FIX THESE WHEN USER CLASS IS DONE
         //user_info->setPassword(password);

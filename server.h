@@ -50,6 +50,8 @@ public:
     static void remove(SGWidget* object_pointer);  // Removes all keys with that value
     static void add(QString key, SGWidget* value);  // Adds key value to dict, overwriting if key already exists.
     static void send(const QString& outgoing_message);
+    static void send(const QByteArray& outgoing_message);
+    static void send(const char* outgoing_message);
     static bool request_response(QString outgoing_message, QString& response);
     static void test(QString key, QString test_message);
     //
