@@ -73,7 +73,7 @@ void Whiteboard::WBLN(QByteArray& line_info)
 void Whiteboard::NUWB(QByteArray& user_ip)
 {
     QByteArray send_wb;
-    send_wb += server::WHITEBOARD_UPDATE + user_ip + ' ';
+    send_wb += server::WHITEBOARD_UPDATE + user_ip + ' ' + group_id + ' ';
     send_wb += *get_whiteboard();
     qDebug() << send_wb;
     server::send(send_wb);
