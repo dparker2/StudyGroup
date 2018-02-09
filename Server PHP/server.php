@@ -6,8 +6,8 @@ include_once 'whiteboardFunctions.php';
 include_once 'utilityFunctions.php';
 
 
-$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
-//$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
+//$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
+$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
 //echo ++$argv[1];
 //$_ = $_SERVER['_'];;
 echo "This is the server socket: ";
@@ -31,24 +31,14 @@ if ($server[0] === false)
 
 
 //Updates all users to offline on server startup in case of crash.
-$dbAccount =  connectAccount();
-$makeoffline = "UPDATE UserInfo
-	   SET UserStatus = 'Offline'
-	   WHERE UserStatus = 'Online'";
-mysqli_query($dbAccount, $makeoffline);
-disconnet($dbAccount);
+echo "Resetting all Online Users... \n";
+clearAllOnlineStatus();
 
 //Deletes all users in groups just in case of crash.
 //Insures that no duplicate users would be printed
-$dbGroup = connectGroup();
-$countGroups = "SELECT TABLE_NAME
-              FROM information_schema.columns
-              where table_schema = 'StudyGroup'
-              and column_name = 'userList';";
-$numGroups = getNumRows($dbGroup, $countGroups);
-echo "Number of groups in database: $numGroups \n";
-clearGroupMembers($dbGroup, $countGroups);
-disconnect($dbGroup);
+
+echo "Clearing Group Members...\n";
+//clearGroupMembers();
 
 
 //Client streaming starts
@@ -117,12 +107,17 @@ while(true) {
         {
             echo "DATA DOES NOT EXIST, i.e. client disconnect, it will close their socket\n";
 
-            echo "Here it prints out the array it's going to kill/the one that disconnected\n";
-            var_dump(array_search($sock, getSocketList($clientList), true));
-
+            /*echo "Here it prints out the array it's going to kill/the one that disconnected\n";
+            var_dump(array_search($sock, getSocketList($clientList), true));*/
+            $socketDC = stream_socket_get_name($sock, true);
+            $username = $clientList[$socketDC]->getName();
+            echo "About to delete this IP: $socketDC \n";
+            echo "Setting User that just DC'ed to offline \n";
+            clearOnlineStatus($username);
+            //clearFromGroup($username);
             echo "Unsetting/deleting the socket that just left from client array then closes it\n";
-            echo "Should be looking for: \n";
-            var_dump($sock);
+            /*echo "Should be looking for: \n";
+            var_dump($sock);*/
             unset($clientList[ array_search($sock, getSocketList($clientList), true)]);
             @fclose($sock); //closes the socket. @ supresses error messages
             echo "A client disconnected. Now there are total ". count($clientList) . " clients.\n";

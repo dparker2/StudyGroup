@@ -15,7 +15,7 @@ date_default_timezone_set('UTC');
 //Function creates group by comparing groupname to existing groups on database, if none found it will create a new group with the group name appended with a random 4 digits after, and sets the creator as Admin of the group
 function createGroup($groupname, $user, $sock)
 {
-  $connection = connect();
+  $connection = connectGroup();
   $username = $user->getName();
   $ip = $user->getIP();
   $rand4 = rand(1000, 9999);
@@ -56,7 +56,7 @@ function createGroup($groupname, $user, $sock)
 //Function inserts user into group table and updates chat, whiteboard, flashcards, and userlist.
 function joinGroup($groupID, $user, $clientList, $sock)
 {
-  $connection = connect();        //Connect to group database.
+  $connection = connectGroup();        //Connect to group database.
   $username = $user->getName();   //Gets username from object and assigns to username
   $ip = $user->getIP();           //Get ip from object and assigns to ip
 
@@ -127,7 +127,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
 //Deletes user from group table and updates rest of members with udpated user list.
 function leaveGroup($groupID, $user, $clientList, $sock)
 {
-  $connection = connect();
+  $connection = connectGroup();
   $username = $user->getName();
   $leaveGroup = "DELETE FROM $groupID
     WHERE userList = '$username'";
@@ -168,7 +168,7 @@ function updateGroupList($connection, $clientList, $groupID)
 //Append username and timestamp to user message and returns to each member in group.
 function sendChatMessage($groupID, $message, $user, $clientList, $sock)
 {
-  $connection = connect();
+  $connection = connectGroup();
   $escMessage = mysqli_escape_string($connection, $message);
   fwrite($sock, "00004SUCC");
   $username = $user->getName();

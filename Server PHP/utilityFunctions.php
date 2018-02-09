@@ -35,13 +35,52 @@ function disconnect($connection) {
   }
 }
 
-function clearGroupMembers($connection, $countGroups) {
+function clearGroupMembers() {
+  $connection = connectGroup();
+  $countGroups = "SELECT TABLE_NAME
+                FROM information_schema.columns
+                where table_schema = 'StudyGroup'
+                and column_name = 'userList';";
   $groupsWithUsers = mysqli_query($connection, $countGroups);
   while ($gArray = mysqli_fetch_array($groupsWithUsers)) {
     $gName = $gArray[0];
     $removeNULL = "DELETE FROM $gName WHERE userList IS NOT NULL";
     mysqli_query($connection, $removeNULL);
   }
+  disconnect($connection);
+}
+
+function clearFromGroup($username) {
+  $connection = connectGroup();
+  $countGroups = "SELECT TABLE_NAME
+                FROM information_schema.columns
+                where table_schema = 'StudyGroup'
+                and column_name = 'userList' IS NOT NULL;";
+  $groupsWithUsers = mysqli_query($connection, $countGroups);
+  while ($gArray = mysqli_fetch_array($groupsWithUsers)) {
+    $gName = $gArray[0];
+    $removeUser = "DELETE FROM $gName WHERE userList = '$username'";
+    mysqli_query($connection, $removeUser);
+  }
+  disconnect($connection);
+}
+
+function clearAllOnlineStatus() {
+  $dbAccount = connectAccount();
+  $makeoffline = "UPDATE UserInfo
+                  SET UserStatus = 'Offline'
+                  WHERE UserStatus = 'Online'";
+  mysqli_query($dbAccount, $makeoffline);
+  disconnect($dbAccount);
+}
+
+function clearOnlineStatus($username) {
+  $dbAccount = connectAccount();
+  $makeoffline = "UPDATE UserInfo
+                  SET UserStatus = 'Offline'
+                  WHERE UserStatus = 'Online' AND Username = '$username'";
+  mysqli_query($dbAccount, $makeoffline);
+  disconnect($dbAccount);
 }
 
 function getNumRows($connection, $query) {
