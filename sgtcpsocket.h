@@ -18,7 +18,7 @@ public:
 signals:
     void disconnected();
     void connected();
-    void new_message();
+    void new_message(QString& object_name, QByteArray& full_message);
 
 public slots:
     void reconnect_socket(QAbstractSocket::SocketState);
@@ -26,6 +26,8 @@ public slots:
     void error(QAbstractSocket::SocketError);
 
 private:
+    QByteArray single_message();
+    QString get_object_name(QByteArray& message);
 
     QTcpSocket* my_tcp_socket;
     bool success_flag; // ***Always set this to 0 before checking, ONLY to be set to 1 by the read_socket_send_signal() function.

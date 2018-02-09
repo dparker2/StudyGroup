@@ -14,7 +14,7 @@ SGWidget::~SGWidget()
     server::remove(this);
 }
 
-void SGWidget::enqueue(QString work_message)
+void SGWidget::enqueue(QByteArray work_message)
 {
     _work_queue.push_back(work_message);
 }

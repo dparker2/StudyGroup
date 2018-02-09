@@ -54,6 +54,22 @@ public:
     static void test(QString key, QString test_message);
     //
 
+    /* Server codes! */
+    static const QString CREATE_ACCOUNT;
+    static const QString LOGIN;
+    static const QString LOGOUT;
+    static const QString RECOVER_USERNAME;
+    static const QString RECOVER_PASSWORD;
+    static const QString GROUP_CREATE;
+    static const QString GROUP_JOIN;
+    static const QString GROUP_LEAVE;
+    static const QString CHAT_SEND;
+    static const QString WHITEBOARD_DRAW;
+    static const QString WHITEBOARD_UPDATE;
+    static const QString WHITEBOARD_SAVE;
+    static const QString FLASHCARD_SET_FRONT;
+    static const QString FLASHCARD_SET_BACK;
+
 protected:
     explicit server(QObject *parent = nullptr);  // Protect the constructor to prevent class instantiation
 
@@ -80,7 +96,7 @@ public slots:
     void send_card(QString&, QString&, int&, int&);
 
 private slots:
-    static void incoming_message();
+    static void incoming_message(QString& object_name, QByteArray& work_message);
 
 private:
     // New stuff

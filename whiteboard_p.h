@@ -7,11 +7,14 @@
 #include <QQueue>
 #include <QTimer>
 
-class my_whiteboard : public QWidget
+#include "sgwidget.h"
+#include "server.h"
+
+class my_whiteboard : public SGWidget
 {
     Q_OBJECT
 public:
-    explicit my_whiteboard(QWidget* parent = nullptr);
+    explicit my_whiteboard(QString name, QWidget* parent = nullptr);
     void draw_line(const QPoint& point1, const QPoint& point2, const QColor& pen_color_arg, const int& pen_size_arg);
     QByteArray* get_whiteboard();
     void update_whiteboard(QByteArray*);
@@ -32,6 +35,7 @@ protected:
 
 private slots:
     void process_paints();
+    void do_work();
 
 private:
     // mouse_pos_queue [ ( (point1, point2), (color, size) ), ]

@@ -20,7 +20,7 @@ class GroupWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GroupWidget(QWidget *parent = nullptr);
+    explicit GroupWidget(QString id, QWidget *parent = nullptr);
     QString get_groupID();
     Whiteboard* whiteboard_ptr();
 

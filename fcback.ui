@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QStackedWidget" name="back_widget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="Back1">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -30,7 +30,7 @@
           </font>
          </property>
          <property name="text">
-          <string>back of card label</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -57,7 +57,11 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QTextEdit" name="back_text"/>
+        <widget class="QTextEdit" name="back_text">
+         <property name="styleSheet">
+          <string notr="true">background-color:white;</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -10,6 +10,21 @@
 QMap<QString, SGWidget*> server::_object_dictionary;
 SGTCPSocket server::sg_socket;
 
+const QString server::CREATE_ACCOUNT = "CACC";
+const QString server::LOGIN = "LOGN";
+const QString server::LOGOUT = "LOGT";
+const QString server::RECOVER_USERNAME = "RUSR";
+const QString server::RECOVER_PASSWORD = "RUSP";
+const QString server::GROUP_CREATE = "CGRP";
+const QString server::GROUP_JOIN = "JGRP";
+const QString server::GROUP_LEAVE = "LGRP";
+const QString server::CHAT_SEND = "GCHT";
+const QString server::WHITEBOARD_DRAW = "WBLN";
+const QString server::WHITEBOARD_UPDATE = "UPWB";
+const QString server::WHITEBOARD_SAVE = "SVWB";
+const QString server::FLASHCARD_SET_FRONT = "FCFT";
+const QString server::FLASHCARD_SET_BACK = "FCBK";
+
 server::server(QObject *parent) : QObject(parent)
 {
     //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
@@ -68,14 +83,14 @@ bool server::request_response(QString outgoing_message, QString &response)
 
 void server::test(QString key, QString test_message)
 {
-    _object_dictionary[key]->enqueue(test_message);
+    //_object_dictionary[key]->enqueue(test_message);
 }
 
 /***
  * SLOTS
  */
 
-void server::incoming_message()
+void server::incoming_message(QString& object_name, QByteArray& work_message)
 {
     qDebug() << "INCOMGIN MESSAF";
 }

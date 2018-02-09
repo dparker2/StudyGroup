@@ -7,7 +7,7 @@ class Whiteboard : public QScrollArea
 {
     Q_OBJECT
 public:
-    explicit Whiteboard(QWidget *parent = nullptr, QWidget* save_button = nullptr);
+    explicit Whiteboard(QString name, QWidget *parent = nullptr, QWidget* save_button = nullptr);
     QByteArray* whiteboard_ba();
     QColor get_pen_color();
     int get_pen_size();

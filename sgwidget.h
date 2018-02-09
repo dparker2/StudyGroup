@@ -21,10 +21,10 @@ class SGWidget : public QWidget
 public:
     explicit SGWidget(QString name, QWidget *parent = nullptr, int work_interval_msec = 500);
     ~SGWidget();
-    void enqueue(QString work_message);
+    void enqueue(QByteArray work_message);
 
 protected:
-    QQueue<QString> _work_queue;
+    QQueue<QByteArray> _work_queue;
 
 signals:
 

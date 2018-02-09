@@ -44,7 +44,7 @@ void SGTCPSocket::write(QString message)
 
 void SGTCPSocket::error(QAbstractSocket::SocketError err)
 {
-   qDebug() << my_tcp_socket->errorString();
+    qDebug() << my_tcp_socket->errorString();
 }
 
 void SGTCPSocket::reconnect_socket(QAbstractSocket::SocketState current_state)
@@ -111,35 +111,59 @@ bool SGTCPSocket::read_socket_helper(QString& out_message)
     }
 }
 
+QByteArray SGTCPSocket::single_message()
+{
+    qDebug() << "Receiving info...";
+    QString message_size_str = my_tcp_socket->read(5);  // Read first 5 bytes, which is the serialized message size
+    qDebug() << "Message size: " << message_size_str;
+
+    int message_size = message_size_str.toInt();    // Convert the size to an integer
+    while((my_tcp_socket->bytesAvailable() < message_size) && (my_tcp_socket->waitForReadyRead())) {
+        qDebug() << "Message not here yet... bytes: " << my_tcp_socket->bytesAvailable();
+        my_tcp_socket->waitForBytesWritten();
+        // Do nothing until the right amount is available!
+    }
+    return my_tcp_socket->read(message_size); // Read the message, which is the next size bytes
+}
+
+QString SGTCPSocket::get_object_name(QByteArray &message)
+{
+    QString message_string(message);
+    QString first_section = message_string.section(' ', 0, 0);
+    QString code = first_section.left(4);  // Get the code
+    first_section.remove(0, 4);  // Remove the code
+    if ((code == "USCH") || (code == "NUSR") || (code == "NCHT"))
+    {
+        return first_section;
+    }
+    else if((code == "WBLN") || (code == "NUWB") || (code == "WBUP"))
+    {
+        return first_section + " whiteboard";
+    }
+    else if((code == "FCFT") || (code == "FCBK"))
+    {
+        return first_section + " flashcard";
+    }
+}
+
 void SGTCPSocket::read_socket_send_signal()
 {
-    emit new_message();
     while(my_tcp_socket->bytesAvailable() >= 5)
     {
-        qDebug() << "Receiving info...";
-        QString message_size_str = my_tcp_socket->read(5);  // Read first 5 bytes, which is the serialized message size
-        qDebug() << "Message size: " << message_size_str;
+        QByteArray message_ba = single_message();
 
-        int message_size = message_size_str.toInt();    // Convert the size to an integer
-        while((my_tcp_socket->bytesAvailable() < message_size) && (my_tcp_socket->waitForReadyRead())) {
-            qDebug() << "Message not here yet... bytes: " << my_tcp_socket->bytesAvailable();
-            my_tcp_socket->waitForBytesWritten();
-            // Do nothing until the right amount is available!
-        }
-        QByteArray message_ba = my_tcp_socket->read(message_size); // Read the message, which is the next size bytes
-        QString server_code = message_ba.left(4);   // Get the server code
-        message_ba.remove(0, 4); // Remove the server code
+        QString server_code = QString(); // Remove the server code
         qDebug() << "Server code: " << server_code;
 
-        // Hinge on server_code
-        if (server_code == "SUCC")      // Success code
+        // First short circuit in case its just a succ or fail message
+        if (QString(message_ba).left(4) == "SUCC")
         {
             // Set the success flag and message
             success_flag = true;
             success_message = message_ba;
             qDebug() << "Server message: " << success_message;
         }
-        else if (server_code == "FAIL") // Fail code
+        else if (QString(message_ba).left(4) == "FAIL")
         {
             // Set the fail flag
             fail_flag = true;
@@ -150,9 +174,14 @@ void SGTCPSocket::read_socket_send_signal()
             timeout_box.setIcon(QMessageBox::Warning);
             timeout_box.exec();
         }
-        else if (server_code == "USCH") // User List has CHANGED
+        else {
+            QString object_name = get_object_name(message_ba);
+            emit new_message(object_name, message_ba);
+        }
+
+        /*if (server_code == "USCH") // User List has CHANGED
         {
-            //emit users_changed();
+            // Notify the relevant group widget
         }
         else if (server_code == "NUSR") // New User code
         {
@@ -173,33 +202,6 @@ void SGTCPSocket::read_socket_send_signal()
             QString chat = message.section(' ', 3, -1);
             //emit new_chat(username, updated_time, chat);
         }
-        else if (server_code  == "WBLN")
-        {
-            QString line_str = message_ba;
-            qDebug() << line_str;
-            QColor pen_color(line_str.section(' ', 0, 0));
-            int pen_size = line_str.section(' ', 1, 1).toInt();
-            QString x1 = line_str.section(' ', 2, 2);
-            QString y1 = line_str.section(' ', 3, 3);
-            QString x2 = line_str.section(' ', 4, 4);
-            QString y2 = line_str.section(' ', 5, -1);
-            QPoint point1(x1.toInt(), y1.toInt());
-            QPoint point2(x2.toInt(), y2.toInt());
-            qDebug() << point1 << point2;
-            //emit whiteboard_draw_line(point1, point2, pen_color, pen_size);
-        }
-        else if (server_code == "NUWB")
-        {
-            QString user_needs_wb = message_ba;
-            qDebug() << "server.cpp NUWB";
-            //emit get_whiteboard(user_needs_wb);
-        }
-        else if (server_code == "WBUP")
-        {
-            QByteArray wb_string = message_ba;
-            qDebug() << "wb string size: " << wb_string.size();
-            //emit update_whiteboard(&wb_string);
-        }
         else if (server_code == "FCFT")
         {
             QString flash_str = message_ba;
@@ -215,7 +217,7 @@ void SGTCPSocket::read_socket_send_signal()
             QString flashcard_back = flash_str.section(' ', 1, -1);
             //emit new_flashcard(flashcard_id, flashcard_back, false);
             qDebug() << flashcard_id << flashcard_back << "back";
-        }
+        }*/
     }
 
     return;

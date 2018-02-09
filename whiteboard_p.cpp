@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QBuffer>
 
-my_whiteboard::my_whiteboard(QWidget *parent) : QWidget(parent)
+my_whiteboard::my_whiteboard(QString name, QWidget *parent) : SGWidget(name, parent)
 {
     setAttribute(Qt::WA_StaticContents);
     update_timer.setInterval(30);
@@ -15,6 +15,8 @@ my_whiteboard::my_whiteboard(QWidget *parent) : QWidget(parent)
     ruler_drawing = false;
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 }
+
+
 
 void my_whiteboard::process_paints()
 {
@@ -37,6 +39,37 @@ void my_whiteboard::process_paints()
         }
         update(QRect(point1, point2).normalized().adjusted(-7, -7, 7, 7));
     }
+}
+
+void my_whiteboard::do_work()
+{
+    /*else if (server_code  == "WBLN")
+    {
+        QString line_str = message_ba;
+        qDebug() << line_str;
+        QColor pen_color(line_str.section(' ', 0, 0));
+        int pen_size = line_str.section(' ', 1, 1).toInt();
+        QString x1 = line_str.section(' ', 2, 2);
+        QString y1 = line_str.section(' ', 3, 3);
+        QString x2 = line_str.section(' ', 4, 4);
+        QString y2 = line_str.section(' ', 5, -1);
+        QPoint point1(x1.toInt(), y1.toInt());
+        QPoint point2(x2.toInt(), y2.toInt());
+        qDebug() << point1 << point2;
+        //emit whiteboard_draw_line(point1, point2, pen_color, pen_size);
+    }
+    else if (server_code == "NUWB")
+    {
+        QString user_needs_wb = message_ba;
+        qDebug() << "server.cpp NUWB";
+        //emit get_whiteboard(user_needs_wb);
+    }
+    else if (server_code == "WBUP")
+    {
+        QByteArray wb_string = message_ba;
+        qDebug() << "wb string size: " << wb_string.size();
+        //emit update_whiteboard(&wb_string);
+    }*/
 }
 
 void my_whiteboard::draw_line(const QPoint& point1, const QPoint& point2, const QColor& pen_color_arg, const int& pen_size_arg)

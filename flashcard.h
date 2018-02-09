@@ -44,6 +44,8 @@ private slots:
     void on_flip_card_btn_clicked();
 
 
+    void on_set_back_btn_clicked();
+
 private:
     Ui::Flashcard *ui;
     FCFront* front;

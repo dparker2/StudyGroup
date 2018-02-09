@@ -5,17 +5,18 @@
 #include <QLine>
 #include <QVBoxLayout>
 
-GroupWidget::GroupWidget(QWidget *parent) :
+GroupWidget::GroupWidget(QString id, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GroupWidget)
 {
     ui->setupUi(this);
+    group_id = id;
 
     // Begin set whiteboard
-    /*whiteboard = new Whiteboard(nullptr, ui->save_whiteboard_button);
+    whiteboard = new Whiteboard(group_id + " whiteboard", nullptr, ui->save_whiteboard_button);
 
-    qDebug() << connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint,QColor,int)), this, SLOT(send_line_drawn(QPoint,QPoint,QColor,int)));
-    qDebug() << connect(this, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), whiteboard, SLOT(draw_line(QPoint,QPoint,QColor,int)));
+    //qDebug() << connect(whiteboard, SIGNAL(line_drawn(QPoint,QPoint,QColor,int)), this, SLOT(send_line_drawn(QPoint,QPoint,QColor,int)));
+    //qDebug() << connect(this, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), whiteboard, SLOT(draw_line(QPoint,QPoint,QColor,int)));
 
     ui->study_mode->addWidget(whiteboard);
     ui->study_mode->setCurrentWidget(whiteboard);
@@ -26,7 +27,6 @@ GroupWidget::GroupWidget(QWidget *parent) :
     whiteboard->set_pen_size(pen_string.toInt());
     //ui->study_mode->setStyleSheet("background-color: #ffffff;");
     // End set whiteboard
-*/
     // Flaschard
 
     deck = new Deck();
