@@ -41,7 +41,7 @@ function createAccount($email, $username, $password, $sock) {
 
 function loginAccount($username, $password, $sock) {
   $connection = connectAccount();
-
+  $bool_check = false;
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
   $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
   $check_email = "SELECT Email FROM UserInfo WHERE Username = '$username'";
@@ -54,6 +54,7 @@ function loginAccount($username, $password, $sock) {
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);
         mysqli_query($connection, $change_online);
+        $bool_check = true;
       } //Closes password check.
       else{
         $message = "FAILPassword incorrect, please try again.";
@@ -65,6 +66,7 @@ function loginAccount($username, $password, $sock) {
     sendMessage($message, $sock);
   }
   disconnect($connection);
+  return $bool_check;
 }
 
 function logoutAccount($username, $sock) {
@@ -78,10 +80,7 @@ function logoutAccount($username, $sock) {
     fwrite($sock, "00004FAIL\n");
   }
   disconnect($connection);
-  /*if(logout($user))
-    fwrite($sock, "00004SUCC");
-  else
-    fwrite($sock, "00004FAIL");*/
+
 }
 
 //unfinished code to change a users password, need client input

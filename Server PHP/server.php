@@ -110,11 +110,9 @@ while(true) {
             /*echo "Here it prints out the array it's going to kill/the one that disconnected\n";
             var_dump(array_search($sock, getSocketList($clientList), true));*/
             $socketDC = stream_socket_get_name($sock, true);
-            $username = $clientList[$socketDC]->getName();
             echo "About to delete this IP: $socketDC \n";
             echo "Setting User that just DC'ed to offline \n";
-            clearOnlineStatus($username);
-            //clearFromGroup($username);
+            logout($clientList[$socketDC]);
             echo "Unsetting/deleting the socket that just left from client array then closes it\n";
             /*echo "Should be looking for: \n";
             var_dump($sock);*/

@@ -59,6 +59,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
   $connection = connectGroup();        //Connect to group database.
   $username = $user->getName();   //Gets username from object and assigns to username
   $ip = $user->getIP();           //Get ip from object and assigns to ip
+  $bool_check = false;
 
   //SQL Statements to Query
   $checkGroupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
@@ -96,12 +97,15 @@ function joinGroup($groupID, $user, $clientList, $sock)
           $object = getObjString($connection, $selectWBstring);
           $wbstring = (string)$object->Whiteboard;
           //If WB is just empty or placeholder, nothing to update. Else send whiteboard to member
-          if($wbstring == "" || $wbstring =="placeholder")
+          if($wbstring == "" || $wbstring =="placeholder"){
             echo "DEBUG: No whiteboard in Database or placeholder, nothing to send...\n";
+            $bool_check = true;
+          }
           else {
             $message = "WBUP$groupID $wbstring";
             echo "DEBUG: Whiteboard found in Database, updating for first user...\n";
             sendMessage($message, $sock);
+            $bool_check = true;
           } // closes line 89 else statement
         }   // closes line 82 numUsers if statement
         //Else not first user joining, will get current whiteboard from existing member and send to member joining
@@ -112,6 +116,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
           $existingSocket = $clientList[$existingMember]->getSocket();
           $message = "NUWB$groupID $ip";
           sendMessage($message, $existingSocket);
+          $bool_check = true;
         } //closes line 95 else statement
       }   //closes line 74 else statement
     }     //closes line 71 if statement for capacity

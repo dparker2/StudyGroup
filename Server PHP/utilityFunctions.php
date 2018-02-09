@@ -80,8 +80,14 @@ function clearOnlineStatus($username) {
 }
 
 function logout($user) {
-  clearFromGroup($user);
-  clearOnlineStatus($user->getName());
+  if ($user->getName() != NULL) {
+    $username = $user->getName();
+    clearOnlineStatus($username);
+    echo "DEBUG: Changing $username to offline \n";
+    if (count($user->getGroup()) != 0)
+      echo "DEBUG: Removing $username from groupos \n";
+      clearFromGroup($user);
+  }
 }
 
 function getNumRows($connection, $query) {
