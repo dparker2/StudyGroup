@@ -135,6 +135,7 @@ while(true) {
           //Prints out messages received for debugging purposes.
           if ($code == 'UPWB' || $code == 'SVWB') {
             echo "THIS IS THE MESSAGE: {$bytes}{$code}: WB String too long to echo. \n"; }
+            echo "THIS IS THE MESSAGE: $code: $message \n";
           else if ($code == 'WBLN') {
             //nothing because it would be echo'd too many times because each point is going to be sent over.
           }
