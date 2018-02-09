@@ -50,17 +50,13 @@ function clearGroupMembers() {
   disconnect($connection);
 }
 
-function clearFromGroup($username) {
+function clearFromGroup($user) {
   $connection = connectGroup();
-  $countGroups = "SELECT TABLE_NAME
-                FROM information_schema.columns
-                where table_schema = 'StudyGroup'
-                and column_name = 'userList' IS NOT NULL;";
-  $groupsWithUsers = mysqli_query($connection, $countGroups);
-  while ($gArray = mysqli_fetch_array($groupsWithUsers)) {
-    $gName = $gArray[0];
-    $removeUser = "DELETE FROM $gName WHERE userList = '$username'";
-    mysqli_query($connection, $removeUser);
+  $groupArray = $user->getGroup();
+  $username = $user->getName();
+  foreach($groupArray as $group) {
+    $remFromGroup = "DELETE FROM $group WHERE userList = '$username'";
+    mysqli_query($connection, $group);
   }
   disconnect($connection);
 }
@@ -81,6 +77,11 @@ function clearOnlineStatus($username) {
                   WHERE UserStatus = 'Online' AND Username = '$username'";
   mysqli_query($dbAccount, $makeoffline);
   disconnect($dbAccount);
+}
+
+function logout($user) {
+  clearFromGroup($user);
+  clearOnlineStatus($user->getName());
 }
 
 function getNumRows($connection, $query) {
@@ -111,6 +112,8 @@ function getSocketList($clientList) {
   }
   return $socketList;
 }
+
+
 class User {
   function __construct() {
     echo "Constructing user class\n";
@@ -123,6 +126,7 @@ class User {
   var $ip;
   var $socket;
   var $email;
+  var $group = array();
 
   function getName() {
     return $this->username;
@@ -136,6 +140,9 @@ class User {
   function getEmail() {
     return $this->email;
   }
+  function getGroup() {
+    return $this->group;
+  }
   function setName($Name) {
     $this->username = $Name;
   }
@@ -147,6 +154,9 @@ class User {
   }
   function setEmail($usrEmail) {
     $this->email = $usrEmail;
+  }
+  function setGroup($groupName) {
+    array_push($this->group, $groupName);
   }
 
 }

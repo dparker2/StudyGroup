@@ -23,16 +23,16 @@ function createAccount($email, $username, $password, $sock) {
 
   if (($username_exists = checkExists($connection, $check_username)) > 0) { //returns failcase of username existing.
     $message = "FAILUsername exists, please try again.";
-    sendMessage($message, $socket);
+    sendMessage($message, $sock);
   }
   elseif (($email_exists = checkExists($connection, $check_email)) > 0) {//returns failcaise of email existing.
     $message = "FAILEmail exists, please try again.";
-    sendMessage($message, $socket);
+    sendMessage($message, $sock);
   }
   else {
-    if (($result = mysqli_query($connection, $insert)) === TRUE){
+    if ($result = mysqli_query($connection, $insert)){
       $message = "SUCCSuccess! User Account created.";
-      sendMessage($message, $socket);
+      sendMessage($message, $sock);
       sendRegEmail($email);
     }
   }
@@ -48,26 +48,23 @@ function loginAccount($username, $password, $sock) {
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
   //Checks if username exists before attempting to login, will return error otherwise.
   if (($username_exists = checkExists($connection, $check_username)) > 0) {
-      if (($password_exists = checkExists($connection, $check_password)) > 0) {
-        $resultEmail = mysqli_query($connection, $check_email);
-        $obj = $resultEmail->fetch_object();
-        $returnEmail = $obj->Email;
-        $message = "SUCC{$returnEmail}"; //Successful if matches and writes back email belonging to user for UI
-        sendMessage($message, $socket);
-        $return_bool = true;
+      $checkPass = getObjString($connection, $check_password)->Pass;
+      if ($checkPass == $password) {
+        $resultEmail = getObjString($connection, $check_email)->Email;
+        $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
+        sendMessage($message, $sock);
         mysqli_query($connection, $change_online);
       } //Closes password check.
       else{
         $message = "FAILPassword incorrect, please try again.";
-        sendMessage($message, $socket);
+        sendMessage($message, $sock);
       }
+  }
   else{
     $message = "FAILUser does not exist, please try again.";
-    sendMessage($message, $socket);
+    sendMessage($message, $sock);
   }
-
   disconnect($connection);
-  return $return_bool;
 }
 
 function logoutAccount($username, $sock) {
@@ -81,6 +78,10 @@ function logoutAccount($username, $sock) {
     fwrite($sock, "00004FAIL\n");
   }
   disconnect($connection);
+  /*if(logout($user))
+    fwrite($sock, "00004SUCC");
+  else
+    fwrite($sock, "00004FAIL");*/
 }
 
 //unfinished code to change a users password, need client input
@@ -128,7 +129,7 @@ function recoverAccount($email, $password, $sock) {
   $disconnect($connection);
 }
 
-// takes users email, returns users username. 
+// takes users email, returns users username.
 function rememberUsername ($email, $sock) {
   $connection = connectAccount();
 

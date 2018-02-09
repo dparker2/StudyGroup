@@ -164,7 +164,8 @@ while(true) {
               createGroup($codeMessage[0], $client, $sock);
               break;
             case "JGRP":
-              joinGroup($codeMessage[0], $client, $clientList, $sock);
+              if(joinGroup($codeMessage[0], $client, $clientList, $sock))
+                $client->setGroup($codeMessage[0]);
               break;
             case "LGRP":
               leaveGroup($codeMessage[0], $client, $clientList, $sock);

@@ -1,7 +1,7 @@
 <?php
 
 //Used to test codes without having to use client.
-$server = fsockopen("127.0.0.1", 1520, $errno, $errstr, 30);
+$server = fsockopen("localhost", 1520, $errno, $errstr, 30);
 
 if (!$server)
 {
@@ -9,7 +9,7 @@ if (!$server)
 }
 else
 {
-    $out = "00018LOGNhello testpass";
+    $out = "00019LOGNfuller testpass";
     ///Send data
     fwrite($server, $out);
 
