@@ -139,6 +139,9 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     QString first_section = message_string.section(' ', 0, 0);
     QString code = first_section.left(4);  // Get the code
     first_section.remove(0, 4);  // Remove the code
+    qDebug() << "before remove" << message;
+    message.remove(4, first_section.length());
+    qDebug() << "after remove" << message;
     if ((code == "USCH") || (code == "NUSR") || (code == "NCHT"))
     {
         return first_section;

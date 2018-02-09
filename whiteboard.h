@@ -22,9 +22,10 @@ public:
     int get_pen_size() { return pen_size; }
     void set_pen_color(QColor color_arg) { pen_color = color_arg; }
     void set_pen_size(int size_arg) { pen_size = size_arg; }
+    const QString& get_group_id() { return group_id; }
 
 signals:
-    void line_drawn(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos, const QColor& pen_color_arg, const int& pen_size_arg);
+    void line_drawn();
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;
@@ -48,7 +49,6 @@ private:
     QPoint prev_mouse_pos;
     QImage image;
     QTimer update_timer;
-    bool image_changed;
     bool drawing;
     bool erasing;
     bool ruler_drawing;
