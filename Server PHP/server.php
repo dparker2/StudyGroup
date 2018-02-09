@@ -91,6 +91,7 @@ while(true) {
     foreach($read_socks as $sock)
     {   echo "Now iterating through our read sockets to read in the message \n";
         echo "Waiting for data now \n\n";
+        $socketDC = stream_socket_get_name($sock, true);
         $data = fread($sock, 5);
         if ($data > 0) {
           echo "DATA EXISTS, it will isolate the code and message \n";
@@ -109,7 +110,6 @@ while(true) {
 
             /*echo "Here it prints out the array it's going to kill/the one that disconnected\n";
             var_dump(array_search($sock, getSocketList($clientList), true));*/
-            $socketDC = stream_socket_get_name($sock, true);
             echo "About to delete this IP: $socketDC \n";
             echo "Setting User that just DC'ed to offline \n";
             logout($clientList[$socketDC]);
