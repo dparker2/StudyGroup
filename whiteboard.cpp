@@ -12,9 +12,6 @@ Whiteboard::Whiteboard(QString name, QWidget *parent) : SGWidget(name, parent)
     update_timer.start();
     connect(&update_timer, SIGNAL(timeout()), this, SLOT(process_paints()));
     mouse_pos_queue = new QQueue<QPair<QPair<QPoint, QPoint>, QPair<QColor, int>>>;
-    pen_color = QColor(0, 0, 0);
-    pen_size = 5;
-    image_changed = false;
     drawing = false;
     erasing = false;
     ruler_drawing = false;
@@ -27,6 +24,7 @@ void Whiteboard::process_paints()
     QPainter painter(&image);
     while(!mouse_pos_queue->isEmpty())
     {
+        emit line_drawn();
         QPair<QPair<QPoint, QPoint>, QPair<QColor, int>> paint_info = mouse_pos_queue->dequeue();
         QPoint point1 = paint_info.first.first;
         QPoint point2 = paint_info.first.second;
@@ -74,7 +72,11 @@ void Whiteboard::WBLN(QByteArray& line_info)
 
 void Whiteboard::NUWB(QByteArray& user_ip)
 {
-    server::send(server::WHITEBOARD_UPDATE + user_ip + ' ' + *get_whiteboard());
+    QByteArray send_wb;
+    send_wb += server::WHITEBOARD_UPDATE + user_ip + ' ';
+    send_wb += *get_whiteboard();
+    qDebug() << send_wb;
+    server::send(send_wb);
 }
 
 void Whiteboard::WBUP(QByteArray& whiteboard_ba)

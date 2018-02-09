@@ -9,18 +9,20 @@
 #include <QPushButton>
 #include <QDate>
 
-#include "whiteboard_old.h"
+#include "whiteboard_wrapper.h"
+#include "sgwidget.h"
 #include "deck.h"
 
 namespace Ui {
 class GroupWidget;
 }
 
-class GroupWidget : public QWidget
+class GroupWidget : public SGWidget
 {
     Q_OBJECT
 public:
     explicit GroupWidget(QString id, QWidget *parent = nullptr);
+    ~GroupWidget();
     QString get_groupID();
     Whiteboard_Wrapper* whiteboard_ptr();
 
@@ -34,7 +36,7 @@ signals:
 public slots:
     void set_card(QString front, int& cardNum, int side);
     void incoming_card(int card_index, QString text, bool front);
-    void new_chat(QString username, QString time, QString message);
+    void new_chat(QString username, QString str_date_time, QString message);
     void users_changed();
     void user_joined(QString username);
     // Whiteboard
@@ -48,13 +50,6 @@ public slots:
 
 
 private slots:
-    void on_save_whiteboard_button_released();
-
-    void on_comboBox_pen_color_currentTextChanged(const QString &arg1);
-
-    void on_comboBox_pen_size_currentTextChanged(const QString &arg1);
-
-
     void on_comboBox_study_mode_currentIndexChanged(int index);
 
     void on_add_card_button_clicked();
@@ -64,6 +59,7 @@ private slots:
     void on_quiz_button_toggled(bool checked);
 
 private:
+    void do_work();
     Ui::GroupWidget* ui;
     Whiteboard_Wrapper* whiteboard;
     Deck* deck;

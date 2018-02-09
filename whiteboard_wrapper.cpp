@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QCursor>
 
-Whiteboard_Wrapper::Whiteboard_Wrapper(QString name, QWidget *parent, QWidget* save_button) :
+Whiteboard_Wrapper::Whiteboard_Wrapper(QString name, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Whiteboard)
 {
@@ -11,19 +11,14 @@ Whiteboard_Wrapper::Whiteboard_Wrapper(QString name, QWidget *parent, QWidget* s
 
     ui->scrollArea->setStyleSheet("background-color: #ffffff");
     ui->scrollArea->setFrameShadow(QFrame::Plain);
-    //ui->whiteboard->resize(2000, 1000);
-    qDebug() << ui->scrollArea->widget();
-    Whiteboard* wb = new Whiteboard(name);
-    wb->setMinimumSize(2000, 1000);
-    ui->scrollArea->setWidget(wb);
-    qDebug() << ui->scrollArea->widget();
-    //this->save_button = save_button;
-    saved = true;
-
-    // Connections to send the drawing messages up the chain to the server object
-    //connect(dynamic_cast<Whiteboard*>(drawing_board), SIGNAL(line_drawn(QPoint,QPoint,QColor,int)), this, SIGNAL(line_drawn(QPoint,QPoint,QColor,int)));
-
-    //this->setWidget(drawing_board);
+    whiteboard = new Whiteboard(name);
+    connect(whiteboard, SIGNAL(line_drawn()), this, SLOT(whiteboard_changed()));
+    whiteboard->set_pen_color(QColor("#000"));
+    QString pen_size = ui->comboBox_pen_size->currentText();
+    pen_size.chop(2);
+    whiteboard->set_pen_size(pen_size.toInt());
+    whiteboard->setMinimumSize(2000, 1000);
+    ui->scrollArea->setWidget(whiteboard);
 }
 
 
@@ -32,45 +27,45 @@ Whiteboard_Wrapper::~Whiteboard_Wrapper()
     delete ui;
 }
 
-QByteArray* Whiteboard_Wrapper::whiteboard_ba()
+void Whiteboard_Wrapper::on_comboBox_pen_color_currentTextChanged(const QString &pen_color)
 {
-    //return dynamic_cast<Whiteboard*>(drawing_board)->get_whiteboard();
+    if(pen_color == "Black")
+    {
+        whiteboard->set_pen_color(QColor("#000"));
+    }
+    else if(pen_color == "Red")
+    {
+        whiteboard->set_pen_color(QColor("#f00"));
+    }
+    else if(pen_color == "Green")
+    {
+        whiteboard->set_pen_color(QColor("#0f0"));
+    }
+    else if(pen_color == "Blue")
+    {
+        whiteboard->set_pen_color(QColor("#00f"));
+    }
 }
 
-void Whiteboard_Wrapper::draw_line(const QPoint &point1, const QPoint &point2, const QColor& pen_color, const int& pen_size)
+void Whiteboard_Wrapper::on_save_whiteboard_button_released()
 {
-    save_button->setEnabled(true);
-    //dynamic_cast<Whiteboard*>(drawing_board)->draw_line(point1, point2, pen_color, pen_size);
+    qDebug() << "saving_whiteboard";
+    QByteArray send_wb;
+    send_wb += server::WHITEBOARD_SAVE + whiteboard->get_group_id() + ' ';
+    send_wb += *whiteboard->get_whiteboard();
+    qDebug() << send_wb;
+    server::send(send_wb);
+    ui->save_whiteboard_button->setEnabled(false);
 }
 
-void Whiteboard_Wrapper::get_whiteboard(QString ip)
+void Whiteboard_Wrapper::on_comboBox_pen_size_currentTextChanged(const QString &pen_size)
 {
-    qDebug() << "whiteboard.cpp emitting send_whiteboard";
-    //emit send_whiteboard(ip, dynamic_cast<Whiteboard*>(drawing_board)->get_whiteboard());
+    QString p_size = pen_size;
+    p_size.chop(2);
+    whiteboard->set_pen_size(p_size.toInt());
 }
 
-void Whiteboard_Wrapper::update_whiteboard(QByteArray *wb_data)
+void Whiteboard_Wrapper::whiteboard_changed()
 {
-    qDebug() << "hello from whiteboard.cpp update_whiteboard";
-    //dynamic_cast<Whiteboard*>(drawing_board)->update_whiteboard(wb_data);
-}
-
-QColor Whiteboard_Wrapper::get_pen_color()
-{
-    //return dynamic_cast<Whiteboard*>(drawing_board)->get_pen_color();
-}
-
-int Whiteboard_Wrapper::get_pen_size()
-{
-    //return dynamic_cast<Whiteboard*>(drawing_board)->get_pen_size();
-}
-
-void Whiteboard_Wrapper::set_pen_color(QColor color_arg)
-{
-    //dynamic_cast<Whiteboard*>(drawing_board)->set_pen_color(color_arg);
-}
-
-void Whiteboard_Wrapper::set_pen_size(int size_arg)
-{
-    //dynamic_cast<Whiteboard*>(drawing_board)->set_pen_size(size_arg);
+    ui->save_whiteboard_button->setEnabled(true);
 }
