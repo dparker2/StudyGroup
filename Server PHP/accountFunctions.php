@@ -44,47 +44,27 @@ function loginAccount($username, $password, $sock) {
 
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
   $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
-  $check_online = "SELECT UserStatus FROM UserInfo WHERE Username = '$username'";
   $check_email = "SELECT Email FROM UserInfo WHERE Username = '$username'";
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
   //Checks if username exists before attempting to login, will return error otherwise.
-  if ($resultUser = mysqli_query($connection, $check_username)) {
-    $obj = $resultUser->fetch_object(); //Returns result of username into object
-    if ($obj->Username == $username) { //Accesses object and compares to username
-      if ($resultPass = mysqli_query($connection, $check_password)) {
-        $obj = $resultPass->fetch_object();
-        if ($obj->Pass == $password){ //compares password to the one inputted
-		  if($resultOnline = mysqli_query($connection, $check_online)) {
-		  	  $obj = $resultOnline->fetch_object();
-			  if ($obj->UserStatus == 'Online'){
-			    $message = "FAILAccount is already online";
-				sendMessage($message, $socket);
-				$return_bool = false;
-				return $return_bool;
-			  }
-		  }
-          $resultEmail = mysqli_query($connection, $check_email);
-          $obj = $resultEmail->fetch_object();
-          $returnEmail = $obj->Email;
-          $message = "SUCC{$returnEmail}"; //Successful if matches and writes back email belonging to user for UI
-          sendMessage($message, $socket);
-          $return_bool = true;
-          mysqli_query($connection, $change_online);
-        } //Closes password check.
-        else{
-          $message = "FAILPassword incorrect, please try again.";
-          sendMessage($message, $socket);
-        }
-        mysqli_free_result($resultPass);
-      }//Closes Password Access
-    } //Closes Username Check
-    else{
-      $message = "FAILUser does not exist, please try again.";
-      sendMessage($message, $socket);
-    }
-
-    mysqli_free_result($resultUser);
-  }//Closes Username Access
+  if (($username_exists = checkExists($connection, $check_username)) > 0) {
+      if (($password_exists = checkExists($connection, $check_password)) > 0) {
+        $resultEmail = mysqli_query($connection, $check_email);
+        $obj = $resultEmail->fetch_object();
+        $returnEmail = $obj->Email;
+        $message = "SUCC{$returnEmail}"; //Successful if matches and writes back email belonging to user for UI
+        sendMessage($message, $socket);
+        $return_bool = true;
+        mysqli_query($connection, $change_online);
+      } //Closes password check.
+      else{
+        $message = "FAILPassword incorrect, please try again.";
+        sendMessage($message, $socket);
+      }
+  else{
+    $message = "FAILUser does not exist, please try again.";
+    sendMessage($message, $socket);
+  }
 
   disconnect($connection);
   return $return_bool;
