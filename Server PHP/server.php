@@ -58,8 +58,8 @@ while(true) {
     echo "Attach server socket into readable socket\n";*/
     $read_socks["Server Socket: "] = $server;
 
-    //echo "Readable sockets:\n";
-    //var_dump($read_socks);
+    echo "Readable sockets:\n";
+    var_dump($read_socks);
     echo "+++++++++++++++++++++++++\n \n";
 
     //start reading and use a large timeout
@@ -91,7 +91,6 @@ while(true) {
     foreach($read_socks as $sock)
     {   echo "Now iterating through our read sockets to read in the message \n";
         echo "Waiting for data now \n\n";
-        $socketDC = stream_socket_get_name($sock, true);
         $data = fread($sock, 5);
         if ($data > 0) {
           echo "DATA EXISTS, it will isolate the code and message \n";
@@ -108,8 +107,9 @@ while(true) {
         {
             echo "DATA DOES NOT EXIST, i.e. client disconnect, it will close their socket\n";
 
-            /*echo "Here it prints out the array it's going to kill/the one that disconnected\n";
-            var_dump(array_search($sock, getSocketList($clientList), true));*/
+            echo "Here it prints out the array it's going to kill/the one that disconnected\n";
+            var_dump(array_search($sock, getSocketList($clientList), true));
+            $socketDC = array_search($sock, getSocketList($clientList), true);
             echo "About to delete this IP: $socketDC \n";
             echo "Setting User that just DC'ed to offline \n";
             logout($clientList[$socketDC]);
