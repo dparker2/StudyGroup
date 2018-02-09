@@ -148,9 +148,10 @@ function leaveGroup($groupID, $user, $clientList, $sock)
 function updateGroupList($connection, $clientList, $groupID)
 {
   //SQL Statements to Query
-  $returnUserList = "SELECT userList FROM $groupID, UserInfo WHERE userList IS NOT NULL
+  /*$returnUserList = "SELECT userList FROM $groupID, UserInfo WHERE userList IS NOT NULL
   and userList = UserInfo.Username
-  and UserInfo.Status = 'Online';";
+  and UserInfo.Status = 'Online';";*/
+  $returnUserList = "SELECT userList FROM $groupID WHERE userList IS NOT NULL";
   $returnIPList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
   $ipList = mysqli_query($connection, $returnIPList); //Returns list of current IP
 
