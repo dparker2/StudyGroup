@@ -6,8 +6,8 @@ include_once 'whiteboardFunctions.php';
 include_once 'utilityFunctions.php';
 
 
-$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
-//$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
+//$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
+$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
 //echo ++$argv[1];
 //$_ = $_SERVER['_'];;
 echo "This is the server socket: ";
@@ -38,7 +38,7 @@ clearAllOnlineStatus();
 //Insures that no duplicate users would be printed
 
 echo "Clearing Group Members...\n";
-//clearGroupMembers();
+clearGroupMembers();
 
 
 //Client streaming starts
@@ -102,6 +102,7 @@ while(true) {
             $lennewdata = $lennewdata + strlen($newdata);
             $newestdata = "{$newestdata}{$newdata}";
           }
+          echo "DEBUG: This is the message \n $newestdata \n";
         }
         if(!$data)
         {
@@ -151,36 +152,36 @@ while(true) {
           switch($code) {
             case "CACC":
               createAccount($codeMessage[0], $codeMessage[1], $codeMessage[2], $sock);
-              break;
+              break; //email, username, password, socket
             case "LOGN":
               if(loginAccount($codeMessage[0], $codeMessage[1], $sock)) {
-                $client->setName($codeMessage[0]);
-              } break;
+                $client->setName($codeMessage[0]);}
+              break;//username, password, socket
             case "LOGT":
               logoutAccount($client->getName(), $sock);
-              break;
+              break; //username, socket
             case "CGRP":
               createGroup($codeMessage[0], $client, $sock);
-              break;
+              break; //groupname, user, socket
             case "JGRP":
-              if(joinGroup($codeMessage[0], $client, $clientList, $sock))
-                $client->setGroup($codeMessage[0]);
-              break;
+              if(joinGroup($codeMessage[0], $client, $clientList, $sock)) {
+                $client->setGroup($codeMessage[0]);}
+              break; //groupID, user, client array, socket
             case "LGRP":
               leaveGroup($codeMessage[0], $client, $clientList, $sock);
-              break;
+              break; //groupID, user, client array, socket
             case "GCHT":
               sendChatMessage($codeMessage[0], $codeMessage[1], $client, $clientList, $sock);
-              break;
+              break; //groupID, message, user, client list, socket
             case "WBLN":
               whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList, $sock);
-              break;
+              break; //groupID, point1, point2, client array, socket
             case "UPWB":
               updateWhiteBoard($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList, $sock);
-              break;
+              break; //ipAddress, wb string, client array, socket
             case "SVWB":
               saveWhiteBoard($codeMessage[0], $codeMessage[1], $sock);
-              break;
+              break; //groupID, wb string, socket
             case "CHPW":
               changePassword($clients[$ip][1], $codeMessage[1], $sock);
               break;
