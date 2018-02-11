@@ -38,7 +38,7 @@ clearAllOnlineStatus();
 //Insures that no duplicate users would be printed
 
 echo "Clearing Group Members...\n";
-clearGroupMembers();
+//clearGroupMembers();
 
 
 //Client streaming starts
