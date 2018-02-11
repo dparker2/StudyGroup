@@ -22,8 +22,8 @@ server::server(QObject *parent) : QObject(parent)
     // Prints any socket errors to console
     connect(my_socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
 
-    //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    my_socket->connectToHost("localhost", 1520);
+    my_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
+    //my_socket->connectToHost("localhost", 1520);
     //my_socket->connectToHost("52.53.198.189", 24680); // David's AWS server
 
     success_flag = false;
@@ -47,8 +47,8 @@ server::server(QObject *parent) : QObject(parent)
 void server::connect_server()
 {
     // Connect the socket to the host
-    //my_socket->connectToHost("18.221.67.202", 9001); // CSCI 150 SERVER
-    my_socket->connectToHost("localhost", 1520);
+    my_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
+    //my_socket->connectToHost("localhost", 1520);
     // If it ever disconnects (including while trying this), the socket will
     // continuously try to reconnect. See reconnect_socket().
 }
