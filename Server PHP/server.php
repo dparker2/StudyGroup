@@ -195,10 +195,10 @@ while(true) {
               rememberPassword($codeMessage[0], $codeMessage[1], $sock);
               break;
             case "FCBK":
-              addToSide2($codeMessage[0], $codeMessage[1], $codeMessage[2], $ip, $clientList, $sock);
+              addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 2);
               break;
             case "FCFT":
-              addToSide1($codeMessage[0], $codeMessage[1], $codeMessage[2], $ip, $clientList, $sock); // 0 = groupID 1 = card id 2 = message
+              addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 1); // 0 = groupID 1 = card id 2 = message
               break;
           }//Switch Statement
       }//Closes else

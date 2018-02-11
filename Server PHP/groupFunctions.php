@@ -90,6 +90,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
         updateGroupList($connection, $clientList, $groupID);
         //updateFlashCards($connection, $ip, $clients, $groupID, $sock);
         updateGroupChat($connection, $groupID, $sock);
+        updateFlashCards($connection, $ip, $clientList, $groupID, $sock);
 
         echo "DEBUG: Determining whiteboard existence... \n";
         //If this is the first user joining
