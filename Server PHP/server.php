@@ -38,7 +38,7 @@ clearAllOnlineStatus();
 //Insures that no duplicate users would be printed
 
 echo "Clearing Group Members...\n";
-//clearGroupMembers();
+clearGroupMembers();
 
 
 //Client streaming starts
@@ -102,7 +102,7 @@ while(true) {
             $lennewdata = $lennewdata + strlen($newdata);
             $newestdata = "{$newestdata}{$newdata}";
           }
-          echo "DEBUG: This is the message \n $newestdata \n";
+          //echo "DEBUG: This is the message \n $newestdata \n";
         }
         if(!$data)
         {

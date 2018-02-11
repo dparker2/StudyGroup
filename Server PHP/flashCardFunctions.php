@@ -89,20 +89,22 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
     $clientMessage = "SUCC{$returnID}";
     $messageSize = str_pad((string)strlen($clientMessage), 5, "0", STR_PAD_LEFT); //might need tuning
     fwrite($sock, "{$messageSize}{$clientMessage}"); //writes to the socket
+    echo "$clientMessage \n";
 
   while($rowIP = mysqli_fetch_array($resultIP)){
     $keyIP = $rowIP[0];
     $keySock = $clientList[$keyIP]->getSocket();
     $FlashCards = "$returnID $message";
 
-    if($side = 'side1'){
+    if($side == 'side1'){
       $clientMessage = "FCFT$FlashCards";
     }
-    else if($side = 'side2'){
+    else if($side == 'side2'){
       $clientMessage = "FCBK$FlashCards";
     }
     $messageSize = str_pad((string)strlen($clientMessage), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read
     fwrite($keySock,"{$messageSize}{$clientMessage}"); //Writes back to client.
+    echo "in while rowIP = mysqli fetch array \n $clientMessage \n";
 
 
 
@@ -122,6 +124,7 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
     //echo "clientMessage is: $clientMessage\n\n";
     $messageSize = str_pad((string)strlen($clientMessage), 5, "0", STR_PAD_LEFT); //might need tuning
     fwrite($sock, "{$messageSize}{$clientMessage}"); //writes to the socket
+    echo "in else statement \n $clientMessage \n";
 
 while($rowIP = mysqli_fetch_array($resultIP)){
   $keyIP = $rowIP[0];
@@ -137,6 +140,7 @@ while($rowIP = mysqli_fetch_array($resultIP)){
 
   $messageSize = str_pad((string)strlen($clientMessage), 5, "0", STR_PAD_LEFT); //Pads left of code with length of string so client knows how much to read
   fwrite($keySock,"{$messageSize}{$clientMessage}"); //Writes back to client.
+  echo "$clientMessage \n in else statement while loop \n";
 
 }
 
