@@ -98,11 +98,12 @@ while(true) {
           $lennewdata = 0;
           $newestdata = "";
           while(($lennewdata < $bytes)){
+            echo "In while loop: isolating data \n";
             $newdata = fread($sock, $bytes);
             $lennewdata = $lennewdata + strlen($newdata);
             $newestdata = "{$newestdata}{$newdata}";
           }
-          //echo "DEBUG: This is the message \n $newestdata \n";
+          echo "DEBUG: This is the message \n $newestdata \n";
         }
         if(!$data)
         {
