@@ -101,10 +101,10 @@ while($rowIP = mysqli_fetch_array($resultIP)){
   $keySock = $clientList[$keyIP]->getSocket();
   $FlashCards = "$returnID $message";
   if($side = 'side1'){
-    $clientMessage = "FCFT$FlashCards";
+    $clientMessage == "FCFT$FlashCards";
   }
   else if($side = 'side2'){
-    $clientMessage = "FCBK$FlashCards";
+    $clientMessage == "FCBK$FlashCards";
   }
   sendMessage($clientMessage, $keySock);
 }// end while loop
