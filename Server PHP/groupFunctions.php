@@ -88,7 +88,6 @@ function joinGroup($groupID, $user, $clientList, $sock)
         fwrite($sock, "00004SUCC");
         mysqli_query($connection, $joinGroup);
         updateGroupList($connection, $clientList, $groupID);
-        //updateFlashCards($connection, $ip, $clients, $groupID, $sock);
         updateGroupChat($connection, $groupID, $sock);
         updateFlashCards($connection, $ip, $clientList, $groupID, $sock);
 
