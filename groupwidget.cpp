@@ -21,7 +21,7 @@ GroupWidget::GroupWidget(QString id, QWidget *parent) :
     // End set whiteboard
     // Flaschard
 
-    deck = new Deck();
+    deck = new Deck(group_id);
     ui->study_mode->insertWidget(1, deck);
     setFlashcardUI();
 

@@ -3,11 +3,12 @@
 
 #include <QDebug>
 
-Deck::Deck(QWidget *parent) :
-    QWidget(parent),
+Deck::Deck(QString name, QWidget *parent) :
+    SGWidget(name, parent),
     ui(new Ui::Deck)
 {
     ui->setupUi(this);
+    groupID = name.section(" ", 0, 0);
 }
 
 Deck::~Deck()
@@ -30,10 +31,10 @@ void Deck::init_card(int index, QString text, bool front_side)
         }
         Flashcard* new_card;
         if(front_side) {
-            new_card = new Flashcard(text, "", index);
+            new_card = new Flashcard(groupID, text, "", index);
         }
         else {
-            new_card = new Flashcard("", text, index);
+            new_card = new Flashcard(groupID, "", text, index);
         }
 
         connect(new_card, SIGNAL(check_set_card(Flashcard*,QString&,int&,int)), this, SLOT(check_set_card(Flashcard*,QString&,int&,int)));
@@ -64,15 +65,29 @@ void Deck::deleteCard(int index){
 
 void Deck::add_card()
 {
+/*
+    int new_index = -1;
+    //emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
+    init_card(new_index, "", true); // Make new card
+
+    ui->stackedWidget_card_edit->removeWidget(deck.at(new_index));
+    current_index = new_index;
+    ui->stackedWidget_card_edit->addWidget(deck.at(current_index));        // Hard coded index for testing card
+    ui->stackedWidget_card_edit->setCurrentWidget(deck.at(current_index)); // ^
+*/
+}
+
+void Deck::on_add_cart_btn_clicked()
+{
     // Hard code index,**** CHANGE BACK WHEN DONE****
     int new_index = -1;
-    emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
-    init_card(0, "", true); // Make new card
+    //emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
+    init_card(new_index, "", true); // Make new card
 
-    ui->stackedWidget_card_edit->removeWidget(deck.at(0));
-    current_index = 0;
-    ui->stackedWidget_card_edit->addWidget(deck.at(0));        // Hard coded index for testing card
-    ui->stackedWidget_card_edit->setCurrentWidget(deck.at(0)); // ^
+    ui->stackedWidget_card_edit->removeWidget(deck.at(current_index));
+    current_index = new_index;
+    ui->stackedWidget_card_edit->addWidget(deck.at(new_index));        // Hard coded index for testing card
+    ui->stackedWidget_card_edit->setCurrentWidget(deck.at(new_index)); // ^
 }
 
 // to be called only from here
@@ -144,6 +159,21 @@ void Deck::on_next_btn_clicked()
 
     ui->stackedWidget_card_edit->addWidget(deck.at(current_index)); // Add the widget at the new index
     ui->stackedWidget_card_edit->setCurrentWidget(deck.at(current_index)); // Make sure its the one being displayed
+}
+
+void Deck::do_work()
+{
+    while(!_work_queue.isEmpty()) {
+        QByteArray message = _work_queue.dequeue();
+        QList<QByteArray> message_list = split(message, 3);
+        int index = message_list[1].toInt();
+        if (message_list[0] == "FCFT") {
+            init_card(index, QString(message_list[2]),true);
+        }
+        else if(message_list[0] == "FCBK") {
+            init_card(index, QString(message_list[2]),false);
+        }
+    }
 }
 
 void Deck::set_quiz(bool is_set)

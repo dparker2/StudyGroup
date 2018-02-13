@@ -15,7 +15,7 @@ class Flashcard : public QWidget
     Q_OBJECT
 public:
     explicit Flashcard(QWidget *parent = nullptr);
-    explicit Flashcard(QString, QString, int, QWidget *parent = nullptr);
+    explicit Flashcard(QString groupID, QString, QString, int, QWidget *parent = nullptr);
     ~Flashcard();
     void setFront(QString);
     void setBack(QString);
@@ -52,6 +52,7 @@ private:
     FCBack* back;
     QString back_text;
     QString front_text;
+    QString groupID;
     int cardNum;
     int current_side;
 };

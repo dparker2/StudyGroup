@@ -1,19 +1,19 @@
 #ifndef DECK_H
 #define DECK_H
 
-#include <QWidget>
+#include "SGWidget.h"
 #include "flashcard.h"
 
 namespace Ui {
 class Deck;
 }
 
-class Deck : public QWidget
+class Deck : public SGWidget
 {
     Q_OBJECT
 
 public:
-    explicit Deck(QWidget *parent = 0);
+    explicit Deck(QString name, QWidget *parent = 0);
     ~Deck();
 
     void deleteCard(int index);
@@ -40,9 +40,12 @@ private slots:
 
     void on_prev_btn_clicked();
     void on_next_btn_clicked();
+    void do_work();
+
+    void on_add_cart_btn_clicked();
 
 private:
-
+    QString groupID;
     bool edit_card(int index, QString text, bool front_side);
     Ui::Deck *ui;
     QVBoxLayout *layout;

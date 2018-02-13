@@ -10,7 +10,7 @@ Flashcard::Flashcard(QWidget *parent) :
     ui->setupUi(this);
     ui->flip_card_btn->hide();
     cardNum = -1;
-    ui->bottom_buttons->setCurrentIndex(0);
+    //ui->bottom_buttons->setCurrentIndex(0);
     ui->card_widget->setCurrentIndex(0);
 
 }
@@ -19,7 +19,7 @@ Flashcard::~Flashcard()
     delete ui;
 }
 
-Flashcard::Flashcard(QString text1, QString text2, int num, QWidget *parent) :
+Flashcard::Flashcard(QString name, QString text1, QString text2, int num, QWidget *parent) :
     QWidget(parent),
 
     ui(new Ui::Flashcard)
@@ -32,39 +32,44 @@ Flashcard::Flashcard(QString text1, QString text2, int num, QWidget *parent) :
     if(text2 != nullptr)
         back_text = text2;
 
+
     // Front/Back widgets
-    front = new FCFront(front_text);
-    back = new FCBack(back_text);
+    groupID = name;
+    front = new FCFront(groupID, front_text, num, parent);
+    back = new FCBack(groupID, back_text, num, parent);
     ui->card_widget->addWidget(front);
     ui->card_widget->addWidget(back);
 
+    /*
     // Defaults buttons
     ui->bottom_buttons->setCurrentIndex(0);
     ui->flip_card_btn->show();
     ui->card_index->setText(QString::number(cardNum+1));
     current_side = false;
-
+    */
 }
+
 void Flashcard::setFront(QString q){
-    front_text = q;
-    front->edit_front(front_text, false);
+    //front_text = q;
+    //front->edit_front(groupID, front_text, cardNum);
 }
 void Flashcard::setBack(QString a){
-    back_text = a;
-    back->edit_back(back_text, false);
+    //back_text = a;
+    //back->edit_back(back_text, false);
 }
 QString Flashcard::getFront(){
-    return front_text;
+    //return front_text;
 }
+
 QString Flashcard::getBack(){
-    return back_text;
+    //return back_text;
 }
 void Flashcard::setCardNum(int num){
     cardNum = num;
-    ui->card_index->setText(QString::number(num));
+    //ui->card_index->setText(QString::number(num));
 }
 int Flashcard::getCardNum(){
-    return cardNum;
+    //return cardNum;
 }
 
 void Flashcard::setEditBtn(){
@@ -86,8 +91,10 @@ void Flashcard::emit_init_signal()
  * PRIVATE/SLOTS
  */
 
+
 void Flashcard::on_edit_card_btn_clicked()
 {
+/*
     if(current_side){
         back->edit_back(back_text, true);    // true displays edit side
         ui->card_widget->setCurrentWidget(back);
@@ -100,7 +107,9 @@ void Flashcard::on_edit_card_btn_clicked()
         ui->bottom_buttons->setCurrentIndex(1);
         //emit check_set_card(this, front_text, cardNum, current_side);
     }
+*/
 }
+
 void Flashcard::on_flip_card_btn_clicked()
 {
     if(current_side){
@@ -122,22 +131,24 @@ void Flashcard::on_set_front_btn_clicked()
     current_side = true;
     on_edit_card_btn_clicked();
 }
+
 void Flashcard::on_set_back_btn_clicked()
 {
+/*
     current_side = false;
     front->display_front();
     ui->card_widget->setCurrentWidget(front);
-    ui->bottom_buttons->setCurrentIndex(0);
+    //ui->bottom_buttons->setCurrentIndex(0);
     ui->frame->setStyleSheet("background-color: rgba(2, 128, 173)");
+*/
 }
 
 void Flashcard::on_cancel_btn_clicked()
 {
     ui->card_widget->setCurrentIndex(0);
-    ui->bottom_buttons->setCurrentIndex(0);
+    //ui->bottom_buttons->setCurrentIndex(0);
     ui->flip_card_btn->show();
 }
-
 
 
 
