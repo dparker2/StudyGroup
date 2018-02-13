@@ -91,19 +91,23 @@ while(true) {
     foreach($read_socks as $sock)
     {   echo "Now iterating through our read sockets to read in the message \n";
         echo "Waiting for data now \n\n";
-        $data = fread($sock, 5);
-        if ($data > 0) {
+        $data = fread($sock, 5); //i.e. 01924SVWB$groupID $wbstring
+        echo "Number of bytes in message: $data\n";
+        if ($data > 0) { //data = 01924
           echo "DATA EXISTS, it will isolate the code and message \n";
-          $bytes = (int)$data;
-          $lennewdata = 0;
-          $newestdata = "";
-          while(($lennewdata < $bytes)){
+          $bytes = (int)$data;//bytes = 1924
+          echo "Number of bytes in while loop $bytes \n";
+          $messageLength = 0;
+          $message = "";
+          //$remainingLength = $bytes;
+          while(($messageLength < $bytes)){ // 0 < 1924
             echo "In while loop: isolating data \n";
-            $newdata = fread($sock, $bytes);
-            $lennewdata = $lennewdata + strlen($newdata);
-            $newestdata = "{$newestdata}{$newdata}";
+            $newdata = fread($sock, ($bytes-$messageLength)); //read800
+            $messageLength = $messageLength + strlen($newdata); //
+            $message = "{$message}{$newdata}";
+            //$remainingLength -= strlen($newdata);
           }
-          echo "DEBUG: This is the message \n $newestdata \n";
+          echo "DEBUG: This is the message \n $bytes $newestdata \n";
         }
         if(!$data)
         {
