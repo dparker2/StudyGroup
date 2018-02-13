@@ -103,11 +103,13 @@ while(true) {
           while(($messageLength < $bytes)){ // 0 < 1924
             echo "In while loop: isolating data \n";
             $newdata = fread($sock, ($bytes-$messageLength)); //read800
+            echo "Appending $newdata to $message \n";
             $messageLength = $messageLength + strlen($newdata); //
+            echo "messageLength is currently $messageLength out of $bytes total";
             $message = "{$message}{$newdata}";
             //$remainingLength -= strlen($newdata);
           }
-          echo "DEBUG: This is the message \n $bytes $message \n";
+          echo "DEBUG: This is the message after reading entire message and isolating \n $bytes $message \n";
         }
         if(!$data)
         {
@@ -140,13 +142,13 @@ while(true) {
 
           //Prints out messages received for debugging purposes.
           if ($code == 'UPWB' || $code == 'SVWB') {
-            echo "THIS IS THE MESSAGE: {$bytes}{$code}: WB String too long to echo. \n";
-            echo "THIS IS THE MESSAGE: $code: $msg \n";}
+            echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: {$bytes}{$code}: WB String too long to echo. \n";
+            echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: $code: $msg \n";}
           else if ($code == 'WBLN') {
             //nothing because it would be echo'd too many times because each point is going to be sent over.
           }
           else {
-            echo "THIS IS THE MESSAGE $code: $msg \n"; }
+            echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT $code: $msg \n"; }
 
           $limit = 3;
           if ($code == "GCHT" || $code == "SVWB") {
