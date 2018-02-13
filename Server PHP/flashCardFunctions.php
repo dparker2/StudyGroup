@@ -13,11 +13,11 @@ function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
   //RETURN FRONT SIDE AND BACK SIDE
   for($i= 0; $i<2; $i++){
     if($i == 0){
-      $side = 'side1';
+      $side == 'side1';
       $code = 'FCFT';
     }
     else if($i == 1){
-      $side = 'side2';
+      $side == 'side2';
       $code = 'FCBK';
     }
     $return_FlashCards = "SELECT id, $side
@@ -30,7 +30,7 @@ function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
     for($n_FlashCards = $num_FlashCards; $n_FlashCards > 0; $n_FlashCards = $n_FlashCards - 1){ //For loop that iterates through lists of flashcards to writeback to client.
       $row=mysqli_fetch_array($resultFlashCards); //Fetches first flash card into array
       $newID = $row[0] -1;
-      $FlashCards = "$newID $row[1]"; //Stores side1 and side2 into variable
+      $FlashCards = "$groupID $newID $row[1]"; //Stores side1 and side2 into variable
       echo "Debugging: We are writing $FlashCards to ip $ip with socket $sock \n";
       $message = "$code$FlashCards"; //Appends CODE FLSH to username
       sendMessage($message, $sock);
@@ -74,7 +74,7 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
   while($rowIP = mysqli_fetch_array($resultIP)){
     $keyIP = $rowIP[0];
     $keySock = $clientList[$keyIP]->getSocket();
-    $FlashCards = "$returnID $message";
+    $FlashCards = "$groupID $returnID $message";
 
     if($side == 'side1'){
       $clientMessage = "FCFT$FlashCards";
@@ -99,11 +99,11 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
 while($rowIP = mysqli_fetch_array($resultIP)){
   $keyIP = $rowIP[0];
   $keySock = $clientList[$keyIP]->getSocket();
-  $FlashCards = "$returnID $message";
-  if($side = 'side1'){
+  $FlashCards = "$groupID $returnID $message";
+  if($side == 'side1'){
     $clientMessage == "FCFT$FlashCards";
   }
-  else if($side = 'side2'){
+  else if($side == 'side2'){
     $clientMessage == "FCBK$FlashCards";
   }
   sendMessage($clientMessage, $keySock);
