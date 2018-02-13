@@ -18,8 +18,10 @@ function createAccount($email, $username, $password, $sock) {
   $check_username = "SELECT * FROM UserInfo WHERE Username = '$username'";
   $check_email = "SELECT * FROM UserInfo WHERE Email = '$email'";
 
+  $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
   //Insert Query
-  $insert = "INSERT INTO UserInfo (Username, Pass, Email) VALUES ('$username', '$password', '$email')";
+  $insert = "INSERT INTO UserInfo (Username, Pass, Email) VALUES ('$username', '$passwordHash', '$email')";
 
   if (($username_exists = checkExists($connection, $check_username)) > 0) { //returns failcase of username existing.
     $message = "FAILUsername exists, please try again.";
@@ -49,7 +51,7 @@ function loginAccount($username, $password, $sock) {
   //Checks if username exists before attempting to login, will return error otherwise.
   if (($username_exists = checkExists($connection, $check_username)) > 0) {
       $checkPass = getObjString($connection, $check_password)->Pass;
-      if ($checkPass == $password) {
+      if (password_verify($password, $checkPass)) {
         $resultEmail = getObjString($connection, $check_email)->Email;
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);
