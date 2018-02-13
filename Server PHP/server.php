@@ -75,7 +75,7 @@ while(true) {
         if ($new_client) {
             //print remote client information, ip and port number
             echo 'Connection accepted from ' . stream_socket_get_name($new_client, true) . "\n";
-            echo "Setting client[ip address]->index 0, to socket resource and index 1 to empty string(reserving for username)\n";
+
             echo "+++++++++++++++++++++++++++ \n";
             $user = stream_socket_get_name($new_client, true);
             $clientList[$user] = new User();
@@ -102,9 +102,9 @@ while(true) {
           //$remainingLength = $bytes;
           while(($messageLength < $bytes)){ // 0 < 1924
             echo "In while loop: isolating data \n";
-            $newdata = fread($sock, ($bytes-$messageLength)); //read800
+            $newdata = fread($sock, ($bytes-$messageLength)); //read something
             echo "Appending $newdata to $message \n";
-            $messageLength = $messageLength + strlen($newdata); //
+            $messageLength += strlen($newdata); //
             echo "messageLength is currently $messageLength out of $bytes total";
             $message = "{$message}{$newdata}";
             //$remainingLength -= strlen($newdata);
@@ -138,7 +138,7 @@ while(true) {
 
           //Takes in the first 5 bytes as to determine length of message.
           $code = substr($message, 0, 4);
-          $msg = substr($message, 4, $bytes);
+          $msg = substr($message, 4, ($bytes-4));
 
           //Prints out messages received for debugging purposes.
           if ($code == 'UPWB' || $code == 'SVWB') {
