@@ -107,7 +107,7 @@ while(true) {
             $message = "{$message}{$newdata}";
             //$remainingLength -= strlen($newdata);
           }
-          echo "DEBUG: This is the message \n $bytes $newestdata \n";
+          echo "DEBUG: This is the message \n $bytes $message \n";
         }
         if(!$data)
         {
@@ -135,24 +135,24 @@ while(true) {
           $client = $clientList[$ip];
 
           //Takes in the first 5 bytes as to determine length of message.
-          $code = substr($newestdata, 0, 4);
-          $message = substr($newestdata, 4, $bytes);
+          $code = substr($message, 0, 4);
+          $msg = substr($message, 4, $bytes);
 
           //Prints out messages received for debugging purposes.
           if ($code == 'UPWB' || $code == 'SVWB') {
             echo "THIS IS THE MESSAGE: {$bytes}{$code}: WB String too long to echo. \n";
-            echo "THIS IS THE MESSAGE: $code: $message \n";}
+            echo "THIS IS THE MESSAGE: $code: $msg \n";}
           else if ($code == 'WBLN') {
             //nothing because it would be echo'd too many times because each point is going to be sent over.
           }
           else {
-            echo "THIS IS THE MESSAGE $code: $message \n"; }
+            echo "THIS IS THE MESSAGE $code: $msg \n"; }
 
           $limit = 3;
           if ($code == "GCHT" || $code == "SVWB") {
             $limit = 2;
           }
-          $codeMessage = explode(" ", $message, $limit);  //Puts message into array
+          $codeMessage = explode(" ", $msg, $limit);  //Puts message into array
 
           switch($code) {
             case "CACC":
