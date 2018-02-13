@@ -6,8 +6,8 @@ include_once 'whiteboardFunctions.php';
 include_once 'utilityFunctions.php';
 
 
-$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
-//$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
+$server = //stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
+$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
 //echo ++$argv[1];
 //$_ = $_SERVER['_'];;
 echo "This is the server socket: ";
@@ -103,13 +103,14 @@ while(true) {
           while(($messageLength < $bytes)){ // 0 < 1924
             echo "In while loop: isolating data \n";
             $newdata = fread($sock, ($bytes-$messageLength)); //read something
-            echo "Appending $newdata to $message \n";
+            echo "Appending message...\n";
             $messageLength += strlen($newdata); //
             echo "messageLength is currently $messageLength out of $bytes total";
             $message = "{$message}{$newdata}";
             //$remainingLength -= strlen($newdata);
           }
-          echo "DEBUG: This is the message after reading entire message and isolating \n $bytes $message \n";
+          if ($bytes < 100)
+            echo "DEBUG: This is the message after reading entire message and isolating \n $bytes $message \n";
         }
         if(!$data)
         {
@@ -138,12 +139,12 @@ while(true) {
 
           //Takes in the first 5 bytes as to determine length of message.
           $code = substr($message, 0, 4);
-          $msg = substr($message, 4, ($bytes-4));
+          $msg = substr($message, 4, $bytes);
 
           //Prints out messages received for debugging purposes.
-          if ($code == 'UPWB' || $code == 'SVWB') {
-            echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: {$bytes}{$code}: WB String too long to echo. \n";
-            echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: $code: $msg \n";}
+          if ($code == 'UPWB' || $code == 'SVWB' || $code == 'WBUP') {
+            echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: {$bytes}{$code}: WB String too long to echo. \n";}
+            //echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: $code: $msg \n";}
           else if ($code == 'WBLN') {
             //nothing because it would be echo'd too many times because each point is going to be sent over.
           }
@@ -168,8 +169,8 @@ while(true) {
               logoutAccount($client->getName(), $sock);
               break; //username, socket
             case "CGRP":
-              createGroup($codeMessage[0], $client, $sock);
-              break; //groupname, user, socket
+              createGroup($codeMessage[0], $client, $clientList, $sock);
+              break; //groupname, user, client list, socket
             case "JGRP":
               if(joinGroup($codeMessage[0], $client, $clientList, $sock)) {
                 $client->setGroup($codeMessage[0]);}

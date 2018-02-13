@@ -13,7 +13,7 @@ date_default_timezone_set('UTC');
 
 //CREATE GROUP FUNCTION
 //Function creates group by comparing groupname to existing groups on database, if none found it will create a new group with the group name appended with a random 4 digits after, and sets the creator as Admin of the group
-function createGroup($groupname, $user, $sock)
+function createGroup($groupname, $user, $clientList, $sock)
 {
   $connection = connectGroup();
   $username = $user->getName();
@@ -48,6 +48,7 @@ function createGroup($groupname, $user, $sock)
       mysqli_query($connection, $createFlashCardTable);
       $message = "SUCC"."$groupID";
       sendMessage($message, $sock);
+      updateGroupList($connection, $clientList, $groupID);
     }
   disconnect($connection);
 }
