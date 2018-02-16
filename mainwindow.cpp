@@ -14,8 +14,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     group_widget = nullptr;
     ui->setupUi(this);
+    ui->stackedWidget_window->setCurrentIndex(0);
 
     server::initialize();
+    left_buttons_list.push_back(ui->home_button);
     left_buttons_list.push_back(ui->create_button);
     left_buttons_list.push_back(ui->join_button);
 
@@ -24,8 +26,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->join_page, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
     connect(ui->create_page, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
 
-    connect(ui->create_button, &QPushButton::released, [=] { changePage(0); });
-    connect(ui->join_button, &QPushButton::released, [=] { changePage(1); });
+    connect(ui->home_button, &QPushButton::released, [=] { changePage(0); });
+    connect(ui->create_button, &QPushButton::released, [=] { changePage(1); });
+    connect(ui->join_button, &QPushButton::released, [=] { changePage(2); });
 
     connect(ui->settings, &SettingsPage::exit_settings, [=] { ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper); });
     QPixmap gear = QPixmap(":/resources/img/gear.png").scaled(35, 35, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -113,7 +116,7 @@ void MainWindow::setStackedIndex(unsigned index)
 
 void MainWindow::changePage(unsigned index)
 {
-    show_leave_button(index > 1);
+    show_leave_button(index > 2);
     ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper);
     ui->page->setCurrentIndex(index);
     set_active_button(index);

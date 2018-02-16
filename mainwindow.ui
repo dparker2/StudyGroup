@@ -113,6 +113,63 @@ QLabel {
               <number>10</number>
              </property>
              <item>
+              <widget class="QPushButton" name="home_button">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Trebuchet MS</family>
+                 <pointsize>16</pointsize>
+                 <weight>75</weight>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+background-color: rgb(30, 33, 36);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(0, 127, 177, 0.6);
+}
+
+QPushButton:checked {
+	background-color: rgb(0, 127, 177);
+}</string>
+               </property>
+               <property name="text">
+                <string>Home</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="create_button">
                <property name="enabled">
                 <bool>true</bool>
@@ -216,9 +273,6 @@ QPushButton:checked {
                 <string> Join Group </string>
                </property>
                <property name="checkable">
-                <bool>true</bool>
-               </property>
-               <property name="checked">
                 <bool>true</bool>
                </property>
               </widget>
@@ -411,6 +465,7 @@ QPushButton:checked {
           <property name="lineWidth">
            <number>0</number>
           </property>
+          <widget class="Homepage" name="homepage"/>
           <widget class="CreateGroupPage" name="create_page"/>
           <widget class="JoinGroupPage" name="join_page"/>
          </widget>
@@ -458,6 +513,12 @@ QPushButton:checked {
    <class>SettingsPage</class>
    <extends>QWidget</extends>
    <header>settingspage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Homepage</class>
+   <extends>QWidget</extends>
+   <header>homepage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

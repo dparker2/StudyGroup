@@ -41,7 +41,9 @@ SOURCES += \
     fcfront.cpp \
     fcback.cpp \
     whiteboard_wrapper.cpp \
-    whiteboard.cpp
+    whiteboard.cpp \
+    homepage.cpp \
+    grouplistitem.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,7 +62,9 @@ HEADERS += \
     fcfront.h \
     fcback.h \
     whiteboard_wrapper.h \
-    whiteboard.h
+    whiteboard.h \
+    homepage.h \
+    grouplistitem.h
 
 FORMS += \
         mainwindow.ui \
@@ -73,7 +77,9 @@ FORMS += \
     deck.ui \
     fcfront.ui \
     fcback.ui \
-    whiteboard.ui
+    whiteboard.ui \
+    homepage.ui \
+    grouplistitem.ui
 
 RESOURCES += \
     resource.qrc
