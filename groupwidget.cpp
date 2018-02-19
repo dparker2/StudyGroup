@@ -19,13 +19,13 @@ GroupWidget::GroupWidget(QString id, QWidget *parent) :
     ui->study_mode->addWidget(whiteboard);
     ui->study_mode->setCurrentWidget(whiteboard);
     // End set whiteboard
-    // Flaschard
 
-    deck = new Deck(group_id);
+    // Flaschard
+    deck = new Deck(group_id + " flashcard");
     ui->study_mode->insertWidget(1, deck);
     setFlashcardUI();
 
-    connect(deck, SIGNAL(set_card(QString,int&,int)), this, SLOT(set_card(QString,int&,int)));
+    //connect(deck, SIGNAL(set_card(QString,int&,int)), this, SLOT(set_card(QString,int&,int)));
 }
 
 GroupWidget::~GroupWidget()
@@ -160,7 +160,7 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
 
 void GroupWidget::on_add_card_button_clicked()
 {
-    deck->add_card();
+    //deck->add_card();
 }
 
 void GroupWidget::set_card(QString front, int& card_num, int side){
@@ -171,7 +171,7 @@ void GroupWidget::set_card(QString front, int& card_num, int side){
 
 void GroupWidget::incoming_card(int card_index, QString text, bool front)
 {
-    deck->init_card(card_index, text, front); // Will edit or create new card
+    //deck->init_card(card_index, text, front); // Will edit or create new card
 }
 
 void GroupWidget::on_pushButton_clicked()
@@ -179,9 +179,4 @@ void GroupWidget::on_pushButton_clicked()
     ui->study_menu->setCurrentIndex(0);
     ui->study_mode->setCurrentWidget(whiteboard);
     ui->comboBox_study_mode->setCurrentIndex(0);
-}
-
-void GroupWidget::on_quiz_button_toggled(bool checked)
-{
-    deck->set_quiz(checked);
 }

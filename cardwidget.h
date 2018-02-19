@@ -30,12 +30,12 @@ public:
 
 
 signals:
-    void set_card(QString, int&, int);
+    void send_card(QString, int&, int);
     void display_card(Flashcard*);
 
 public slots:
 
-    void check_set_card(Flashcard*, QString&, int&, int);
+    void check_send_card(Flashcard*, QString&, int&, int);
 
 private slots:
 

@@ -56,8 +56,6 @@ private slots:
 
     void on_pushButton_clicked();
 
-    void on_quiz_button_toggled(bool checked);
-
 private:
     void do_work();
     Ui::GroupWidget* ui;

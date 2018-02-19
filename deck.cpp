@@ -2,6 +2,7 @@
 #include "ui_deck.h"
 
 #include <QDebug>
+#include "server.h"
 
 Deck::Deck(QString name, QWidget *parent) :
     SGWidget(name, parent),
@@ -9,6 +10,10 @@ Deck::Deck(QString name, QWidget *parent) :
 {
     ui->setupUi(this);
     groupID = name.section(" ", 0, 0);
+    current_index = 0;
+    ui->prev_btn->setEnabled(false);    // Disabled when deck < 1 card
+    ui->next_btn->setEnabled(false);
+    quiz = false;
 }
 
 Deck::~Deck()
@@ -16,44 +21,135 @@ Deck::~Deck()
     delete ui;
 }
 
-// When a new card needs to be properly inserted/edited
-void Deck::init_card(int index, QString text, bool front_side)
+/*
+ * Receive flashcards from server
+*/
+void Deck::do_work()
 {
-    // Is this a new card?
-    if(edit_card(index, text, front_side)){
-        return;
-    }
-    else { // New card!
-        qDebug() << "Deck size: "<< deck.size() <<endl;
-        qDebug() << "Adding new card at" << index;
-        while((deck.size()-1) < index) { // If the index we get is out of range, put nullptrs in until we get to where we want
-            deck.append(nullptr);
-        }
-        Flashcard* new_card;
-        if(front_side) {
-            new_card = new Flashcard(groupID, text, "", index);
-        }
-        else {
-            new_card = new Flashcard(groupID, "", text, index);
-        }
-
-        connect(new_card, SIGNAL(check_set_card(Flashcard*,QString&,int&,int)), this, SLOT(check_set_card(Flashcard*,QString&,int&,int)));
-        deck[index] = new_card; // The above loop guarantees we are in the proper spot to append at the right index
-                                  // even if the index was too high at first
-        if(deck.size() > 1)
+    while(!_work_queue.isEmpty())
+    {
+        QByteArray message = _work_queue.dequeue();
+        QList<QByteArray> message_list = split(message, 3);
+        int index = message_list[1].toInt();
+        if (message_list[0] == "FCFT")
         {
-            ui->prev_btn->show(); // Show the prev/next buttons
-            ui->next_btn->show();
-        } else {
-            current_index = index; // If first card AND back is defined, set that in the stacked widget
-            ui->stackedWidget_card_edit->addWidget(new_card);
-            ui->stackedWidget_card_edit->setCurrentWidget(new_card);
+            init_card(index, QString(message_list[2]),"", true, false);
+        }
+        else if(message_list[0] == "FCBK")
+        {
+            init_card(index, "", QString(message_list[2]),false, false);
         }
     }
 }
 
-QString Deck::get_card_text(){
-    //return flashcard->get_card_text();
+/*
+ *  When a new card needs to be properly inserted/edited
+*/
+void Deck::init_card(int index, QString front_text, QString back_text, bool front_side, bool send_card)
+{
+    // Is this a new card?
+    if(edit_card(index, front_text, back_text, front_side, send_card))
+    {
+        return;
+    }
+    else { // New card!
+
+        new_card = new Flashcard(groupID, front_text, back_text, index, send_card);
+        //new_index = index;
+
+        while((deck.size()-1) < index)       // If the index we get is out of range, put nullptrs in until we get to where we want
+        {
+            deck.append(nullptr);
+        }
+
+        deck[index] = new_card;              // The above loop guarantees we are in the proper spot to append at the right index
+                                             // even if the index was too high at first
+        if(deck.size() > 1)
+        {
+            ui->prev_btn->setEnabled(true);  // Show the prev/next buttons
+            ui->next_btn->setEnabled(true);
+        } else {
+            current_index = index;           // If first card AND back is defined, set that in the stacked widget
+            ui->card_area->addWidget(new_card);
+            ui->card_area->setCurrentWidget(new_card);
+        }
+    }
+}
+/*
+ * Adds new card to ui and sends card to server
+ * server returns new index and card is displayed
+*/
+void Deck::on_add_card_btn_clicked()
+{
+    //int new_index;
+    QString index = "-1";
+
+    QString new_card = server::FLASHCARD_SET_FRONT + groupID + " " + index + " ";
+    server::request_response(new_card, index);
+    new_index = index.toInt();
+
+    init_card(new_index, "", "", true, false); // Make new card
+
+    ui->card_area->removeWidget(deck.at(current_index));
+    current_index = new_index;
+    display_card(new_index);
+}
+
+/*
+ *  Returns true if editing existing card, false if new card
+*/
+bool Deck::edit_card(int index, QString front_text, QString back_text, bool front_side, bool send_card)
+{
+    // Is this a new card?
+    if((index < deck.size()) && (deck.at(index) != nullptr))  // Editing existing card
+    {
+        if(front_side)
+        {
+            deck.at(index)->setFront(front_text, index, send_card);
+        }
+        else {
+            deck.at(index)->setBack(back_text, index, send_card);
+        }
+        ui->card_area->setCurrentWidget(deck.at(index));
+        return true;
+    }
+    return false;
+}
+
+/*
+ * Flashcard navigation controls
+ * Move to previous or next card in the deck
+ */
+void Deck::on_prev_btn_clicked()
+{
+    qDebug() << "ON PREV BUTTON CLICKED: " << current_index << " DECK SIZE :" << deck.size();
+    ui->card_area->removeWidget(deck.at(current_index)); // Remove the widget currently displayed
+    do {
+        if(quiz) {
+            current_index = rand() % deck.size();
+        } else {
+            current_index = (current_index - 1) < 0 ? deck.size() - 1 : current_index - 1; // Update index
+            // If current index - 1 is negative, loop back to top. Otherwise, current_index - 1.
+        }
+    } while(deck.at(current_index) == nullptr);    // Keep updating until we get to one that isnt a nullptr
+
+    display_card(current_index);                   // Add the widget at the new index and display it
+}
+
+void Deck::on_next_btn_clicked()
+{
+    qDebug() << "ON PREV BUTTON CLICKED: " << current_index << " DECK SIZE :" << deck.size();
+    ui->card_area->removeWidget(deck.at(current_index)); // Remove the widget currently displayed
+    do {
+        if(quiz)
+        {
+            current_index = rand() % deck.size();
+        } else {
+            current_index = (current_index + 1) % deck.size();   // Update index, mod so it loops back to beginning if too far
+        }
+    } while(deck.at(current_index) == nullptr);                  // Keep updating until we get to one that isnt a nullptr
+
+    display_card(current_index);                                 // Add the widget at the new index and display it
 }
 
 void Deck::deleteCard(int index){
@@ -62,133 +158,31 @@ void Deck::deleteCard(int index){
     deck[deck.size()-1] = temp;
     deck.pop_back();
 }
-
-void Deck::add_card()
-{
 /*
-    int new_index = -1;
-    //emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
-    init_card(new_index, "", true); // Make new card
-
-    ui->stackedWidget_card_edit->removeWidget(deck.at(new_index));
-    current_index = new_index;
-    ui->stackedWidget_card_edit->addWidget(deck.at(current_index));        // Hard coded index for testing card
-    ui->stackedWidget_card_edit->setCurrentWidget(deck.at(current_index)); // ^
+ * If toggled true, sets a random index and displays in ui
+ * otherwise resets deck to start from index 0 (first card)
 */
-}
-
-void Deck::on_add_cart_btn_clicked()
-{
-    // Hard code index,**** CHANGE BACK WHEN DONE****
-    int new_index = -1;
-    //emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
-    init_card(new_index, "", true); // Make new card
-
-    ui->stackedWidget_card_edit->removeWidget(deck.at(current_index));
-    current_index = new_index;
-    ui->stackedWidget_card_edit->addWidget(deck.at(new_index));        // Hard coded index for testing card
-    ui->stackedWidget_card_edit->setCurrentWidget(deck.at(new_index)); // ^
-}
-
-// to be called only from here
-// When we want no chance of making a new card
-// returns true if editing existing card, false if new card
-bool Deck::edit_card(int index, QString text, bool front_side)
-{
-    // Is this a new card?
-    if((index < deck.size()) && (deck.at(index) != nullptr)) { // Editing existing card
-        if(front_side)
-        {
-            deck.at(index)->setFront(text);
-        }
-        else {
-            deck.at(index)->setBack(text);
-        }
-        return true;
-    }
-    return false;
-}
-
-int Deck::getDeckSize()
-{
-    return deck.size();
-}
-
-void Deck::check_set_card(Flashcard* card, QString& text, int& index, int side)
-{
-    if(side == 0) { // Front
-        emit set_card(text, index, side); // The index returned is index
-        edit_card(index, text, true); // Edit card with proper index
-    }
-    else { // Back
-        emit set_card(text, index, side);
-        edit_card(index, text, false); // Edit
-        if(ui->stackedWidget_card_edit->currentIndex() > 0) {
-            ui->stackedWidget_card_edit->removeWidget(card); // Remove the card (done editing)
-        }
-    }
-}
-
-void Deck::on_prev_btn_clicked()
-{
-    ui->stackedWidget_card_edit->removeWidget(deck.at(current_index)); // Remove the widget currently displayed
-    do {
-        if(quiz) {
-            current_index = rand() % deck.size();
-        } else {
-            current_index = (current_index - 1) < 0 ? deck.size() - 1 : current_index - 1; // Update index
-            // If current index - 1 is negative, loop back to top. Otherwise, current_index - 1.
-        }
-    } while(deck.at(current_index) == nullptr); // Keep updating until we get to one that isnt a nullptr
-
-    ui->stackedWidget_card_edit->addWidget(deck.at(current_index)); // Add the widget at the new index
-    ui->stackedWidget_card_edit->setCurrentWidget(deck.at(current_index)); // Make sure its the one being displayed
-
-}
-
-void Deck::on_next_btn_clicked()
-{
-    ui->stackedWidget_card_edit->removeWidget(deck.at(current_index)); // Remove the widget currently displayed
-    do {
-        if(quiz) {
-            current_index = rand() % deck.size();
-        } else {
-            current_index = (current_index + 1) % deck.size(); // Update index, mod so it loops back to beginning if too far
-        }
-    } while(deck.at(current_index) == nullptr); // Keep updating until we get to one that isnt a nullptr
-
-    ui->stackedWidget_card_edit->addWidget(deck.at(current_index)); // Add the widget at the new index
-    ui->stackedWidget_card_edit->setCurrentWidget(deck.at(current_index)); // Make sure its the one being displayed
-}
-
-void Deck::do_work()
-{
-    while(!_work_queue.isEmpty()) {
-        QByteArray message = _work_queue.dequeue();
-        QList<QByteArray> message_list = split(message, 3);
-        int index = message_list[1].toInt();
-        if (message_list[0] == "FCFT") {
-            init_card(index, QString(message_list[2]),true);
-        }
-        else if(message_list[0] == "FCBK") {
-            init_card(index, QString(message_list[2]),false);
-        }
-    }
-}
-
-void Deck::set_quiz(bool is_set)
+void Deck::on_quiz_btn_toggled(bool is_set)
 {
     quiz = is_set;
-    if(deck.size() > 0) { // Make sure that the deck even has any cards...
-        ui->stackedWidget_card_edit->removeWidget(deck.at(current_index));  // remove current displayed widget
+    if(deck.size() > 0)   // Make sure that the deck even has any cards...
+    {
+        ui->card_area->removeWidget(deck.at(current_index));  // remove current displayed widget
         if(quiz) {
             current_index = rand() % deck.size();
-            ui->stackedWidget_card_edit->addWidget(deck.at(current_index)); // Put random
+            ui->card_area->addWidget(deck.at(current_index)); // Put random
         }
         else {
             current_index = 0;
-            ui->stackedWidget_card_edit->addWidget(deck.at(current_index)); // Put first card
+            ui->card_area->addWidget(deck.at(current_index)); // Put first card
         }
     }
 }
-
+/*
+ * Helper function to display current card in ui
+*/
+void Deck::display_card(int index)
+{
+    ui->card_area->addWidget(deck.at(index));
+    ui->card_area->setCurrentWidget(deck.at(index));
+}
