@@ -40,53 +40,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout" name="edit_layout">
-         <item>
-          <widget class="QPushButton" name="edit_card_btn">
-           <property name="font">
-            <font>
-             <family>Trebuchet MS</family>
-             <weight>75</weight>
-             <italic>false</italic>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton {
-background-color: rgba(255, 98, 71, 0.6);
-color: white; 
-font:bold;
-padding: 8px 12px 8px 12px;
-border: 0px;
-}
-
-QPushButton:hover {
-	background-color: rgba(255, 98, 71, 1);
-}
-
-</string>
-           </property>
-           <property name="text">
-            <string>Edit</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="Back2">
