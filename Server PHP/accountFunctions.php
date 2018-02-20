@@ -105,7 +105,6 @@ function changePassword($username, $password, $sock) {
 // unfinised account recovery using email method. outdated, unused, unloved
 function recoverAccount($email, $password, $sock) {
   $connection = connectAccount();
-
   //check if email exists before attempting to send recovery email, will return error otherwise.
   $check_email = "SELECT Email FROM UserInfo WHERE Email = '$email'";
   $change_password = "UPDATE UserInfo SET Pass= '$newPass' WHERE Email = '$email'";
@@ -133,16 +132,19 @@ function recoverAccount($email, $password, $sock) {
 // takes users email, returns users username.
 function rememberUsername ($email, $sock) {
   $connection = connectAccount();
-
   $find_user = "SELECT Username FROM UserInfo WHERE Email = '$email'";  //finds a username tied to a email
-  $resultUser = mysqli_query($connection, $find_user); //runs find_user
-  $obj = $resultUser->fetch_object();
-  $returnUser = $obj->Username; // returnUser == return value of find_user
-  $message = "SUCC{$returnUser}";
-  sendMessage($message, $socket);
-
+  if(checkExists($connection, $find_user) > 0) {
+    $returnUser = getObjString($connection, $find_user)->Username;
+    $message = "SUCC";
+    sendMessage($message, $sock);
+    sendVerEmail($email, $returnUser);
+  }
+  else {
+    fwrite($sock, "FAIL\n");
+  }
   disconnect($connection);
 }
+
 
 // recovery option for remembering a password, sends a recovery email
 function rememberPassword ($username, $email, $sock) {

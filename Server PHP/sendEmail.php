@@ -31,5 +31,16 @@ function recPWEmail($email, $user, $pass){
 
 }
 
+function sendVerEmail($email, $user){
+ $to = "$email";
+ $subject = "StudyGroup Username Requested!";
+ $body = "Hello, you recently requested the username belong to this email: $email.\n\nThe username associated with this account is: $user.\n\nThank you for using our software, and be on the lookout for new StudyGroupPro++ Limited Release DLC Platinum Package which now allows you to resize the window!";
+ if (mail($to, $subject, $body)) {
+ echo("<p>Email successfully sent!</p>");
+ } else {
+ echo("<p>Email delivery failed…</p>");
+ }
+}
+
 
 ?>

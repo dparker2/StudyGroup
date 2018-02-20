@@ -13,11 +13,11 @@ function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
   //RETURN FRONT SIDE AND BACK SIDE
   for($i= 0; $i<2; $i++){
     if($i == 0){
-      $side == 'side1';
+      $side = 'side1';
       $code = 'FCFT';
     }
     else if($i == 1){
-      $side == 'side2';
+      $side = 'side2';
       $code = 'FCBK';
     }
     $return_FlashCards = "SELECT id, $side
@@ -101,10 +101,10 @@ while($rowIP = mysqli_fetch_array($resultIP)){
   $keySock = $clientList[$keyIP]->getSocket();
   $FlashCards = "$groupID $returnID $message";
   if($side == 'side1'){
-    $clientMessage == "FCFT$FlashCards";
+    $clientMessage = "FCFT$FlashCards";
   }
   else if($side == 'side2'){
-    $clientMessage == "FCBK$FlashCards";
+    $clientMessage = "FCBK$FlashCards";
   }
   sendMessage($clientMessage, $keySock);
 }// end while loop
