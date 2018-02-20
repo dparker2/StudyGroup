@@ -24,6 +24,7 @@ signals:
 
 private slots:
     void on_signin_button_clicked();
+    void RECQ(QString);
 
     /*void on_lineEdit_email_editingFinished();
     void on_lineEdit_email_cursorPositionChanged();

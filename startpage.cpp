@@ -29,8 +29,14 @@ StartPage::~StartPage()
 
 void StartPage::do_work()
 {
-    while(!_work_queue.isEmpty()) {
-        qDebug() << _work_queue.dequeue();
+    while(!_work_queue.isEmpty())
+    {
+        QByteArray message = _work_queue.dequeue();
+        QList<QByteArray> message_list = split(message, 2);
+        if (message_list[0] == "RECQ")
+        {
+            RECQ(QString(message_list[1]));
+        }
     }
 }
 
@@ -157,19 +163,23 @@ void StartPage::on_pushButton_recover_pass_clicked()
 void StartPage::on_pushButton_recover_user_clicked()
 {
     QString email = ui->lineEdit_recover_user->text();
-    QString user;
-
-    /*if (my_serv->recover_user(email, user)){
-        // QString username = user;
-        QMessageBox username_box;
-        username_box.setText("Your username is: ");
-        username_box.setInformativeText(user); //placeholder
-        username_box.exec();
-    }
-    else {
-        QMessageBox error_box;
-        error_box.critical (0, "Error", "An error has occured! ");
-        error_box.setFixedSize(500,200);
-    }*/
+    server::send(server::RECOVER_USERNAME+email);
 
 }
+void StartPage::RECQ(QString email_sent)
+{
+
+    if(email_sent == "SUCC"){
+        QMessageBox username_box;
+        username_box.information(0, "Username Recovery", "\nUsername was sent to email\n");
+    }
+    else{
+        QMessageBox error_box;
+        error_box.critical(0, "Username Recovery", "\nEmail does not exist\n");
+        error_box.setFixedSize(500,200);
+    }
+}
+
+// create security 3 questions when creating account
+// sending questions and answers
+// RECQUsername Q1 A1 Q2 A3
