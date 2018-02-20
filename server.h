@@ -34,16 +34,6 @@ public:
     static void initialize();  // New one
     static void clear_memory();  // New thing
     void setTimestamps(char arg);  // Figure this out later
-    // Account Functions
-    bool login(QString& username, QString& password, QString& email);  // Replace all of these with static functions
-    bool create_account(QString& username, QString& password, QString& email);  //  |
-    bool recover_user(QString& email, QString& user);                           //  |
-    bool recover_pass(QString& username, QString& email, QString& pass);        //  |
-    bool logout();                                                              //  |
-    // Group Functions                                                          //  |
-    bool create_group(QString& group_name, QString& group_id);                  //  |
-    bool join_group(QString& group_id);                                         //  |
-    bool leave_group(QString& group_id);                                        // <-
 
     // New stuff
     static void remove(QString class_key);  // Removes the key value pair from dict
@@ -74,28 +64,6 @@ public:
 
 protected:
     explicit server(QObject *parent = nullptr);  // Protect the constructor to prevent class instantiation
-
-signals:
-    // Group Signals
-    void new_chat(QString,QString,QString);
-    void users_changed();
-    void user_joined(QString);
-    void user_left(QString);
-    // Whiteboard
-    void whiteboard_draw_line(const QPoint&, const QPoint&, const QColor&, const int&);
-    void get_whiteboard(QString);
-    void update_whiteboard(QByteArray*);
-    // Flashcard
-    void new_flashcard(const int id, const QString&, const bool front);
-
-public slots:
-    // Group Slots
-    void send_chat(QString& groupID, QString& message);
-    // Whiteboard Slots
-    void send_whiteboard_line(const QString& groupID, const QPoint& point1, const QPoint& point2, const QColor& pen_color, const int& pen_size);
-    void send_whiteboard(QString& ip, QByteArray* whiteboard);
-    void save_whiteboard(QString& group_id, QByteArray* whiteboard);
-    void send_card(QString&, QString&, int&, int&);
 
 private slots:
     static void incoming_message(QString& object_name, QByteArray& work_message);

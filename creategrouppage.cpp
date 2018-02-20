@@ -24,10 +24,5 @@ void CreateGroupPage::on_create_group_button_released()
         GroupWidget* group_widget = new GroupWidget(group_id);
         ui->create_group_lineEdit->setText("");
         emit group_joined(group_widget, group_id);
-
-        /*ui->back_to_group_button->setVisible(true);
-        ui->back_to_group_button->setText(group_id);
-        ui->leave_button->setVisible(true);
-        ui->leave_button->setChecked(false);*/
     }
 }

@@ -23,9 +23,6 @@ GroupWidget::GroupWidget(QString id, QWidget *parent) :
     // Flaschard
     deck = new Deck(group_id + " flashcard");
     ui->study_mode->insertWidget(1, deck);
-    setFlashcardUI();
-
-    //connect(deck, SIGNAL(set_card(QString,int&,int)), this, SLOT(set_card(QString,int&,int)));
 }
 
 GroupWidget::~GroupWidget()
@@ -121,12 +118,6 @@ void GroupWidget::set_groupID(QString &groupID)
     ui->groupid_label->setText("GroupID: "+groupID);
 }
 
-void GroupWidget::send_line_drawn(const QPoint& first_mouse_pos, const QPoint& second_mouse_pos, const QColor& pen_color, const int& pen_size)
-{
-    //ui->save_whiteboard_button->setEnabled(true);
-    emit line_drawn(group_id, first_mouse_pos, second_mouse_pos, pen_color, pen_size);
-}
-
 /********
  *
  * UI SLOTS
@@ -142,10 +133,6 @@ void GroupWidget::on_submit_chat_released()
     }
 }
 
-void GroupWidget::setFlashcardUI(){
-    //deck->card_label->hide();
-}
-
 void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
 {
     if(index){
@@ -156,27 +143,4 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
         ui->study_mode->setCurrentWidget(whiteboard);
         ui->study_menu->setCurrentIndex(0);
     }
-}
-
-void GroupWidget::on_add_card_button_clicked()
-{
-    //deck->add_card();
-}
-
-void GroupWidget::set_card(QString front, int& card_num, int side){
-    QString groupID = get_groupID();
-    qDebug() << "SET FRONT" << endl;
-    emit send_card(groupID, front, card_num, side);
-}
-
-void GroupWidget::incoming_card(int card_index, QString text, bool front)
-{
-    //deck->init_card(card_index, text, front); // Will edit or create new card
-}
-
-void GroupWidget::on_pushButton_clicked()
-{
-    ui->study_menu->setCurrentIndex(0);
-    ui->study_mode->setCurrentWidget(whiteboard);
-    ui->comboBox_study_mode->setCurrentIndex(0);
 }

@@ -27,7 +27,6 @@ public slots:
     void removeCurrentPage();
 
 private slots:
-    void exit_settings();
     void on_settings_button_released();
     void on_leave_button_released();
     void on_logout_button_released();
