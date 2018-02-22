@@ -1,7 +1,5 @@
 <?php
-
 include_once 'classes.php';
-
 //Test function for existence.
 function checkExists($connection, $query) {
   if ($stmt = mysqli_prepare($connection, $query)) {
@@ -124,4 +122,5 @@ function getSocketList($clientList) {
   }
   return $socketList;
 }
+
 ?>

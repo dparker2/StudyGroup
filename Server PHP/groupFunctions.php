@@ -16,6 +16,7 @@ date_default_timezone_set('UTC');
 //Function creates group by comparing groupname to existing groups on database, if none found it will create a new group with the group name appended with a random 4 digits after, and sets the creator as Admin of the group
 function createGroup($groupname, $user, $clientList, $sock)
 {
+  global $groupList;
   $connection = connectGroup();
   $username = $user->getName();
   $ip = $user->getIP();
@@ -47,6 +48,15 @@ function createGroup($groupname, $user, $clientList, $sock)
       mysqli_query($connection, $insertUserList);
       mysqli_query($connection, $insertWBph);
       mysqli_query($connection, $createFlashCardTable);
+      $groupList[$groupID] = new Group;
+      $newGroup = $groupList["$groupID"];
+      $newGroup->setGroupID($groupID);
+      $newGroup->setAdmin($username);
+      $newGroup->setMember($username);
+      $newGroup->setMemberIP($ip);
+      $newGroup->setNum();
+      $user->setGroup($groupID);
+      var_dump($groupList);
       $message = "SUCC"."$groupID";
       sendMessage($message, $sock);
       $user->setGroup($groupID);
@@ -59,6 +69,7 @@ function createGroup($groupname, $user, $clientList, $sock)
 //Function inserts user into group table and updates chat, whiteboard, flashcards, and userlist.
 function joinGroup($groupID, $user, $clientList, $sock)
 {
+  global $groupList;
   $connection = connectGroup();        //Connect to group database.
   $username = $user->getName();   //Gets username from object and assigns to username
   $ip = $user->getIP();           //Get ip from object and assigns to ip
@@ -77,21 +88,29 @@ function joinGroup($groupID, $user, $clientList, $sock)
   Checks if group that user entered exists.
   Returns Fail message if the group doesn't exists, or if the current user is the last person to join the group and the administrator hasn't joined yet.
   Else, it will insert the user into the group, then update the group list, flash cards, group chat, then whitebaord.*/
-  if (($groupIDExists = checkExists($connection, $checkGroupID)) > 0) { // True if group does exist
-    $numUsers = getNumRows($connection, $returnUserList);        //Obtains curr number of users in group from database
-    $adminName = getObjString($connection, $selectAdmin)->Admin; //Obtains admin name for comparison
+  if (($groupIDExists = checkExists($connection, $checkGroupID)) > 0 || array_key_exists($groupID, $groupList)) { // True if group does exist
+    //$numUsers = getNumRows($connection, $returnUserList);        //Obtains curr number of users in group from database
+    //$adminName = getObjString($connection, $selectAdmin)->Admin; //Obtains admin name for comparison
+    $groupClass = $groupList[$groupID];
+    $numUsers = $groupClass->getNumMembers();
+    $adminName = $groupClass->getAdmin();
+
     echo "DEBUG: Admin of $groupID is $adminName\n";
     echo "DBUG: $username is joining group $groupID ... \n\n";
     echo "DEBUG: Number of users in group: $numUsers \n\n";
     if ($numUsers < 5) { //Max Group Size currently set to 5
       if(($numUsers == 4) && (($adminExists = checkExists($connection, $checkAdmin)) < 1) && ($adminName != $username) ) //Checks to see if admin is in group before max capacity
         fwrite($sock, "00021FAILNo Admin in Group");
-        //If able to join, will insert user to group table and update client for group list, group chat, flash card, wb.
+        //If able to joingroupList, will insert user to group table and update client for group list, group chat, flash card, wb.
       else {
         fwrite($sock, "00004SUCC");
         mysqli_query($connection, $joinGroup);
         $user->setGroup($groupID);
         updateGroupList($connection, $clientList, $groupID);
+        $groupClass->setMember($username);
+        $groupClass->setMemberIP($ip);
+        $groupClass->setNum();
+        updateGroupList($connection, $clientList, $groupClass, $groupID);
         updateGroupChat($connection, $groupID, $sock);
         updateFlashCards($connection, $ip, $clientList, $groupID, $sock);
 
@@ -136,6 +155,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
 //Deletes user from group table and updates rest of members with udpated user list.
 function leaveGroup($groupID, $user, $clientList, $sock)
 {
+  global $groupList;
   $connection = connectGroup();
   $username = $user->getName();
   $leaveGroup = "DELETE FROM $groupID
@@ -143,14 +163,16 @@ function leaveGroup($groupID, $user, $clientList, $sock)
   echo "DEBUG: $username Leaving Group... \n";
   mysqli_query($connection, $leaveGroup);
   fwrite($sock, "00004SUCC");             //writes back to current client success on leave
-  updateGroupList($connection, $clientList, $groupID);
+  $groupClass = $groupList[$groupID];
+  $groupClass->removeMember($username);
+  updateGroupList($connection, $clientList, $groupClass, $groupID);
   $user->removeGroup($groupID);
   disconnect($connection);
 }
 
 //UPDATE GROUP LIST FUNCTION
 //Updates group members of user list
-function updateGroupList($connection, $clientList, $groupID)
+function updateGroupList($connection, $clientList, $groupClass, $groupID)
 {
   //SQL Statements to Query
   /*$returnUserList = "SELECT userList FROM $groupID, UserInfo WHERE userList IS NOT NULL
@@ -160,6 +182,19 @@ function updateGroupList($connection, $clientList, $groupID)
   $returnIPList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
   $ipList = mysqli_query($connection, $returnIPList); //Returns list of current IP
 
+  $ipList2 = $groupClass->getMemberIP();
+  $memberList = $groupClass->getMembers();
+  foreach($ipList2 as $userIP) {
+    $keySock = $clientList[$userIP]->getSocket();
+    $message = "USCH"."$groupID";
+    sendMessage($message, $keySock);
+    foreach($memberList as $member) {
+      $message = "NUSR"."$groupID $member";
+      sendMessage($message, $keySock);
+    }
+  }
+
+/*
   echo "DEBUG: Updating Group List... \n";
   while($rowIP = mysqli_fetch_array($ipList)) {  //Loops through each member one at a time.
     $keyIP = $rowIP[0];                          //Stores one IP from current group list
@@ -173,7 +208,7 @@ function updateGroupList($connection, $clientList, $groupID)
       $message = "NUSR"."$groupID $name";                                  //Appends CODE NUSR to username so client can update.
       sendMessage($message, $keySock);
     } //closes for/while loop
-  }   //end while Loops
+  }   //end while Loops*/
 }
 //SEND CHAT FUNCTION
 //Append username and timestamp to user message and returns to each member in group.

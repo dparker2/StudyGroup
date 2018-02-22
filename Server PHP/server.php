@@ -14,43 +14,33 @@ $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //A
 //echo "This is the server socket: ";
 //var_dump($server);
 echo "\n+++++++ Program Start +++++++\n";
-
-/* Failed restart function
-register_shutdown_function(function () {
-  global $_, $argv, $server;
-  //restart script
-  sleep(5);
-  fclose($server);
-  pcntl_exec($_, $argv);
-});*/
-
 //Returns error message if we fail to bind
 if ($server[0] === false)
 {
     die("Failed to bind to socket:  $errorMessage \n");
 }
-
-
 //Updates all users to offline on server startup in case of crash.
 echo "Resetting all Online Users... \n";
 clearAllOnlineStatus();
 
 //Deletes all users in groups just in case of crash.
 //Insures that no duplicate users would be printed
-
 echo "Clearing Group Members...\n";
 clearGroupMembers();
 
 
 //Client streaming starts
+$groupList = array(); // Initates global group list
 $clientList = array(); // $ip => ($socket, $username)
 while(true) {
     //echo "Listening \n";
     //prepare readable sockets
-    //echo "\n+++++++++++++++++++++++++\n";
-    //echo "At top of the while loop, current clients connected: \n";
-    //echo "Clients:\n";
-    //var_dump($clientList);
+    echo "\n+++++++++++++++++++++++++\n";
+    echo "At top of the while loop, current clients connected: \n";
+    echo "Clients:\n";
+    var_dump($clientList);
+    echo "Groups:\n";
+    var_dump($groupList);
 
     //$read_socks = array_column($clients, 0);
     $read_socks = getSocketList($clientList);
@@ -171,11 +161,10 @@ while(true) {
               logoutAccount($client->getName(), $sock);
               break; //username, socket
             case "CGRP":
-              createGroup($codeMessage[0], $client, $clientList, $sock);
-              break; //groupname, user, client list, socket
+              createGroup($codeMessage[0], $client, $clientList, $sock)
+              break; //groupname, user, client list, group list, socket
             case "JGRP":
-              if(joinGroup($codeMessage[0], $client, $clientList, $sock)) {
-                $client->setGroup($codeMessage[0]);}
+              joinGroup($codeMessage[0], $client, $clientList, $sock);
               break; //groupID, user, client array, socket
             case "LGRP":
               leaveGroup($codeMessage[0], $client, $clientList, $sock);

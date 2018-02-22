@@ -3,6 +3,7 @@ include_once 'db_credentials.php';
 include_once 'utilityFunctions.php';
 include_once 'flashCardFunctions.php';
 include_once 'groupFunctions.php';
+include_once 'classes.php';
 /* Whiteboard Functions
   function whiteboardLine($groupID, $point1, $point2, $clientList, $sock)
   function updateWhiteBoard($ipaddress, $wbstring, $clientList, $sock)
