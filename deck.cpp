@@ -64,6 +64,7 @@ void Deck::init_card(int index, QString front_text, QString back_text, bool fron
 
         deck[index] = new_card;              // The above loop guarantees we are in the proper spot to append at the right index
                                              // even if the index was too high at first
+        ui->total->setText("Total: " + QString::number(deck.size()));
         if(deck.size() > 1)
         {
             ui->prev_btn->setEnabled(true);  // Show the prev/next buttons
