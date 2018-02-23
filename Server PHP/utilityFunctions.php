@@ -17,7 +17,7 @@ function connectGroup() {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   if ($connection->connect_error)
     die("Connection failed: " . $connection->connect_error);
-  else
+  //else
     //echo "Connected to database \n";
   return $connection;
 }
@@ -26,13 +26,14 @@ function connectAccount() {
   $connection = new mysqli(DB2_Server, DB2_User, DB2_Pass, DB2_Name);
   if ($connection->connect_error)
     die("Connection failed: " . $connection->connect_error);
-  else
-    echo "Connected to database \n";
+  //else
+    //echo "Connected to database \n";
   return $connection;
 }
 
 function disconnect($connection) {
-  if($connection->close()) {
+  $connection->close();
+  //if($connection->close()) {
     //echo "Database Closed \n";
   }
 }
@@ -89,7 +90,7 @@ function logout($user) {
     clearOnlineStatus($username);
     echo "DEBUG: Changing $username to offline \n";
     if (count($user->getGroup()) != 0)
-      echo "DEBUG: Removing $username from groupos \n";
+      echo "DEBUG: Removing $username from groups \n";
       clearFromGroup($user);
   }
 }
@@ -110,7 +111,7 @@ function sendMessage($message, $socket) {
   $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
   $code = substr($message, 0, 4);
   if ($messageSize < 100 && $code != 'WBLN')
-    echo "DEBUG: This is the fwrite: $message \n";
+    echo "DEBUG: This is the fwrite: $messageSize $message \n";
   fwrite($socket, "{$messageSize}{$message}");
 }
 

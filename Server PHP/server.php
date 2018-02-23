@@ -145,13 +145,13 @@ while(true) {
 
           //Prints out messages received for debugging purposes.
           if ($code == 'UPWB' || $code == 'SVWB' || $code == 'WBUP') {
-            echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: {$bytes}{$code}: WB String too long to echo. \n";}
+            echo "THIS IS THE MESSAGE SERVER RECEIVED BEFORE PASSING INTO SWITCH STATEMENT: \n {$bytes}{$code}: WB String too long to echo. \n";}
             //echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: $code: $msg \n";}
           else if ($code == 'WBLN') {
             //nothing because it would be echo'd too many times because each point is going to be sent over.
           }
           else {
-            echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT $code: $msg \n"; }
+            echo "THIS IS THE MESSAGE SERVER RECEIVED BEFORE PASSING INTO SWITCH STATEMENT: \n $code: $msg \n"; }
 
           $limit = 3;
           if ($code == "GCHT" || $code == "SVWB") {

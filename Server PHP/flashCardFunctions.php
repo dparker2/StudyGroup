@@ -69,21 +69,21 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
     $returnID = $returnID -1;
     $clientMessage = "SUCC{$returnID}";
     sendMessage($clientMessage, $sock);
-    echo "$clientMessage \n";
+    //echo "$clientMessage \n";
 
-  while($rowIP = mysqli_fetch_array($resultIP)){
-    $keyIP = $rowIP[0];
-    $keySock = $clientList[$keyIP]->getSocket();
-    $FlashCards = "$groupID $returnID $message";
+    while($rowIP = mysqli_fetch_array($resultIP)){
+      $keyIP = $rowIP[0];
+      $keySock = $clientList[$keyIP]->getSocket();
+      $FlashCards = "$groupID $returnID $message";
 
-    if($side == 'side1'){
-      $clientMessage = "FCFT$FlashCards";
-    }
-    else if($side == 'side2'){
-      $clientMessage = "FCBK$FlashCards";
-    }
-    sendMessage($clientMessage, $keySock);
-  } //Closes while loop
+      if($side == 'side1'){
+        $clientMessage = "FCFT$FlashCards";
+      }
+      else if($side == 'side2'){
+        $clientMessage = "FCBK$FlashCards";
+      }
+      sendMessage($clientMessage, $keySock);
+    } //Closes while loop
   }//Closes outer if statement
 
   else{
@@ -96,18 +96,18 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
     //echo "clientMessage is: $clientMessage\n\n";
     sendMessage($clientMessage, $sock);
 
-while($rowIP = mysqli_fetch_array($resultIP)){
-  $keyIP = $rowIP[0];
-  $keySock = $clientList[$keyIP]->getSocket();
-  $FlashCards = "$groupID $returnID $message";
-  if($side == 'side1'){
-    $clientMessage == "FCFT$FlashCards";
-  }
-  else if($side == 'side2'){
-    $clientMessage == "FCBK$FlashCards";
-  }
-  sendMessage($clientMessage, $keySock);
-}// end while loop
+      while($rowIP = mysqli_fetch_array($resultIP)){
+        $keyIP = $rowIP[0];
+        $keySock = $clientList[$keyIP]->getSocket();
+        $FlashCards = "$groupID $returnID $message";
+        if($side == 'side1'){
+          $clientMessage == "FCFT$FlashCards";
+        }
+        else if($side == 'side2'){
+          $clientMessage == "FCBK$FlashCards";
+        }
+        sendMessage($clientMessage, $keySock);
+      }// end while loop
   } // end else bracket
   disconnect($connection);
 }//close function
