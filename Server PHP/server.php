@@ -205,11 +205,11 @@ while(true) {
               rememberPassword($codeMessage[0], $codeMessage[1], $sock);
               break;
             case "FCBK":
-              if(!$codeMessage[2]) {$codeMessage[2] = ""};
+              if(!$codeMessage[2]) {$codeMessage[2] = "";}
               addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 2);
               break;
             case "FCFT":
-              if(!$codeMessage[2]) {$codeMessage[2] = ""};
+              if(!$codeMessage[2]) {$codeMessage[2] = "";}
               addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 1); // 0 = groupID 1 = card id 2 = message
               break;
           }//Switch Statement
