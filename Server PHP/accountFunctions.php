@@ -2,6 +2,7 @@
 include_once 'db_credentials.php';
 include_once 'sendEmail.php';
 include_once 'utilityFunctions.php';
+include_once 'classes.php';
 /* Group Functions
   function createAccount($email, $username, $password, $sock);
   function loginAccount($username, $password, $sock);

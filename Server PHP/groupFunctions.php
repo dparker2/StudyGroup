@@ -2,6 +2,7 @@
 include_once 'db_credentials.php';
 include_once 'utilityFunctions.php';
 include_once 'flashCardFunctions.php';
+include_once 'classes.php';
 date_default_timezone_set('UTC');
 /* Group Functions
   function createGroup($groupname, $user, $sock)
@@ -48,6 +49,7 @@ function createGroup($groupname, $user, $clientList, $sock)
       mysqli_query($connection, $createFlashCardTable);
       $message = "SUCC"."$groupID";
       sendMessage($message, $sock);
+      $user->setGroup($groupID);
       updateGroupList($connection, $clientList, $groupID);
     }
   disconnect($connection);
@@ -88,6 +90,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
       else {
         fwrite($sock, "00004SUCC");
         mysqli_query($connection, $joinGroup);
+        $user->setGroup($groupID);
         updateGroupList($connection, $clientList, $groupID);
         updateGroupChat($connection, $groupID, $sock);
         updateFlashCards($connection, $ip, $clientList, $groupID, $sock);
