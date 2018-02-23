@@ -96,8 +96,12 @@ bool SGTCPSocket::read_socket_helper(QString& out_message)
     success_flag = false;
     fail_flag = false;
     success_message = nullptr;
+
+tryread:
     if((QAbstractSocket::ConnectedState == my_tcp_socket->state()) && (my_tcp_socket->waitForReadyRead(5000)))
     {
+        if(!(success_flag || fail_flag))
+            goto tryread;
         if(success_flag)
         {
             out_message = success_message;
