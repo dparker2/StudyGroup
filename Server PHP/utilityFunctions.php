@@ -56,9 +56,11 @@ function clearFromGroup($user) {
   $connection = connectGroup();
   $groupArray = $user->getGroup();
   $username = $user->getName();
+  global $clientList;
   foreach($groupArray as $group) {
     $remFromGroup = "DELETE FROM $group WHERE userList = '$username'";
-    mysqli_query($connection, $group);
+    mysqli_query($connection, $remFromGroup);
+    updateGroupList($connection, $clientList, $group);
   }
   disconnect($connection);
 }
