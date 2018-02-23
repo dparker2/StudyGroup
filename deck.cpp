@@ -81,18 +81,8 @@ void Deck::init_card(int index, QString front_text, QString back_text, bool fron
 */
 void Deck::on_add_card_btn_clicked()
 {
-    //int new_index;
-    QString index = "-1";
-
-    QString new_card = server::FLASHCARD_SET_FRONT + groupID + " " + index + " ";
-    server::request_response(new_card, index);
-    new_index = index.toInt();
-
-    init_card(new_index, "", "", true, false); // Make new card
-
-    ui->card_area->removeWidget(deck.at(current_index));
-    current_index = new_index;
-    display_card(new_index);
+    QString new_card = server::FLASHCARD_SET_FRONT + groupID + " -1";
+    server::send(new_card);
 }
 
 /*
