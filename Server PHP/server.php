@@ -47,7 +47,7 @@ $clientList = array(); // $ip => ($socket, $username)
 while(true) {
     //echo "Listening \n";
     //prepare readable sockets
-    echo "\n+++++++++++++++++++++++++\n";
+    //echo "\n+++++++++++++++++++++++++\n";
     //echo "At top of the while loop, current clients connected: \n";
     //echo "Clients:\n";
     //var_dump($clientList);
@@ -61,7 +61,7 @@ while(true) {
 
     //echo "Readable sockets:\n";
     //var_dump($read_socks);
-    echo "+++++++++++++++++++++++++\n \n";
+    //echo "+++++++++++++++++++++++++\n \n";
 
     //start reading and use a large timeout
     if(!stream_select ( $read_socks, $write, $except, 300000 ))
@@ -77,7 +77,7 @@ while(true) {
             //print remote client information, ip and port number
             echo 'Connection accepted from ' . stream_socket_get_name($new_client, true) . "\n";
 
-            echo "+++++++++++++++++++++++++++ \n";
+            //echo "+++++++++++++++++++++++++++ \n";
             $user = stream_socket_get_name($new_client, true);
             $clientList[$user] = new User();
             $clientList[$user]->setIP(stream_socket_get_name($new_client, true));
