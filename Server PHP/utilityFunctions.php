@@ -116,7 +116,7 @@ function sendMessage($message, $socket) {
 
 function getSocketList($clientList) {
   $clientNum = count($clientList);
-  echo "DEBUG: In getSocketList, number of clients: ". $clientNum . "\n";
+  //echo "DEBUG: In getSocketList, number of clients: ". $clientNum . "\n";
   $socketList = array();
   foreach ($clientList as $user) {
     $socketList[$user->getIP()] = $user->getSocket();
