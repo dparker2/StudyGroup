@@ -11,8 +11,8 @@ $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //A
 //$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
 //echo ++$argv[1];
 //$_ = $_SERVER['_'];;
-echo "This is the server socket: ";
-var_dump($server);
+//echo "This is the server socket: ";
+//var_dump($server);
 echo "\n+++++++ Program Start +++++++\n";
 
 /* Failed restart function
@@ -50,7 +50,7 @@ while(true) {
     echo "\n+++++++++++++++++++++++++\n";
     //echo "At top of the while loop, current clients connected: \n";
     //echo "Clients:\n";
-    var_dump($clientList);
+    //var_dump($clientList);
 
     //$read_socks = array_column($clients, 0);
     $read_socks = getSocketList($clientList);
