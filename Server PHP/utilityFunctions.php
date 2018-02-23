@@ -1,5 +1,7 @@
 <?php
 
+include_once 'classes.php';
+
 //Test function for existence.
 function checkExists($connection, $query) {
   if ($stmt = mysqli_prepare($connection, $query)) {
@@ -118,53 +120,5 @@ function getSocketList($clientList) {
     $socketList[$user->getIP()] = $user->getSocket();
   }
   return $socketList;
-}
-
-
-class User {
-  function __construct() {
-    echo "Constructing user class\n";
-  }
-  function __destruct() {
-    echo "Destructing user class\n";
-  }
-
-  var $username;
-  var $ip;
-  var $socket;
-  var $email;
-  var $group = array();
-
-  function getName() {
-    return $this->username;
-  }
-  function getIP() {
-    return $this->ip;
-  }
-  function getSocket() {
-    return $this->socket;
-  }
-  function getEmail() {
-    return $this->email;
-  }
-  function getGroup() {
-    return $this->group;
-  }
-  function setName($Name) {
-    $this->username = $Name;
-  }
-  function setIP($ipAddress) {
-    $this->ip = $ipAddress;
-  }
-  function setSocket($sock) {
-    $this->socket = $sock;
-  }
-  function setEmail($usrEmail) {
-    $this->email = $usrEmail;
-  }
-  function setGroup($groupName) {
-    array_push($this->group, $groupName);
-  }
-
 }
 ?>
