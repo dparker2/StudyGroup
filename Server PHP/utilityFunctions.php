@@ -108,7 +108,8 @@ function getObjString($connection, $query) {
 
 function sendMessage($message, $socket) {
   $messageSize = str_pad((string)strlen($message), 5, "0", STR_PAD_LEFT);
-  if ($messageSize < 100)
+  $code = $substr($message, 0, 4);
+  if ($messageSize < 100 && $code != 'WBUP')
     echo "DEBUG: This is the fwrite: $message \n";
   fwrite($socket, "{$messageSize}{$message}");
 }
