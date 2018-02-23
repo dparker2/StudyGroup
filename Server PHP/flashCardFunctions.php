@@ -61,7 +61,7 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
 // Check to see if the id for this card exists already
   $check_card = "SELECT * FROM $flashGroupID WHERE (id='$num')";
   if (checkExists($connection, $check_card) > 0){
-    echo "Card exists already ";
+    echo "Card exists already \n";
     $update = "UPDATE $flashGroupID SET user= '$username', $side='$message' WHERE (id='$num')";
     mysqli_query($connection, $update);
     $NewID = "SELECT id FROM $flashGroupID WHERE (user='$username' AND $side='$message')";
@@ -101,10 +101,10 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
         $keySock = $clientList[$keyIP]->getSocket();
         $FlashCards = "$groupID $returnID $message";
         if($side == 'side1'){
-          $clientMessage == "FCFT$FlashCards";
+          $clientMessage = "FCFT$FlashCards";
         }
         else if($side == 'side2'){
-          $clientMessage == "FCBK$FlashCards";
+          $clientMessage = "FCBK$FlashCards";
         }
         sendMessage($clientMessage, $keySock);
       }// end while loop
