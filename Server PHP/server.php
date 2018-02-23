@@ -48,8 +48,8 @@ while(true) {
     //echo "Listening \n";
     //prepare readable sockets
     echo "\n+++++++++++++++++++++++++\n";
-    echo "At top of the while loop, current clients connected: \n";
-    echo "Clients:\n";
+    //echo "At top of the while loop, current clients connected: \n";
+    //echo "Clients:\n";
     var_dump($clientList);
 
     //$read_socks = array_column($clients, 0);
@@ -59,8 +59,8 @@ while(true) {
     echo "Attach server socket into readable socket\n";*/
     $read_socks["Server Socket: "] = $server;
 
-    echo "Readable sockets:\n";
-    var_dump($read_socks);
+    //echo "Readable sockets:\n";
+    //var_dump($read_socks);
     echo "+++++++++++++++++++++++++\n \n";
 
     //start reading and use a large timeout
@@ -90,23 +90,23 @@ while(true) {
 
     //message from existing client
     foreach($read_socks as $sock)
-    {   echo "Now iterating through our read sockets to read in the message \n";
-        echo "Waiting for data now \n\n";
+    {   //echo "Now iterating through our read sockets to read in the message \n";
+        //echo "Waiting for data now \n\n";
         $data = fread($sock, 5); //i.e. 01924SVWB$groupID $wbstring
-        echo "Number of bytes in message: $data\n";
+        //echo "Number of bytes in message: $data\n";
         if ($data > 0) { //data = 01924
-          echo "DATA EXISTS, it will isolate the code and message \n";
+          //echo "DATA EXISTS, it will isolate the code and message \n";
           $bytes = (int)$data;//bytes = 1924
-          echo "Number of bytes in while loop $bytes \n";
+          //echo "Number of bytes in while loop $bytes \n";
           $messageLength = 0;
           $message = "";
           //$remainingLength = $bytes;
           while(($messageLength < $bytes)){ // 0 < 1924
-            echo "In while loop: isolating data \n";
+            //echo "In while loop: isolating data \n";
             $newdata = fread($sock, ($bytes-$messageLength)); //read something
-            echo "Appending message...\n";
+            //echo "Appending message...\n";
             $messageLength += strlen($newdata); //
-            echo "messageLength is currently $messageLength out of $bytes total";
+            //echo "messageLength is currently $messageLength out of $bytes total\n";
             $message = "{$message}{$newdata}";
             //$remainingLength -= strlen($newdata);
           }
@@ -134,7 +134,7 @@ while(true) {
         }
         //send the message back to client
         else {
-          echo "It passes the code through our switch statement \n";
+          //echo "It passes the code through our switch statement \n";
           $ip = stream_socket_get_name($sock, true); //Current user.
           $client = $clientList[$ip];
 
