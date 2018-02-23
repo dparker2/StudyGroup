@@ -81,8 +81,8 @@ function joinGroup($groupID, $user, $clientList, $sock)
     $numUsers = getNumRows($connection, $returnUserList);        //Obtains curr number of users in group from database
     $adminName = getObjString($connection, $selectAdmin)->Admin; //Obtains admin name for comparison
     echo "DEBUG: Admin of $groupID is $adminName\n";
-    echo "DBUG: $username is joining group $groupID ... \n";
-    echo "DEBUG: Number of users in group: $numUsers \n";
+    echo "DBUG: $username is joining group $groupID ... \n\n";
+    echo "DEBUG: Number of users in group: $numUsers \n\n";
     if ($numUsers < 5) { //Max Group Size currently set to 5
       if(($numUsers == 4) && (($adminExists = checkExists($connection, $checkAdmin)) < 1) && ($adminName != $username) ) //Checks to see if admin is in group before max capacity
         fwrite($sock, "00021FAILNo Admin in Group");
@@ -102,19 +102,19 @@ function joinGroup($groupID, $user, $clientList, $sock)
           $wbstring = (string)$object->Whiteboard;
           //If WB is just empty or placeholder, nothing to update. Else send whiteboard to member
           if($wbstring == "" || $wbstring =="placeholder"){
-            echo "DEBUG: No whiteboard in Database or placeholder, nothing to send...\n";
+            echo "DEBUG: No whiteboard in Database or placeholder, nothing to send...\n\n";
             $bool_check = true;
           }
           else {
             $message = "WBUP$groupID $wbstring";
-            echo "DEBUG: Whiteboard found in Database, updating for first user...\n";
+            echo "DEBUG: Whiteboard found in Database, updating for first user...\n\n";
             sendMessage($message, $sock);
             $bool_check = true;
           } // closes line 89 else statement
         }   // closes line 82 numUsers if statement
         //Else not first user joining, will get current whiteboard from existing member and send to member joining
         else {
-          echo "Requesting whiteboard from existing user to update joining member... \n";
+          echo "Requesting whiteboard from existing user to update joining member... \n\n";
           $object = getObjString($connection, $selectExistingMember);
           $existingMember = (string)$object->ipAddress;
           $existingSocket = $clientList[$existingMember]->getSocket();
@@ -213,7 +213,7 @@ function updateGroupChat($connection, $groupID, $sock)
                         FROM $groupID
                         WHERE Message IS NOT NULL";
   $messageList = mysqli_query($connection, $returnMessageList);
-  echo "DEBUG: Updating Group Chat... \n";
+  echo "DEBUG: Updating Group Chat... \n\n";
 
   //Sends chat log to requested socket
   while($row = mysqli_fetch_array($messageList)) {

@@ -67,9 +67,9 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
     $NewID = "SELECT id FROM $flashGroupID WHERE (user='$username' AND $side='$message')";
     $returnID = getObjString($connection, $NewID)->id;
     $returnID = $returnID -1;
-    $clientMessage = "SUCC{$returnID}";
+    /*$clientMessage = "SUCC{$returnID}";
     sendMessage($clientMessage, $sock);
-    //echo "$clientMessage \n";
+    //echo "$clientMessage \n";*/
 
     while($rowIP = mysqli_fetch_array($resultIP)){
       $keyIP = $rowIP[0];
@@ -92,9 +92,9 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
     $returnID = getObjString($connection, $NewID)->id;
     $returnID = $returnID -1;
     //echo "returnID is: $returnID\n\n";
-    $clientMessage = "SUCC{$returnID}";
+    /*$clientMessage = "SUCC{$returnID}";
     //echo "clientMessage is: $clientMessage\n\n";
-    sendMessage($clientMessage, $sock);
+    sendMessage($clientMessage, $sock);*/
 
       while($rowIP = mysqli_fetch_array($resultIP)){
         $keyIP = $rowIP[0];
