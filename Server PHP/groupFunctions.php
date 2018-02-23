@@ -88,12 +88,24 @@ function joinGroup($groupID, $user, $clientList, $sock)
   Checks if group that user entered exists.
   Returns Fail message if the group doesn't exists, or if the current user is the last person to join the group and the administrator hasn't joined yet.
   Else, it will insert the user into the group, then update the group list, flash cards, group chat, then whitebaord.*/
-  if (($groupIDExists = checkExists($connection, $checkGroupID)) > 0 || array_key_exists($groupID, $groupList)) { // True if group does exist
+  if (($groupIDExists = checkExists($connection, $checkGroupID)) > 0) { // True if group does exist
     //$numUsers = getNumRows($connection, $returnUserList);        //Obtains curr number of users in group from database
-    //$adminName = getObjString($connection, $selectAdmin)->Admin; //Obtains admin name for comparison
-    $groupClass = $groupList[$groupID];
-    $numUsers = $groupClass->getNumMembers();
-    $adminName = $groupClass->getAdmin();
+
+
+
+    //If you join an existing group in the database, and it isn't in the groupList yet...
+    if (array_key_exists($groupID, $groupList)) {
+      $groupClass = $groupList[$groupID];
+      $numUsers = $groupClass->getNumMembers();
+      $adminName = $groupClass->getAdmin();
+    }
+    else {
+      $adminName = getObjString($connection, $selectAdmin)->Admin; //Obtains admin name for comparison
+      $groupList[$groupID] = new Group;
+      $groupClass = $groupList[$groupID];
+      $groupClass->setAdmin($adminName);
+      $numUsers = $groupClass->getNumMembers();
+    }
 
     echo "DEBUG: Admin of $groupID is $adminName\n";
     echo "DBUG: $username is joining group $groupID ... \n\n";
@@ -104,9 +116,9 @@ function joinGroup($groupID, $user, $clientList, $sock)
         //If able to joingroupList, will insert user to group table and update client for group list, group chat, flash card, wb.
       else {
         fwrite($sock, "00004SUCC");
-        mysqli_query($connection, $joinGroup);
         $user->setGroup($groupID);
         updateGroupList($connection, $clientList, $groupID);
+        //mysqli_query($connection, $joinGroup);
         $groupClass->setMember($username);
         $groupClass->setMemberIP($ip);
         $groupClass->setNum();

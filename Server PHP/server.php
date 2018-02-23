@@ -161,7 +161,7 @@ while(true) {
               logoutAccount($client->getName(), $sock);
               break; //username, socket
             case "CGRP":
-              createGroup($codeMessage[0], $client, $clientList, $sock)
+              createGroup($codeMessage[0], $client, $clientList, $sock);
               break; //groupname, user, client list, group list, socket
             case "JGRP":
               joinGroup($codeMessage[0], $client, $clientList, $sock);

@@ -92,6 +92,7 @@ class Group {
         array_splice($this->memberIPs, $i, 1);
       }
     }
+    $this->numMembers--;
   }
   function setGroupID($name) {
       $this->groupID = $name;
