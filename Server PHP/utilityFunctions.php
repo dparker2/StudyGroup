@@ -35,7 +35,6 @@ function disconnect($connection) {
   $connection->close();
   //if($connection->close()) {
     //echo "Database Closed \n";
-  }
 }
 
 function clearGroupMembers() {
