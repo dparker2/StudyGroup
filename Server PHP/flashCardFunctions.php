@@ -13,11 +13,11 @@ function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
   //RETURN FRONT SIDE AND BACK SIDE
   for($i= 0; $i<2; $i++){
     if($i == 0){
-      $side == 'side1';
+      $side = 'side1';
       $code = 'FCFT';
     }
     else if($i == 1){
-      $side == 'side2';
+      $side = 'side2';
       $code = 'FCBK';
     }
     $return_FlashCards = "SELECT id, $side
