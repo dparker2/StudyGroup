@@ -110,7 +110,7 @@ while(true) {
             $message = "{$message}{$newdata}";
             //$remainingLength -= strlen($newdata);
           }
-          $code = substr($message, 0, 4)
+          $code = substr($message, 0, 4);
           if ($bytes < 100 && $code != 'WBLN')
             echo "DEBUG: This is the message after reading entire message and isolating \n $bytes $message \n";
         }
