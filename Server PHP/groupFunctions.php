@@ -5,7 +5,7 @@ include_once 'flashCardFunctions.php';
 include_once 'classes.php';
 date_default_timezone_set('UTC');
 /* Group Functions
-  function createGroup($groupname, $user, $sock)
+  function createGroup($groupname, $user, $clientList, $sock)
   function joinGroup($groupID, $user, $clientList, $sock)
   function leaveGroup($groupID, $user, $clientList, $sock)
   function updateGroupList($connection, $clientList, $groupID)
@@ -144,6 +144,7 @@ function leaveGroup($groupID, $user, $clientList, $sock)
   mysqli_query($connection, $leaveGroup);
   fwrite($sock, "00004SUCC");             //writes back to current client success on leave
   updateGroupList($connection, $clientList, $groupID);
+  $user->removeGroup($groupID);
   disconnect($connection);
 }
 

@@ -50,64 +50,12 @@ class User {
     array_unshift($this->group, $groupID);
   }
   function removeGroup($groupID) {
-  }
-
-}
-
-class Group {
-  function _construct() {
-    echo "Creating Group Class\n";
-  }
-  function __destruct() {
-    echo "Destructing Group Class\n";
-  }
-
-  var $groupID;
-  var $numMembers;
-  var $admin;
-  var $members = array();
-  var $memberIPs = array();
-
-  function getGroupID() {
-    return $this->groupID;
-  }
-  function getNumMembers() {
-    return $this->numMembers;
-  }
-  function getMembers() {
-    return $this->members;
-  }
-  function getMemberIP() {
-    return $this->memberIPs;
-  }
-  function getAdmin() {
-    return $this->admin;
-  }
-
-  function removeMember($username) {
-    for ($i = 0; $i < $this->numMembers; $i++) {
-      if ($this->members[$i] == $username) {
-        array_splice($this->members, $i, 1);
-        array_splice($this->memberIPs, $i, 1);
-      }
+    for($i = 0; $i < (count($this->group)); $i++) {
+      if($this->group[$i] == $groupID)
+        array_splice($this->group, $i, 1);
     }
-    $this->numMembers--;
   }
-  function setGroupID($name) {
-      $this->groupID = $name;
-  }
-  function setNum() {
-    $this->numMembers = count($this->members);
-  }
-  function setMember($member) {
-    array_push($this->members, $member);
-  }
-  function setMemberIP($ipaddress) {
-    array_push($this->memberIPs, $ipaddress);
-  }
-  function setAdmin($adminName) {
-    $this->admin = $adminName;
-  }
+
 }
 
 ?>
