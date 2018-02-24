@@ -1,43 +1,48 @@
 <?php
-    return $this->username;
-
-  function __construct() {
 class User {
+  function __construct() {
     echo "Constructing user class\n";
-  function __destruct() {
   }
+  function __destruct() {
     echo "Destructing user class\n";
   }
   var $username;
-
   var $ip;
   var $socket;
   var $email;
-  var $group = array();
+  var $currGroups = array();
+  var $recGroups = array();
+  var $favGroups = array();
+  var $numFavorite = 5;
+  var $numRecent = 5;
 
   function getName() {
-  function getIP() {
+    return $this->username;
   }
+  function getIP() {
     return $this->ip;
   }
-    return $this->socket;
   function getSocket() {
+    return $this->socket;
   }
   function getEmail() {
     return $this->email;
   }
-  function getGroup() {
-    return $this->group;
+  function getCurrGroups() {
+    return $this->currGroups;
   }
-  function getRecentGroup(){
-    return $recentGroup;
-    $recentGroup = array_slice($this->group, 0, 5);
+  function getRecentGroups(){
+    $recentGroups = array_slice($this->recGroups, 0, $this->numRecent);
+    return $recentGroups;
+  }
+  function getFavoriteGroups() {
+    return $this->favGroups;
   }
 
-  function setName($Name) {
-    $this->username = $Name;
-  function setIP($ipAddress) {
+  function setName($name) {
+    $this->username = $name;
   }
+  function setIP($ipAddress) {
     $this->ip = $ipAddress;
   }
   function setSocket($sock) {
@@ -46,15 +51,46 @@ class User {
   function setEmail($usrEmail) {
     $this->email = $usrEmail;
   }
-    array_unshift($this->group, $groupID);
-  function setGroup($groupID) {
+  function setNumFavorite($num) {
+    $this->numFavorite = $num;
   }
-  function removeGroup($groupID) {
-    for($i = 0; $i < (count($this->group)); $i++) {
-      if($this->group[$i] == $groupID)
-        array_splice($this->group, $i, 1);
+  function setNumRecent($num) {
+    $this->numRecent = $num;
+  }
+  function setGroup($groupID) {
+    array_unshift($this->currGroups, $groupID);
+  }
+  function setRecGroup($groupID) {
+    array_unshift($this->recGroups, $groupID);
+  }
+  function setFavGroup($groupID) {
+    if (count($groupID) == $this->numFavorite) {
+      array_unshift($this->favGroups, $groupID);
+      array_pop($this->favGroups);
+    }
+    else
+      array_unshift($this->favGroups, $groupID);
+  }
+
+  function removeFavGroup($groupID) {
+    for($i = 0; $i < count($this->favGroups); $i++) {
+      if ($this->favGroups[$i] == $groupID)
+        array_splice($this->favGroups, $i, 1);
     }
   }
+  function removeGroup($groupID) {
+    for($i = 0; $i < (count($this->currGroups)); $i++) {
+      if($this->currGroups[$i] == $groupID)
+        array_splice($this->currGroups, $i, 1);
+    }
+  }
+  function clearGroups() {
+    $this->recGroups = array();
+    $this->currGroups = array();
+    $this->favGroups = array();
+  }
+}
+
 class Group {
   function _construct() {
     echo "Creating Group Class\n";
@@ -74,8 +110,8 @@ class Group {
   }
   function getNumMembers() {
     return $this->numMembers;
-  function getMembers() {
   }
+  function getMembers() {
     return $this->members;
   }
   function getMemberIP() {
@@ -85,17 +121,16 @@ class Group {
     return $this->admin;
   }
   function removeMember($username) {
-
     for ($i = 0; $i < $this->numMembers; $i++) {
-        array_splice($this->members, $i, 1);
       if ($this->members[$i] == $username) {
+        array_splice($this->members, $i, 1);
         array_splice($this->memberIPs, $i, 1);
+        $this->numMembers--;
       }
     }
-    $this->numMembers--;
   }
-  function setGroupID($name) {
-      $this->groupID = $name;
+  function setGroupID($groupname) {
+      $this->groupID = $groupname;
   }
   function setNum() {
     $this->numMembers = count($this->members);
@@ -106,7 +141,7 @@ class Group {
   function setMemberIP($ipaddress) {
     array_push($this->memberIPs, $ipaddress);
   }
-    $this->admin = $adminName;
   function setAdmin($adminName) {
+    $this->admin = $adminName;
   }
 }

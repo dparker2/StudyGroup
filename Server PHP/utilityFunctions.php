@@ -48,19 +48,23 @@ function clearGroupMembers() {
     mysqli_query($connection, $removeNULL);
   }
   disconnect($connection);
+  return true;
 }
 
 function clearFromGroup($user) {
-  $connection = connectGroup();
-  $groupArray = $user->getGroup();
-  $username = $user->getName();
+  global $groupList;
   global $clientList;
+  //$connection = connectGroup();
+  $groupArray = $user->getCurrGroups();
+  $username = $user->getName();
   foreach($groupArray as $group) {
-    $remFromGroup = "DELETE FROM $group WHERE userList = '$username'";
-    mysqli_query($connection, $remFromGroup);
-    updateGroupList($connection, $clientList, $group);
+    $groupClass = $groupList[$group];
+    $groupClass->removeMember($user->getName());
+    /*$remFromGroup = "DELETE FROM $group WHERE userList = '$username'";
+    mysqli_query($connection, $remFromGroup);*/
+    updateGroupList($connection, $clientList, $groupClass, $group);
   }
-  disconnect($connection);
+  //disconnect($connection);
 }
 
 function clearAllOnlineStatus() {
@@ -70,6 +74,7 @@ function clearAllOnlineStatus() {
                   WHERE UserStatus = 'Online'";
   mysqli_query($dbAccount, $makeoffline);
   disconnect($dbAccount);
+  return true;
 }
 
 function clearOnlineStatus($username) {
@@ -79,17 +84,6 @@ function clearOnlineStatus($username) {
                   WHERE UserStatus = 'Online' AND Username = '$username'";
   mysqli_query($dbAccount, $makeoffline);
   disconnect($dbAccount);
-}
-
-function logout($user) {
-  if ($user->getName() != NULL) {
-    $username = $user->getName();
-    clearOnlineStatus($username);
-    echo "DEBUG: Changing $username to offline \n";
-    if (count($user->getGroup()) != 0)
-      echo "DEBUG: Removing $username from groups \n";
-      clearFromGroup($user);
-  }
 }
 
 function getNumRows($connection, $query) {

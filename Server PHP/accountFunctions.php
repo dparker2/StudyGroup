@@ -40,13 +40,15 @@ function createAccount($email, $username, $password, $sock) {
   disconnect($connection);
 }
 
-function loginAccount($username, $password, $sock) {
+function loginAccount($username, $password, $client, $sock) {
   $connection = connectAccount();
-  $bool_check = false;
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
   $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
   $check_email = "SELECT Email FROM UserInfo WHERE Username = '$username'";
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
+  $check_recent_groups = "SELECT RecentGroups FROM UserInfo WHERE Username = '$username' AND RecentGroups IS NOT NULL";
+  $check_favorite_groups = "SELECT FavoriteGroups FROM UserInfo WHERE Username = '$username' AND FavoriteGroups IS NOT NULL";
+
   //Checks if username exists before attempting to login, will return error otherwise.
   if (($username_exists = checkExists($connection, $check_username)) > 0) {
       $checkPass = getObjString($connection, $check_password)->Pass;
@@ -55,7 +57,22 @@ function loginAccount($username, $password, $sock) {
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);
         mysqli_query($connection, $change_online);
-        $bool_check = true;
+        $client->setName($username);
+        $client->setEmail($resultEmail);
+        if (checkExists($connection, $check_recent_groups) > 0) {
+          $recent_groups = getObjString($connection, $check_recent_groups)->RecentGroups;
+          $rec_group_array = array_reverse(explode(" ", $recent_groups));
+          foreach($rec_group_array as $group) {
+            $client->setRecGroup($group);
+          }
+        }
+        if (checkExists($connection, $check_favorite_groups) > 0) {
+          $favorite_groups = getObjString($connection, $check_favorite_groups)->FavoriteGroups;
+          $fav_group_array = array_reverse(explode(" ", $recent_groups));
+          foreach($fav_group_array as $group) {
+            $client->setFavGroup($group);
+          }
+        }
       } //Closes password check.
       else{
         $message = "FAILPassword incorrect, please try again.";
@@ -67,9 +84,38 @@ function loginAccount($username, $password, $sock) {
     sendMessage($message, $sock);
   }
   disconnect($connection);
-  return $bool_check;
 }
 
+function logout($user) {
+  $connection = connectAccount();
+  $username = $user->getName();
+  if (count($user->getFavoriteGroups()) > 0) {
+    $favGroup = implode(" ", $user->getFavoriteGroups());
+    $set_favorite_groups = "UPDATE UserInfo SET FavoriteGroups='$favGroup' WHERE Username = '$username'";
+    mysqli_query($connection, $set_favorite_groups);
+  }
+  if (count($user->getRecentGroups()) > 0) {
+    $recGroup = implode(" ", $user->getRecentGroups());
+    $set_recent_groups = "UPDATE UserInfo SET RecentGroups='$recGroup' WHERE Username = '$username'";
+    mysqli_query($connection, $set_recent_groups);
+  }
+  disconnect($connection);
+
+  if ($user->getName() != NULL) {
+    $username = $user->getName();
+    echo "DEBUG: Changing $username to offline \n";
+    clearOnlineStatus($username);
+    if (count($user->getCurrGroups()) != 0) {
+      echo "DEBUG: Removing $username from groups \n";
+      clearFromGroup($user);
+    }
+  }
+  $user->setName(NULL);
+  $user->setEmail(NULL);
+  $user->clearGroups();
+
+}
+/*
 function logoutAccount($username, $sock) {
   $connection = connectAccount();
 
@@ -82,7 +128,7 @@ function logoutAccount($username, $sock) {
   }
   disconnect($connection);
 
-}
+}*/
 
 //unfinished code to change a users password, need client input
 function changePassword($username, $password, $sock) {
