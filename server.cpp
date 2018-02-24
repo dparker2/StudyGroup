@@ -24,6 +24,9 @@ const QString server::WHITEBOARD_UPDATE = "UPWB";
 const QString server::WHITEBOARD_SAVE = "SVWB";
 const QString server::FLASHCARD_SET_FRONT = "FCFT";
 const QString server::FLASHCARD_SET_BACK = "FCBK";
+const QString server::HOMEPAGE_UPDATE = "UPHP";
+const QString server::HOMEPAGE_NEW_FAVORITE = "NWFG";
+const QString server::HOMEPAGE_REMOVE_FAVORITE = "RMFG";
 
 server::server(QObject *parent) : QObject(parent)
 {

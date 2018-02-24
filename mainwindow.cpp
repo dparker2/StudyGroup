@@ -119,6 +119,7 @@ void MainWindow::changePage(unsigned index)
     show_leave_button(index > 2);
     ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper);
     ui->page->setCurrentIndex(index);
+    ui->homepage->set_active(index == 0);
     set_active_button(index);
 }
 
@@ -257,10 +258,6 @@ void MainWindow::on_logout_button_released()
     // Sanity check: if we aren't even logged in yet (if login_page is active), don't do anything!
     if((ui->stackedWidget_window->currentWidget() != ui->login_page))
     {
-        for (unsigned i = 2; i < left_buttons_list.size(); ) {
-            ui->page->setCurrentIndex(i);  // Change the page
-            on_leave_button_released();  // Simulate pressing leave group
-        }
         // Clear username info -- REDO WHEN DONE
         //user_info->setEmail("");
         //user_info->setUsername("");

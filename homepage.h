@@ -8,26 +8,27 @@ namespace Ui {
 class Homepage;
 }
 
-class Homepage : public GroupMainPage, public SGWidget
+class Homepage : public GroupMainPage
 {
     Q_OBJECT
 
 public:
     explicit Homepage(QWidget *parent = 0);
     ~Homepage();
+    set_active(bool);
 
 private:
     Ui::Homepage *ui;
-    QQueue<QPair<QString, bool>> recent_groups;
-    QList<QString> favorite_groups;
+    bool is_active;
 
     void do_work();
     void clear_recents();
     void clear_favorites();
-    void insert_recents(QList<QByteArray>& groups_list);
-    void insert_favorites(QList<QByteArray>& groups_list);
-    void update_recents();
-    void update_favorites();
+    void update_recents(QList<QByteArray>& groups_list);
+    void update_favorites(QList<QByteArray>& groups_list);
+
+private slots:
+    void on_join_group(QString group);
 };
 
 #endif // HOMEPAGE_H

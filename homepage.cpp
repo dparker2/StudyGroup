@@ -1,11 +1,15 @@
 #include "homepage.h"
 #include "ui_homepage.h"
 
+#include "grouplistitem.h"
+#include "server.h"
+
 Homepage::Homepage(QWidget *parent) :
-    GroupMainPage(parent), SGWidget("homepage"),
+    GroupMainPage("homepage", parent),
     ui(new Ui::Homepage)
 {
     ui->setupUi(this);
+    is_active == false;
 }
 
 Homepage::~Homepage()
@@ -13,54 +17,80 @@ Homepage::~Homepage()
     delete ui;
 }
 
+Homepage::set_active(bool is)
+{
+    is_active = is;
+}
+
 void Homepage::do_work()
 {
     while(!_work_queue.isEmpty()) {
         QByteArray message = _work_queue.dequeue();
+        QByteArray code = message.left(4);
+        message.remove(0, 4);
         QList<QByteArray> message_list = split(message);
-        /*if (message_list[0] == "USCH") {
-            users_changed();
+        if (code == "UPRG") {
+            clear_recents();
+            update_recents(message_list);
         }
-        else if(message_list[0] == "NUSR") {
-            user_joined(message_list[1]);
+        else if(code == "UPFG") {
+            clear_favorites();
+            update_favorites(message_list);
         }
-        else if(message_list[0] == "NCHT") {
-            new_chat(message_list[1], message_list[2] + ' ' + message_list[3], message_list[4]);
-        }*/
     }
+    if(is_active)
+        server::send(server::HOMEPAGE_UPDATE);
 }
 
 void Homepage::clear_recents()
 {
-    for(unsigned i = 0; i < recent_groups.size(); i++) {
-        recent_groups.removeAt(i);
+    QLayoutItem* item;
+    while ( ( item = ui->recent_groups->takeAt( 0 ) ) != NULL )
+    {
+        delete item->widget();
+        delete item;
     }
 }
 
 void Homepage::clear_favorites()
 {
-    for(unsigned i = 0; i < favorite_groups.size(); i++) {
-        favorite_groups.removeAt(i);
+    QLayoutItem* item;
+    while ( ( item = ui->favorite_groups->takeAt( 0 ) ) != NULL )
+    {
+        delete item->widget();
+        delete item;
     }
 }
 
-void Homepage::insert_recents(QList<QByteArray> &groups_list)
+void Homepage::update_recents(QList<QByteArray> &groups_list)
 {
     // Iterate through groups list and put shit where it goes
+    for(int i = 0; i < (groups_list.size() - 2); i += 3)
+    {
+        GroupListItem* new_item = new GroupListItem();
+        connect(new_item, SIGNAL(join_pressed(QString)), this, SLOT(on_join_group(QString)));
+        new_item->set_group(groups_list.at(i));
+        new_item->set_pop(groups_list.at(i+1));
+        new_item->set_favorite(groups_list.at(i+2) == "1");
+        ui->recent_groups->addWidget(new_item);
+    }
 }
 
-void Homepage::insert_favorites(QList<QByteArray> &groups_list)
+void Homepage::update_favorites(QList<QByteArray> &groups_list)
 {
-
+    for(int i = 0; i < (groups_list.size() - 1); i += 2)
+    {
+        GroupListItem* new_item = new GroupListItem();
+        connect(new_item, SIGNAL(join_pressed(QString)), this, SLOT(on_join_group(QString)));
+        new_item->set_group(groups_list.at(i));
+        new_item->set_pop(groups_list.at(i+1));
+        new_item->set_favorite(true);
+        ui->favorite_groups->addWidget(new_item);
+    }
 }
 
-void Homepage::update_recents()
+void Homepage::on_join_group(QString group)
 {
-    ui->
-}
-
-void Homepage::update_favorites()
-{
-
+    join_group(group);
 }
 
