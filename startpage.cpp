@@ -24,6 +24,7 @@ StartPage::StartPage(QString name, QWidget *parent) :
     // Account Security
     recover = new AccountSecurity();
     ui->recover_account->addWidget(recover);
+    connect(recover, SIGNAL(expand_tabwidget()), this, SLOT(expand_tabwidget()));
 }
 
 StartPage::~StartPage()
@@ -142,7 +143,7 @@ void StartPage::on_pushButton_recover_pass_clicked()
     QString email = ui->lineEdit_recover_pass_2->text();*/
 
     ui->tab_recover_account->layout()->setContentsMargins(0,0,0,0);
-
+    //ui->tabWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 }
 
@@ -156,5 +157,14 @@ void StartPage::on_tabWidget_tabBarClicked(int index)
 {
     recover->clear_text();
     ui->recover_account->setCurrentWidget(ui->recover_acct_page);
-    ui->tab_recover_account->layout()->setContentsMargins(50,50,50,50);
+    ui->spacer_top->changeSize(0,25,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+    ui->spacer_bottom->changeSize(0,50,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
 }
+void StartPage::expand_tabwidget(){
+    qDebug() << "EXPANDING WIDGET";
+    ui->spacer_top->changeSize(0,100,QSizePolicy::Fixed, QSizePolicy::Minimum);
+    ui->spacer_bottom->changeSize(0,100,QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+}
+
+

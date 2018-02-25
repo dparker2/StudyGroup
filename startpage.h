@@ -22,6 +22,9 @@ signals:
     void logged_in(unsigned);
 
 private slots:
+    void expand_tabwidget();
+
+private slots:
     void on_signin_button_clicked();
 
     /*void on_lineEdit_email_editingFinished();
@@ -61,6 +64,7 @@ private slots:
     void on_lineEdit_password2_textChanged(const QString &arg1);
 
     void on_tabWidget_tabBarClicked(int index);
+
 
 private:
     Ui::StartPage *ui;

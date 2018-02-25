@@ -18,6 +18,9 @@ public:
     void display_recovery_page(int index);
     void clear_text();
 
+signals:
+    void expand_tabwidget();
+
 private slots:
     void do_work();
     void RUSR(QString email_sent);

@@ -86,4 +86,6 @@ void AccountSecurity::on_recover_pass_btn_clicked()
     ui->recover_pass_email_2->show();
     ui->recover_pass_email_3->show();
     ui->recover_pass_email_4->show();
+
+    emit expand_tabwidget();
 }
