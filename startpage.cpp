@@ -20,24 +20,18 @@ StartPage::StartPage(QString name, QWidget *parent) :
     ui->label_email_check->hide();
 
     ui->tabWidget->setCurrentWidget(ui->tab_sign_in);
+
+    // Account Security
+    recover = new AccountSecurity();
+    ui->recover_account->addWidget(recover);
 }
 
 StartPage::~StartPage()
 {
     delete ui;
 }
+void StartPage::do_work(){
 
-void StartPage::do_work()
-{
-    while(!_work_queue.isEmpty())
-    {
-        QByteArray message = _work_queue.dequeue();
-        QList<QByteArray> message_list = split(message, 2);
-        if (message_list[0] == "RECQ")
-        {
-            RECQ(QString(message_list[1]));
-        }
-    }
 }
 
 void StartPage::on_signin_button_clicked()
@@ -142,6 +136,8 @@ void StartPage::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStrin
 
 void StartPage::on_pushButton_recover_pass_clicked()
 {
+    recover->display_recovery_page(1);
+    ui->recover_account->setCurrentWidget(recover);
     /*QString username = ui->lineEdit_recover_pass_1->text();
     QString email = ui->lineEdit_recover_pass_2->text();
 
@@ -162,24 +158,11 @@ void StartPage::on_pushButton_recover_pass_clicked()
 
 void StartPage::on_pushButton_recover_user_clicked()
 {
-    QString email = ui->lineEdit_recover_user->text();
-    server::send(server::RECOVER_USERNAME+email);
-
+    recover->display_recovery_page(0);
+    ui->recover_account->setCurrentWidget(recover);
 }
-void StartPage::RECQ(QString email_sent)
+
+void StartPage::on_tabWidget_tabBarClicked(int index)
 {
-
-    if(email_sent == "SUCC"){
-        QMessageBox username_box;
-        username_box.information(0, "Username Recovery", "\nUsername was sent to email\n");
-    }
-    else{
-        QMessageBox error_box;
-        error_box.critical(0, "Username Recovery", "\nEmail does not exist\n");
-        error_box.setFixedSize(500,200);
-    }
+    ui->recover_account->setCurrentWidget(ui->recover_acct_page);
 }
-
-// create security 3 questions when creating account
-// sending questions and answers
-// RECQUsername Q1 A1 Q2 A3

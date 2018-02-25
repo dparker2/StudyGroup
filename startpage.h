@@ -4,8 +4,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QLineEdit>
-
-#include <sgwidget.h>
+#include "accountsecurity.h"
 
 namespace Ui {
 class StartPage;
@@ -24,7 +23,6 @@ signals:
 
 private slots:
     void on_signin_button_clicked();
-    void RECQ(QString);
 
     /*void on_lineEdit_email_editingFinished();
     void on_lineEdit_email_cursorPositionChanged();
@@ -62,8 +60,11 @@ private slots:
 
     void on_lineEdit_password2_textChanged(const QString &arg1);
 
+    void on_tabWidget_tabBarClicked(int index);
+
 private:
     Ui::StartPage *ui;
+    AccountSecurity *recover;
 };
 
 #endif // STARTPAGE_H
