@@ -16,12 +16,16 @@ public:
     explicit AccountSecurity(QString name = "recover", QWidget *parent = 0);
     ~AccountSecurity();
     void display_recovery_page(int index);
+    void clear_text();
 
 private slots:
     void do_work();
-    void RECQ(QString email_sent);
-
+    void RUSR(QString email_sent);
     void on_recover_user_btn_clicked();
+
+
+
+    void on_recover_pass_btn_clicked();
 
 private:
     Ui::AccountSecurity *ui;

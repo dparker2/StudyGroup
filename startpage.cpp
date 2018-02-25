@@ -139,20 +139,10 @@ void StartPage::on_pushButton_recover_pass_clicked()
     recover->display_recovery_page(1);
     ui->recover_account->setCurrentWidget(recover);
     /*QString username = ui->lineEdit_recover_pass_1->text();
-    QString email = ui->lineEdit_recover_pass_2->text();
+    QString email = ui->lineEdit_recover_pass_2->text();*/
 
-    QString pass;
+    ui->tab_recover_account->layout()->setContentsMargins(0,0,0,0);
 
-    if (my_serv->recover_pass(username, email, pass)){
-        QMessageBox password_box;
-        password_box.setText ("Email Sent!");
-        password_box.exec();
-    }
-    else {
-        QMessageBox error_box;
-        error_box.critical (0, "Error", "An error has occured! ");
-        error_box.setFixedSize(500,200);
-    }*/
 
 }
 
@@ -164,5 +154,7 @@ void StartPage::on_pushButton_recover_user_clicked()
 
 void StartPage::on_tabWidget_tabBarClicked(int index)
 {
+    recover->clear_text();
     ui->recover_account->setCurrentWidget(ui->recover_acct_page);
+    ui->tab_recover_account->layout()->setContentsMargins(50,50,50,50);
 }
