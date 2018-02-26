@@ -210,10 +210,10 @@ while(true) {
               addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 1); // 0 = groupID 1 = card id 2 = message
               break;
             case "REQQ":
-              reqSecQuest($client, $sock);
+              reqSecQuest($codeMessage[0], $sock); // code[0] is username because user is not logged in yet so can't access via client
               break;
             case "REQA":
-              reqSecAns($client, $sock);
+              reqSecAns($codeMessage[0], $sock); // code[0] is username because user is not logged in yet so can't access via client
               break;
             case "SETQ":
               setSecQuest($client, $codeMessage[0], $codeMessage[1], $codeMessage[2], $sock); // 0 = question 1, 1 = question 2, 2 = question 3
