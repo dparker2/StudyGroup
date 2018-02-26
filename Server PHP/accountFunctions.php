@@ -24,9 +24,9 @@ function createAccount($email, $username, $password, $sock) {
   $defaultQ2 = "What_is_the_name_of_the_street_you_grew_up_on?";
   $defaultQ3 = "What_was_the_name_of_your_first_pet?";
 
-  $defaultQ1 = mysqli_real_escape_string($defaultQ1);
-  $defaultQ2 = mysqli_real_escape_string($defaultQ2);
-  $defaultQ3 = mysqli_real_escape_string($defaultQ3);
+  $defaultQ1 = mysqli_real_escape_string($connection, $defaultQ1);
+  $defaultQ2 = mysqli_real_escape_string($connection, $defaultQ2);
+  $defaultQ3 = mysqli_real_escape_string($connection, $defaultQ3);
 
   //Insert Query
   $insert = "INSERT INTO UserInfo (Username, Pass, Email, SQ1, SQ2, SQ3) VALUES ('$username', '$passwordHash', '$email', '$defaultQ1', '$defaultQ2', '$defaultQ3')";
