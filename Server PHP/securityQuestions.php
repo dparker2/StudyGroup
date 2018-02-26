@@ -13,9 +13,11 @@ function reqSecQuest($user, $sock) {
   $query3 = "SELECT SQ3 FROM UserInfo WHERE Username = '$username'";
 
   $q1 = mysqli_query($connection, $query1);
+  echo "q1 is: $q1\n\n";
   $q2 = mysqli_query($connection, $query2);
+  echo "q2 is: $q2\n\n";
   $q3 = mysqli_query($connection, $query3);
-
+  echo "q3 is: $q3\n\n";
 
   $message = "REQQ$q1 $q2 $q3";
   sendMessage($message, $sock);
