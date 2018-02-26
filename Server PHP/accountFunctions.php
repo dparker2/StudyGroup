@@ -135,12 +135,12 @@ function rememberUsername ($email, $sock) {
   $find_user = "SELECT Username FROM UserInfo WHERE Email = '$email'";  //finds a username tied to a email
   if(checkExists($connection, $find_user) > 0) {
     $returnUser = getObjString($connection, $find_user)->Username;
-    $message = "SUCC";
+    $message = "SUCC1Email has been sent with your username. Make sure to check your spam folder!\n";
     sendMessage($message, $sock);
     sendVerEmail($email, $returnUser);
   }
   else {
-    fwrite($sock, "FAIL\n");
+    fwrite($sock, "FAILNo username found with that email. Try again!");
   }
   disconnect($connection);
 }
