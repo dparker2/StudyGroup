@@ -28,7 +28,7 @@ function reqSecQuest($user, $sock) {
   $q3 = getObjString($connection, $query3)->SQ3;
   echo "This is q3: $q3\n\n";
 
-  $message = "REQQ$q1 $q2 $q3";
+  $message = "REQQ{$q1} {$q2} {$q3}";
   sendMessage($message, $sock);
   disconnect($connection);
 }
