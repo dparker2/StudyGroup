@@ -140,7 +140,8 @@ function rememberUsername ($email, $sock) {
     sendVerEmail($email, $returnUser);
   }
   else {
-    fwrite($sock, "FAILNo username found with that email. Try again!");
+    $message = "FAILNo username found with that email. Try again!");
+    sendMessage($message, $sock);
   }
   disconnect($connection);
 }
