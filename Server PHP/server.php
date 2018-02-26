@@ -208,6 +208,18 @@ while(true) {
             case "FCFT":
               addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 1); // 0 = groupID 1 = card id 2 = message
               break;
+            case "REQQ":
+              reqSecQuest($client, $sock);
+              break;
+            case "REQA":
+              reqSecAns($client, $sock);
+              break;
+            case "SETQ":
+              setSecQuest($client, $codeMessage[0], $codeMessage[1], $codeMessage[2], $sock); // 0 = question 1, 1 = question 2, 2 = question 3
+              break;
+            case "SETA":
+              setSecAns($client, $codeMessage[0], $codeMessage[1], $codeMessage[2], $sock); // 0 = answer 1, 1 = answer 2, 2 = answer 3
+              break;
           }//Switch Statement
       }//Closes else
     }//Closes foreach

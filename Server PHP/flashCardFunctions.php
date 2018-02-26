@@ -3,7 +3,6 @@ include_once 'db_credentials.php';
 include_once 'utilityFunctions.php';
 include_once 'groupFunctions.php';
 include_once 'whiteboardFunctions.php';
-include_once 'utilityFunctions.php';
 
 
 

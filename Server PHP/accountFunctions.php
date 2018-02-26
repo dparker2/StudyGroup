@@ -20,8 +20,12 @@ function createAccount($email, $username, $password, $sock) {
 
   $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
+  $defaultQ1 = "What_is_your_mother's_maiden_name?";
+  $defaultQ2 = "What_is_the_name_of_the_street_you_grew_up_on?";
+  $defaultQ3 = "What_was_the_name_of_your_first_pet?";
+
   //Insert Query
-  $insert = "INSERT INTO UserInfo (Username, Pass, Email) VALUES ('$username', '$passwordHash', '$email')";
+  $insert = "INSERT INTO UserInfo (Username, Pass, Email, SQ1, SQ2, SQ3) VALUES ('$username', '$passwordHash', '$email', '$defaultQ1', '$defaultQ2', '$defaultQ3')";
 
   if (($username_exists = checkExists($connection, $check_username)) > 0) { //returns failcase of username existing.
     $message = "FAILUsername exists, please try again.";
