@@ -8,6 +8,7 @@ include_once 'sendEmail.php';
 function reqSecQuest($user, $sock) {
   $connection = connectAccount();
   $username = $user->getName();
+  echo "the username input to the function is: $username";
   $query1 = "SELECT SQ1 FROM UserInfo WHERE Username = '$username'";
   $query2 = "SELECT SQ2 FROM UserInfo WHERE Username = '$username'";
   $query3 = "SELECT SQ3 FROM UserInfo WHERE Username = '$username'";
@@ -22,11 +23,11 @@ function reqSecQuest($user, $sock) {
   */
 
   $q1 = getObjString($connection, $query1)->SQ1;
-  echo "This is q1: $q1\n\n";
+  echo "This is q1:" . "$q1";
   $q2 = getObjString($connection, $query2)->SQ2;
-  echo "This is q2: $q2\n\n";
+  echo "This is q2: {$q2}\n\n";
   $q3 = getObjString($connection, $query3)->SQ3;
-  echo "This is q3: $q3\n\n";
+  echo "This is q3: {$q3}\n\n";
 
   $message = "REQQ{$q1} {$q2} {$q3}";
   sendMessage($message, $sock);
