@@ -25,7 +25,7 @@ function createAccount($email, $username, $password, $sock) {
   $defaultQ3 = "What_was_the_name_of_your_first_pet?";
 
   //Insert Query
-  $insert = "INSERT INTO UserInfo (Username, Pass, Email) VALUES ('$username', '$passwordHash', '$email')";
+  $insert = "INSERT INTO UserInfo (Username, Pass, Email, SQ1, SQ2, SQ3) VALUES ('$username', '$passwordHash', '$email', '$defaultQ1', '$defaultQ2', '$defaultQ3')";
 
   if (($username_exists = checkExists($connection, $check_username)) > 0) { //returns failcase of username existing.
     $message = "FAILUsername exists, please try again.";
@@ -40,6 +40,9 @@ function createAccount($email, $username, $password, $sock) {
       $message = "SUCCSuccess! User Account created.";
       sendMessage($message, $sock);
       sendRegEmail($email);
+    }
+    else {
+      echo("Error description: " . mysqli_error($connection));
     }
   }
   disconnect($connection);
