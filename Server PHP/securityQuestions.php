@@ -12,12 +12,18 @@ function reqSecQuest($user, $sock) {
   $query2 = "SELECT SQ2 FROM UserInfo WHERE Username = '$username'";
   $query3 = "SELECT SQ3 FROM UserInfo WHERE Username = '$username'";
 
+  /* not working for now, think it's a getobj string error
   $q1 = mysqli_query($connection, $query1);
   echo "q1 is: $q1\n\n";
   $q2 = mysqli_query($connection, $query2);
   echo "q2 is: $q2\n\n";
   $q3 = mysqli_query($connection, $query3);
   echo "q3 is: $q3\n\n";
+  */
+
+  $q1 = getObjString($connection, $query1)->SQ1;
+  $q2 = getObjString($connection, $query2)->SQ2;
+  $q3 = getObjString($connection, $query3)->SQ3;
 
   $message = "REQQ$q1 $q2 $q3";
   sendMessage($message, $sock);
@@ -33,9 +39,9 @@ function reqSecAns($user, $sock) {
   $query2 = "SELECT SQA2 FROM UserInfo WHERE Username = '$username'";
   $query3 = "SELECT SQA3 FROM UserInfo WHERE Username = '$username'";
 
-  $a1 = mysqli_query($connection, $query1);
-  $a2 = mysqli_query($connection, $query2);
-  $a3 = mysqli_query($connection, $query3);
+  $a1 = getObjString($connection, $query1)->SQA1;
+  $a2 = getObjString($connection, $query2)->SQA2;
+  $a3 = getObjString($connection, $query3)->SQA3;
 
   $message = "REQA$a1 $a2 $a3";
   sendMessage($message, $sock);
