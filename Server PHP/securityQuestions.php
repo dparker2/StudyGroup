@@ -8,9 +8,14 @@ include_once 'sendEmail.php';
 function reqSecQuest($user, $sock) {
   $connection = connectAccount();
   $username = $user->getName();
-  $q1 = "SELECT SQ1 FROM UserInfo WHERE Username = '$username'";
-  $q2 = "SELECT SQ2 FROM UserInfo WHERE Username = '$username'";
-  $q3 = "SELECT SQ3 FROM UserInfo WHERE Username = '$username'";
+  $query1 = "SELECT SQ1 FROM UserInfo WHERE Username = '$username'";
+  $query2 = "SELECT SQ2 FROM UserInfo WHERE Username = '$username'";
+  $query3 = "SELECT SQ3 FROM UserInfo WHERE Username = '$username'";
+
+  $q1 = mysqli_query($connection, $query1);
+  $q2 = mysqli_query($connection, $query2);
+  $q3 = mysqli_query($connection, $query3);
+
 
   $message = "REQQ$q1 $q2 $q3";
   sendMessage($message, $sock);
@@ -22,9 +27,13 @@ function reqSecQuest($user, $sock) {
 function reqSecAns($user, $sock) {
   $connection = connectAccount();
   $username = $user->getName();
-  $a1 = "SELECT SQA1 FROM UserInfo WHERE Username = '$username'";
-  $a2 = "SELECT SQA2 FROM UserInfo WHERE Username = '$username'";
-  $a3 = "SELECT SQA3 FROM UserInfo WHERE Username = '$username'";
+  $query1 = "SELECT SQA1 FROM UserInfo WHERE Username = '$username'";
+  $query2 = "SELECT SQA2 FROM UserInfo WHERE Username = '$username'";
+  $query3 = "SELECT SQA3 FROM UserInfo WHERE Username = '$username'";
+
+  $a1 = mysqli_query($connection, $query1);
+  $a2 = mysqli_query($connection, $query2);
+  $a3 = mysqli_query($connection, $query3);
 
   $message = "REQA$a1 $a2 $a3";
   sendMessage($message, $sock);
