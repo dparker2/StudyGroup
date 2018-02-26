@@ -7,7 +7,7 @@ include_once 'sendEmail.php';
 
 function reqSecQuest($user, $sock) {
   $connection = connectAccount();
-  $username = $user->getName();
+  $username = $user;
   echo "the username input to the function is: $username";
   $query1 = "SELECT SQ1 FROM UserInfo WHERE Username = '$username'";
   $query2 = "SELECT SQ2 FROM UserInfo WHERE Username = '$username'";
@@ -23,11 +23,11 @@ function reqSecQuest($user, $sock) {
   */
 
   $q1 = getObjString($connection, $query1)->SQ1;
-  echo "This is q1:" . "$q1";
+  echo "This is q1: " . "$q1\n";
   $q2 = getObjString($connection, $query2)->SQ2;
-  echo "This is q2: {$q2}\n\n";
+  //echo "This is q2: {$q2}\n\n";
   $q3 = getObjString($connection, $query3)->SQ3;
-  echo "This is q3: {$q3}\n\n";
+  //echo "This is q3: {$q3}\n\n";
 
   $message = "REQQ{$q1} {$q2} {$q3}";
   sendMessage($message, $sock);
@@ -38,7 +38,7 @@ function reqSecQuest($user, $sock) {
 //might actually not need this function but i'm leaving it for now
 function reqSecAns($user, $sock) {
   $connection = connectAccount();
-  $username = $user->getName();
+  $username = $user;
   $query1 = "SELECT SQA1 FROM UserInfo WHERE Username = '$username'";
   $query2 = "SELECT SQA2 FROM UserInfo WHERE Username = '$username'";
   $query3 = "SELECT SQA3 FROM UserInfo WHERE Username = '$username'";
@@ -54,7 +54,7 @@ function reqSecAns($user, $sock) {
 
 function setSecQuest($user, $q1, $q2, $q3, $sock) {
   $connection = connectAccount();
-  $username = $user->getName();
+  $username = $user;
   /*will only need these if client sends the server questions without spaces, but probably will not need
   $q1_nospaces = str_replace(' ','_',$q1);
   $q2_nospaces = str_replace(' ','_',$q2);
@@ -76,7 +76,7 @@ function setSecQuest($user, $q1, $q2, $q3, $sock) {
 
 function setSecAns($user, $a1, $a2, $a3, $sock) {
   $connection = connectAccount();
-  $username = $user->getName();
+  $username = $user;
   /*will only need these if client sends the server questions without spaces, but probably will not need
   $q1_nospaces = str_replace(' ','_',$q1);
   $q2_nospaces = str_replace(' ','_',$q2);

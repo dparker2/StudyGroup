@@ -156,6 +156,9 @@ while(true) {
           if ($code == "GCHT" || $code == "SVWB") {
             $limit = 2;
           }
+          elseif ($code == "SETQ" || $code == "SETA") {
+            $limit = 4;
+          }
           $codeMessage = explode(" ", $msg, $limit);  //Puts message into array
 
           switch($code) {
@@ -216,10 +219,10 @@ while(true) {
               reqSecAns($codeMessage[0], $sock); // code[0] is username because user is not logged in yet so can't access via client
               break;
             case "SETQ":
-              setSecQuest($client, $codeMessage[0], $codeMessage[1], $codeMessage[2], $sock); // 0 = question 1, 1 = question 2, 2 = question 3
+              setSecQuest($codeMessage[0], $codeMessage[1], $codeMessage[2], $codeMessage[3], $sock); // 0 = username, 1 = question 1, 2 = question 2, 3 = question 3
               break;
             case "SETA":
-              setSecAns($client, $codeMessage[0], $codeMessage[1], $codeMessage[2], $sock); // 0 = answer 1, 1 = answer 2, 2 = answer 3
+              setSecAns($codeMessage[0], $codeMessage[1], $codeMessage[2], $codeMessage[3], $sock); // 0 = username, 1 = answer 1, 2 = answer 2, 3 = answer 3
               break;
           }//Switch Statement
       }//Closes else
