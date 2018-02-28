@@ -69,6 +69,7 @@ private slots:
 
     void on_register_btn_clicked();
 
+    void set_questions(QList<QByteArray> questions);
 private:
     Ui::StartPage *ui;
     AccountSecurity *recover;

@@ -39,7 +39,7 @@ void StartPage::do_work(){
         QList<QByteArray> message_list = split(message,4);
         if (message_list[0] == "REQQ")
         {
-            set_questions(QString(message_list));
+            set_questions(message_list);
         }
     }
 }
@@ -124,8 +124,14 @@ void StartPage::on_save_question_btn_clicked()
     server::send(server::SECURITY_ANSWERS+q1+' '+ q2 + ' ' + q3);
 }
 
-void StartPage::set_questions(QString questions){
-
+void StartPage::set_questions(QList<QByteArray> questions)
+{
+    ui->comboBox_q1->addItem(QString(questions[1]));
+    ui->comboBox_q1->addItem("Create Custom Question");
+    ui->comboBox_q2->addItem(QString(questions[2]));
+    ui->comboBox_q2->addItem("Create Custom Question");
+    ui->comboBox_q3->addItem(QString(questions[3]));
+    ui->comboBox_q3->addItem("Create Custom Question");
 }
 
 void StartPage::on_lineEdit_email_textChanged(const QString &email)
