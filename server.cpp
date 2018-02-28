@@ -24,6 +24,9 @@ const QString server::WHITEBOARD_UPDATE = "UPWB";
 const QString server::WHITEBOARD_SAVE = "SVWB";
 const QString server::FLASHCARD_SET_FRONT = "FCFT";
 const QString server::FLASHCARD_SET_BACK = "FCBK";
+const QString server::SECURITY_QUESTIONS = "REQQ";
+const QString server::SECURITYQ_CUSTOM = "SETQ";
+const QString server::SECURITY_ANSWERS = "SETA";
 
 server::server(QObject *parent) : QObject(parent)
 {

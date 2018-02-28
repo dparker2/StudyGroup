@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
-    <height>493</height>
+    <width>300</width>
+    <height>231</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,19 +29,55 @@
    <string notr="true">color: black;
 background-color: #283035;</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QStackedWidget" name="account_recovery">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="recover_user_page">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QLineEdit" name="recover_user_email">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>300</width>
            <height>37</height>
           </size>
          </property>
@@ -100,8 +136,26 @@ QPushButton:hover {
      </widget>
      <widget class="QWidget" name="recover_pass_page">
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
-        <widget class="QLineEdit" name="recover_pass_email">
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -110,28 +164,31 @@ QPushButton:hover {
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
-           <height>37</height>
+           <width>300</width>
+           <height>16777215</height>
           </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Trebuchet MS</family>
-           <pointsize>16</pointsize>
-          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: #545454;
 color:white;
 border-style:none;</string>
          </property>
-         <property name="placeholderText">
-          <string>Email</string>
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="recover_pass_username">
+        <widget class="QLineEdit" name="recover_pass_email">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -140,7 +197,7 @@ border-style:none;</string>
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
+           <width>300</width>
            <height>37</height>
           </size>
          </property>
@@ -156,7 +213,7 @@ color:white;
 border-style:none;</string>
          </property>
          <property name="placeholderText">
-          <string>Username</string>
+          <string>Answer</string>
          </property>
         </widget>
        </item>
@@ -185,33 +242,33 @@ QPushButton:hover {
 }</string>
          </property>
          <property name="text">
-          <string>Next</string>
+          <string>Get Magic Code</string>
          </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="security_question_page">
+     <widget class="QWidget" name="code_verification_page">
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
-        <widget class="QComboBox" name="comboBox">
-         <property name="sizeIncrement">
-          <size>
-           <width>0</width>
-           <height>37</height>
-          </size>
+        <widget class="QLineEdit" name="code_btn">
+         <property name="enabled">
+          <bool>true</bool>
          </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="recover_pass_email_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -224,7 +281,7 @@ border-style:none;</string>
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
+           <width>300</width>
            <height>37</height>
           </size>
          </property>
@@ -240,90 +297,12 @@ color:white;
 border-style:none;</string>
          </property>
          <property name="placeholderText">
-          <string>Email</string>
+          <string>Email Code</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_2">
-         <property name="styleSheet">
-          <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="recover_pass_email_3">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>37</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>37</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Trebuchet MS</family>
-           <pointsize>16</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-         </property>
-         <property name="placeholderText">
-          <string>Email</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox_3">
-         <property name="styleSheet">
-          <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="recover_pass_email_4">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>37</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>37</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Trebuchet MS</family>
-           <pointsize>16</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-         </property>
-         <property name="placeholderText">
-          <string>Email</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="recover_pass_btn_2">
+        <widget class="QPushButton" name="email_code">
          <property name="font">
           <font>
            <family>Trebuchet MS</family>
@@ -347,7 +326,7 @@ QPushButton:hover {
 }</string>
          </property>
          <property name="text">
-          <string>Next</string>
+          <string>Recover Password</string>
          </property>
         </widget>
        </item>

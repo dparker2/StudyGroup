@@ -71,6 +71,9 @@ public:
     static const QString WHITEBOARD_SAVE;
     static const QString FLASHCARD_SET_FRONT;
     static const QString FLASHCARD_SET_BACK;
+    static const QString SECURITY_QUESTIONS;
+    static const QString SECURITYQ_CUSTOM;
+    static const QString SECURITY_ANSWERS;
 
 protected:
     explicit server(QObject *parent = nullptr);  // Protect the constructor to prevent class instantiation

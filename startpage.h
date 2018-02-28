@@ -43,7 +43,7 @@ private slots:
 
     void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
 
-    void on_singup_button_clicked();
+    //void on_singup_button_clicked();
 
     void on_pushButton_recover_pass_clicked();
 
@@ -65,10 +65,15 @@ private slots:
 
     void on_tabWidget_tabBarClicked(int index);
 
+    void on_save_question_btn_clicked();
+
+    void on_register_btn_clicked();
 
 private:
     Ui::StartPage *ui;
     AccountSecurity *recover;
+    QString username;
+    bool customQ_flag;
 };
 
 #endif // STARTPAGE_H

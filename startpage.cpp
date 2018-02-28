@@ -22,8 +22,7 @@ StartPage::StartPage(QString name, QWidget *parent) :
     ui->tabWidget->setCurrentWidget(ui->tab_sign_in);
 
     // Account Security
-    recover = new AccountSecurity();
-    ui->recover_account->addWidget(recover);
+    recover = new AccountSecurity("recover");
     connect(recover, SIGNAL(expand_tabwidget()), this, SLOT(expand_tabwidget()));
 }
 
@@ -32,8 +31,19 @@ StartPage::~StartPage()
     delete ui;
 }
 void StartPage::do_work(){
-
+    qDebug() << "IN DO WORK " << _work_queue.isEmpty() ;
+    while(!_work_queue.isEmpty())
+    {
+        QByteArray message = _work_queue.dequeue();
+        qDebug() << "MESSAGE IN DO WORK: " << message;
+        QList<QByteArray> message_list = split(message,4);
+        if (message_list[0] == "REQQ")
+        {
+            set_questions(QString(message_list));
+        }
+    }
 }
+
 
 void StartPage::on_signin_button_clicked()
 {
@@ -58,15 +68,31 @@ void StartPage::on_signin_button_clicked()
         emit logged_in(0); // Change main page
     }
 }
-
+/*
 void StartPage::on_singup_button_clicked()
 {
+    ui->sign_up->setCurrentIndex(1);
+    recover->display_recovery_page(1);
+    ui->recover_account->addWidget(recover);
+    ui->recover_account->setCurrentWidget(recover);
+    ui->tab_recover_account->layout()->setContentsMargins(0,0,0,0);
+}
+*/
+
+/*****************************************************
+ * ACCOUNT SIGNUP
+ */
+void StartPage::on_register_btn_clicked()
+{
+    qDebug() << "I AM IN THE REGISTER BUTTON FUNCTION";
+    username = ui->lineEdit_username_signup->text();
     QString full_string = server::CREATE_ACCOUNT + ui->lineEdit_email->text() +
-            " " + ui->lineEdit_username_signup->text() +
+            " " + username +
             " " + ui->lineEdit_password2->text();
-    QString response;
+    QString response, questions;
     if(server::request_response(full_string, response))
     {
+        qDebug() << "sending account";
         QMessageBox success_box;
         success_box.setText(response);
         success_box.exec();
@@ -74,12 +100,33 @@ void StartPage::on_singup_button_clicked()
         ui->lineEdit_username_signup->setText("");
         ui->lineEdit_password1->setText("");
         ui->lineEdit_password2->setText("");
+
+        // Request default questions from server
+        ui->sign_up->setCurrentIndex(1);
+        if(ui->comboBox_q1->count() == 0){
+            qDebug() << "SENDING SECURITY QUESTIONS REQUEST";
+            server::send(server::SECURITY_QUESTIONS+username);
+        }
+        return;
     }
+    ui->sign_up->setCurrentIndex(0);
 }
 
-/*****************************************************
- * ACCOUNT SIGNUP
- */
+void StartPage::on_save_question_btn_clicked()
+{
+    QString q1 = ui->lineEdit_answer1->text().replace(' ', '_');
+    QString q2 = ui->lineEdit_answer2->text().replace(' ', '_');
+    QString q3 = ui->lineEdit_answer3->text().replace(' ', '_');
+
+    if(customQ_flag){
+        server::send(server::SECURITYQ_CUSTOM+username+ ' ' +q1+' '+ q2 + ' ' + q3);
+    }
+    server::send(server::SECURITY_ANSWERS+q1+' '+ q2 + ' ' + q3);
+}
+
+void StartPage::set_questions(QString questions){
+
+}
 
 void StartPage::on_lineEdit_email_textChanged(const QString &email)
 {
@@ -125,7 +172,8 @@ void StartPage::on_lineEdit_password2_textChanged(const QString &password2)
     }
 }
 
-void StartPage::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid){
+void StartPage::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid)
+{
     QPixmap mark = valid ? QPixmap(":/resources/img/check_mark.png") : QPixmap(":/resources/img/x_mark.png");
     this_label->setPixmap(mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     this_label->show();
@@ -134,37 +182,48 @@ void StartPage::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStrin
 /*****************************************************************
  * ACCOUNT RECOVERY
  */
+void StartPage::on_pushButton_recover_user_clicked()
+{
+    recover->display_recovery_page(0);
+    ui->recover_account->addWidget(recover);
+    ui->recover_account->setCurrentWidget(recover);
+}
 
 void StartPage::on_pushButton_recover_pass_clicked()
 {
     recover->display_recovery_page(1);
-    ui->recover_account->setCurrentWidget(recover);
-    /*QString username = ui->lineEdit_recover_pass_1->text();
-    QString email = ui->lineEdit_recover_pass_2->text();*/
-
-    ui->tab_recover_account->layout()->setContentsMargins(0,0,0,0);
-    //ui->tabWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-}
-
-void StartPage::on_pushButton_recover_user_clicked()
-{
-    recover->display_recovery_page(0);
+    ui->recover_account->addWidget(recover);
     ui->recover_account->setCurrentWidget(recover);
 }
 
 void StartPage::on_tabWidget_tabBarClicked(int index)
 {
+    if(index == 1){
+        ui->sign_up->setCurrentIndex(0);
+
+    }
     recover->clear_text();
+    ui->recover_account->removeWidget(recover);
     ui->recover_account->setCurrentWidget(ui->recover_acct_page);
+    /*
+    ui->tab_recover_account->layout()->setContentsMargins(50,50,50,50);
     ui->spacer_top->changeSize(0,25,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
     ui->spacer_bottom->changeSize(0,50,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+    */
 }
-void StartPage::expand_tabwidget(){
-    qDebug() << "EXPANDING WIDGET";
+void StartPage::expand_tabwidget()
+{
+    /*
     ui->spacer_top->changeSize(0,100,QSizePolicy::Fixed, QSizePolicy::Minimum);
     ui->spacer_bottom->changeSize(0,100,QSizePolicy::Fixed, QSizePolicy::Minimum);
+    */
 
 }
+
+
+
+
+
+
 
 

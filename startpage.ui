@@ -32,6 +32,22 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <item row="4" column="0">
+    <spacer name="spacer_bottom">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::MinimumExpanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>50</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="0">
     <spacer name="spacer_top">
      <property name="orientation">
@@ -73,7 +89,7 @@ background-color: #283035;</string>
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_sign_in">
       <attribute name="title">
@@ -87,13 +103,13 @@ background-color: #283035;</string>
         <number>50</number>
        </property>
        <property name="topMargin">
-        <number>50</number>
+        <number>40</number>
        </property>
        <property name="rightMargin">
         <number>50</number>
        </property>
        <property name="bottomMargin">
-        <number>50</number>
+        <number>80</number>
        </property>
        <item>
         <spacer name="verticalSpacer_8">
@@ -101,12 +117,12 @@ background-color: #283035;</string>
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Maximum</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>45</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
@@ -196,17 +212,17 @@ border-style:none;</string>
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_18">
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
+          <enum>QSizePolicy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>0</height>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -259,245 +275,227 @@ QPushButton:hover {
       <attribute name="title">
        <string>Sign Up</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_9">
-       <property name="spacing">
-        <number>10</number>
-       </property>
+      <layout class="QGridLayout" name="gridLayout_3">
        <property name="leftMargin">
-        <number>50</number>
-       </property>
-       <property name="topMargin">
-        <number>50</number>
+        <number>30</number>
        </property>
        <property name="rightMargin">
-        <number>50</number>
+        <number>30</number>
        </property>
-       <property name="bottomMargin">
-        <number>50</number>
-       </property>
-       <item>
-        <layout class="QHBoxLayout" name="email_layout">
-         <item>
-          <widget class="QLineEdit" name="lineEdit_email">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Trebuchet MS</family>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: #545454;
+       <item row="0" column="1">
+        <widget class="QStackedWidget" name="sign_up">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <widget class="QWidget" name="set_email_pass_page">
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <layout class="QHBoxLayout" name="email_layout">
+             <item>
+              <widget class="QLineEdit" name="lineEdit_email">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Trebuchet MS</family>
+                 <pointsize>16</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #545454;
 color:white;
 border-style:none;</string>
-           </property>
-           <property name="placeholderText">
-            <string>Email</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_email_check">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="username_layout">
-         <item>
-          <widget class="QLineEdit" name="lineEdit_username_signup">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Trebuchet MS</family>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: #545454;
+               </property>
+               <property name="placeholderText">
+                <string>Email</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_email_check">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="username_layout">
+             <item>
+              <widget class="QLineEdit" name="lineEdit_username_signup">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Trebuchet MS</family>
+                 <pointsize>16</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #545454;
 color:white;
 border-style:none;</string>
-           </property>
-           <property name="placeholderText">
-            <string>Username</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_username_check">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="password_layout">
-         <item>
-          <widget class="QLineEdit" name="lineEdit_password1">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Trebuchet MS</family>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: #545454;
+               </property>
+               <property name="placeholderText">
+                <string>Username</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_username_check">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="password_layout">
+             <item>
+              <widget class="QLineEdit" name="lineEdit_password1">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Trebuchet MS</family>
+                 <pointsize>16</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #545454;
 color:white;
 border-style:none;</string>
-           </property>
-           <property name="echoMode">
-            <enum>QLineEdit::Password</enum>
-           </property>
-           <property name="placeholderText">
-            <string>Password</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_password1_check">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="verify_password_layout">
-         <item>
-          <widget class="QLineEdit" name="lineEdit_password2">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Trebuchet MS</family>
-             <pointsize>16</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: #545454;
+               </property>
+               <property name="echoMode">
+                <enum>QLineEdit::Password</enum>
+               </property>
+               <property name="placeholderText">
+                <string>Password</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_password1_check">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="verify_password_layout">
+             <item>
+              <widget class="QLineEdit" name="lineEdit_password2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Trebuchet MS</family>
+                 <pointsize>16</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #545454;
 color:white;
 border-style:none;</string>
-           </property>
-           <property name="echoMode">
-            <enum>QLineEdit::Password</enum>
-           </property>
-           <property name="placeholderText">
-            <string>Verify Password</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_password2_check">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_12">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="singup_button">
-         <property name="font">
-          <font>
-           <family>Trebuchet MS</family>
-           <pointsize>16</pointsize>
-           <weight>75</weight>
-           <italic>false</italic>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
+               </property>
+               <property name="echoMode">
+                <enum>QLineEdit::Password</enum>
+               </property>
+               <property name="placeholderText">
+                <string>Verify Password</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_password2_check">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QPushButton" name="register_btn">
+             <property name="font">
+              <font>
+               <family>Trebuchet MS</family>
+               <pointsize>16</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 background-color: rgba(255, 98, 71, 0.6);
 color: white; 
 font:bold;
@@ -508,10 +506,210 @@ border: 0px;
 QPushButton:hover {
 	background-color: rgba(255, 98, 71, 1);
 }</string>
-         </property>
-         <property name="text">
-          <string>Register</string>
-         </property>
+             </property>
+             <property name="text">
+              <string>Register</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+          <zorder>register_btn</zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+          <zorder></zorder>
+         </widget>
+         <widget class="QWidget" name="set_security_questions_page">
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <property name="bottomMargin">
+            <number>5</number>
+           </property>
+           <item>
+            <widget class="QComboBox" name="comboBox_q1">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>0</width>
+               <height>37</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_answer1">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>37</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>37</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Trebuchet MS</family>
+               <pointsize>16</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+             </property>
+             <property name="placeholderText">
+              <string>Answer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_q2">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_answer2">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>37</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>37</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Trebuchet MS</family>
+               <pointsize>16</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+             </property>
+             <property name="placeholderText">
+              <string>Answer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_q3">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_answer3">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>37</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>37</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Trebuchet MS</family>
+               <pointsize>16</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #545454;
+color:white;
+border-style:none;</string>
+             </property>
+             <property name="placeholderText">
+              <string>Answer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="save_question_btn">
+             <property name="font">
+              <font>
+               <family>Trebuchet MS</family>
+               <pointsize>16</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+background-color: rgba(255, 98, 71, 0.6);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(255, 98, 71, 1);
+}</string>
+             </property>
+             <property name="text">
+              <string>Save</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -604,13 +802,6 @@ QPushButton:hover {
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="text">
-              <string>PushButton</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </widget>
@@ -641,22 +832,6 @@ QPushButton:hover {
       <size>
        <width>20</width>
        <height>25</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0">
-    <spacer name="spacer_bottom">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::MinimumExpanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>50</height>
       </size>
      </property>
     </spacer>
