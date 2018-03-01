@@ -63,11 +63,11 @@ function loginAccount($username, $password, $sock) {
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
   //Checks if username exists before attempting to login, will return error otherwise.
   if (($username_exists = checkExists($connection, $check_username)) > 0) {
-	  if ($a>=5) {
-	    loginTimeout();
-		disconnect($connection);
-	    return $bool_check;
-	  }
+      if ($a>=5) {
+	loginTimeout();
+	disconnect($connection);
+	return $bool_check;
+      }
       $checkPass = getObjString($connection, $check_password)->Pass;
       else if (password_verify($password, $checkPass)) {
         $resultEmail = getObjString($connection, $check_email)->Email;
