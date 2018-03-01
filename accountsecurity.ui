@@ -45,7 +45,7 @@ background-color: #283035;</string>
    <item>
     <widget class="QStackedWidget" name="account_recovery">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="recover_user_page">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -302,7 +302,7 @@ border-style:none;</string>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="email_code">
+        <widget class="QPushButton" name="email_btn">
          <property name="font">
           <font>
            <family>Trebuchet MS</family>

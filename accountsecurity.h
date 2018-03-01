@@ -19,15 +19,11 @@ public:
     void clear_text();
 
 signals:
-    void expand_tabwidget();
 
 private slots:
     void do_work();
     void RUSR(QString email_sent);
     void on_recover_user_btn_clicked();
-
-
-
     void on_recover_pass_btn_clicked();
 
 private:
