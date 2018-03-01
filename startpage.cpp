@@ -3,6 +3,7 @@
 #include "server.h"
 #include "joingrouppage.h"
 #include <QMessageBox>
+#include <QListView>
 
 StartPage::StartPage(QString name, QWidget *parent) :
     SGWidget(name, parent),
@@ -12,6 +13,7 @@ StartPage::StartPage(QString name, QWidget *parent) :
 
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
+    QPixmap pencil(":/resources/img/edit_pencil.png");
 
     // check/X icons are hidden initially
     ui->label_username_check->hide();
@@ -23,7 +25,8 @@ StartPage::StartPage(QString name, QWidget *parent) :
 
     // Account Security
     recover = new AccountSecurity("recover");
-    connect(recover, SIGNAL(expand_tabwidget()), this, SLOT(expand_tabwidget()));
+    customQ_flag = false;
+
 }
 
 StartPage::~StartPage()
@@ -40,6 +43,7 @@ void StartPage::do_work(){
         if (message_list[0] == "REQQ")
         {
             set_questions(message_list);
+
         }
     }
 }
@@ -82,9 +86,13 @@ void StartPage::on_singup_button_clicked()
 /*****************************************************
  * ACCOUNT SIGNUP
  */
+
+/**
+ * Comeback here when user info starts to get verified
+ * to handle the empty string case and invalid info
+ */
 void StartPage::on_register_btn_clicked()
 {
-    qDebug() << "I AM IN THE REGISTER BUTTON FUNCTION";
     username = ui->lineEdit_username_signup->text();
     QString full_string = server::CREATE_ACCOUNT + ui->lineEdit_email->text() +
             " " + username +
@@ -103,7 +111,7 @@ void StartPage::on_register_btn_clicked()
 
         // Request default questions from server
         ui->sign_up->setCurrentIndex(1);
-        if(ui->comboBox_q1->count() == 0){
+        if(ui->comboBox_q2->count() == 0){
             qDebug() << "SENDING SECURITY QUESTIONS REQUEST";
             server::send(server::SECURITY_QUESTIONS+username);
         }
@@ -111,27 +119,76 @@ void StartPage::on_register_btn_clicked()
     }
     ui->sign_up->setCurrentIndex(0);
 }
-
+/*
+ * Send security question and answers to server
+*****/
 void StartPage::on_save_question_btn_clicked()
 {
-    QString q1 = ui->lineEdit_answer1->text().replace(' ', '_');
-    QString q2 = ui->lineEdit_answer2->text().replace(' ', '_');
-    QString q3 = ui->lineEdit_answer3->text().replace(' ', '_');
+    // Replaces all  spaces with underscores before sending to server
+    QString a1 = ui->lineEdit_answer1->text().replace(' ', '_');
+    QString a2 = ui->lineEdit_answer2->text().replace(' ', '_');
+    QString a3 = ui->lineEdit_answer3->text().replace(' ', '_');
 
+
+    // If there exists a custom question send all questions to server
     if(customQ_flag){
-        server::send(server::SECURITYQ_CUSTOM+username+ ' ' +q1+' '+ q2 + ' ' + q3);
+        //server::send(server::SECURITYQ_CUSTOM+username + ' ' + question[0] + ' ' + question[1]  + ' ' + question[2]);
     }
-    server::send(server::SECURITY_ANSWERS+q1+' '+ q2 + ' ' + q3);
+    server::send(server::SECURITY_ANSWERS + a1 + ' ' + a2 + ' ' + a3);  // Answers get sent regardless
+}
+void StartPage::set_questions(QList<QByteArray> message)
+{
+    QComboBox* t;
+    // Loops through message and sets all three questions to each combobox
+    for(int i = 1; i < message.size(); i++)
+    {
+        for(int j = 1; j < message.size(); j++)
+        {
+            t = parentWidget()->findChild<QComboBox*>("comboBox_q" + QString::number(i));
+            t->addItem(QString(message[j]).replace('_', ' '));
+        }
+        t->addItem("Create custom question");
+        custom_questions.append(nullptr);   // appends null for custom question QlineEdits
+    }
+
+}
+/*
+ *  When user chooses custom question the custom flag is set to true
+ *  and the current combobox is hidden and replaced with a QLineEdit
+********/
+void StartPage::on_comboBox_q1_currentIndexChanged(int index)
+{
+    customQ_flag = true;
+    QLineEdit* q = new QLineEdit();
+    q->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
+    if(index)
+    {
+        ui->comboBox_q1->hide();
+        ui->layout_q1->addWidget(q);
+    }
 }
 
-void StartPage::set_questions(QList<QByteArray> questions)
+void StartPage::on_comboBox_q2_currentIndexChanged(int index)
 {
-    ui->comboBox_q1->addItem(QString(questions[1]));
-    ui->comboBox_q1->addItem("Create Custom Question");
-    ui->comboBox_q2->addItem(QString(questions[2]));
-    ui->comboBox_q2->addItem("Create Custom Question");
-    ui->comboBox_q3->addItem(QString(questions[3]));
-    ui->comboBox_q3->addItem("Create Custom Question");
+    customQ_flag = true;
+    QLineEdit* q = new QLineEdit();
+    q->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
+    if(index)
+    {
+        ui->comboBox_q2->hide();
+        ui->layout_q2->addWidget(q);
+    }
+}
+void StartPage::on_comboBox_q3_currentIndexChanged(int index)
+{
+    customQ_flag = true;
+    QLineEdit* q = new QLineEdit();
+    q->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
+    if(index)
+    {
+        ui->comboBox_q3->hide();
+        ui->layout_q3->addWidget(q);
+    }
 }
 
 void StartPage::on_lineEdit_email_textChanged(const QString &email)
@@ -204,32 +261,23 @@ void StartPage::on_pushButton_recover_pass_clicked()
 
 void StartPage::on_tabWidget_tabBarClicked(int index)
 {
-    if(index == 1){
-        ui->sign_up->setCurrentIndex(0);
-
+    /*
+     * NOT SURE ABOUT THIS FEATURE
+     * Asks the user whether they want to skip security questions if they click away from
+     * security question tab
+    if(ui->tabWidget->currentIndex() == 1)
+    {
+        QMessageBox message_box;
+        int user_reply = message_box.warning(0, "Skip Security Questions", "Are you sure you want to skip security questions?", "I want to be safe", "Yes, risk it");
+        if(user_reply){
+            ui->tabWidget->setCurrentIndex(0);
+        }
     }
+    */
     recover->clear_text();
     ui->recover_account->removeWidget(recover);
     ui->recover_account->setCurrentWidget(ui->recover_acct_page);
-    /*
-    ui->tab_recover_account->layout()->setContentsMargins(50,50,50,50);
-    ui->spacer_top->changeSize(0,25,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-    ui->spacer_bottom->changeSize(0,50,QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-    */
 }
-void StartPage::expand_tabwidget()
-{
-    /*
-    ui->spacer_top->changeSize(0,100,QSizePolicy::Fixed, QSizePolicy::Minimum);
-    ui->spacer_bottom->changeSize(0,100,QSizePolicy::Fixed, QSizePolicy::Minimum);
-    */
-
-}
-
-
-
-
-
 
 
 

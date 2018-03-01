@@ -89,7 +89,7 @@ background-color: #283035;</string>
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_sign_in">
       <attribute name="title">
@@ -285,7 +285,7 @@ QPushButton:hover {
        <item row="0" column="1">
         <widget class="QStackedWidget" name="sign_up">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="set_email_pass_page">
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -533,25 +533,32 @@ QPushButton:hover {
             <number>5</number>
            </property>
            <item>
-            <widget class="QComboBox" name="comboBox_q1">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="sizeIncrement">
-              <size>
-               <width>0</width>
-               <height>37</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #545454;
+            <layout class="QHBoxLayout" name="layout_q1">
+             <item>
+              <widget class="QComboBox" name="comboBox_q1">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="sizeIncrement">
+                <size>
+                 <width>0</width>
+                 <height>37</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #545454;
 color:white;
 border-style:none;</string>
-             </property>
-            </widget>
+               </property>
+               <property name="sizeAdjustPolicy">
+                <enum>QComboBox::AdjustToContents</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QLineEdit" name="lineEdit_answer1">
@@ -590,19 +597,23 @@ border-style:none;</string>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboBox_q2">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #545454;
+            <layout class="QHBoxLayout" name="layout_q2">
+             <item>
+              <widget class="QComboBox" name="comboBox_q2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #545454;
 color:white;
 border-style:none;</string>
-             </property>
-            </widget>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QLineEdit" name="lineEdit_answer2">
@@ -635,19 +646,23 @@ border-style:none;</string>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboBox_q3">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #545454;
+            <layout class="QHBoxLayout" name="layout_q3">
+             <item>
+              <widget class="QComboBox" name="comboBox_q3">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #545454;
 color:white;
 border-style:none;</string>
-             </property>
-            </widget>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QLineEdit" name="lineEdit_answer3">
