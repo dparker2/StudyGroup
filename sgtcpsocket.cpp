@@ -155,9 +155,12 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     {
         return first_section + " flashcard";
     }
-    else if((code == "REQQ"))
+    else if(code == "REQQ")
     {
         return "startpage";
+    }
+    else if (code == "RUSR"){
+        return "recover";
     }
 }
 
