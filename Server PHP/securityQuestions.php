@@ -89,9 +89,11 @@ function setSecAns($user, $a1, $a2, $a3, $sock) {
   $escA3 = mysqli_real_escape_string($connection, $a3);
   */
 
-  $a1Hash = password_hash($a1, PASSWORD_DEFAULT);
-  $a2Hash = password_hash($a2, PASSWORD_DEFAULT);
-  $a3Hash = password_hash($a3, PASSWORD_DEFAULT);
+  $a1Hash = mysqli_real_escape_string($connection, password_hash($a1, PASSWORD_DEFAULT));
+  $a2Hash = mysqli_real_escape_string($connection, password_hash($a2, PASSWORD_DEFAULT));
+  $a3Hash = mysqli_real_escape_string($connection, password_hash($a3, PASSWORD_DEFAULT));
+
+
 
   $query = "UPDATE UserInfo SET SQA1='$a1Hash', SET SQA2='$a2Hash', SET SQA3='$a3Hash' WHERE Username = '$username'";
   if (!mysqli_query($connection, $query)) {
@@ -100,5 +102,20 @@ function setSecAns($user, $a1, $a2, $a3, $sock) {
   }
 
 }
+
+/*
+function generateRecCode() {
+
+
+}
+
+
+function verifyCode($user, $code) {
+
+
+
+
+}
+*/
 
 ?>
