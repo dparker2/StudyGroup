@@ -5,7 +5,7 @@ include_once 'flashCardFunctions.php';
 include_once 'whiteboardFunctions.php';
 include_once 'utilityFunctions.php';
 include_once 'classes.php';
-
+include_once 'homePageFunctions.php';
 
 //$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
 $server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
@@ -97,7 +97,7 @@ while(true) {
             $socketDC = array_search($sock, getSocketList($clientList), true);
             echo "DATA DOES NOT EXIST, $socketDC disconnected, closing socket...\n";
             var_dump(array_search($sock, getSocketList($clientList), true));
-            logout($clientList[$socketDC], $clientList, $sock);
+            logout($clientList[$socketDC]);
             unset($clientList[ array_search($sock, getSocketList($clientList), true)]);
             @fclose($sock); //closes the socket. @ supresses error messages
             echo "Now there are total ". count($clientList) . " clients.\n";
@@ -148,10 +148,10 @@ while(true) {
               leaveGroup($codeMessage[0], $client, $clientList, $sock);
               break; //groupID, user, client array, socket
             case "NWFG":
-              $client->setFavGroup($codeMessage[0]);
+              newFavoriteGroup($client, $codeMessage[0]);
               break;
             case "RMFG":
-              $client->removeFavGroup($codeMessage[0]);
+              removeFavoriteGroup($client, $codeMessage[0]);
               break;
             case "GCHT":
               sendChatMessage($codeMessage[0], $codeMessage[1], $client, $clientList, $sock);

@@ -99,6 +99,7 @@ function joinGroup($groupID, $user, $clientList, $sock)
       $adminName = getObjString($connection, $selectAdmin)->Admin; //Obtains admin name for comparison
       $groupList[$groupID] = new Group;
       $groupClass = $groupList[$groupID];
+      $groupClass->setGroupID($groupID);
       $groupClass->setAdmin($adminName);
       $numUsers = $groupClass->getNumMembers();
     }
@@ -114,14 +115,13 @@ function joinGroup($groupID, $user, $clientList, $sock)
         fwrite($sock, "00004SUCC");
         $user->setGroup($groupID);
         $user->setRecGroup($groupID);
-        updateGroupList($connection, $clientList, $groupClass, $groupID);
         //mysqli_query($connection, $joinGroup);
         $groupClass->setMember($username);
         $groupClass->setMemberIP($ip);
-        $groupClass->setNum();
         updateGroupList($connection, $clientList, $groupClass, $groupID);
         updateGroupChat($connection, $groupID, $sock);
         updateFlashCards($connection, $ip, $clientList, $groupID, $sock);
+        updateRecentGroups($user, $groupList);
 
         echo "DEBUG: Determining whiteboard existence... \n";
         //If this is the first user joining
@@ -141,8 +141,10 @@ function joinGroup($groupID, $user, $clientList, $sock)
         //Else not first user joining, will get current whiteboard from existing member and send to member joining
         else {
           echo "Requesting whiteboard from existing user to update joining member... \n\n";
-          $object = getObjString($connection, $selectExistingMember);
-          $existingMember = (string)$object->ipAddress;
+          /*$object = getObjString($connection, $selectExistingMember);
+          $existingMember = (string)$object->ipAddress;*/
+          $existMembers = $groupClass->getMemberIP();
+          $existingMember = $existMembers[0];
           $existingSocket = $clientList[$existingMember]->getSocket();
           $message = "NUWB$groupID $ip";
           sendMessage($message, $existingSocket);

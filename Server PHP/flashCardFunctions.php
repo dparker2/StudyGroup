@@ -55,6 +55,8 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
   $username = mysqli_real_escape_string($connection, $username);
   $message = mysqli_real_escape_string($connection, $message);
   $groupID = mysqli_real_escape_string($connection, $groupID);
+  $unescMessage = stripslashes($message);
+  $unescGroupID = stripslashes($groupID);
   $flashGroupID = "$groupID" . "FC";
 
   /*$return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
@@ -79,7 +81,7 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
     foreach ($resultIP as $keyIP) {
       //$keyIP = $rowIP[0];
       $keySock = $clientList[$keyIP]->getSocket();
-      $FlashCards = "$groupID $returnID $message";
+      $FlashCards = "$unescGroupID $returnID $unescMessage";
 
       if($side == 'side1'){
         $clientMessage = "FCFT$FlashCards";
@@ -105,7 +107,7 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
       foreach($resultIP as $keyIP) {
         //$keyIP = $rowIP[0];
         $keySock = $clientList[$keyIP]->getSocket();
-        $FlashCards = "$groupID $returnID $message";
+        $FlashCards = "$unescGroupID $returnID $unescMessage";
         if($side == 'side1'){
           $clientMessage = "FCFT$FlashCards";
         }

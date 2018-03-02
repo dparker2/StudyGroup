@@ -16,6 +16,7 @@ class User {
   var $numFavorite = 5;
   var $numRecent = 5;
 
+  //Get Functions
   function getName() {
     return $this->username;
   }
@@ -32,8 +33,7 @@ class User {
     return $this->currGroups;
   }
   function getRecentGroups(){
-    $recentGroups = array_slice($this->recGroups, 0, $this->numRecent);
-    return $recentGroups;
+    return $this->recGroups;
   }
   function getFavoriteGroups() {
     return $this->favGroups;
@@ -61,27 +61,44 @@ class User {
     array_unshift($this->currGroups, $groupID);
   }
   function setRecGroup($groupID) {
-    array_unshift($this->recGroups, $groupID);
+    if (in_array($groupID, $this->recGroups)) {
+      $key = array_search($groupID, $this->recGroups);
+      if ($key != 0){
+        if(count($this->recGroups) == $this->numRecent){
+          array_unshift($this->recGroups, $groupID);
+          array_pop($this->recGroups);
+        }
+        else
+          array_unshift($this->recGroups, $groupID);
+      }
+    }//if in array
+    else {
+      if(count($this->recGroups) == $this->numRecent) {
+        array_unshift($this->recGroups, $groupID);
+        array_pop($this->recGroups, $groupID);
+      }
+      else
+        array_unshift($this->recGroups, $groupID);
+    }
   }
   function setFavGroup($groupID) {
-    if (count($groupID) == $this->numFavorite) {
+    if (count($this->favGroups) == $this->numFavorite) {
       array_unshift($this->favGroups, $groupID);
       array_pop($this->favGroups);
     }
     else
       array_unshift($this->favGroups, $groupID);
   }
-
   function removeFavGroup($groupID) {
-    for($i = 0; $i < count($this->favGroups); $i++) {
-      if ($this->favGroups[$i] == $groupID)
-        array_splice($this->favGroups, $i, 1);
+    if (in_array($groupID, $this->favGroups)) {
+      $key = array_search($groupID, $this->favGroups);
+      array_splice($this->favGroups, $key, 1);
     }
   }
   function removeGroup($groupID) {
-    for($i = 0; $i < (count($this->currGroups)); $i++) {
-      if($this->currGroups[$i] == $groupID)
-        array_splice($this->currGroups, $i, 1);
+    if (in_array($groupID, $this->currGroups)) {
+      $key = array_search($groupID, $this->currGroups);
+      array_splice($this->currGroups, $key, 1);
     }
   }
   function clearGroups() {
@@ -105,10 +122,12 @@ class Group {
   var $members = array();
   var $memberIPs = array();
 
+  //Get Functions
   function getGroupID() {
     return $this->groupID;
   }
   function getNumMembers() {
+    $this->numMembers = count($this->members);
     return $this->numMembers;
   }
   function getMembers() {
@@ -120,20 +139,9 @@ class Group {
   function getAdmin() {
     return $this->admin;
   }
-  function removeMember($username) {
-    for ($i = 0; $i < $this->numMembers; $i++) {
-      if ($this->members[$i] == $username) {
-        array_splice($this->members, $i, 1);
-        array_splice($this->memberIPs, $i, 1);
-        $this->numMembers--;
-      }
-    }
-  }
+  //Set Functions
   function setGroupID($groupname) {
       $this->groupID = $groupname;
-  }
-  function setNum() {
-    $this->numMembers = count($this->members);
   }
   function setMember($member) {
     array_push($this->members, $member);
@@ -144,4 +152,11 @@ class Group {
   function setAdmin($adminName) {
     $this->admin = $adminName;
   }
+  function removeMember($username) {
+    $key = array_search($username, $this->memFavorited);
+    array_splice($this->members, $key, 1);
+    array_splice($this->memberIPs, $key, 1);
+  }
 }
+
+?>

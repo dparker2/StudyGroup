@@ -1,4 +1,5 @@
 <?php
+include_once 'db_credentials.php';
 include_once 'classes.php';
 //Test function for existence.
 function checkExists($connection, $query) {
@@ -54,7 +55,7 @@ function clearGroupMembers() {
 function clearFromGroup($user) {
   global $groupList;
   global $clientList;
-  //$connection = connectGroup();
+  $connection = connectGroup();
   $groupArray = $user->getCurrGroups();
   $username = $user->getName();
   foreach($groupArray as $group) {
@@ -64,7 +65,7 @@ function clearFromGroup($user) {
     mysqli_query($connection, $remFromGroup);*/
     updateGroupList($connection, $clientList, $groupClass, $group);
   }
-  //disconnect($connection);
+  disconnect($connection);
 }
 
 function clearAllOnlineStatus() {
