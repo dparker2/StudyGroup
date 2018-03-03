@@ -68,9 +68,7 @@ function loginAccount($username, $password, $client, $sock) {
               $client->setFavGroup($group);
             }
           }
-          updateFavoriteGroups($client, $groupList);
         }
-
         //updates user of previously stored groups in database only if the user just logged in. Avoids accidental updates from database
         if (checkExists($connection, $check_recent_groups) > 0) {
           $recent_groups = getObjString($connection, $check_recent_groups)->RecentGroups;
@@ -80,9 +78,9 @@ function loginAccount($username, $password, $client, $sock) {
               $client->setRecGroup($group);
             }
           }
-          updateRecentGroups($client, $groupList);
         }
-
+        updateFavoriteGroups($client, $groupList);
+        updateRecentGroups($client, $groupList);
       } //Closes password check.
       else{
         $message = "FAILPassword incorrect, please try again.";

@@ -70,6 +70,7 @@ function newFavoriteGroup($user, $groupID) {
       $user->setFavGroup($groupID);
       sendMessage("SUCC", $sock);
       updateFavoriteGroups($user, $groupList);
+      updateRecentGroups($user, $groupList);
     }
   } //closes if exist
   else {
@@ -92,6 +93,7 @@ function removeFavoriteGroup($user, $groupID) {
     $user->removeFavGroup($groupID);
     sendMessage("SUCC", $sock);
     updateFavoriteGroups($user, $groupList);
+    updateRecentGroups($user, $groupList);
   }
 }
 

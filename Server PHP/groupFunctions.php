@@ -54,7 +54,6 @@ function createGroup($groupname, $user, $clientList, $sock)
       $groupClass->setAdmin($username);
       $groupClass->setMember($username);
       $groupClass->setMemberIP($ip);
-      $groupClass->setNum();
       $user->setGroup($groupID);
       $user->setRecGroup($groupID);
       var_dump($groupList);

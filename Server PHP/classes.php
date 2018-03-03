@@ -64,27 +64,29 @@ class User {
     if (in_array($groupID, $this->recGroups)) {
       $key = array_search($groupID, $this->recGroups);
       if ($key != 0){
-        if(count($this->recGroups) == $this->numRecent){
+        $count = count($this->recGroups);
+        echo "DEBUG: Trying to add to Recent Group this is the count before add: $count\n";
+        if(count($this->recGroups) >= $this->numRecent){
           array_unshift($this->recGroups, $groupID);
-          array_pop($this->recGroups);
+          $this->recGroups = array_splice($this->recGroups, 0, $this->numRecent);
         }
         else
           array_unshift($this->recGroups, $groupID);
       }
     }//if in array
     else {
-      if(count($this->recGroups) == $this->numRecent) {
+      if(count($this->recGroups) >= $this->numRecent) {
         array_unshift($this->recGroups, $groupID);
-        array_pop($this->recGroups, $groupID);
+        $this->recGroups = array_splice($this->recGroups, 0, 5);
       }
       else
         array_unshift($this->recGroups, $groupID);
     }
   }
   function setFavGroup($groupID) {
-    if (count($this->favGroups) == $this->numFavorite) {
+    if (count($this->favGroups) >= $this->numFavorite) {
       array_unshift($this->favGroups, $groupID);
-      array_pop($this->favGroups);
+      $this->recGroups = array_splice($this->recGroups, 0, $this->numFavorite);
     }
     else
       array_unshift($this->favGroups, $groupID);
@@ -153,7 +155,7 @@ class Group {
     $this->admin = $adminName;
   }
   function removeMember($username) {
-    $key = array_search($username, $this->memFavorited);
+    $key = array_search($username, $this->favGroups);
     array_splice($this->members, $key, 1);
     array_splice($this->memberIPs, $key, 1);
   }
