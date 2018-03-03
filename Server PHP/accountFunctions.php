@@ -60,17 +60,6 @@ function loginAccount($username, $password, $client, $sock) {
         $client->setName($username);
         $client->setEmail($resultEmail);
         //updates user of previously stored groups in database only if the user just logged in. Avoids accidental updates from database
-        if (checkExists($connection, $check_recent_groups) > 0) {
-          $recent_groups = getObjString($connection, $check_recent_groups)->RecentGroups;
-          $rec_group_array = array_reverse(explode(" ", $recent_groups));
-          if($rec_group_array != "" && $rec_group_array != " ") {
-            foreach($rec_group_array as $group) {
-              $client->setRecGroup($group);
-            }
-          }
-          updateRecentGroups($client, $groupList);
-        }
-        //updates user of previously stored groups in database only if the user just logged in. Avoids accidental updates from database
         if (checkExists($connection, $check_favorite_groups) > 0) {
           $favorite_groups = getObjString($connection, $check_favorite_groups)->FavoriteGroups;
           $fav_group_array = array_reverse(explode(" ", $favorite_groups));
@@ -81,6 +70,19 @@ function loginAccount($username, $password, $client, $sock) {
           }
           updateFavoriteGroups($client, $groupList);
         }
+
+        //updates user of previously stored groups in database only if the user just logged in. Avoids accidental updates from database
+        if (checkExists($connection, $check_recent_groups) > 0) {
+          $recent_groups = getObjString($connection, $check_recent_groups)->RecentGroups;
+          $rec_group_array = array_reverse(explode(" ", $recent_groups));
+          if($rec_group_array != "" && $rec_group_array != " ") {
+            foreach($rec_group_array as $group) {
+              $client->setRecGroup($group);
+            }
+          }
+          updateRecentGroups($client, $groupList);
+        }
+
       } //Closes password check.
       else{
         $message = "FAILPassword incorrect, please try again.";

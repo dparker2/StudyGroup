@@ -7,8 +7,8 @@ include_once 'utilityFunctions.php';
 include_once 'classes.php';
 include_once 'homePageFunctions.php';
 
-//$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
-$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
+$server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
+//$server = stream_socket_server("tcp://localhost:1520", $errno, $errorMessage); //Localhost
 //echo ++$argv[1];
 //$_ = $_SERVER['_'];;
 //echo "This is the server socket: ";
