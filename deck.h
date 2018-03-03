@@ -1,7 +1,7 @@
 #ifndef DECK_H
 #define DECK_H
 
-#include "SGWidget.h"
+#include "sgwidget.h"
 #include "flashcard.h"
 
 namespace Ui {
@@ -30,6 +30,7 @@ private slots:
 private:
     QString groupID;
     bool edit_card(int index, QString front_text, QString back_text, bool front_side, bool send_card);
+    void insert_card_list(int index, QString front_text, QString back_text, bool front_side);
     Ui::Deck *ui;
     QList<Flashcard*> deck;
     Flashcard* new_card;

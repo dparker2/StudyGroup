@@ -21,8 +21,8 @@ public:
     void set_index(int);
     void edit_back(QString, int, bool);
 
-private slots:
-    void on_set_back_btn_clicked();
+public slots:
+    void save_back();
 
 private:
     Ui::FCBack *ui;

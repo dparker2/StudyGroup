@@ -22,22 +22,18 @@ Flashcard::Flashcard(QString groupID, QString text1, QString text2, int num, boo
     ui(new Ui::Flashcard)
 {
     ui->setupUi(this);
-    current_side = 0;
+    back_side = 0;
 
     // Initialize Front/Back widgets
     front = new FCFront(groupID, text1, num, send_card, parent);
     back = new FCBack(groupID, text2, num, send_card, parent);
     ui->card_widget->addWidget(front);
     ui->card_widget->addWidget(back);
+    ui->card_widget->setCurrentWidget(front);
 
     ui->card_index->setText(QString::number(num+1));    // Set flashcard index in ui
+}
 
-}
-void Flashcard::send_index(int index)
-{
-    front->set_index(index);
-    back->set_index(index);
-}
 /*
  * Set front/back of card
  * send_card determines whether card needs to be sent to server
@@ -65,12 +61,20 @@ void Flashcard::set_card_num(int num)
 ***/
 void Flashcard::on_edit_card_btn_clicked()
 {
-    if(current_side){
-        back->display_edit_back();
-    }
-    else{
-        front->display_edit_front();
-    }
+    ui->card_widget->setCurrentWidget(ui->edit_view);
+    qDebug() << ui->card_widget->count();
+    ui->card_widget->removeWidget(front);
+    qDebug() << ui->card_widget->count();
+    qDebug() << front->layout();
+    ui->cards_edit->addWidget(front);
+    delete front->layout();
+    front->setLayout(ui->cards_edit);
+    qDebug() << front->layout();
+
+    front->display_edit_front();
+    ui->card_widget->removeWidget(back);
+    ui->cards_edit->addWidget(back);
+    back->display_edit_back();
 }
 
 /*
@@ -79,20 +83,29 @@ void Flashcard::on_edit_card_btn_clicked()
 ***/
 void Flashcard::on_flip_card_btn_clicked()
 {
-    if(current_side){
+    if(back_side){
         front->display_front();
         ui->card_widget->setCurrentWidget(front);
-        ui->frame->setStyleSheet("background-color: rgba(2, 128, 173)");
     }
     else{
         back->display_back();
         ui->card_widget->setCurrentWidget(back);
-        ui->frame->setStyleSheet("background-color: rgba(0, 190, 144)");
     }
-    current_side ^= true; // testing sides (xor)
+    back_side = !back_side;
 }
 
+void Flashcard::on_card_widget_currentChanged(int arg1)
+{
+    //this->setStyleSheet('background-color: rgb(')
+}
 
-
-
-
+void Flashcard::on_save_button_released()
+{
+    //ui->cards_edit->removeWidget(front);
+    //ui->cards_edit->removeWidget(back);
+    ui->card_widget->addWidget(front);
+    ui->card_widget->addWidget(back);
+    ui->card_widget->setCurrentWidget(front);
+    front->save_front();
+    back->save_back();
+}

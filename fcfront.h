@@ -21,8 +21,8 @@ public:
     void set_index(int);
     void edit_front(QString, int, bool);
 
-private slots:
-    void on_set_front_btn_clicked();
+public slots:
+    void save_front();
 
 private:
     Ui::FCFront *ui;

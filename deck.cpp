@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include "server.h"
+#include "flashcardlistitem.h"
 
 Deck::Deck(QString name, QWidget *parent) :
     SGWidget(name, parent),
@@ -14,6 +15,7 @@ Deck::Deck(QString name, QWidget *parent) :
     ui->prev_btn->setEnabled(false);    // Disabled when deck < 1 card
     ui->next_btn->setEnabled(false);
     quiz = false;
+    connect(ui->back_to_deck_button, &QPushButton::released, [=] { ui->stacked_deck->setCurrentWidget(ui->deck_view);} );
 }
 
 Deck::~Deck()
@@ -33,10 +35,12 @@ void Deck::do_work()
         int index = message_list[1].toInt();
         if (message_list[0] == "FCFT")
         {
+            insert_card_list(index, message_list[2], "", true);
             init_card(index, QString(message_list[2]),"", true, false);
         }
         else if(message_list[0] == "FCBK")
         {
+            insert_card_list(index, "", message_list[2], false);
             init_card(index, "", QString(message_list[2]),false, false);
         }
     }
@@ -107,6 +111,24 @@ bool Deck::edit_card(int index, QString front_text, QString back_text, bool fron
     return false;
 }
 
+void Deck::insert_card_list(int index, QString front_text, QString back_text, bool front)
+{
+    FlashcardListItem* item;
+    QString index_str = QString::number(index + 1);
+    QLayoutItem* l_item = ui->card_list->itemAt(index);
+    bool doesnt_exist = l_item == 0;
+    item = (doesnt_exist) ? new FlashcardListItem() : (FlashcardListItem*)l_item->widget();
+
+    item->set_index(index_str);
+    (front) ? item->set_front(front_text) : item->set_back(back_text);
+
+    if(doesnt_exist)
+    {
+        ui->card_list->insertWidget(index, item);
+        connect(item, SIGNAL(card_clicked(int)), this, SLOT(display_card(int)));
+    }
+}
+
 /*
  * Flashcard navigation controls
  * Move to previous or next card in the deck
@@ -114,7 +136,6 @@ bool Deck::edit_card(int index, QString front_text, QString back_text, bool fron
 void Deck::on_prev_btn_clicked()
 {
     qDebug() << "ON PREV BUTTON CLICKED: " << current_index << " DECK SIZE :" << deck.size();
-    ui->card_area->removeWidget(deck.at(current_index)); // Remove the widget currently displayed
     do {
         if(quiz) {
             current_index = rand() % deck.size();
@@ -130,7 +151,6 @@ void Deck::on_prev_btn_clicked()
 void Deck::on_next_btn_clicked()
 {
     qDebug() << "ON PREV BUTTON CLICKED: " << current_index << " DECK SIZE :" << deck.size();
-    ui->card_area->removeWidget(deck.at(current_index)); // Remove the widget currently displayed
     do {
         if(quiz)
         {
@@ -158,7 +178,6 @@ void Deck::on_quiz_btn_toggled(bool is_set)
     quiz = is_set;
     if(deck.size() > 0)   // Make sure that the deck even has any cards...
     {
-        ui->card_area->removeWidget(deck.at(current_index));  // remove current displayed widget
         if(quiz) {
             current_index = rand() % deck.size();
             ui->card_area->addWidget(deck.at(current_index)); // Put random
@@ -174,6 +193,9 @@ void Deck::on_quiz_btn_toggled(bool is_set)
 */
 void Deck::display_card(int index)
 {
+    current_index = index;
+    ui->stacked_deck->setCurrentWidget(ui->card_view);
+    ui->card_area->removeWidget(ui->card_area->currentWidget());
     ui->card_area->addWidget(deck.at(index));
     ui->card_area->setCurrentWidget(deck.at(index));
 }

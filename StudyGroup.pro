@@ -41,7 +41,8 @@ SOURCES += \
     fcfront.cpp \
     fcback.cpp \
     whiteboard_wrapper.cpp \
-    whiteboard.cpp
+    whiteboard.cpp \
+    flashcardlistitem.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,7 +61,8 @@ HEADERS += \
     fcfront.h \
     fcback.h \
     whiteboard_wrapper.h \
-    whiteboard.h
+    whiteboard.h \
+    flashcardlistitem.h
 
 FORMS += \
         mainwindow.ui \
@@ -73,7 +75,8 @@ FORMS += \
     deck.ui \
     fcfront.ui \
     fcback.ui \
-    whiteboard.ui
+    whiteboard.ui \
+    flashcardlistitem.ui
 
 RESOURCES += \
     resource.qrc

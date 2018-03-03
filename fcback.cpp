@@ -22,7 +22,7 @@ FCBack::~FCBack()
 void FCBack::edit_back(QString text, int index, bool send_card){
     // Initializes both label, and text box
 
-    qDebug() << "SENDING-> " + server::FLASHCARD_SET_BACK + " " + groupID + " " + QString::number(index) + " " + text;
+    qDebug() << "SENDING-> " + server::FLASHCARD_SET_BACK + groupID + " " + QString::number(index) + " " + text;
 
     if(send_card){
         server::send(server::FLASHCARD_SET_BACK +  groupID + " " + QString::number(index) + " " + text);
@@ -49,7 +49,7 @@ void FCBack::display_edit_back()
     ui->back_widget->setCurrentIndex(1);
 }
 // **
-void FCBack::on_set_back_btn_clicked()
+void FCBack::save_back()
 {
     QString text = ui->back_text->toPlainText();
 
