@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->login_page, SIGNAL(logged_in(unsigned)), this, SLOT(changePage(unsigned)));
 
+    connect(ui->homepage, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
     connect(ui->join_page, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
     connect(ui->create_page, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
 
@@ -137,7 +138,7 @@ void MainWindow::removeCurrentPage()
 {
     QWidget* page = ui->page->currentWidget();
     ui->page->removeWidget(page);
-    show_leave_button(ui->page->currentIndex() > 1);
+    show_leave_button(ui->page->currentIndex() > 2);
     page->deleteLater();
 }
 

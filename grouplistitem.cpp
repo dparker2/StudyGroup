@@ -20,11 +20,6 @@ void GroupListItem::set_group(QString group)
     ui->name->setText(group);
 }
 
-void GroupListItem::set_pop(QString num)
-{
-    ui->users->setText(num);
-}
-
 void GroupListItem::set_favorite(bool fav)
 {
     ui->fav_button->setChecked(fav);

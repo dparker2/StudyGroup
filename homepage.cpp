@@ -63,27 +63,29 @@ void Homepage::clear_favorites()
 void Homepage::update_recents(QList<QByteArray> &groups_list)
 {
     // Iterate through groups list and put shit where it goes
-    for(int i = 0; i < (groups_list.size() - 2); i += 3)
-    {
-        GroupListItem* new_item = new GroupListItem();
-        connect(new_item, SIGNAL(join_pressed(QString)), this, SLOT(on_join_group(QString)));
-        new_item->set_group(groups_list.at(i));
-        new_item->set_pop(groups_list.at(i+1));
-        new_item->set_favorite(groups_list.at(i+2) == "1");
-        ui->recent_groups->addWidget(new_item);
+    if(groups_list.at(0) != "") {
+        for(int i = 0; i < (groups_list.size() - 1); i += 2)
+        {
+            GroupListItem* new_item = new GroupListItem();
+            connect(new_item, SIGNAL(join_pressed(QString)), this, SLOT(on_join_group(QString)));
+            new_item->set_group(groups_list.at(i));
+            new_item->set_favorite(groups_list.at(i+1) == "1");
+            ui->recent_groups->addWidget(new_item);
+        }
     }
 }
 
 void Homepage::update_favorites(QList<QByteArray> &groups_list)
 {
-    for(int i = 0; i < (groups_list.size() - 1); i += 2)
-    {
-        GroupListItem* new_item = new GroupListItem();
-        connect(new_item, SIGNAL(join_pressed(QString)), this, SLOT(on_join_group(QString)));
-        new_item->set_group(groups_list.at(i));
-        new_item->set_pop(groups_list.at(i+1));
-        new_item->set_favorite(true);
-        ui->favorite_groups->addWidget(new_item);
+    if(groups_list.at(0) != "") {
+        for(int i = 0; i < groups_list.size(); i += 1)
+        {
+            GroupListItem* new_item = new GroupListItem();
+            connect(new_item, SIGNAL(join_pressed(QString)), this, SLOT(on_join_group(QString)));
+            new_item->set_group(groups_list.at(i));
+            new_item->set_favorite(true);
+            ui->favorite_groups->addWidget(new_item);
+        }
     }
 }
 
