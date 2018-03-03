@@ -71,6 +71,11 @@ function newFavoriteGroup($user, $groupID) {
       sendMessage("SUCC", $sock);
       updateFavoriteGroups($user, $groupList);
       updateRecentGroups($user, $groupList);
+      $currentGroups = $user->getCurrGroups();
+      if (in_array($groupID, $currentGroups)) {
+        $message = "NWFG"."$groupID";
+        sendMessage($message, $sock);
+      }
     }
   } //closes if exist
   else {
@@ -86,7 +91,7 @@ function removeFavoriteGroup($user, $groupID) {
   $sock = $user->getSocket();
   $username = $user->getName();
   $favGroups = $user->getFavoriteGroups();
-  if(in_array($groupID, $favGroups) == FALSE) {
+  if(!in_array($groupID, $favGroups)) {
     sendMessage("FAIL", $sock);
   }
   else {
@@ -94,6 +99,11 @@ function removeFavoriteGroup($user, $groupID) {
     sendMessage("SUCC", $sock);
     updateFavoriteGroups($user, $groupList);
     updateRecentGroups($user, $groupList);
+    $currentGroups = $user->getCurrGroups();
+    if (in_array($groupID, $currentGroups)) {
+      $message = "RMFG"."$groupID";
+      sendMessage($message, $sock);
+    }
   }
 }
 

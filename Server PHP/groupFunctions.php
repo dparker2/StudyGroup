@@ -60,6 +60,7 @@ function createGroup($groupname, $user, $clientList, $sock)
       $message = "SUCC"."$groupID";
       sendMessage($message, $sock);
       updateGroupList($connection, $clientList, $groupClass, $groupID);
+      updateRecentGroups($user, $groupList);
     }
   disconnect($connection);
 }
@@ -121,6 +122,11 @@ function joinGroup($groupID, $user, $clientList, $sock)
         updateGroupChat($connection, $groupID, $sock);
         updateFlashCards($connection, $ip, $clientList, $groupID, $sock);
         updateRecentGroups($user, $groupList);
+        $favoriteGroups = $user->getFavoriteGroups();
+        if (in_array($groupID, $favoriteGroups)) {
+          $message = "NWFG"."$groupID";
+          sendMessage($message, $sock);
+        }
 
         echo "DEBUG: Determining whiteboard existence... \n";
         //If this is the first user joining

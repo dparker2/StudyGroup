@@ -155,7 +155,10 @@ class Group {
     $this->admin = $adminName;
   }
   function removeMember($username) {
-    $key = array_search($username, $this->favGroups);
+    if ($username == NULL) {
+      return  "DEBUG: Trying to remove null user from group \n";
+    }
+    $key = array_search($username, $this->members);
     array_splice($this->members, $key, 1);
     array_splice($this->memberIPs, $key, 1);
   }

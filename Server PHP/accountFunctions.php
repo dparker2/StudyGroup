@@ -101,16 +101,21 @@ function logout($user) {
   $username = $user->getName();
   if (count($user->getFavoriteGroups()) > 0) {
     $favGroup = implode(" ", $user->getFavoriteGroups());
-    if($favGroup == "" || $favGroup == " ") {
-      $favGroup == NULL;}
     $set_favorite_groups = "UPDATE UserInfo SET FavoriteGroups='$favGroup' WHERE Username = '$username'";
     mysqli_query($connection, $set_favorite_groups);
   }
+  else {
+    $set_favorite_groups = "UPDATE UserInfo SET FavoriteGroups=NULL WHERE Username = '$username'";
+    mysqli_query($connection, $set_favorite_groups);
+  }
+
   if (count($user->getRecentGroups()) > 0) {
     $recGroup = implode(" ", $user->getRecentGroups());
-    if($recGroup == "" || $recGroup == " ") {
-      $recGroup == NULL;}
     $set_recent_groups = "UPDATE UserInfo SET RecentGroups='$recGroup' WHERE Username = '$username'";
+    mysqli_query($connection, $set_recent_groups);
+  }
+  else {
+    $set_recent_groups = "UPDATE UserInfo SET RecentGroups=NULL WHERE Username = '$username'";
     mysqli_query($connection, $set_recent_groups);
   }
   disconnect($connection);
