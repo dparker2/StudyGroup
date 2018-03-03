@@ -262,7 +262,17 @@
           </spacer>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="recent_groups"/>
+          <layout class="QVBoxLayout" name="recent_groups">
+           <item>
+            <widget class="GroupListItem" name="widget_4" native="true"/>
+           </item>
+           <item>
+            <widget class="GroupListItem" name="widget" native="true"/>
+           </item>
+           <item>
+            <widget class="GroupListItem" name="widget_2" native="true"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -290,7 +300,11 @@
           </spacer>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="favorite_groups"/>
+          <layout class="QVBoxLayout" name="favorite_groups">
+           <item>
+            <widget class="GroupListItem" name="widget_3" native="true"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -316,6 +330,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GroupListItem</class>
+   <extends>QWidget</extends>
+   <header>grouplistitem.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

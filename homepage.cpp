@@ -38,8 +38,6 @@ void Homepage::do_work()
             update_favorites(message_list);
         }
     }
-    if(is_active)
-        server::send(server::HOMEPAGE_UPDATE);
 }
 
 void Homepage::clear_recents()

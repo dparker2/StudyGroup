@@ -20,6 +20,7 @@ public:
 private:
     Ui::Homepage *ui;
     bool is_active;
+    QList<bool> favorited_recents;
 
     void do_work();
     void clear_recents();

@@ -37,14 +37,15 @@ void GroupListItem::on_join_button_released()
 
 void GroupListItem::on_fav_button_clicked(bool checked)
 {
+    ui->fav_button->setChecked(false);
     QString _;
-    if (!checked) {
-        if(server::request_response(server::HOMEPAGE_REMOVE_FAVORITE + ui->name->text(), _)) {
-            ui->fav_button->setChecked(false);
-        }
-    } else {
+    if (checked) {
         if(server::request_response(server::HOMEPAGE_NEW_FAVORITE + ui->name->text(), _)) {
             ui->fav_button->setChecked(true);
+        }
+    } else {
+        if(server::request_response(server::HOMEPAGE_REMOVE_FAVORITE + ui->name->text(), _)) {
+            ui->fav_button->setChecked(false);
         }
     }
 }
