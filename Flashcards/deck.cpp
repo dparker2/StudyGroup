@@ -194,6 +194,7 @@ void Deck::on_quiz_btn_toggled(bool is_set)
 void Deck::display_card(int index)
 {
     current_index = index;
+    deck.at(index)->show_front();
     ui->stacked_deck->setCurrentWidget(ui->card_view);
     ui->card_area->removeWidget(ui->card_area->currentWidget());
     ui->card_area->addWidget(deck.at(index));

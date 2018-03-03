@@ -29,7 +29,6 @@ SOURCES += \
     user_account_check.cpp \
     server.cpp \
     groupwidget.cpp \
-    flashcard.cpp \
     startpage.cpp \
     joingrouppage.cpp \
     creategrouppage.cpp \
@@ -37,19 +36,23 @@ SOURCES += \
     sgtcpsocket.cpp \
     sgwidget.cpp \
     groupmainpage.cpp \
-    deck.cpp \
-    fcfront.cpp \
-    fcback.cpp \
     whiteboard_wrapper.cpp \
     whiteboard.cpp \
-    flashcardlistitem.cpp
+    Flashcards/deck.cpp \
+    Flashcards/flashcard.cpp \
+    Flashcards/flashcardlistitem.cpp \
+    Flashcards/fcside.cpp \
+    Flashcards/fcedit.cpp \
+    Flashcards/fcfront.cpp \
+    Flashcards/fcback.cpp \
+    Flashcards/fcfrontedit.cpp \
+    Flashcards/fcbackedit.cpp
 
 HEADERS += \
         mainwindow.h \
     user_account_check.h \
     server.h \
     groupwidget.h \
-    flashcard.h \
     startpage.h \
     joingrouppage.h \
     creategrouppage.h \
@@ -57,26 +60,31 @@ HEADERS += \
     sgtcpsocket.h \
     sgwidget.h \
     groupmainpage.h \
-    deck.h \
-    fcfront.h \
-    fcback.h \
     whiteboard_wrapper.h \
     whiteboard.h \
-    flashcardlistitem.h
+    Flashcards/deck.h \
+    Flashcards/flashcard.h \
+    Flashcards/flashcardlistitem.h \
+    Flashcards/fcside.h \
+    Flashcards/fcedit.h \
+    Flashcards/fcfront.h \
+    Flashcards/fcback.h \
+    Flashcards/fcfrontedit.h \
+    Flashcards/fcbackedit.h
 
 FORMS += \
         mainwindow.ui \
     groupwidget.ui\
-    flashcard.ui \
     startpage.ui \
     joingrouppage.ui \
     creategrouppage.ui \
     settingspage.ui \
-    deck.ui \
-    fcfront.ui \
-    fcback.ui \
     whiteboard.ui \
-    flashcardlistitem.ui
+    Flashcards/deck.ui \
+    Flashcards/flashcard.ui \
+    Flashcards/flashcardlistitem.ui \
+    Flashcards/fcside.ui \
+    Flashcards/fcedit.ui
 
 RESOURCES += \
     resource.qrc

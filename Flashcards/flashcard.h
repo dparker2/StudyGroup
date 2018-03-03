@@ -5,6 +5,8 @@
 #include <QHBoxLayout>
 #include "fcfront.h"
 #include "fcback.h"
+#include "fcbackedit.h"
+#include "fcfrontedit.h"
 
 namespace Ui {
 class Flashcard;
@@ -21,6 +23,7 @@ public:
     void setFront(QString, int, bool);
     void setBack(QString, int, bool);
     void set_card_num(int);
+    void show_front();
 
 public slots:
 
@@ -33,8 +36,8 @@ private slots:
 
 private:
     Ui::Flashcard *ui;
-    FCFront* front;
-    FCBack* back;
+    FCFrontEdit* fc_front_edit;
+    FCBackEdit* fc_back_edit;
     QString groupID;
     int cardNum;
     int back_side;

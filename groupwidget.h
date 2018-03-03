@@ -11,7 +11,7 @@
 
 #include "whiteboard_wrapper.h"
 #include "sgwidget.h"
-#include "deck.h"
+#include "Flashcards/deck.h"
 
 namespace Ui {
 class GroupWidget;
