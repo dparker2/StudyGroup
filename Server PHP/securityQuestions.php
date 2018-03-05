@@ -55,12 +55,6 @@ function reqSecAns($user, $sock) {
 function setSecQuest($user, $q1, $q2, $q3, $sock) {
   $connection = connectAccount();
   $username = $user;
-  /*will only need these if client sends the server questions without spaces, but probably will not need
-  $q1_nospaces = str_replace(' ','_',$q1);
-  $q2_nospaces = str_replace(' ','_',$q2);
-  $q3_nospaces = str_replace(' ','_',$q3);
-  */
-
   $escQ1 = mysqli_real_escape_string($connection, $q1);
   $escQ2 = mysqli_real_escape_string($connection, $q2);
   $escQ3 = mysqli_real_escape_string($connection, $q3);
@@ -77,11 +71,7 @@ function setSecQuest($user, $q1, $q2, $q3, $sock) {
 function setSecAns($user, $a1, $a2, $a3, $sock) {
   $connection = connectAccount();
   $username = $user;
-  /*will only need these if client sends the server questions without spaces, but probably will not need
-  $q1_nospaces = str_replace(' ','_',$q1);
-  $q2_nospaces = str_replace(' ','_',$q2);
-  $q3_nospaces = str_replace(' ','_',$q3);
-  */
+
 
   /*not sure if i need to escape string, or if hashing will be good enough. leaving this in case hashing alone does not work
   $escA1 = mysqli_real_escape_string($connection, $a1);
@@ -89,9 +79,13 @@ function setSecAns($user, $a1, $a2, $a3, $sock) {
   $escA3 = mysqli_real_escape_string($connection, $a3);
   */
 
-  $a1Hash = mysqli_real_escape_string($connection, password_hash($a1, PASSWORD_DEFAULT));
-  $a2Hash = mysqli_real_escape_string($connection, password_hash($a2, PASSWORD_DEFAULT));
-  $a3Hash = mysqli_real_escape_string($connection, password_hash($a3, PASSWORD_DEFAULT));
+  //$a1Hash = mysqli_real_escape_string($connection, password_hash($a1, PASSWORD_DEFAULT));
+  //$a2Hash = mysqli_real_escape_string($connection, password_hash($a2, PASSWORD_DEFAULT));
+  //$a3Hash = mysqli_real_escape_string($connection, password_hash($a3, PASSWORD_DEFAULT));
+
+  $a1Hash = password_hash($a1, PASSWORD_DEFAULT);
+  $a2Hash = password_hash($a2, PASSWORD_DEFAULT);
+  $a3Hash = password_hash($a3, PASSWORD_DEFAULT);
 
 
 
@@ -103,11 +97,8 @@ function setSecAns($user, $a1, $a2, $a3, $sock) {
 
 }
 
-/*
-function generateRecCode() {
 
 
-}
 
 
 function verifyCode($user, $code) {
@@ -116,6 +107,6 @@ function verifyCode($user, $code) {
 
 
 }
-*/
+
 
 ?>
