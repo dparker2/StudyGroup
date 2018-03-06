@@ -151,16 +151,6 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
     }
 }
 
-void GroupWidget::on_add_card_button_clicked()
-{
-    deck->add_card();
-}
-
-void GroupWidget::on_quiz_button_toggled(bool checked)
-{
-    deck->set_quiz(checked);
-}
-
 void GroupWidget::on_fav_button_clicked(bool checked)
 {
     ui->fav_button->setChecked(false);
