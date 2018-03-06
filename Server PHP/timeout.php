@@ -2,14 +2,17 @@
 
 include_once 'utilityFunctions.php';
 
+// 2 global variabls for keeping track of failed attempts a= login, s=security
 $a = 0;
 $s = 0;
 
+// returns the exact time, to the millisecond, this function was called. in UTC
 function microtime_float() {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
 }
 
+// i need to verify that $time is giving me a int, not a double or a float, else 2nd if needs to be changes
 function loginTimeout(){
 	global $a;
 	$time_start = microtime_float();
