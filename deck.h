@@ -1,54 +1,40 @@
 #ifndef DECK_H
 #define DECK_H
 
-#include <QWidget>
+#include "SGWidget.h"
 #include "flashcard.h"
 
 namespace Ui {
 class Deck;
 }
 
-class Deck : public QWidget
+class Deck : public SGWidget
 {
     Q_OBJECT
 
 public:
-    explicit Deck(QWidget *parent = 0);
+    explicit Deck(QString group_name, QWidget *parent = 0);
     ~Deck();
-
-    void deleteCard(int index);
-    void add_card();
-    void init_card(int index, QString text, bool front_side);
-    //void set_new_card();
-    //void set_existing_card()
-
-    void set_quiz(bool);
-    int getDeckSize();
-    int get_card_number();
-    Flashcard* getCard(int index);
-    QString get_card_text();
-
-signals:
-    void set_card(QString, int&, int);
-    void display_card(Flashcard*);
-
-public slots:
-
-    void check_set_card(Flashcard*, QString&, int&, int);
 
 private slots:
 
+    void do_work();
     void on_prev_btn_clicked();
     void on_next_btn_clicked();
+    void on_add_card_btn_clicked();
+    void on_quiz_btn_toggled(bool checked);
+    void deleteCard(int index);
+    void display_card(int index);
+    void init_card(int index, QString front_text, QString back_text, bool front_side, bool send_card);
 
 private:
-
-    bool edit_card(int index, QString text, bool front_side);
+    QString groupID;
+    bool edit_card(int index, QString front_text, QString back_text, bool front_side, bool send_card);
     Ui::Deck *ui;
-    QVBoxLayout *layout;
     QList<Flashcard*> deck;
-    Flashcard* flashcard;
+    Flashcard* new_card;
     int current_index;
+    int new_index;
     bool quiz;
 };
 

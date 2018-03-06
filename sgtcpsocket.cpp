@@ -32,7 +32,7 @@ void SGTCPSocket::connect_server()
     //my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
     //my_tcp_socket->connectToHost("localhost", 9001);
     // If it ever disconnects (including while trying this), the socket will
-    // continuously try to reconnect. See reconnect_socket().
+    // continuouslyq try to reconnect. See reconnect_socket().
 }
 
 void SGTCPSocket::write(QString message)
@@ -96,8 +96,12 @@ bool SGTCPSocket::read_socket_helper(QString& out_message)
     success_flag = false;
     fail_flag = false;
     success_message = nullptr;
+
+tryread:
     if((QAbstractSocket::ConnectedState == my_tcp_socket->state()) && (my_tcp_socket->waitForReadyRead(5000)))
     {
+        if(!(success_flag || fail_flag))
+            goto tryread;
         if(success_flag)
         {
             out_message = success_message;
@@ -195,46 +199,6 @@ void SGTCPSocket::read_socket_send_signal()
             QString object_name = get_object_name(message_ba);
             emit new_message(object_name, message_ba);
         }
-
-        /*if (server_code == "USCH") // User List has CHANGED
-        {
-            // Notify the relevant group widget
-        }
-        else if (server_code == "NUSR") // New User code
-        {
-            QString new_username = message_ba;
-            qDebug() << "New user: " << new_username;
-            //emit user_joined(new_username);
-        }
-        else if (server_code == "NCHT")
-        {
-            QString message = message_ba;
-            qDebug() << message;
-            QString username = message.section(' ', 0, 0);
-            QString str_date_time = message.section(' ', 1, 2);
-            QDateTime date_time = QDateTime::fromString(str_date_time, "yyyy-MM-dd HH:mm:ss");
-            date_time.setTimeSpec(Qt::UTC);
-            //QDateTime updated_date_time(date_time.toTimeSpec(timestamps.timeSpec()));
-            //QString updated_time = updated_date_time.toString("yyyy-MM-dd hh:mm:ss AP");
-            QString chat = message.section(' ', 3, -1);
-            //emit new_chat(username, updated_time, chat);
-        }
-        else if (server_code == "FCFT")
-        {
-            QString flash_str = message_ba;
-            int flashcard_id = flash_str.section(' ', 0, 0).toInt();
-            QString flashcard_front = flash_str.section(' ', 1, -1);
-            //emit new_flashcard(flashcard_id, flashcard_front, true);
-            qDebug() << flashcard_id << flashcard_front << "front";
-        }
-        else if (server_code == "FCBK")
-        {
-            QString flash_str = message_ba;
-            int flashcard_id = flash_str.section(' ', 0, 0).toInt();
-            QString flashcard_back = flash_str.section(' ', 1, -1);
-            //emit new_flashcard(flashcard_id, flashcard_back, false);
-            qDebug() << flashcard_id << flashcard_back << "back";
-        }*/
     }
 
     return;

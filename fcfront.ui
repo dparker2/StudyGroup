@@ -20,12 +20,18 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="front1">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
         <widget class="QLabel" name="front_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="font">
           <font>
            <family>Trebuchet MS</family>
@@ -41,6 +47,13 @@
      </widget>
      <widget class="QWidget" name="front2">
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="0">
+        <widget class="QTextEdit" name="front_text">
+         <property name="styleSheet">
+          <string notr="true">background-color:white;</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="top_label">
          <property name="font">
@@ -59,12 +72,31 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QTextEdit" name="front_text">
-         <property name="styleSheet">
-          <string notr="true">background-color:white;</string>
-         </property>
-        </widget>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QPushButton" name="set_front_btn">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+background-color: rgba(255, 98, 71, 0.6);
+color: white; 
+font:bold;
+padding: 8px 12px 8px 12px;
+border: 0px;
+}
+
+QPushButton:hover {
+	background-color: rgba(255, 98, 71, 1);
+}
+
+</string>
+           </property>
+           <property name="text">
+            <string>Set Front</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

@@ -15,43 +15,26 @@ class Flashcard : public QWidget
     Q_OBJECT
 public:
     explicit Flashcard(QWidget *parent = nullptr);
-    explicit Flashcard(QString, QString, int, QWidget *parent = nullptr);
+    explicit Flashcard(QString groupID, QString, QString, int, bool, QWidget *parent = nullptr);
     ~Flashcard();
-    void setFront(QString);
-    void setBack(QString);
-    void setCardNum(int);
-    QString getFront();
-    QString getBack();
-    int getCardNum();
 
-    void setEditBtn();
-    void emit_init_signal();
-
-signals:
-
-
-    void check_set_card(Flashcard*, QString&, int&, int);
+    void setFront(QString, int, bool);
+    void setBack(QString, int, bool);
+    void set_card_num(int);
+    void send_index(int);
 
 public slots:
 
 private slots:
     void on_edit_card_btn_clicked();
-
-    void on_set_front_btn_clicked();
-
-    void on_cancel_btn_clicked();
-
     void on_flip_card_btn_clicked();
 
-
-    void on_set_back_btn_clicked();
 
 private:
     Ui::Flashcard *ui;
     FCFront* front;
     FCBack* back;
-    QString back_text;
-    QString front_text;
+    QString groupID;
     int cardNum;
     int current_side;
 };

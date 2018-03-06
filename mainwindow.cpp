@@ -36,10 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->settings_button->setIconSize(QSize(35, 35));
     ui->settings_button->setIcon(QIcon(gear));
 
-
-    //connect(ui->header, SIGNAL(button_changed(unsigned)), this, SLOT(changePage(unsigned)));
-    //connect(ui->header, SIGNAL(leave_group()), this, SLOT(removeCurrentPage()));
-
     //connect(my_serv, SIGNAL(disconnected()), this, SLOT(on_logout_button_released())); // Logs out user if server connection is lost
     user_info = new UserAccount();
 
@@ -104,10 +100,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    //on_logout_button_released();
-
     delete ui;
-    //group_widget->deleteLater();
 }
 
 void MainWindow::setStackedIndex(unsigned index)
@@ -142,24 +135,11 @@ void MainWindow::removeCurrentPage()
     page->deleteLater();
 }
 
-/*
- * Sign Up Check - Username
- * Checks the username entered by the user and sets the green check/X icon
- * accordingly. If username is valid it is set to the UserAccount email
- */
-
-
-
 /**************
  *
  * PRIVATE
  *
  */
-
-void MainWindow::exit_settings()
-{
-    //ui->stackedWidget_inner->setCurrentWidget(exit_settings_to); // Go back to previously active page
-}
 
 void MainWindow::on_settings_button_released()
 {
@@ -175,44 +155,6 @@ void MainWindow::on_leave_button_released()
     removeCurrentPage();
     remove_button(index);
     set_active_button(ui->page->currentIndex());
-}
-
-void MainWindow::_initialize_group()
-{
-    /*
-     * DONT THINK WE NEED ANYMORE...... JUST KEEPING FOR REFERENCE.
-     * group_widget = new GroupWidget();
-
-    // ALL THE CONNECTIONS!!!
-    connect(my_serv, SIGNAL(user_joined(QString)), group_widget, SLOT(user_joined(QString)));
-    connect(my_serv, SIGNAL(users_changed()), group_widget, SLOT(users_changed()));
-    connect(my_serv, SIGNAL(new_chat(QString,QString,QString)), group_widget, SLOT(new_chat(QString,QString,QString)));
-
-    connect(my_serv, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)), group_widget, SIGNAL(whiteboard_draw_line(QPoint,QPoint,QColor,int)));
-    connect(my_serv, SIGNAL(get_whiteboard(QString)), group_widget->whiteboard_ptr(), SLOT(get_whiteboard(QString)));
-    connect(group_widget->whiteboard_ptr(), SIGNAL(send_whiteboard(QString&,QByteArray*)), my_serv, SLOT(send_whiteboard(QString&,QByteArray*)));
-    connect(my_serv, SIGNAL(update_whiteboard(QByteArray*)), group_widget->whiteboard_ptr(), SLOT(update_whiteboard(QByteArray*)));
-
-    connect(group_widget, SIGNAL(send_chat(QString&,QString&)), my_serv, SLOT(send_chat(QString&,QString&)));
-    connect(group_widget, SIGNAL(line_drawn(QString,QPoint,QPoint,QColor,int)), my_serv, SLOT(send_whiteboard_line(QString,QPoint,QPoint,QColor,int)));
-    connect(group_widget, SIGNAL(save_whiteboard(QString&,QByteArray*)), my_serv, SLOT(save_whiteboard(QString&,QByteArray*)));
-
-    connect(group_widget, SIGNAL(send_card(QString&, QString&, int&, int&)), my_serv, SLOT(send_card(QString&, QString&, int&, int&)));
-    connect(my_serv, SIGNAL(new_flashcard(int,QString,bool)), group_widget, SLOT(incoming_card(int,QString,bool)));
-*/}
-
-void MainWindow::_activate_group(QString &group_id)
-{
-    /*
-     * DONT THINK WE NEED ANYMORE
-     * ui->stackedWidget_inner->addWidget(group_widget);
-    ui->stackedWidget_inner->setCurrentWidget(group_widget);
-    group_widget->set_groupID(group_id);
-
-    ui->back_to_group_button->setVisible(true);
-    ui->back_to_group_button->setText(group_id);
-    ui->leave_button->setVisible(true);
-    ui->leave_button->setChecked(false);**/
 }
 
 void MainWindow::set_active_button(unsigned index)
@@ -268,36 +210,6 @@ void MainWindow::on_logout_button_released()
         server::send("LOGT");
     }
 }
-
-/*void MainWindow::on_stackedWidget_inner_currentChanged(int)
-{
-    /*ui->join_button->setChecked(false);
-    ui->create_button->setChecked(false);
-    ui->back_to_group_button->setChecked(false);
-    set_settings_btn_icon(0);
-    if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_JoinGroup)
-    {
-        ui->join_button->setChecked(true);
-    }
-    else if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_CreateGroup)
-    {
-        ui->create_button->setChecked(true);
-    }
-    else if(ui->stackedWidget_inner->currentWidget() == ui->stackedPage_Settings)
-    {
-        set_settings_btn_icon(1);
-        if(exit_settings_to == ui->stackedPage_JoinGroup)
-            ui->join_button->setChecked(true);
-        if(exit_settings_to == ui->stackedPage_CreateGroup)
-            ui->create_button->setChecked(true);
-        if(exit_settings_to == group_widget)
-            ui->back_to_group_button->setChecked(true);
-    }
-    else if(ui->stackedWidget_inner->currentWidget() == group_widget)
-    {
-        ui->back_to_group_button->setChecked(true);
-    }*/
-//}
 
 /***
  *
