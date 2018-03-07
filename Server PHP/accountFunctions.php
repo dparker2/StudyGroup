@@ -68,7 +68,7 @@ function loginAccount($username, $password, $sock) {
 		break;
       }
       $checkPass = getObjString($connection, $check_password)->Pass;
-      else if (password_verify($password, $checkPass)) {
+      elseif (password_verify($password, $checkPass)) {
         $resultEmail = getObjString($connection, $check_email)->Email;
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);

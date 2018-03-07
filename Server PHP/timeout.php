@@ -12,7 +12,7 @@ function microtime_float() {
     return ((float)$usec + (float)$sec);
 }
 
-// i need to verify that $time is giving me a int, not a double or a float, else 2nd if needs to be changes
+// i need to verify what type of time i'm getting so i can set the 2nd if statement'
 function loginTimeout(){
 	global $a;
 	$time_start = microtime_float();
@@ -25,7 +25,7 @@ function loginTimeout(){
 			$t = microtime_float();
 			$a = 1;
 		}
-		else {
+		else { // a warning for imminent timeout
 			$message = "4 login fails";
 			sendMessage($message, $sock);
 		}
@@ -37,7 +37,7 @@ function loginTimeout(){
 			$t = microtime_float();
 			$a = 1;
 		}
-		else {
+		else { // still need some sort of punishment here. how to implement the lockout?
 			$message = "5+ login fails";
 			sendMessage($message, $sock);
 		}
