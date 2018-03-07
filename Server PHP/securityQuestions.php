@@ -67,7 +67,7 @@ function setSecQuest($user, $q1, $q2, $q3, $sock) {
   echo "This is escq1: $escQ1\n\n";
   echo "This is escq2: $escQ2\n\n";
   echo "This is escq3: $escQ3\n\n";
-  $query = "UPDATE UserInfo SET SQ1='$escQ1', SET SQ2='$escQ2', SET SQ3='$escQ3' WHERE Username = '$username'";
+  $query = "UPDATE UserInfo SET SQ1='$escQ1', SQ2='$escQ2', SQ3='$escQ3' WHERE Username = '$username'";
   echo "Here is the setSecQuest query: $query\n\n";
   if (!mysqli_query($connection, $query)) {
     $message = "FAILThere was an issue setting the security questions.\n\n";
