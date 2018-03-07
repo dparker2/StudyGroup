@@ -103,7 +103,7 @@ function setSecAns($user, $a1, $a2, $a3, $sock) {
 
 
 
-  $query = "UPDATE UserInfo SET SQA1='$a1Hash', SET SQA2='$a2Hash', SET SQA3='$a3Hash' WHERE Username = '$username'";
+  $query = "UPDATE UserInfo SET SQA1='$a1Hash', SQA2='$a2Hash', SQA3='$a3Hash' WHERE Username = '$username'";
   if (!mysqli_query($connection, $query)) {
     $message = "FAILThere was an issue setting the security question answers.\n\n";
     sendMessage($message, $sock);
