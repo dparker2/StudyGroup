@@ -4,6 +4,7 @@
 #include "joingrouppage.h"
 #include <QMessageBox>
 #include <QListView>
+#include <QStandardItemModel>
 
 StartPage::StartPage(QString name, QWidget *parent) :
     SGWidget(name, parent),
@@ -25,7 +26,8 @@ StartPage::StartPage(QString name, QWidget *parent) :
 
     // Account Security
     recover = new AccountSecurity("recover");
-    customQ_flag = false;
+    //customQ_flag = false;
+
 
 }
 
@@ -33,17 +35,19 @@ StartPage::~StartPage()
 {
     delete ui;
 }
-void StartPage::do_work(){
-    qDebug() << "IN DO WORK " << _work_queue.isEmpty() ;
+
+void StartPage::do_work()
+{
     while(!_work_queue.isEmpty())
     {
         QByteArray message = _work_queue.dequeue();
-        qDebug() << "MESSAGE IN DO WORK: " << message;
-        QList<QByteArray> message_list = split(message,4);
-        if (message_list[0] == "REQQ")
+        QString code = message.left(4);
+        message.remove(0,4);
+        QList<QByteArray> message_list = split(message,3);
+        if (code == "REQQ")
         {
-            set_questions(message_list);
-
+            qDebug() << "MESSAGE LIST:  " << message_list;
+            REQQ(message_list);
         }
     }
 }
@@ -72,16 +76,6 @@ void StartPage::on_signin_button_clicked()
         emit logged_in(0); // Change main page
     }
 }
-/*
-void StartPage::on_singup_button_clicked()
-{
-    ui->sign_up->setCurrentIndex(1);
-    recover->display_recovery_page(1);
-    ui->recover_account->addWidget(recover);
-    ui->recover_account->setCurrentWidget(recover);
-    ui->tab_recover_account->layout()->setContentsMargins(0,0,0,0);
-}
-*/
 
 /*****************************************************
  * ACCOUNT SIGNUP
@@ -111,83 +105,166 @@ void StartPage::on_register_btn_clicked()
 
         // Request default questions from server
         ui->sign_up->setCurrentIndex(1);
-        if(ui->comboBox_q2->count() == 0){
-            qDebug() << "SENDING SECURITY QUESTIONS REQUEST";
+        if(questions.isEmpty()){
             server::send(server::SECURITY_QUESTIONS+username);
         }
         return;
     }
     ui->sign_up->setCurrentIndex(0);
 }
+
+/*
+ * Load the security question comboboxes with questions sent
+ * from the server
+******/
+void StartPage::REQQ(QList<QByteArray> message)
+{
+    QComboBox* comboBox;
+    for(int i = 0; i < 3; i++){
+        comboBox = parentWidget()->findChild<QComboBox*>("comboBox_q" + QString::number(i+1));
+        question_comboBox.push_back(comboBox);
+    }
+
+    questions.push_back("Choose Security Question");
+    for(int i = 0; i < message.size(); i++)
+    {
+        questions.push_back(QString(message[i]).replace('_', ' '));
+        custom_questions.push_back(nullptr);
+    }
+     questions.push_back("Create Custom Question");
+
+     qDebug() << "QUESTOINS : " << questions;
+    for(int i = 0; i < question_comboBox.size(); i++)
+    {
+        for(int j = 0; j < questions.size(); j++)
+        {
+            question_comboBox[i]->addItem(questions[j]);
+        }
+    }
+}
+
+void StartPage::set_questions(QList<QByteArray> message)
+{
+
+}
+
 /*
  * Send security question and answers to server
 *****/
 void StartPage::on_save_question_btn_clicked()
 {
     // Replaces all  spaces with underscores before sending to server
-    QString a1 = ui->lineEdit_answer1->text().replace(' ', '_');
-    QString a2 = ui->lineEdit_answer2->text().replace(' ', '_');
-    QString a3 = ui->lineEdit_answer3->text().replace(' ', '_');
+    QString questions_to_send, answers_to_send;
+
+    for(int i = 0; i < custom_questions.size(); i++){
+        if(custom_questions[i] != nullptr)
+        {
+            questions[i+1] = custom_questions[i]->text();
+        }
+    }
+    for(int i = 1; i < questions.size()-1; i++){
+        questions_to_send += questions[i].replace(' ', '_') + " ";
+    }
+
+    answers_to_send = ui->lineEdit_answer1->text().replace(' ', '_') + " " + ui->lineEdit_answer2->text().replace(' ', '_') + " " + ui->lineEdit_answer3->text().replace(' ', '_');
 
 
     // If there exists a custom question send all questions to server
-    if(customQ_flag){
-        //server::send(server::SECURITYQ_CUSTOM+username + ' ' + question[0] + ' ' + question[1]  + ' ' + question[2]);
-    }
-    server::send(server::SECURITY_ANSWERS + a1 + ' ' + a2 + ' ' + a3);  // Answers get sent regardless
-}
-void StartPage::set_questions(QList<QByteArray> message)
-{
-    QComboBox* t;
-    // Loops through message and sets all three questions to each combobox
-    for(int i = 1; i < message.size(); i++)
+    if(customQ_flag)
     {
-        for(int j = 1; j < message.size(); j++)
-        {
-            t = parentWidget()->findChild<QComboBox*>("comboBox_q" + QString::number(i));
-            t->addItem(QString(message[j]).replace('_', ' '));
-        }
-        t->addItem("Create custom question");
-        custom_questions.append(nullptr);   // appends null for custom question QlineEdits
+        server::send(server::SECURITYQ_CUSTOM+username + " " + questions_to_send);
     }
-
+    server::send(server::SECURITY_ANSWERS+username + " " + answers_to_send);  // Answers get sent regardless
 }
+
 /*
  *  When user chooses custom question the custom flag is set to true
  *  and the current combobox is hidden and replaced with a QLineEdit
 ********/
-void StartPage::on_comboBox_q1_currentIndexChanged(int index)
+void StartPage::on_comboBox_q1_activated(int index)
 {
-    customQ_flag = true;
-    QLineEdit* q = new QLineEdit();
-    q->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
-    if(index)
+    //customQ_flag = false;
+    if(index == question_comboBox[0]->count()-1)  // Custom question is picked
     {
+        custom_questions[0] = new QLineEdit();
+        custom_questions[0]->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
+        customQ_flag = true;  // Just in case I need the flag for something not sure yet
         ui->comboBox_q1->hide();
-        ui->layout_q1->addWidget(q);
+        ui->layout_q1->addWidget(custom_questions[0]);
+    }
+    else{
+        update_question_list(index, ui->comboBox_q1);
     }
 }
 
-void StartPage::on_comboBox_q2_currentIndexChanged(int index)
+void StartPage::update_question_list(int current_index, QComboBox* current_comboBox)
 {
-    customQ_flag = true;
-    QLineEdit* q = new QLineEdit();
-    q->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
-    if(index)
+    QList<QComboBox*> other_comboBox;           // pointer for combobox not currently selected
+    QList<QString> other_selected_question;     // selected questions from the other comboboxes
+    QList<int> other_selected_index;            // indexes of selected questions from other combo boxes
+
+    for(int i = 0; i < question_comboBox.size(); i++)   // loops the number of comboboxes in UI (3)
     {
-        ui->comboBox_q2->hide();
-        ui->layout_q2->addWidget(q);
+       if(question_comboBox[i] != current_comboBox)     // catches the other two comboboxes
+       {
+           other_comboBox.push_back(question_comboBox[i]);
+       }
     }
-}
-void StartPage::on_comboBox_q3_currentIndexChanged(int index)
-{
-    customQ_flag = true;
-    QLineEdit* q = new QLineEdit();
-    q->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
-    if(index)
+    QString current_question = current_comboBox->currentText();   // the one currently selected
+
+    for(int j = 0; j < other_comboBox.size(); j++){
+        other_selected_question.push_back(other_comboBox[j]->currentText());   // pushes back the questions selected at two other comboboxes
+        other_selected_index.push_back(other_comboBox[j]->currentIndex());
+        other_comboBox[j]->clear();                 // clears all questions
+        other_comboBox[j]->addItems(questions);     // adds them all back in, ready to remove the ones that are currently selected
+    }
+
+    int j = 1;
+    for(int i = 0; i < other_comboBox.size(); i++)
     {
+        // removes the currently selected question from the two other comboxes
+        if(current_index != 0){
+            other_comboBox[i]->removeItem(other_comboBox[i]->findText(current_question));
+        }
+        if(other_selected_index[j] != 0 && other_selected_index[j] != questions.size()-1){
+            other_comboBox[i]->removeItem(other_comboBox[i]->findText(other_selected_question[j]));
+        }
+        j--;
+    }
+    // Finding the new index of selected questions and setting that index to be selected
+    int new_index1 = other_comboBox[0]->findText(other_selected_question[0]);
+    int new_index2 = other_comboBox[1]->findText(other_selected_question[1]);
+    other_comboBox[0]->setCurrentIndex(new_index1);
+    other_comboBox[1]->setCurrentIndex(new_index2);
+}
+void StartPage::on_comboBox_q2_activated(int index)
+{
+    if(index == question_comboBox[1]->count()-1)
+    {
+        custom_questions[1] = new QLineEdit();
+        custom_questions[1]->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
+        customQ_flag = true;
+        ui->comboBox_q2->hide();
+        ui->layout_q2->addWidget(custom_questions[1]);
+    }
+    else{
+        update_question_list(index, ui->comboBox_q2);
+    }
+
+}
+void StartPage::on_comboBox_q3_activated(int index)
+{
+    if(index == question_comboBox[2]->count()-1)
+    {
+        custom_questions[2] = new QLineEdit();
+        custom_questions[2]->setStyleSheet("background-color: #545454; color:white;border-style:none; height: 33px; width: 316px");
+        customQ_flag = true;
         ui->comboBox_q3->hide();
-        ui->layout_q3->addWidget(q);
+        ui->layout_q3->addWidget(custom_questions[2]);
+    }
+    else
+    {
+        update_question_list(index, ui->comboBox_q3);
     }
 }
 
@@ -278,6 +355,9 @@ void StartPage::on_tabWidget_tabBarClicked(int index)
     ui->recover_account->removeWidget(recover);
     ui->recover_account->setCurrentWidget(ui->recover_acct_page);
 }
+
+
+
 
 
 

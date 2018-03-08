@@ -141,18 +141,21 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     QString code = first_section.left(4);  // Get the code
     first_section.remove(0, 4);  // Remove the code
     qDebug() << "before remove" << message;
-    message.remove(4, first_section.length());
+
     qDebug() << "after remove" << message;
     if ((code == "USCH") || (code == "NUSR") || (code == "NCHT"))
     {
+        message.remove(4, first_section.length());
         return first_section;
     }
     else if((code == "WBLN") || (code == "NUWB") || (code == "WBUP"))
     {
+        message.remove(4, first_section.length());
         return first_section + " whiteboard";
     }
     else if((code == "FCFT") || (code == "FCBK"))
     {
+        message.remove(4, first_section.length());
         return first_section + " flashcard";
     }
     else if(code == "REQQ")
@@ -162,6 +165,11 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     else if (code == "RUSR"){
         return "recover";
     }
+    else if(code == "RPWD"){
+        qDebug() << "Recover password message";
+        return "recover";
+    }
+
 }
 
 void SGTCPSocket::read_socket_send_signal()

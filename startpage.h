@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QLineEdit>
-#include <QComboBox>
+#include <qcombobox.h>
 #include "accountsecurity.h"
 
 namespace Ui {
@@ -67,11 +67,13 @@ private slots:
 
     void on_register_btn_clicked();
 
+    void REQQ(QList<QByteArray> questions);
     void set_questions(QList<QByteArray> questions);
-    void on_comboBox_q1_currentIndexChanged(int index);
-    void on_comboBox_q2_currentIndexChanged(int index);
-    void on_comboBox_q3_currentIndexChanged(int index);
 
+    void update_question_list(int, QComboBox*);
+    void on_comboBox_q1_activated(int index);
+    void on_comboBox_q2_activated(int index);
+    void on_comboBox_q3_activated(int index);
 
 private:
     Ui::StartPage *ui;
@@ -79,7 +81,9 @@ private:
     QString username;
     bool customQ_flag;
     QList<QLineEdit*> custom_questions;
-    QList<QString> answers;
+    QList<QString> questions;
+    QList<QComboBox*> question_comboBox;
+
 };
 
 #endif // STARTPAGE_H

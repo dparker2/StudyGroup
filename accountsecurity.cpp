@@ -22,11 +22,15 @@ void AccountSecurity::do_work()
     while(!_work_queue.isEmpty())
     {
         QByteArray message = _work_queue.dequeue();
-        QList<QByteArray> message_list = split(message, 2);
+        QList<QByteArray> message_list = split(message, 3);
         qDebug() << "TESTING Recoveer Username: " << message_list[0];
         if (message_list[0] == "RUSR")
         {
             RUSR(QString(message_list[1]));
+        }
+        if (message_list[0] == "RPWD")
+        {
+            RPWD(message_list[1].toInt(), QString(message_list[2]));
         }
     }
 }
@@ -35,9 +39,6 @@ void AccountSecurity::display_recovery_page(int index)
 {
     ui->account_recovery->setCurrentIndex(index);
 }
-// create security 3 questions when creating account
-// sending questions and answers
-// RECQUsername Q1 A1 Q2 A3
 
 void AccountSecurity::on_recover_user_btn_clicked()
 {
@@ -51,7 +52,7 @@ void AccountSecurity::RUSR(QString email_sent)
     message_box.information(0, "Recover Username", email_sent);
 }
 void AccountSecurity::clear_text(){
-    ui->recover_pass_email->clear();
+    //ui->recover_pass_email->clear();
     //ui->recover_pass_username->clear();
     ui->recover_user_email->clear();
 }
@@ -59,4 +60,60 @@ void AccountSecurity::clear_text(){
 void AccountSecurity::on_recover_pass_btn_clicked()
 {
     ui->account_recovery->setCurrentIndex(2);
+}
+
+void AccountSecurity::on_next_btn_clicked()
+{
+    if(ui->username_lineEdit->text().isEmpty()){
+        qDebug() << "Username field is blank";
+    }
+    else{
+        server::send(server::RECOVER_PASSWORD+ui->username_lineEdit->text());
+        ui->account_recovery->setCurrentIndex(2);
+    }
+    ui->random_securityQ_label->setText("random question");
+
+}
+
+void AccountSecurity::on_request_code_btn_clicked()
+{
+    QString securityQ_answer = ui->securityQ_answer->text();
+    if(securityQ_answer.isEmpty()){
+        qDebug() << "answer field is blank";
+    }
+    else{
+        server::send("CHKA"+random_question_index+" "+random_question_answer);
+        ui->account_recovery->setCurrentIndex(3);
+    }
+}
+
+void AccountSecurity::on_submit_code_btn_clicked()
+{
+    QString code = ui->recover_code_lineEdit->text();
+    if(code.isEmpty()){
+        qDebug() << "answer field is blank";
+    }
+    else{
+        //server::send("CHKC"+username + " " + code);
+        ui->account_recovery->setCurrentIndex(4);
+    }
+}
+
+void AccountSecurity::on_reset_password_btn_clicked()
+{
+    QString new_password = ui->new_password_lineEdit1->text();
+    QString confirm_password = ui->new_password_lineEdit2->text();
+
+    if(new_password.isEmpty() || confirm_password.isEmpty()){
+        qDebug() << "answer field is blank";
+    }
+    else{
+        server::send("UPWD"+random_question_index+" "+random_question_answer);
+        ui->account_recovery->setCurrentIndex(5);
+    }
+}
+void AccountSecurity::RPWD(int index, QString question)
+{
+    random_question_index = index;
+    ui->random_securityQ_label->setText(question);
 }
