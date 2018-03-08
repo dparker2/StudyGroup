@@ -55,20 +55,21 @@ function createAccount($email, $username, $password, $sock) {
 
 function loginAccount($username, $password, $sock) {
   $connection = connectAccount();
-  global $a;
   $bool_check = false;
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
   $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
   $check_email = "SELECT Email FROM UserInfo WHERE Username = '$username'";
+  $check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
   //Checks if username exists before attempting to login, will return error otherwise.
   if (($username_exists = checkExists($connection, $check_username)) > 0) {
-      if ($a>=5) { // checks if user failed loging in 5+ times recently
-		loginTimeout();
+	  if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
+	    $message = "FAILThis account is currently locked.";
+		sendMessage($message, $sock);
 		break;
-      }
+	  }
       $checkPass = getObjString($connection, $check_password)->Pass;
-      elseif (password_verify($password, $checkPass)) {
+      else if (password_verify($password, $checkPass)) {
         $resultEmail = getObjString($connection, $check_email)->Email;
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);
@@ -77,7 +78,7 @@ function loginAccount($username, $password, $sock) {
       } //Closes password check.
       else{
         $message = "FAILPassword incorrect, please try again.";
-		loginTimeout();
+		loginTimeout($username);
         sendMessage($message, $sock);
       }
   }
