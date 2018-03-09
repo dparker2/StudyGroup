@@ -42,10 +42,12 @@ void RecoverUsername::on_recover_username_btn_clicked()
     }
 }
 
-void RecoverUsername::clear_text(){
+void RecoverUsername::clear_text()
+{
     ui->email_lineEdit->clear();
 }
-void RecoverUsername::set_invalid_icon(){
+void RecoverUsername::set_invalid_icon()
+{
     QPixmap check_mark = QPixmap(":/resources/img/x_mark.png");
 
     //QPixmap mark = valid ? QPixmap(":/resources/img/check_mark.png") : QPixmap(":/resources/img/x_mark.png");

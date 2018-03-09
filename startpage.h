@@ -7,6 +7,7 @@
 #include <qcombobox.h>
 #include "accountsecurity.h"
 #include "recoverusername.h"
+#include "resetpassword.h"
 
 namespace Ui {
 class StartPage;
@@ -44,8 +45,6 @@ private slots:
 
     //void on_singup_button_clicked();
 
-    void on_pushButton_recover_pass_clicked();
-
     void on_pushButton_recover_user_clicked();
 
     //void on_lineEdit_password2_textEdited();
@@ -76,9 +75,12 @@ private slots:
     void on_comboBox_q2_activated(int index);
     void on_comboBox_q3_activated(int index);
 
+    void on_reset_password_btn_clicked();
+
 private:
     Ui::StartPage *ui;
     RecoverUsername *recover_username;
+    ResetPassword *reset_password;
     QString username;
     bool customQ_flag;
     QList<QLineEdit*> custom_questions;

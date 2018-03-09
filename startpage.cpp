@@ -26,6 +26,7 @@ StartPage::StartPage(QString name, QWidget *parent) :
 
     // Account Security
     recover_username = new RecoverUsername("recover username");
+    reset_password = new ResetPassword("reset password");
     //customQ_flag = false;
 
 
@@ -327,12 +328,10 @@ void StartPage::on_pushButton_recover_user_clicked()
     ui->recover_account->addWidget(recover_username);
     ui->recover_account->setCurrentWidget(recover_username);
 }
-
-void StartPage::on_pushButton_recover_pass_clicked()
+void StartPage::on_reset_password_btn_clicked()
 {
-    //recover->display_recovery_page(1);
-    //ui->recover_account->addWidget(recover);
-    //ui->recover_account->setCurrentWidget(recover);
+    ui->recover_account->addWidget(reset_password);
+    ui->recover_account->setCurrentWidget(reset_password);
 }
 
 void StartPage::on_tabWidget_tabBarClicked(int index)
@@ -350,10 +349,18 @@ void StartPage::on_tabWidget_tabBarClicked(int index)
         }
     }
     */
-    recover_username->clear_text();
-    ui->recover_account->removeWidget(recover_username);
-    ui->recover_account->setCurrentWidget(ui->recover_acct_page);
+    if(index == 1){
+       // ui->recover_account->removeWidget();
+    }
+    if(index == 2){
+        recover_username->clear_text();
+        ui->recover_account->removeWidget(recover_username);
+        ui->recover_account->setCurrentWidget(ui->recover_acct_page);
+    }
+
 }
+
+
 
 
 

@@ -781,7 +781,7 @@ QPushButton:hover {
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_recover_pass">
+            <widget class="QPushButton" name="reset_password_btn">
              <property name="font">
               <font>
                <family>Trebuchet MS</family>
@@ -805,7 +805,7 @@ QPushButton:hover {
 }</string>
              </property>
              <property name="text">
-              <string>Recover Password</string>
+              <string>Reset Password</string>
              </property>
             </widget>
            </item>

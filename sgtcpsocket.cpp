@@ -163,13 +163,12 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
         return "startpage";
     }
     else if (code == "RUSR"){
-        qDebug() << "PLEASE WORK";
         message.remove(4, first_section.length());
         return "recover username";
     }
     else if(code == "RPWD"){
         qDebug() << "Recover password message";
-        return "recover";
+        return "recover password";
     }
 
 }
