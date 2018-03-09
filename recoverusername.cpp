@@ -2,6 +2,7 @@
 #include "ui_recoverusername.h"
 #include "server.h"
 #include <QMessageBox>
+#include <QLabel>
 
 RecoverUsername::RecoverUsername(QString name, QWidget *parent) :
     SGWidget(name, parent),
@@ -21,36 +22,46 @@ void RecoverUsername::do_work(){
         QList<QByteArray> message_list = split(message,2);
         if (message_list[0] == "RUSR")
         {
-            RUSR(QString(message_list[1]));
+            //RUSR(QString(message_list[1]));
         }
     }
 }
-void RecoverUsername::RUSR(QString email_msg){
-    QMessageBox succs_box;
-    succs_box.information(0, "Email Sent", email_msg);
+void RecoverUsername::RUSR(QString email_msg)
+{
+    // don't think this is needed
 }
-
 
 void RecoverUsername::on_recover_username_btn_clicked()
 {
     if(ui->email_lineEdit->text().isEmpty()){
         set_invalid_icon();
+        return;
+    }
+    QString succs_msg;
+    if(server::request_response(server::RECOVER_USERNAME + ui->email_lineEdit->text(), succs_msg))
+    {
+        qDebug() << "Recover username for:  " << ui->email_lineEdit->text();
+        QMessageBox succs_box;
+        succs_box.information(0, "Email Sent", succs_msg);
     }
     else{
-        qDebug() << "Recover username for:  " << ui->email_lineEdit->text();
-        server::send(server::RECOVER_USERNAME + ui->email_lineEdit->text());
+        set_invalid_icon();
     }
 }
 
 void RecoverUsername::clear_text()
 {
     ui->email_lineEdit->clear();
+    ui->invalid_icon_label->clear();
 }
 void RecoverUsername::set_invalid_icon()
 {
-    QPixmap check_mark = QPixmap(":/resources/img/x_mark.png");
+    QPixmap x_mark = QPixmap(":/resources/img/x_mark.png");
+    ui->invalid_icon_label->setPixmap(x_mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->invalid_icon_label->show();
+}
 
-    //QPixmap mark = valid ? QPixmap(":/resources/img/check_mark.png") : QPixmap(":/resources/img/x_mark.png");
-    //ui->invalid_icon_label->setPixmap(check_mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    //ui->invalid_icon_label->show();
+void RecoverUsername::on_email_lineEdit_textEdited(const QString &arg1)
+{
+    ui->invalid_icon_label->clear();
 }

@@ -30,6 +30,7 @@ StartPage::StartPage(QString name, QWidget *parent) :
     //customQ_flag = false;
 
 
+
 }
 
 StartPage::~StartPage()
@@ -327,6 +328,7 @@ void StartPage::on_pushButton_recover_user_clicked()
 {
     ui->recover_account->addWidget(recover_username);
     ui->recover_account->setCurrentWidget(recover_username);
+    ui->tab_recover_account->setContentsMargins(0, 0, -20, 0);
 }
 void StartPage::on_reset_password_btn_clicked()
 {
@@ -356,10 +358,10 @@ void StartPage::on_tabWidget_tabBarClicked(int index)
         recover_username->clear_text();
         ui->recover_account->removeWidget(recover_username);
         ui->recover_account->setCurrentWidget(ui->recover_acct_page);
+        ui->tab_recover_account->setContentsMargins(0, 0, 0, 0);
     }
 
 }
-
 
 
 

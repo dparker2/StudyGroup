@@ -24,6 +24,8 @@ private slots:
     void set_invalid_icon();
     void on_recover_username_btn_clicked();
 
+    void on_email_lineEdit_textEdited(const QString &arg1);
+
 private:
     Ui::RecoverUsername *ui;
 };

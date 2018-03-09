@@ -168,7 +168,7 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     }
     else if(code == "RPWD"){
         qDebug() << "Recover password message";
-        return "recover password";
+        return success_message;
     }
 
 }
@@ -185,6 +185,7 @@ void SGTCPSocket::read_socket_send_signal()
         // First short circuit in case its just a succ or fail message
         if (QString(message_ba).left(4) == "SUCC")
         {
+            qDebug() << "SUCCESSSSSSS";
             // Set the success flag and message
             success_flag = true;
             message_ba.remove(0, 4);

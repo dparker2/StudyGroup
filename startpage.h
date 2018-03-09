@@ -24,6 +24,7 @@ public:
 signals:
     void logged_in(unsigned);
 
+
 private slots:
     void on_signin_button_clicked();
 
