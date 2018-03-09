@@ -1,7 +1,7 @@
 #include "resetpassword.h"
 #include "ui_resetpassword.h"
 #include "server.h"
-#include <QComboBox>
+#include <QMessageBox>
 
 ResetPassword::ResetPassword(QString name, QWidget *parent) :
     SGWidget(name, parent),
@@ -41,7 +41,7 @@ void ResetPassword::on_next_btn_clicked()
     }
     QString email_message;
     if(server::request_response(server::RECOVER_PASSWORD + username, email_message)){
-        QComboBox succs_box;
+        QMessageBox succs_box;
         succs_box.information(0, "Check Email", email_message);
         ui->reset_password->setCurrentIndex(1);
     }
@@ -49,16 +49,26 @@ void ResetPassword::on_next_btn_clicked()
 
 void ResetPassword::on_submit_answer_btn_clicked()
 {
-    if(!ui->answer_lineEdit->text().isEmpty()){
-        server::send(server::CHECK_SECURITY_ANSWER + username + " " + question_index + " " + ui->answer_lineEdit->text());
+    QString answer = ui->answer_lineEdit->text();
+    if(answer.isEmpty()){
+        return;
+    }
+    QString answers_matched;
+    if(server::request_response(server::CHECK_SECURITY_ANSWER + username + " " + question_index + " " + answer, answers_matched)){
+        qDebug() << "Answers match: " << answers_matched;
         ui->reset_password->setCurrentIndex(2);
     }
 }
 
 void ResetPassword::on_verify_code_btn_clicked()
 {
-    if(!ui->email_code_lineEdit->text().isEmpty()){
-        server::send(server::CHECK_SECURITY_CODE + username + " " + ui->email_code_lineEdit->text());
+    QString code = ui->email_code_lineEdit->text();
+    if(code.isEmpty()){
+        return;
+    }
+    QString code_verified;
+    if(server::request_response(server::CHECK_SECURITY_CODE + username + " " + ui->email_code_lineEdit->text(), code_verified)){
+        qDebug() << "Code verified: " << code_verified;
         ui->reset_password->setCurrentIndex(3);
     }
 }
@@ -68,7 +78,13 @@ void ResetPassword::on_confirm_pass_lineEdit_clicked()
     bool empty_field = (ui->new_pass_lineEdit->text().isEmpty() || ui->confirm_pass_lineEdit->text().isEmpty());
     bool passwords_match = (ui->new_pass_lineEdit->text() == ui->confirm_pass_lineEdit->text());
 
-    if(!empty_field && passwords_match){
-        server::send(server::UPDATE_PASSWORD + username + " " + ui->new_pass_lineEdit->text());
+    if(empty_field || !passwords_match){
+        return;
     }
+    QString password_reset;
+    if(server::request_response(server::UPDATE_PASSWORD + username + " " + ui->new_pass_lineEdit->text(), password_reset)){
+        qDebug() << "Password reset: " << password_reset;
+     }
+
+
 }
