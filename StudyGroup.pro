@@ -42,7 +42,9 @@ SOURCES += \
     fcback.cpp \
     whiteboard_wrapper.cpp \
     whiteboard.cpp \
-    accountsecurity.cpp
+    accountsecurity.cpp \
+    recoverusername.cpp \
+    resetpassword.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -62,7 +64,9 @@ HEADERS += \
     fcback.h \
     whiteboard_wrapper.h \
     whiteboard.h \
-    accountsecurity.h
+    accountsecurity.h \
+    recoverusername.h \
+    resetpassword.h
 
 FORMS += \
         mainwindow.ui \
@@ -76,7 +80,9 @@ FORMS += \
     fcfront.ui \
     fcback.ui \
     whiteboard.ui \
-    accountsecurity.ui
+    accountsecurity.ui \
+    recoverusername.ui \
+    resetpassword.ui
 
 RESOURCES += \
     resource.qrc

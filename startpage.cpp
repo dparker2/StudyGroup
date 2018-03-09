@@ -14,7 +14,7 @@ StartPage::StartPage(QString name, QWidget *parent) :
 
     QPixmap logo(":/resources/img/GSLogoName1.png");    // StudyGroup logo
     ui->label_logo->setPixmap(logo.scaled(250,300,Qt::KeepAspectRatio,Qt::SmoothTransformation));     // Resize to fit
-    QPixmap pencil(":/resources/img/edit_pencil.png");
+    //QPixmap pencil(":/resources/img/edit_pencil.png");
 
     // check/X icons are hidden initially
     ui->label_username_check->hide();
@@ -25,7 +25,7 @@ StartPage::StartPage(QString name, QWidget *parent) :
     ui->tabWidget->setCurrentWidget(ui->tab_sign_in);
 
     // Account Security
-    recover = new AccountSecurity("recover");
+    recover_username = new RecoverUsername("recover username");
     //customQ_flag = false;
 
 
@@ -324,16 +324,15 @@ void StartPage::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QStrin
  */
 void StartPage::on_pushButton_recover_user_clicked()
 {
-    recover->display_recovery_page(0);
-    ui->recover_account->addWidget(recover);
-    ui->recover_account->setCurrentWidget(recover);
+    ui->recover_account->addWidget(recover_username);
+    ui->recover_account->setCurrentWidget(recover_username);
 }
 
 void StartPage::on_pushButton_recover_pass_clicked()
 {
-    recover->display_recovery_page(1);
-    ui->recover_account->addWidget(recover);
-    ui->recover_account->setCurrentWidget(recover);
+    //recover->display_recovery_page(1);
+    //ui->recover_account->addWidget(recover);
+    //ui->recover_account->setCurrentWidget(recover);
 }
 
 void StartPage::on_tabWidget_tabBarClicked(int index)
@@ -351,8 +350,8 @@ void StartPage::on_tabWidget_tabBarClicked(int index)
         }
     }
     */
-    recover->clear_text();
-    ui->recover_account->removeWidget(recover);
+    recover_username->clear_text();
+    ui->recover_account->removeWidget(recover_username);
     ui->recover_account->setCurrentWidget(ui->recover_acct_page);
 }
 

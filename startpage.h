@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <qcombobox.h>
 #include "accountsecurity.h"
+#include "recoverusername.h"
 
 namespace Ui {
 class StartPage;
@@ -77,7 +78,7 @@ private slots:
 
 private:
     Ui::StartPage *ui;
-    AccountSecurity *recover;
+    RecoverUsername *recover_username;
     QString username;
     bool customQ_flag;
     QList<QLineEdit*> custom_questions;
