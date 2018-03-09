@@ -45,7 +45,7 @@ background-color: #283035;</string>
        </property>
        <property name="minimumSize">
         <size>
-         <width>290</width>
+         <width>285</width>
          <height>37</height>
         </size>
        </property>
@@ -108,8 +108,8 @@ border-style:none;</string>
      </property>
      <property name="maximumSize">
       <size>
-       <width>290</width>
-       <height>16777215</height>
+       <width>285</width>
+       <height>37</height>
       </size>
      </property>
      <property name="font">

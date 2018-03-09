@@ -8,7 +8,7 @@ ResetPassword::ResetPassword(QString name, QWidget *parent) :
     ui(new Ui::ResetPassword)
 {
     ui->setupUi(this);
-    ui->reset_password->setCurrentIndex(0);
+    //ui->reset_password->setCurrentIndex(0);
 }
 
 ResetPassword::~ResetPassword()
@@ -44,7 +44,7 @@ void ResetPassword::on_next_btn_clicked()
 {
     username = ui->username_lineEdit->text();
     if(username.isEmpty()){
-        //add ui invalid icon
+        set_invalid_icon(ui->username_invalid_icon);
         return;
     }
     QString email_message;
@@ -52,6 +52,9 @@ void ResetPassword::on_next_btn_clicked()
         QMessageBox succs_box;
         succs_box.information(0, "Check Email", email_message);
         ui->reset_password->setCurrentIndex(1);
+    }
+    else{
+        set_invalid_icon(ui->username_invalid_icon);
     }
 }
 
@@ -94,4 +97,16 @@ void ResetPassword::on_reset_password_btn_clicked()
         qDebug() << "Password reset: " << password_reset;
      }
 
+}
+
+void ResetPassword::set_invalid_icon(QLabel *mark)
+{
+    QPixmap x_mark = QPixmap(":/resources/img/x_mark.png");
+    mark->setPixmap(x_mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    mark->show();
+}
+
+void ResetPassword::on_username_lineEdit_textEdited(const QString &arg1)
+{
+    ui->username_invalid_icon->clear();
 }

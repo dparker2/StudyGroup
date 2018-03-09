@@ -198,7 +198,7 @@ void StartPage::on_comboBox_q1_activated(int index)
         update_question_list(index, ui->comboBox_q1);
     }
 }
-
+// HAVE TO RESTRUCTURE THIS
 void StartPage::update_question_list(int current_index, QComboBox* current_comboBox)
 {
     QList<QComboBox*> other_comboBox;           // pointer for combobox not currently selected
@@ -334,6 +334,7 @@ void StartPage::on_reset_password_btn_clicked()
 {
     ui->recover_account->addWidget(reset_password);
     ui->recover_account->setCurrentWidget(reset_password);
+    ui->tab_recover_account->setContentsMargins(0, 0, -20, 0);
 }
 
 void StartPage::on_tabWidget_tabBarClicked(int index)
@@ -358,6 +359,7 @@ void StartPage::on_tabWidget_tabBarClicked(int index)
         recover_username->clear_text();
         ui->recover_account->removeWidget(recover_username);
         ui->recover_account->setCurrentWidget(ui->recover_acct_page);
+        qDebug() << "resetting margins *** ";
         ui->tab_recover_account->setContentsMargins(0, 0, 0, 0);
     }
 
