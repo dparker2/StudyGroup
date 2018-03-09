@@ -26,8 +26,15 @@ void ResetPassword::do_work(){
         }
     }
 }
-
-void ResetPassword::RPWD(int index, QString random_question){
+void ResetPassword::clear_text()
+{
+    ui->username_lineEdit->clear();
+    ui->answer_lineEdit->clear();
+    ui->confirm_pass_lineEdit->clear();
+    ui->email_code_lineEdit->clear();
+}
+void ResetPassword::RPWD(int index, QString random_question)
+{
     question_index = index;
     security_question = random_question;
 }
@@ -73,7 +80,7 @@ void ResetPassword::on_verify_code_btn_clicked()
     }
 }
 
-void ResetPassword::on_confirm_pass_lineEdit_clicked()
+void ResetPassword::on_reset_password_btn_clicked()
 {
     bool empty_field = (ui->new_pass_lineEdit->text().isEmpty() || ui->confirm_pass_lineEdit->text().isEmpty());
     bool passwords_match = (ui->new_pass_lineEdit->text() == ui->confirm_pass_lineEdit->text());
@@ -85,6 +92,5 @@ void ResetPassword::on_confirm_pass_lineEdit_clicked()
     if(server::request_response(server::UPDATE_PASSWORD + username + " " + ui->new_pass_lineEdit->text(), password_reset)){
         qDebug() << "Password reset: " << password_reset;
      }
-
 
 }

@@ -18,15 +18,12 @@ public:
 
 private slots:
     void do_work();
+    void clear_text();
     void RPWD(int index, QString random_question);
-
     void on_next_btn_clicked();
-
     void on_submit_answer_btn_clicked();
-
     void on_verify_code_btn_clicked();
-
-    void on_confirm_pass_lineEdit_clicked();
+    void on_reset_password_btn_clicked();
 
 private:
     Ui::ResetPassword *ui;
