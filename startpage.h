@@ -5,7 +5,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <qcombobox.h>
-#include "accountsecurity.h"
 #include "recoverusername.h"
 #include "resetpassword.h"
 
