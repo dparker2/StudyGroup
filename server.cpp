@@ -29,7 +29,7 @@ const QString server::SECURITYQ_CUSTOM = "SETQ";
 const QString server::SECURITY_ANSWERS = "SETA";
 const QString server::CHECK_SECURITY_ANSWER = "CHKA";
 const QString server::CHECK_SECURITY_CODE = "CHKC";
-const QString server::UPDATE_PASSWORD = "UPWD";
+const QString server::UPDATE_PASSWORD = "CHPW";
 
 
 server::server(QObject *parent) : QObject(parent)

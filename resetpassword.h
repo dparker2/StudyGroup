@@ -14,7 +14,7 @@ class ResetPassword : public SGWidget
     Q_OBJECT
 
 public:
-    explicit ResetPassword(QString name = "recover password", QWidget *parent = 0);
+    explicit ResetPassword(QString name = "reset password", QWidget *parent = 0);
     ~ResetPassword();
 
 private slots:
@@ -32,7 +32,7 @@ private slots:
 private:
     Ui::ResetPassword *ui;
     QString security_question;
-    QString question_index;
+    int question_index;
     QString username;
 };
 

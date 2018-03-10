@@ -27,10 +27,10 @@ SGTCPSocket::~SGTCPSocket()
 
 void SGTCPSocket::connect_server()
 {
-    //my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
+    my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
     // Connect the socket to the host
     //my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
-    my_tcp_socket->connectToHost("localhost", 9001);
+    //my_tcp_socket->connectToHost("localhost", 9001);
     // If it ever disconnects (including while trying this), the socket will
     // continuouslyq try to reconnect. See reconnect_socket().
 }
@@ -168,7 +168,7 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     }
     else if(code == "RPWD"){
         qDebug() << "Recover password message";
-        return success_message;
+        return "reset password";
     }
 
 }
