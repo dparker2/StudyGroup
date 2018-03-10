@@ -195,7 +195,7 @@ while(true) {
               saveWhiteBoard($codeMessage[0], $codeMessage[1], $sock);
               break; //groupID, wb string, socket
             case "CHPW":
-              changePassword($clients[$ip][1], $codeMessage[1], $sock);
+              changePassword($codeMessage[0], $codeMessage[1], $sock); //user, new pass
               break;
             case "RACC":
               recoverAccount($codeMessage[0], $codeMessage[1], $sock);
@@ -223,6 +223,15 @@ while(true) {
               break;
             case "SETA":
               setSecAns($codeMessage[0], $codeMessage[1], $codeMessage[2], $codeMessage[3], $sock); // 0 = username, 1 = answer 1, 2 = answer 2, 3 = answer 3
+              break;
+            case "RPWD":
+              sendRandomSecQuest($codeMessage[0], $sock); // username
+              break;
+            case "CHKA":
+              checkSecAnswer($codeMessage[0], $codeMessage[1], $codeMessage[2], $sock); // user, answer#, answer
+              break;
+            case "CHKC":
+              checkCode($codeMessage[0], $codeMessage[1], $sock); // user, code
               break;
           }//Switch Statement
       }//Closes else

@@ -99,17 +99,15 @@ function logoutAccount($username, $sock) {
 //unfinished code to change a users password, need client input
 function changePassword($username, $password, $sock) {
   $connection = connectAccount();
-
-  // UI should now send a 'they did it' message and a new password
-  $newPass = nul; //new pass from UI goes here
-  $change_password = "UPDATE UserInfo SET Pass= 'newPass' WHERE Username = '$username'";
-  if (mysqli_query($connection, $change_password)) {
-    fwrite($sock, "SUCC\n");
+  $query = "UPDATE UserInfo SET Pass='$password' WHERE Username = '$username'";
+  if (!mysqli_query($connection, $query)) {
+    $message = "FAILSomething went wrong. Either the username does not exist or there was an issue connecting to the database.\n\n";
+    sendMessage($message, $sock);
   }
   else {
-    fwrite($sock, "FAIL\n");
+    $message = "CHPWSUCC Password was successfully changed!\n\n";
+    sendMessage($message, $sock);
   }
-
   disconnect($connection);
 }
 

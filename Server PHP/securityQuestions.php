@@ -5,9 +5,11 @@ include_once 'utilityFunctions.php';
 include_once 'sendEmail.php';
 
 
-function reqSecQuest($user, $sock) {
+function reqSecQuest($user, $sock) { /*why not combine this function to take multiple parameters? then you could re-use function.
+  maybe like another input determining how many questions to send and if it's just one, run randomizer? so like sendquest1, 2, 3, etc
+  */
   $connection = connectAccount();
-  $username = $user;
+  $username = $user; //why username = user? why not just change parameter to username?? FOR ALL
   echo "the username input to the function is: $username\n\n";
   $query1 = "SELECT SQ1 FROM UserInfo WHERE Username = '$username'";
   echo "This is question1 query: $query1";
@@ -74,10 +76,6 @@ function setSecQuest($user, $q1, $q2, $q3, $sock) {
     echo("Error description: " . mysqli_error($connection));
     sendMessage($message, $sock);
   }
-  else {
-
-  }
-
 }
 
 
@@ -111,15 +109,66 @@ function setSecAns($user, $a1, $a2, $a3, $sock) {
 
 }
 
+function sendRandomSecQuest($user, $sock) {
+  $connection = connectAccount();
+  $num = rand(1,3);
+  $column = "SQ" . "$num";
+  $query = "SELECT $column FROM UserInfo WHERE (Username='$user')";
+  if (!mysqli_query($connection, $query)) {
+    $message = "FAILUser doesn't exist or questions are not set.\n\n";
+    sendMessage($message, $sock);
+  }
+  else {
+    $question = getObjString($connection, $query)->$column;
+    $message ="RPWD$num $question";
+    sendMessage($message, $sock);
+  }
+  disconnect($connection);
+}
+
+function checkSecAnswer($user, $num, $answer, $sock) {
+  $connection = connectAccount();
+  $column = "SQA" . "$num";
+  $query = "SELECT $column FROM UserInfo WHERE (Username='$user')";
+  if(!mysqli_query($connection, $query)) {
+    $message = "FAILUser doesn't exist or answer not set.\n\n";
+    sendMessage($message, $sock);
+  }
+  else {
+    $answerDB = getObjString($connection, $query)->$column;
+    if (password_verify($answer, $answerDB)) {
+      $query = "SELECT Email FROM UserInfo WHERE (Username='$user')";
+      $email = getObjString($connection, $query)->Email;
+      sendRecCode($email, $user);
+      $message = "RPWDSUCC An email has been sent to you with a recovery code. Please remember to check your spam folder!\n\n";
+      sendMessage($message, $sock);
+    }
+    else {
+      $message = "FAIL";
+      sendMessage($message, $sock);
+    }
+  }
+}
 
 
-
-
-function verifyCode($user, $code) {
-
-
-
-
+function checkCode($user, $code, $sock) {
+  $connection = connectAccount();
+  $query = "SELECT RecCode FROM UserInfo WHERE (Username='$user')";
+  if(!mysqli_query($connection, $query)) {
+    $message = "FAIL";
+    sendMessage($message, $sock);
+  }
+  else {
+    if ($code == getObjString($connection, $query)->RecCode) {
+      $message = "CHKCSUCC";
+      sendMessage($message, $sock);
+    }
+    else {
+      $message = "FAIL";
+      sendMessage($message, $sock);
+    }
+  }
+  disconnect($connection);
 }
 
 
