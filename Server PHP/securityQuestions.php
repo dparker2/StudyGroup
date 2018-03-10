@@ -140,11 +140,11 @@ function checkSecAnswer($user, $num, $answer, $sock) {
       $query = "SELECT Email FROM UserInfo WHERE (Username='$user')";
       $email = getObjString($connection, $query)->Email;
       sendRecCode($email, $user);
-      $message = "RPWDSUCC An email has been sent to you with a recovery code. Please remember to check your spam folder!\n\n";
+      $message = "SUCCAn email has been sent to you with a recovery code. Please remember to check your spam folder!\n\n";
       sendMessage($message, $sock);
     }
     else {
-      $message = "FAIL";
+      $message = "FAILAnswer did not match. Try again!";
       sendMessage($message, $sock);
     }
   }
@@ -160,7 +160,7 @@ function checkCode($user, $code, $sock) {
   }
   else {
     if ($code == getObjString($connection, $query)->RecCode) {
-      $message = "CHKCSUCC";
+      $message = "SUCC";
       sendMessage($message, $sock);
     }
     else {

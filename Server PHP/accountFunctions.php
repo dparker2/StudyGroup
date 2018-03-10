@@ -105,7 +105,7 @@ function changePassword($username, $password, $sock) {
     sendMessage($message, $sock);
   }
   else {
-    $message = "CHPWSUCC Password was successfully changed!\n\n";
+    $message = "SUCCPassword was successfully changed!\n\n";
     sendMessage($message, $sock);
   }
   disconnect($connection);
