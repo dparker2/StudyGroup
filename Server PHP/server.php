@@ -212,6 +212,9 @@ while(true) {
               if(count($codeMessage) < 3) {$codeMessage[2] = "";}
               addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 1); // 0 = groupID 1 = card id 2 = message
               break;
+            case "SUSR":
+              searchUser($codeMessage[0], $sock);
+              break;
           }//Switch Statement
       }//Closes else
     }//Closes foreach

@@ -28,12 +28,14 @@ function searchUser($user, $sock) {
     while ($rows = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
       $searchResults .= $rows["Username"] . " ";
     }
+    $message = "SUCC$searchResults";
+    sendMessage($message, $sock);
   }
   else {
     echo "Damn it didn't work son :/ ... Error: " . mysqli_error($connection);
+    $message = "FAIL";
   }
-  $message = "SUCC$searchResults";
-  sendMessage($message, $sock);
+
   disconnect($connection);
 }
 
