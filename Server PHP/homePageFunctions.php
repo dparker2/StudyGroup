@@ -7,7 +7,6 @@ include_once 'classes.php';
 //Preps and sends message to update recent groups to client-side for homepage
 function updateRecentGroups($user, $groupList) {
   $sock = $user->getSocket();
-  //Now preps the message in following format UPRG$group1 fav/not $group2 fav/not etc
   if (count($user->getRecentGroups()) > 0) {
     $recentGroup = $user->getRecentGroups();
     $favoriteGroup = $user->getFavoriteGroups();
@@ -19,12 +18,12 @@ function updateRecentGroups($user, $groupList) {
         array_push($messageArray, '1');
       else
         array_push($messageArray, '0');
-    }//ends foreach
+    }
     $implodeArray = implode(" ", $messageArray);
     $message .= $implodeArray;
     echo "DEBUG: Message for UPRG: $message \n";
     sendMessage($message, $sock);
-  }// ends if count
+  }
   else {
     $message = "UPRG";
     sendMessage($message, $sock);
@@ -40,12 +39,12 @@ function updateFavoriteGroups($user, $groupList) {
     $messageArray = array();
     foreach ($favoriteGroup as $group) {
       array_push($messageArray, $group);
-    } //ends foreach
-    $implodeArray = implode(" ", $messageArray); // puts groups into string with space b/w
+    }
+    $implodeArray = implode(" ", $messageArray);
     $message .= $implodeArray;
     echo "DEBUG: Message for UPFG: $message \n";
     sendMessage($message, $sock);
-  } // ends if count
+  }
   else {
     $message = "UPFG";
     sendMessage($message, $sock);
@@ -65,7 +64,7 @@ function newFavoriteGroup($user, $groupID) {
     if (in_array($groupID, $favGroups)) {
       $message = "FAIL";
       sendMessage($message, $sock);
-    } //closes if in array
+    }
     else {
       $user->setFavGroup($groupID);
       sendMessage("SUCC", $sock);
@@ -77,11 +76,11 @@ function newFavoriteGroup($user, $groupID) {
         sendMessage($message, $sock);
       }
     }
-  } //closes if exist
+  }
   else {
     $message = "FAILGroup does not exist";
     sendMessage($message, $sock);
-  }//closes else fail
+  }
   disconnectDB($connection);
 }
 

@@ -4,13 +4,6 @@ include_once 'utilityFunctions.php';
 include_once 'flashCardFunctions.php';
 include_once 'classes.php';
 date_default_timezone_set('UTC');
-/* Group Functions
-  function createGroup($groupname, $user, $clientList, $sock)
-  function joinGroup($groupID, $user, $clientList, $sock)
-  function leaveGroup($groupID, $user, $clientList, $sock)
-  function updateGroupList($connection, $clientList, $groupID)
-  function sendChatMessage($groupID, $message, $user, $clientList, $sock)
-  function updateGroupChat($connection, $groupID, $sock) */
 
 //CREATE GROUP FUNCTION
 //Function creates group by comparing groupname to existing groups on database, if none found it will create a new group with the group name appended with a random 4 digits after, and sets the creator as Admin of the group
@@ -35,12 +28,10 @@ function createGroup($groupname, $user, $clientList, $sock)
   $createFlashCardTable = "CREATE TABLE $flashGroupID (
     id INT NOT NULL AUTO_INCREMENT, user varchar(20), side1 varchar(255) , side2 varchar(255) , primary key (id))";
 
-  //Returns Fail message if group already exits.
   if (($groupIDExists = checkExistsDB($connection, $checkGroupID)) > 0) {
     $message = "FAILGroup already exists";
     sendMessage($message, $sock);
   }
-  //Else Creates group, makes creator admin, inserts it into user list, puts a blank placeholder for whiteboard, and creates the flash card table. Returns SUCC message to client.
   else {
       echo "DEBUG: Creating group $groupID ...\n";
       mysqli_query($connection, $createGroupTable);
@@ -69,10 +60,9 @@ function createGroup($groupname, $user, $clientList, $sock)
 function joinGroup($groupID, $user, $clientList, $sock)
 {
   global $groupList;
-  $connection = connectGroupDB();        //Connect to group database.
-  $username = $user->getName();   //Gets username from object and assigns to username
-  $ip = $user->getIP();           //Get ip from object and assigns to ip
-
+  $connection = connectGroupDB();
+  $username = $user->getName();
+  $ip = $user->getIP();
   //SQL Statements to Query
   $checkGroupID = "SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name='$groupID'";
   $checkAdmin = "SELECT userList FROM $groupID WHERE (SELECT Admin FROM $groupID WHERE Admin IS NOT NULL) = userList";
@@ -80,18 +70,14 @@ function joinGroup($groupID, $user, $clientList, $sock)
   $selectWBstring = "SELECT Whiteboard FROM $groupID WHERE Whiteboard IS NOT NULL";
   $selectExistingMember = "SELECT ipAddress FROM $groupID WHERE userList != '$username' LIMIT 1";
 
-  /*
-  Checks if group that user entered exists.
-  Returns Fail message if the group doesn't exists, or if the current user is the last person to join the group and the administrator hasn't joined yet.
-  Else, it will insert the user into the group, then update the group list, flash cards, group chat, then whitebaord.*/
-  if (($groupIDExists = checkExistsDB($connection, $checkGroupID)) > 0) { // True if group does exist
+  if (($groupIDExists = checkExistsDB($connection, $checkGroupID)) > 0) {
     if (array_key_exists($groupID, $groupList)) {
       $groupClass = $groupList[$groupID];
       $numUsers = $groupClass->getNumMembers();
       $adminName = $groupClass->getAdmin();
     }
     else {
-      $adminName = getObjStringDB($connection, $selectAdmin)->Admin; //Obtains admin name for comparison
+      $adminName = getObjStringDB($connection, $selectAdmin)->Admin;
       $groupList[$groupID] = new Group;
       $groupClass = $groupList[$groupID];
       $groupClass->setGroupID($groupID);
@@ -105,12 +91,10 @@ function joinGroup($groupID, $user, $clientList, $sock)
     if ($numUsers < 5) { //Max Group Size currently set to 5
       if(($numUsers == 4) && (($adminExists = checkExistsDB($connection, $checkAdmin)) < 1) && ($adminName != $username) ) //Checks to see if admin is in group before max capacity
         fwrite($sock, "00021FAILNo Admin in Group");
-        //If able to joingroupList, will insert user to group table and update client for group list, group chat, flash card, wb.
       else {
         fwrite($sock, "00004SUCC");
         $user->setGroup($groupID);
         $user->setRecGroup($groupID);
-        //mysqli_query($connection, $joinGroup);
         $groupClass->addMember($user);
         updateGroupList($connection, $clientList, $groupClass, $groupID);
         updateGroupChat($connection, $groupID, $sock);
@@ -121,13 +105,10 @@ function joinGroup($groupID, $user, $clientList, $sock)
           $message = "NWFG"."$groupID";
           sendMessage($message, $sock);
         }
-
         echo "DEBUG: Determining whiteboard existence... \n";
-        //If this is the first user joining
         if ($numUsers == 0) {
           $object = getObjStringDB($connection, $selectWBstring);
           $wbstring = (string)$object->Whiteboard;
-          //If WB is just empty or placeholder, nothing to update. Else send whiteboard to member
           if($wbstring == "" || $wbstring =="placeholder"){
             echo "DEBUG: No whiteboard in Database or placeholder, nothing to send...\n\n";
           }
@@ -135,9 +116,8 @@ function joinGroup($groupID, $user, $clientList, $sock)
             $message = "WBUP$groupID $wbstring";
             echo "DEBUG: Whiteboard found in Database, updating for first user...\n\n";
             sendMessage($message, $sock);
-          } // closes line 89 else statement
-        }   // closes line 82 numUsers if statement
-        //Else not first user joining, will get current whiteboard from existing member and send to member joining
+          }
+        }
         else {
           echo "Requesting whiteboard from existing user to update joining member... \n\n";
           $existMembers = $groupClass->getMemberIP();
@@ -145,14 +125,14 @@ function joinGroup($groupID, $user, $clientList, $sock)
           $existingSocket = $clientList[$existingMember]->getSocket();
           $message = "NUWB$groupID $ip";
           sendMessage($message, $existingSocket);
-        } //closes line 95 else statement
-      }   //closes line 74 else statement
-    }     //closes line 71 if statement for capacity
+        }
+      }
+    }
     else
-      fwrite($sock, "00016FAILMax Capacity");      //Fail case for max capcity.
-  }       //closes line 66 if statement for group exists
+      fwrite($sock, "00016FAILMax Capacity");
+  }
   else
-    fwrite($sock, "00023FAILGroup Doesn't Exist"); //Fail case that groupname doesn't exist
+    fwrite($sock, "00023FAILGroup Doesn't Exist");
   disconnectDB($connection);
 }
 
@@ -190,6 +170,7 @@ function updateGroupList($connection, $clientList, $groupClass, $groupID)
     }
   }
 }
+
 //SEND CHAT FUNCTION
 //Append username and timestamp to user message and returns to each member in group.
 function sendChatMessage($groupID, $message, $user, $clientList, $sock)
@@ -200,7 +181,7 @@ function sendChatMessage($groupID, $message, $user, $clientList, $sock)
   fwrite($sock, "00004SUCC");
   $username = $user->getName();
   $timestamp = date("Y-m-d H:i:s");
-  $fullmessage = "$groupID $username $timestamp $message";      //Full message that include username timestamp and the message
+  $fullmessage = "$groupID $username $timestamp $message";
   echo "DEBUG: Sending Message... \n";
   echo "DEBUG: This is the full message $fullmessage \n";
   $ipList = $groupList[$groupID]->getMemberIP();
@@ -209,9 +190,6 @@ function sendChatMessage($groupID, $message, $user, $clientList, $sock)
     $newMessage = "NCHT$fullmessage";
     sendMessage($newMessage,$socket);
   }
-
-
-  //Inserts chat into database for logging
   $insertChat = "INSERT INTO $groupID (user, Clock, Message)
                 VALUES ('$username', current_timestamp(), '$escMessage')";
   if (!mysqli_query($connection, $insertChat))
@@ -228,13 +206,11 @@ function updateGroupChat($connection, $groupID, $sock)
                         WHERE Message IS NOT NULL";
   $messageList = mysqli_query($connection, $returnMessageList);
   echo "DEBUG: Updating Group Chat... \n\n";
-
-  //Sends chat log to requested socket
   while($row = mysqli_fetch_array($messageList)) {
-    $messages = "$groupID $row[0] $row[1] $row[2]"; //Stores user: clock: message into variable
-    $message = "NCHT$messages";            //Appends CODE NCHT for client use
+    $messages = "$groupID $row[0] $row[1] $row[2]";
+    $message = "NCHT$messages";
     sendMessage($message, $sock);
-  } //closes while loop
+  }
 }
 
 ?>

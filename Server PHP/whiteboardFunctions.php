@@ -4,26 +4,11 @@ include_once 'utilityFunctions.php';
 include_once 'flashCardFunctions.php';
 include_once 'groupFunctions.php';
 include_once 'classes.php';
-/* Whiteboard Functions
-  function whiteboardLine($groupID, $point1, $point2, $clientList, $sock)
-  function updateWhiteBoard($ipaddress, $wbstring, $clientList, $sock)
-  function saveWhiteBoard($groupID, $wbstring, $sock)
-*/
+
 //WHITEBOARD LINE FUNCTION
 //Takes in point1 and point2 of whiteboard and writes to every member of group for real time drawing
 function whiteboardLine($groupID, $point1, $point2, $clientList, $sock) {
   global $groupList;
-  //$connection = connectGroupDB();
-  /*$returnIPList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
-  $ipList = mysqli_query($connection, $returnIPList);
-  while($rowIP = mysqli_fetch_array($ipList)) { //Actively sends whiteboard to everyone in group
-    $keyIP = $rowIP[0];                         //Stores IP for socket access
-    $keySock = $clientList[$keyIP]->getSocket();//Uses IP to obtain socket that is going to be written to
-    if ($keySock != $sock) {                    // Makes sure doesn't write back to original socket.
-      $message = "WBLN$groupID $point1 $point2";
-      sendMessage($message, $keySock);
-    }//end if statement
-  }  //end while Loops*/
   $ipList = $groupList[$groupID]->getMemberIP();
   foreach($ipList as $ip) {
     $socket = $clientList[$ip]->getSocket();
@@ -32,7 +17,6 @@ function whiteboardLine($groupID, $point1, $point2, $clientList, $sock) {
       sendMessage($message, $socket);
     }
   }
-  //disconnectDB($connection);
 }
 
 //UPDATE WHITEBOARD FUNCTION

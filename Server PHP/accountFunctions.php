@@ -3,15 +3,6 @@ include_once 'db_credentials.php';
 include_once 'sendEmail.php';
 include_once 'utilityFunctions.php';
 include_once 'classes.php';
-/* Group Functions
-  function createAccount($email, $username, $password, $sock);
-  function loginAccount($username, $password, $sock);
-  function logoutAccount($username, $sock);
-  function changePassword($username, $password, $sock);
-  function recoverAccount($email, $password, $sock);
-  function rememberUsername ($email, $sock);
-  function rememberPassword ($username, $email, $sock);
-*/
 
 function createAccount($email, $username, $password, $sock) {
   $connection = connectAccountDB();
@@ -22,11 +13,11 @@ function createAccount($email, $username, $password, $sock) {
   //Insert Query
   $insert = "INSERT INTO UserInfo (Username, Pass, Email) VALUES ('$username', '$password', '$email')";
 
-  if (($username_exists = checkExistsDB($connection, $check_username)) > 0) { //returns failcase of username existing.
+  if (($username_exists = checkExistsDB($connection, $check_username)) > 0) {
     $message = "FAILUsername exists, please try again.";
     sendMessage($message, $sock);
   }
-  elseif (($email_exists = checkExistsDB($connection, $check_email)) > 0) {//returns failcaise of email existing.
+  elseif (($email_exists = checkExistsDB($connection, $check_email)) > 0) {
     $message = "FAILEmail exists, please try again.";
     sendMessage($message, $sock);
   }
@@ -49,17 +40,16 @@ function loginAccount($username, $password, $client, $sock) {
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
   $check_recent_groups = "SELECT RecentGroups FROM UserInfo WHERE Username = '$username' AND RecentGroups IS NOT NULL";
   $check_favorite_groups = "SELECT FavoriteGroups FROM UserInfo WHERE Username = '$username' AND FavoriteGroups IS NOT NULL";
-  //Checks if username exists before attempting to login, will return error otherwise.
+
   if (($username_exists = checkExistsDB($connection, $check_username)) > 0) {
       $checkPass = getObjStringDB($connection, $check_password)->Pass;
       if ($checkPass == $password) {
         $resultEmail = getObjStringDB($connection, $check_email)->Email;
-        $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
+        $message = "SUCC{$resultEmail}";
         sendMessage($message, $sock);
         mysqli_query($connection, $change_online);
         $client->setName($username);
         $client->setEmail($resultEmail);
-        //updates user of previously stored groups in database only if the user just logged in. Avoids accidental updates from database
         if (checkExistsDB($connection, $check_favorite_groups) > 0) {
           $favorite_groups = getObjStringDB($connection, $check_favorite_groups)->FavoriteGroups;
           $fav_group_array = array_reverse(explode(" ", $favorite_groups));
@@ -69,7 +59,6 @@ function loginAccount($username, $password, $client, $sock) {
             }
           }
         }
-        //updates user of previously stored groups in database only if the user just logged in. Avoids accidental updates from database
         if (checkExistsDB($connection, $check_recent_groups) > 0) {
           $recent_groups = getObjStringDB($connection, $check_recent_groups)->RecentGroups;
           $rec_group_array = array_reverse(explode(" ", $recent_groups));
@@ -81,7 +70,7 @@ function loginAccount($username, $password, $client, $sock) {
         }
         updateFavoriteGroups($client, $groupList);
         updateRecentGroups($client, $groupList);
-      } //Closes password check.
+      } 
       else{
         $message = "FAILPassword incorrect, please try again.";
         sendMessage($message, $sock);

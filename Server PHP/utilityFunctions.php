@@ -1,7 +1,7 @@
 <?php
 include_once 'db_credentials.php';
 include_once 'classes.php';
-//Test function for existence.
+
 function checkExistsDB($connection, $query) {
   if ($stmt = mysqli_prepare($connection, $query)) {
     mysqli_stmt_execute($stmt);
@@ -59,8 +59,6 @@ function clearFromGroupsGL($user, $connection) {
   foreach($groupArray as $group) {
     $groupClass = $groupList[$group];
     $groupClass->removeMember($user->getName());
-    /*$remFromGroup = "DELETE FROM $group WHERE userList = '$username'";
-    mysqli_query($connection, $remFromGroup);*/
     updateGroupList($connection, $clientList, $groupClass, $group);
   }
 }
@@ -130,7 +128,6 @@ function sendMessage($message, $socket) {
 
 function getSocketListCL($clientList) {
   $clientNum = count($clientList);
-  //echo "DEBUG: In getSocketListCL, number of clients: ". $clientNum . "\n";
   $socketList = array();
   foreach ($clientList as $user) {
     $socketList[$user->getIP()] = $user->getSocket();

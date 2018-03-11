@@ -14,29 +14,23 @@ $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //A
 //echo "This is the server socket: ";
 //var_dump($server);
 echo "\n+++++++ Program Start +++++++\n";
-//Returns error message if we fail to bind
-if ($server[0] === false)
-{
+if ($server[0] === false){
     die("Failed to bind to socket:  $errorMessage \n");
 }
 //Updates all users to offline on server startup in case of crash.
 echo "Resetting all Online Users... \n";
 if (clearAllOnlineStatusDB())
   echo "Reset done \n";
-
 //Deletes all users in groups just in case of crash.
 //Insures that no duplicate users would be printed
 echo "Clearing Group Members...\n";
 if(clearGroupMembersDB())
   echo "Clear done \n";
 
-
 //Client streaming starts
-$groupList = array(); // Initates global group list
-$clientList = array(); // $ip => ($socket, $username)
+$groupList = array();
+$clientList = array();
 while(true) {
-    //echo "Listening \n";
-    //prepare readable sockets
     echo "\n+++++++++++++++++++++++++\n";
     echo "At top of the while loop, current clients connected: \n";
     echo "Clients:\n";
@@ -46,27 +40,20 @@ while(true) {
 
     //$read_socks = array_column($clients, 0);
     $read_socks = getSocketListCL($clientList);
-    /*echo "Sockets we have already read through, obtained by copying client array's resources(aka socket identifier)\n";
-    var_dump($read_socks);
-    echo "Attach server socket into readable socket\n";*/
     $read_socks["Server Socket: "] = $server;
-
     echo "Readable sockets:\n";
     var_dump($read_socks);
     echo "+++++++++++++++++++++++++\n \n";
 
-    //start reading and use a large timeout
     if(!stream_select ( $read_socks, $write, $except, 300000 ))
     {
         die('something went wrong while selecting');
     }
 
-    //new client
-    if(in_array($server, $read_socks)) //If $server in $read_socks
+    if(in_array($server, $read_socks))
     {
         $new_client = stream_socket_accept($server);
         if ($new_client) {
-            //print remote client information, ip and port number
             $user = stream_socket_get_name($new_client, true);
             echo "Connection accepted from $user \n";
             $clientList[$user] = new User();
@@ -76,9 +63,8 @@ while(true) {
             echo "DEBUG: Verifying socket is " . $clientList[$user]->getSocket() ."\n";
         }
         unset($read_socks[ array_search($server, $read_socks) ]);
-    } //close if(in_array)
+    }
 
-    //message from existing client
     foreach($read_socks as $sock)
     {
         $data = fread($sock, 5);
@@ -90,8 +76,8 @@ while(true) {
             $newdata = fread($sock, ($bytes-$messageLength));
             $messageLength += strlen($newdata);
             $message = "{$message}{$newdata}";
-          } //closes while loop
-        }//closes if statement
+          }
+        }
         if(!$data)
         {
             $socketDC = array_search($sock, getSocketListCL($clientList), true);
@@ -99,23 +85,19 @@ while(true) {
             var_dump(array_search($sock, getSocketListCL($clientList), true));
             logout($clientList[$socketDC]);
             unset($clientList[ array_search($sock, getSocketListCL($clientList), true)]);
-            @fclose($sock); //closes the socket. @ supresses error messages
+            @fclose($sock);
             echo "Now there are total ". count($clientList) . " clients.\n";
             var_dump($clientList);
             continue;
         }
-        //send the message back to client
         else {
-          $ip = stream_socket_get_name($sock, true); //Current user.
+          $ip = stream_socket_get_name($sock, true);
           $client = $clientList[$ip];
-          //Takes in the first 5 bytes as to determine length of message.
           $code = substr($message, 0, 4);
           $msg = substr($message, 4, $bytes);
 
-          //Prints out messages received for debugging purposes.
           if ($code == 'UPWB' || $code == 'SVWB' || $code == 'WBUP') {
             echo "DEBUG: Message Received  $bytes $code: WB String too long to echo. \n\n";}
-            //echo "THIS IS THE MESSAGE BEFORE PASSING INTO SWITCH STATEMENT: $code: $msg \n";}
           else if ($code == 'WBLN') {
             //nothing because it would be echo'd too many times because each point is going to be sent over.
           }
@@ -126,27 +108,27 @@ while(true) {
           if ($code == "GCHT" || $code == "SVWB") {
             $limit = 2;
           }
-          $codeMessage = explode(" ", $msg, $limit);  //Puts message into array
+          $codeMessage = explode(" ", $msg, $limit);
 
           switch($code) {
             case "CACC":
               createAccount($codeMessage[0], $codeMessage[1], $codeMessage[2], $sock);
-              break; //email, username, password, socket
+              break;
             case "LOGN":
               loginAccount($codeMessage[0], $codeMessage[1], $client, $sock);
-              break;//username, password, client, socket
+              break;
             case "LOGT":
               logout($client);
-              break; //username, socket
+              break;
             case "CGRP":
               createGroup($codeMessage[0], $client, $clientList, $sock);
-              break; //groupname, user, client list, group list, socket
+              break;
             case "JGRP":
               joinGroup($codeMessage[0], $client, $clientList, $sock);
-              break; //groupID, user, client array, socket
+              break;
             case "LGRP":
               leaveGroup($codeMessage[0], $client, $clientList, $sock);
-              break; //groupID, user, client array, socket
+              break;
             case "NWFG":
               newFavoriteGroup($client, $codeMessage[0]);
               break;
@@ -155,16 +137,16 @@ while(true) {
               break;
             case "GCHT":
               sendChatMessage($codeMessage[0], $codeMessage[1], $client, $clientList, $sock);
-              break; //groupID, message, user, client list, socket
+              break;
             case "WBLN":
               whiteboardLine($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList, $sock);
-              break; //groupID, point1, point2, client array, socket
+              break;
             case "UPWB":
               updateWhiteBoard($codeMessage[0], $codeMessage[1], $codeMessage[2], $clientList, $sock);
-              break; //ipAddress, wb string, client array, socket
+              break;
             case "SVWB":
               saveWhiteBoard($codeMessage[0], $codeMessage[1], $sock);
-              break; //groupID, wb string, socket
+              break;
             case "CHPW":
               changePassword($clients[$ip][1], $codeMessage[1], $sock);
               break;
@@ -183,10 +165,10 @@ while(true) {
               break;
             case "FCFT":
               if(count($codeMessage) < 3) {$codeMessage[2] = "";}
-              addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 1); // 0 = groupID 1 = card id 2 = message
+              addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 1);
               break;
-          }//Switch Statement
-      }//Closes else
-    }//Closes foreach
-}//Closes while
+          }
+      }
+    }
+}
 ?>
