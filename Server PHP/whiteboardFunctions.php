@@ -13,7 +13,7 @@ include_once 'classes.php';
 //Takes in point1 and point2 of whiteboard and writes to every member of group for real time drawing
 function whiteboardLine($groupID, $point1, $point2, $clientList, $sock) {
   global $groupList;
-  //$connection = connectGroup();
+  //$connection = connectGroupDB();
   /*$returnIPList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
   $ipList = mysqli_query($connection, $returnIPList);
   while($rowIP = mysqli_fetch_array($ipList)) { //Actively sends whiteboard to everyone in group
@@ -32,7 +32,7 @@ function whiteboardLine($groupID, $point1, $point2, $clientList, $sock) {
       sendMessage($message, $socket);
     }
   }
-  //disconnect($connection);
+  //disconnectDB($connection);
 }
 
 //UPDATE WHITEBOARD FUNCTION
@@ -47,13 +47,13 @@ function updateWhiteBoard($ipaddress, $groupID, $wbstring, $clientList, $sock) {
 //SAVE WHITEBOARD FUNCTION
 //Saves whiteboard onto database as string.
 function saveWhiteBoard($groupID, $wbstring, $sock) {
-  $connection = connectGroup();
+  $connection = connectGroupDB();
   $escString = mysqli_escape_string($connection, $wbstring);
   echo "Saving Whiteboard into Database...\n";
   $saveWB = "UPDATE $groupID
              SET Whiteboard = '$escString'
              WHERE Whiteboard IS NOT NULL";
   mysqli_query($connection, $saveWB);
-  disconnect($connection);
+  disconnectDB($connection);
 }
 ?>

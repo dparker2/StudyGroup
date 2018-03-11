@@ -68,7 +68,7 @@ class User {
         echo "DEBUG: Trying to add to Recent Group this is the count before add: $count\n";
         if(count($this->recGroups) >= $this->numRecent){
           array_unshift($this->recGroups, $groupID);
-          $this->recGroups = array_splice($this->recGroups, 0, $this->numRecent);
+          $this->recGroups = array_splice($this->recGroups, $this->numRecent);
         }
         else
           array_unshift($this->recGroups, $groupID);
@@ -77,7 +77,7 @@ class User {
     else {
       if(count($this->recGroups) >= $this->numRecent) {
         array_unshift($this->recGroups, $groupID);
-        $this->recGroups = array_splice($this->recGroups, 0, 5);
+        $this->recGroups = array_splice($this->recGroups, 0, $this->numRecent);
       }
       else
         array_unshift($this->recGroups, $groupID);
@@ -86,7 +86,7 @@ class User {
   function setFavGroup($groupID) {
     if (count($this->favGroups) >= $this->numFavorite) {
       array_unshift($this->favGroups, $groupID);
-      $this->recGroups = array_splice($this->recGroups, 0, $this->numFavorite);
+      $this->recGroups = array_splice($this->recGroups, $this->numFavorite);
     }
     else
       array_unshift($this->favGroups, $groupID);
@@ -97,7 +97,7 @@ class User {
       array_splice($this->favGroups, $key, 1);
     }
   }
-  function removeGroup($groupID) {
+  function removeCurrGroup($groupID) {
     if (in_array($groupID, $this->currGroups)) {
       $key = array_search($groupID, $this->currGroups);
       array_splice($this->currGroups, $key, 1);
@@ -122,7 +122,6 @@ class Group {
   var $numMembers;
   var $admin;
   var $members = array();
-  var $memberIPs = array();
 
   //Get Functions
   function getGroupID() {
@@ -136,7 +135,11 @@ class Group {
     return $this->members;
   }
   function getMemberIP() {
-    return $this->memberIPs;
+    $ipArray = array();
+    foreach($this->members as $user) {
+      array_push($ipArray, $user->getIP());
+    }
+    return $ipArray;
   }
   function getAdmin() {
     return $this->admin;
@@ -145,11 +148,8 @@ class Group {
   function setGroupID($groupname) {
       $this->groupID = $groupname;
   }
-  function setMember($member) {
-    array_push($this->members, $member);
-  }
-  function setMemberIP($ipaddress) {
-    array_push($this->memberIPs, $ipaddress);
+  function addMember($user) {
+    array_push($this->members, $user);
   }
   function setAdmin($adminName) {
     $this->admin = $adminName;
@@ -160,7 +160,6 @@ class Group {
     }
     $key = array_search($username, $this->members);
     array_splice($this->members, $key, 1);
-    array_splice($this->memberIPs, $key, 1);
   }
 }
 

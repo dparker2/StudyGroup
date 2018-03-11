@@ -14,7 +14,7 @@ include_once 'classes.php';
 */
 
 function createAccount($email, $username, $password, $sock) {
-  $connection = connectAccount();
+  $connection = connectAccountDB();
 
   $check_username = "SELECT * FROM UserInfo WHERE Username = '$username'";
   $check_email = "SELECT * FROM UserInfo WHERE Email = '$email'";
@@ -22,11 +22,11 @@ function createAccount($email, $username, $password, $sock) {
   //Insert Query
   $insert = "INSERT INTO UserInfo (Username, Pass, Email) VALUES ('$username', '$password', '$email')";
 
-  if (($username_exists = checkExists($connection, $check_username)) > 0) { //returns failcase of username existing.
+  if (($username_exists = checkExistsDB($connection, $check_username)) > 0) { //returns failcase of username existing.
     $message = "FAILUsername exists, please try again.";
     sendMessage($message, $sock);
   }
-  elseif (($email_exists = checkExists($connection, $check_email)) > 0) {//returns failcaise of email existing.
+  elseif (($email_exists = checkExistsDB($connection, $check_email)) > 0) {//returns failcaise of email existing.
     $message = "FAILEmail exists, please try again.";
     sendMessage($message, $sock);
   }
@@ -37,12 +37,12 @@ function createAccount($email, $username, $password, $sock) {
       sendRegEmail($email);
     }
   }
-  disconnect($connection);
+  disconnectDB($connection);
 }
 
 function loginAccount($username, $password, $client, $sock) {
   global $groupList;
-  $connection = connectAccount();
+  $connection = connectAccountDB();
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
   $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
   $check_email = "SELECT Email FROM UserInfo WHERE Username = '$username'";
@@ -50,18 +50,18 @@ function loginAccount($username, $password, $client, $sock) {
   $check_recent_groups = "SELECT RecentGroups FROM UserInfo WHERE Username = '$username' AND RecentGroups IS NOT NULL";
   $check_favorite_groups = "SELECT FavoriteGroups FROM UserInfo WHERE Username = '$username' AND FavoriteGroups IS NOT NULL";
   //Checks if username exists before attempting to login, will return error otherwise.
-  if (($username_exists = checkExists($connection, $check_username)) > 0) {
-      $checkPass = getObjString($connection, $check_password)->Pass;
+  if (($username_exists = checkExistsDB($connection, $check_username)) > 0) {
+      $checkPass = getObjStringDB($connection, $check_password)->Pass;
       if ($checkPass == $password) {
-        $resultEmail = getObjString($connection, $check_email)->Email;
+        $resultEmail = getObjStringDB($connection, $check_email)->Email;
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);
         mysqli_query($connection, $change_online);
         $client->setName($username);
         $client->setEmail($resultEmail);
         //updates user of previously stored groups in database only if the user just logged in. Avoids accidental updates from database
-        if (checkExists($connection, $check_favorite_groups) > 0) {
-          $favorite_groups = getObjString($connection, $check_favorite_groups)->FavoriteGroups;
+        if (checkExistsDB($connection, $check_favorite_groups) > 0) {
+          $favorite_groups = getObjStringDB($connection, $check_favorite_groups)->FavoriteGroups;
           $fav_group_array = array_reverse(explode(" ", $favorite_groups));
           if($fav_group_array != "" && $fav_group_array != " ") {
             foreach($fav_group_array as $group) {
@@ -70,8 +70,8 @@ function loginAccount($username, $password, $client, $sock) {
           }
         }
         //updates user of previously stored groups in database only if the user just logged in. Avoids accidental updates from database
-        if (checkExists($connection, $check_recent_groups) > 0) {
-          $recent_groups = getObjString($connection, $check_recent_groups)->RecentGroups;
+        if (checkExistsDB($connection, $check_recent_groups) > 0) {
+          $recent_groups = getObjStringDB($connection, $check_recent_groups)->RecentGroups;
           $rec_group_array = array_reverse(explode(" ", $recent_groups));
           if($rec_group_array != "" && $rec_group_array != " ") {
             foreach($rec_group_array as $group) {
@@ -91,53 +91,26 @@ function loginAccount($username, $password, $client, $sock) {
     $message = "FAILUser does not exist, please try again.";
     sendMessage($message, $sock);
   }
-  disconnect($connection);
+  disconnectDB($connection);
 }
 
 function logout($user) {
-
-  //Inserts favorite groups and recent groups into database
-  $connection = connectAccount();
-  $username = $user->getName();
-  if (count($user->getFavoriteGroups()) > 0) {
-    $favGroup = implode(" ", $user->getFavoriteGroups());
-    $set_favorite_groups = "UPDATE UserInfo SET FavoriteGroups='$favGroup' WHERE Username = '$username'";
-    mysqli_query($connection, $set_favorite_groups);
-  }
-  else {
-    $set_favorite_groups = "UPDATE UserInfo SET FavoriteGroups=NULL WHERE Username = '$username'";
-    mysqli_query($connection, $set_favorite_groups);
-  }
-
-  if (count($user->getRecentGroups()) > 0) {
-    $recGroup = implode(" ", $user->getRecentGroups());
-    $set_recent_groups = "UPDATE UserInfo SET RecentGroups='$recGroup' WHERE Username = '$username'";
-    mysqli_query($connection, $set_recent_groups);
-  }
-  else {
-    $set_recent_groups = "UPDATE UserInfo SET RecentGroups=NULL WHERE Username = '$username'";
-    mysqli_query($connection, $set_recent_groups);
-  }
-  disconnect($connection);
-
-  //Sets user to offline, removes from groups.
+  $accountDB = connectAccountDB();
+  $groupDB = connectGroupDB();
   if ($user->getName() != NULL) {
-    $username = $user->getName();
-    echo "DEBUG: Changing $username to offline \n";
-    clearOnlineStatus($username);
-    if (count($user->getCurrGroups()) != 0) {
-      echo "DEBUG: Removing $username from groups \n";
-      clearFromGroup($user);
-    }
-    $user->setName(NULL);
-    $user->setEmail(NULL);
-    $user->clearGroups();
+    setOfflineDB($user, $accountDB);
+    setFavoriteGroupsDB($user, $groupDB);
+    setRecentGroupsDB($user, $groupDB);
+    if (count($user->getCurrGroups()) != 0)
+      clearFromGroupsGL($user, $groupDB);
+    setOfflineCL($user);
   }
-
+  disconnectDB($accountDB);
+  disconnectDB($groupDB);
 }
 //unfinished code to change a users password, need client input
 function changePassword($username, $password, $sock) {
-  $connection = connectAccount();
+  $connection = connectAccountDB();
 
   // UI should now send a 'they did it' message and a new password
   $newPass = nul; //new pass from UI goes here
@@ -149,12 +122,12 @@ function changePassword($username, $password, $sock) {
     fwrite($sock, "FAIL\n");
   }
 
-  disconnect($connection);
+  disconnectDB($connection);
 }
 
 // unfinised account recovery using email method. outdated, unused, unloved
 function recoverAccount($email, $password, $sock) {
-  $connection = connectAccount();
+  $connection = connectAccountDB();
 
   //check if email exists before attempting to send recovery email, will return error otherwise.
   $check_email = "SELECT Email FROM UserInfo WHERE Email = '$email'";
@@ -177,12 +150,12 @@ function recoverAccount($email, $password, $sock) {
     mysqli_free_result($result1);
   }
 
-  $disconnect($connection);
+  $disconnectDB($connection);
 }
 
 // takes users email, returns users username.
 function rememberUsername ($email, $sock) {
-  $connection = connectAccount();
+  $connection = connectAccountDB();
 
   $find_user = "SELECT Username FROM UserInfo WHERE Email = '$email'";  //finds a username tied to a email
   $resultUser = mysqli_query($connection, $find_user); //runs find_user
@@ -191,12 +164,12 @@ function rememberUsername ($email, $sock) {
   $message = "SUCC{$returnUser}";
   sendMessage($message, $socket);
 
-  disconnect($connection);
+  disconnectDB($connection);
 }
 
 // recovery option for remembering a password, sends a recovery email
 function rememberPassword ($username, $email, $sock) {
-  $connection = connectAccount();
+  $connection = connectAccountDB();
 
   $find_pass = "SELECT Pass FROM UserInfo WHERE (Email = '$email' AND Username = '$username')";
   $resultPass = mysqli_query($connection, $find_pass); //runs find_pass
@@ -206,7 +179,7 @@ function rememberPassword ($username, $email, $sock) {
   recPWEmail($email, $username, $returnPass);
   sendMessage($message, $socket);
 
-  disconnect($connection);
+  disconnectDB($connection);
 }
 
 ?>

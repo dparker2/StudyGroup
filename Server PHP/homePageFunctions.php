@@ -59,8 +59,8 @@ function newFavoriteGroup($user, $groupID) {
   $sock = $user->getSocket();
   $groupExists = "SELECT TABLE_NAME FROM information_schema.TABLES
                   where TABLE_NAME = '$groupID'";
-  $connection = connectGroup();
-  if (checkExists($connection, $groupExists) > 0) {
+  $connection = connectGroupDB();
+  if (checkExistsDB($connection, $groupExists) > 0) {
     $favGroups = $user->getFavoriteGroups();
     if (in_array($groupID, $favGroups)) {
       $message = "FAIL";
@@ -82,7 +82,7 @@ function newFavoriteGroup($user, $groupID) {
     $message = "FAILGroup does not exist";
     sendMessage($message, $sock);
   }//closes else fail
-  disconnect($connection);
+  disconnectDB($connection);
 }
 
 //Removes a group from favorite list. Returns fail if group didn't exist in list.

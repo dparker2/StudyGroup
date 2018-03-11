@@ -21,13 +21,13 @@ if ($server[0] === false)
 }
 //Updates all users to offline on server startup in case of crash.
 echo "Resetting all Online Users... \n";
-if (clearAllOnlineStatus())
+if (clearAllOnlineStatusDB())
   echo "Reset done \n";
 
 //Deletes all users in groups just in case of crash.
 //Insures that no duplicate users would be printed
 echo "Clearing Group Members...\n";
-if(clearGroupMembers())
+if(clearGroupMembersDB())
   echo "Clear done \n";
 
 
@@ -45,7 +45,7 @@ while(true) {
     var_dump($groupList);
 
     //$read_socks = array_column($clients, 0);
-    $read_socks = getSocketList($clientList);
+    $read_socks = getSocketListCL($clientList);
     /*echo "Sockets we have already read through, obtained by copying client array's resources(aka socket identifier)\n";
     var_dump($read_socks);
     echo "Attach server socket into readable socket\n";*/
@@ -94,11 +94,11 @@ while(true) {
         }//closes if statement
         if(!$data)
         {
-            $socketDC = array_search($sock, getSocketList($clientList), true);
+            $socketDC = array_search($sock, getSocketListCL($clientList), true);
             echo "DATA DOES NOT EXIST, $socketDC disconnected, closing socket...\n";
-            var_dump(array_search($sock, getSocketList($clientList), true));
+            var_dump(array_search($sock, getSocketListCL($clientList), true));
             logout($clientList[$socketDC]);
-            unset($clientList[ array_search($sock, getSocketList($clientList), true)]);
+            unset($clientList[ array_search($sock, getSocketListCL($clientList), true)]);
             @fclose($sock); //closes the socket. @ supresses error messages
             echo "Now there are total ". count($clientList) . " clients.\n";
             var_dump($clientList);

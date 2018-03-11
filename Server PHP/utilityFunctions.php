@@ -2,7 +2,7 @@
 include_once 'db_credentials.php';
 include_once 'classes.php';
 //Test function for existence.
-function checkExists($connection, $query) {
+function checkExistsDB($connection, $query) {
   if ($stmt = mysqli_prepare($connection, $query)) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_store_result($stmt);
@@ -12,32 +12,31 @@ function checkExists($connection, $query) {
   }
 }
 
-function connectGroup() {
+function connectGroupDB() {
   $connection = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
   if ($connection->connect_error)
     die("Connection failed: " . $connection->connect_error);
-  //else
-    //echo "Connected to database \n";
+  else
+    echo "Connected to database \n";
   return $connection;
 }
 
-function connectAccount() {
+function connectAccountDB() {
   $connection = new mysqli(DB2_Server, DB2_User, DB2_Pass, DB2_Name);
   if ($connection->connect_error)
     die("Connection failed: " . $connection->connect_error);
-  //else
-    //echo "Connected to database \n";
+  else
+    echo "Connected to database \n";
   return $connection;
 }
 
-function disconnect($connection) {
-  $connection->close();
-  //if($connection->close()) {
-    //echo "Database Closed \n";
+function disconnectDB($connection) {
+  if($connection->close())
+    echo "Database Closed \n";
 }
 
-function clearGroupMembers() {
-  $connection = connectGroup();
+function clearGroupMembersDB() {
+  $connection = connectGroupDB();
   $countGroups = "SELECT TABLE_NAME
                 FROM information_schema.columns
                 where table_schema = 'StudyGroup'
@@ -48,14 +47,13 @@ function clearGroupMembers() {
     $removeNULL = "DELETE FROM $gName WHERE userList IS NOT NULL";
     mysqli_query($connection, $removeNULL);
   }
-  disconnect($connection);
+  disconnectDB($connection);
   return true;
 }
 
-function clearFromGroup($user) {
+function clearFromGroupsGL($user, $connection) {
   global $groupList;
   global $clientList;
-  $connection = connectGroup();
   $groupArray = $user->getCurrGroups();
   $username = $user->getName();
   foreach($groupArray as $group) {
@@ -65,35 +63,57 @@ function clearFromGroup($user) {
     mysqli_query($connection, $remFromGroup);*/
     updateGroupList($connection, $clientList, $groupClass, $group);
   }
-  disconnect($connection);
 }
 
-function clearAllOnlineStatus() {
-  $dbAccount = connectAccount();
-  $makeoffline = "UPDATE UserInfo
+function clearAllOnlineStatusDB() {
+  $dbAccount = connectAccountDB();
+  $offline = "UPDATE UserInfo
                   SET UserStatus = 'Offline'
                   WHERE UserStatus = 'Online'";
-  mysqli_query($dbAccount, $makeoffline);
-  disconnect($dbAccount);
+  mysqli_query($dbAccount, $offline);
+  disconnectDB($dbAccount);
   return true;
 }
 
-function clearOnlineStatus($username) {
-  $dbAccount = connectAccount();
-  $makeoffline = "UPDATE UserInfo
+function setOfflineDB($user, $connection) {
+  $username = $user->getName();
+  $offline = "UPDATE UserInfo
                   SET UserStatus = 'Offline'
                   WHERE UserStatus = 'Online' AND Username = '$username'";
-  mysqli_query($dbAccount, $makeoffline);
-  disconnect($dbAccount);
+  mysqli_query($connection, $offline);
 }
 
-function getNumRows($connection, $query) {
-  $queryResult = mysqli_query($connection, $query);
-  $numRows = $queryResult->num_rows;
-  return $numRows;
+function setOfflineCL($user) {
+  $user->setName(NULL);
+  $user->setEmail(NULL);
+  $user->clearGroups();
 }
 
-function getObjString($connection, $query) {
+function setFavoriteGroupsDB($user, $connection) {
+  if (count($user->getFavoriteGroups()) > 0) {
+    $favGroup = implode(" ", $user->getFavoriteGroups());
+    $set_favorite_groups = "UPDATE UserInfo SET FavoriteGroups='$favGroup' WHERE Username = '$username'";
+    mysqli_query($connection, $set_favorite_groups);
+  }
+  else {
+    $set_favorite_groups = "UPDATE UserInfo SET FavoriteGroups=NULL WHERE Username = '$username'";
+    mysqli_query($connection, $set_favorite_groups);
+  }
+}
+
+function setRecentGroupsDB($user, $connection) {
+  if (count($user->getRecentGroups()) > 0) {
+    $recGroup = implode(" ", $user->getRecentGroups());
+    $set_recent_groups = "UPDATE UserInfo SET RecentGroups='$recGroup' WHERE Username = '$username'";
+    mysqli_query($connection, $set_recent_groups);
+  }
+  else {
+    $set_recent_groups = "UPDATE UserInfo SET RecentGroups=NULL WHERE Username = '$username'";
+    mysqli_query($connection, $set_recent_groups);
+  }
+}
+
+function getObjStringDB($connection, $query) {
   $queryResult = mysqli_query($connection, $query);
   $object = $queryResult->fetch_object();
   return $object;
@@ -108,14 +128,13 @@ function sendMessage($message, $socket) {
 }
 
 
-function getSocketList($clientList) {
+function getSocketListCL($clientList) {
   $clientNum = count($clientList);
-  //echo "DEBUG: In getSocketList, number of clients: ". $clientNum . "\n";
+  //echo "DEBUG: In getSocketListCL, number of clients: ". $clientNum . "\n";
   $socketList = array();
   foreach ($clientList as $user) {
     $socketList[$user->getIP()] = $user->getSocket();
   }
   return $socketList;
 }
-
 ?>

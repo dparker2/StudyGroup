@@ -9,7 +9,7 @@ include_once 'classes.php';
 
 
 function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
-  $connection = connectGroup();
+  $connection = connectGroupDB();
   $flashGroupID = "$groupID" . "FC";
   //RETURN FRONT SIDE AND BACK SIDE
   for($i= 0; $i<2; $i++){
@@ -37,7 +37,7 @@ function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
       sendMessage($message, $sock);
     } //closes query for loop
   } //closes front/back for loop
-  disconnect($connection);
+  disconnectDB($connection);
 
 
 }//Close function
@@ -45,7 +45,7 @@ function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
 function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
   global $groupList;
   $side = "side" . "$side";
-  $connection = connectGroup();
+  $connection = connectGroupDB();
   $username = $user->getName();
   $ip = $user->getIP();
   $num = $num + 1;
@@ -66,12 +66,12 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
   $query = "INSERT INTO $flashGroupID (user, $side) VALUES ('$username', '$message')";
 // Check to see if the id for this card exists already
   $check_card = "SELECT * FROM $flashGroupID WHERE (id='$num')";
-  if (checkExists($connection, $check_card) > 0){
+  if (checkExistsDB($connection, $check_card) > 0){
     echo "Card exists already \n";
     $update = "UPDATE $flashGroupID SET user= '$username', $side='$message' WHERE (id='$num')";
     mysqli_query($connection, $update);
     $NewID = "SELECT id FROM $flashGroupID WHERE (user='$username' AND $side='$message')";
-    $returnID = getObjString($connection, $NewID)->id;
+    $returnID = getObjStringDB($connection, $NewID)->id;
     $returnID = $returnID -1;
     /*$clientMessage = "SUCC{$returnID}";
     sendMessage($clientMessage, $sock);
@@ -96,7 +96,7 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
   else{
     mysqli_query($connection, $query);
     $NewID = "SELECT id FROM $flashGroupID ORDER BY id DESC LIMIT 1";
-    $returnID = getObjString($connection, $NewID)->id;
+    $returnID = getObjStringDB($connection, $NewID)->id;
     $returnID = $returnID -1;
     //echo "returnID is: $returnID\n\n";
     /*$clientMessage = "SUCC{$returnID}";
@@ -117,7 +117,7 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
         sendMessage($clientMessage, $keySock);
       }// end while loop/foreach
   } // end else bracket
-  disconnect($connection);
+  disconnectDB($connection);
 }//close function
 
 ?>
