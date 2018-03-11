@@ -107,9 +107,12 @@ void ResetPassword::on_reset_password_btn_clicked()
     }
     QString password_reset;
     if(server::request_response(server::UPDATE_PASSWORD + username + " " + ui->new_pass_lineEdit->text(), password_reset)){
+        QMessageBox succs_box;
+        succs_box.information(0, "Check Email", password_reset);
         qDebug() << "Password reset: " << password_reset;
+        clear_text();
+        // back to login
      }
-
 }
 
 void ResetPassword::set_invalid_icon(QLabel *mark)
