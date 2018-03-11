@@ -42,7 +42,7 @@ void CardWidget::setCard(int index, QString text, bool front_side)
         else {
             new_card = new Flashcard("", text, index);
         }
-        connect(new_card, SIGNAL(check_set_card(Flashcard*,QString&,int&,int)), this, SLOT(check_set_card(Flashcard*,QString&,int&,int)));
+        connect(new_card, SIGNAL(check_send_card(Flashcard*,QString&,int&,int)), this, SLOT(check_send_card(Flashcard*,QString&,int&,int)));
 
         deck[index] = new_card; // The above loop guarantees we are in the proper spot to append at the right index
                                 // even if the index was too high at first
@@ -72,7 +72,7 @@ void CardWidget::deleteCard(int index){
 void CardWidget::on_addCardBtn_clicked()
 {
     int new_index = -1;
-    emit set_card("", new_index, 0); // Emit new card signal first thing to receive index
+    emit send_card("", new_index, 0); // Emit new card signal first thing to receive index
     setCard(new_index, "", true); // Make new card
 
     ui->stackedWidget_card_edit->removeWidget(deck.at(current_index));
@@ -102,15 +102,15 @@ int CardWidget::getDeckSize()
     return deck.size();
 }
 
-void CardWidget::check_set_card(Flashcard* card, QString& text, int& index, int side)
+void CardWidget::check_send_card(Flashcard* card, QString& text, int& index, int side)
 {
-    qDebug() << "CHECK_SET_CARD" << endl;
+    qDebug() << "CHECK_send_card" << endl;
     if(side == 0) { // Front
-        emit set_card(text, index, side); // The index returned is index
+        emit send_card(text, index, side); // The index returned is index
         editCard(index, text, true); // Edit card with proper index
     }
     else { // Back
-        emit set_card(text, index, side);
+        emit send_card(text, index, side);
         editCard(index, text, false); // Edit
         if(ui->stackedWidget_card_edit->currentIndex() > 0) {
             ui->stackedWidget_card_edit->removeWidget(card); // Remove the card (done editing)

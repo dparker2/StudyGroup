@@ -6,7 +6,6 @@
 #include <QList>
 
 #include "flashcard.h"
-#include "ui_cardwidget.h"
 //#include "server.h"
 
 namespace Ui {
@@ -31,17 +30,16 @@ public:
 
 
 signals:
-    void set_card(QString, int&, int);
+    void send_card(QString, int&, int);
     void display_card(Flashcard*);
 
 public slots:
 
-    void check_set_card(Flashcard*, QString&, int&, int);
+    void check_send_card(Flashcard*, QString&, int&, int);
 
 private slots:
 
     void on_prev_btn_clicked();
-
     void on_next_btn_clicked();
 
 private:
