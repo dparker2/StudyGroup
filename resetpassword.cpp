@@ -8,7 +8,8 @@ ResetPassword::ResetPassword(QString name, QWidget *parent) :
     ui(new Ui::ResetPassword)
 {
     ui->setupUi(this);
-    //ui->reset_password->setCurrentIndex(0);
+    ui->reset_password->setCurrentIndex(0);
+    ui->question_invalid_icon->hide();
 }
 
 ResetPassword::~ResetPassword()
