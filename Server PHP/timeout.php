@@ -27,6 +27,12 @@ function loginTimeout($username){
 		}
 	}
 	else if (a>=5){ // 5+ failed attempts
+		$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
+	    if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
+			$message = "FAILThis account is currently locked.";
+			sendMessage($message, $sock);
+			break;
+	    }
 		$time_end = microtime_float();
 		$time = $time_end - $t;
 		if ($time > 60){ // 60 seconds since first fail, restart timeout
@@ -43,7 +49,7 @@ function loginTimeout($username){
 }
 
 // with this login and securityQ share the same lockout. should they be separate?
-function securityTimeout(){
+function securityTimeout($username){
 	static $a = 0; // attempt counter
 	$time_start = microtime_float();
 	static $t = $time_start; // need time_start to be static, cant directly declare it as static.
@@ -61,6 +67,12 @@ function securityTimeout(){
 		}
 	}
 	else if (a>=5){ // 5+ failed attempts
+		$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
+	    if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
+			$message = "FAILThis account is currently locked.";
+			sendMessage($message, $sock);
+			break;
+	    }
 		$time_end = microtime_float();
 		$time = $time_end - $t;
 		if ($time > 60){ // 60 seconds since first fail, restart timeout
