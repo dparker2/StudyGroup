@@ -88,8 +88,11 @@ function setOfflineCL($user) {
 }
 
 function setFavoriteGroupsDB($user, $connection) {
+  $username = $user->getName();
   if (count($user->getFavoriteGroups()) > 0) {
+    echo "Saving favorite groups for $username\n";
     $favGroup = implode(" ", $user->getFavoriteGroups());
+    echo "$favGroup \n";
     $set_favorite_groups = "UPDATE UserInfo SET FavoriteGroups='$favGroup' WHERE Username = '$username'";
     mysqli_query($connection, $set_favorite_groups);
   }
@@ -100,8 +103,11 @@ function setFavoriteGroupsDB($user, $connection) {
 }
 
 function setRecentGroupsDB($user, $connection) {
+  $username = $user->getName();
   if (count($user->getRecentGroups()) > 0) {
+    echo "Saving recent groups for $username \n";
     $recGroup = implode(" ", $user->getRecentGroups());
+    echo "$recGroup \n";
     $set_recent_groups = "UPDATE UserInfo SET RecentGroups='$recGroup' WHERE Username = '$username'";
     mysqli_query($connection, $set_recent_groups);
   }
