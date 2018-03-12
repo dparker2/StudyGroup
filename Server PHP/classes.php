@@ -13,7 +13,7 @@ class User {
   var $currGroups = array();
   var $recGroups = array();
   var $favGroups = array();
-  var $numFavorite = 5;
+  var $numFavorite = 25;
   var $numRecent = 5;
 
   //Get Functions
@@ -68,7 +68,7 @@ class User {
         echo "DEBUG: Trying to add to Recent Group this is the count before add: $count\n";
         if(count($this->recGroups) >= $this->numRecent){
           array_unshift($this->recGroups, $groupID);
-          $this->recGroups = array_splice($this->recGroups, $this->numRecent);
+          $this->recGroups = array_splice($this->recGroups, 0, $this->numRecent);
         }
         else
           array_unshift($this->recGroups, $groupID);
@@ -86,7 +86,7 @@ class User {
   function setFavGroup($groupID) {
     if (count($this->favGroups) >= $this->numFavorite) {
       array_unshift($this->favGroups, $groupID);
-      $this->recGroups = array_splice($this->recGroups, $this->numFavorite);
+      $this->favGroups = array_splice($this->favGroups, 0, $this->numFavorite);
     }
     else
       array_unshift($this->favGroups, $groupID);
