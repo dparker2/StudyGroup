@@ -22,7 +22,7 @@ function loginTimeout($username){
 			$a = 1;
 		}
 		else { // a warning for imminent timeout
-			$message = "3 login fails";
+			$message = "FAIL3rd failure";
 			sendMessage($message, $sock);
 		}
 	}
@@ -36,7 +36,7 @@ function loginTimeout($username){
 		else { // places a lock on the accounts ability to log in
 			$change_lockout = "UPDATE UserInfo SET LockoutStatus='1' WHERE Username = '$username'";
 			mysqli_query($connection, $change_lockout);
-			$message = "Account locked";
+			$message = "FAILAccount now locked";
 			sendMessage($message, $sock);
 		}
 	}
@@ -56,7 +56,7 @@ function securityTimeout(){
 			$s = 1;
 		}
 		else { // a warning for imminent timeout
-			$message = "3 security fails";
+			$message = "FAIL3rd failure";
 			sendMessage($message, $sock);
 		}
 	}
@@ -70,7 +70,7 @@ function securityTimeout(){
 		else {// places a lock on the accounts ability to answer security questions
 			$change_lockout = "UPDATE UserInfo SET LockoutStatus='1' WHERE Username = '$username'";
 			mysqli_query($connection, $change_lockout);
-			$message = "Account locked";
+			$message = "FAILAccount now locked";
 			sendMessage($message, $sock);
 		}
 	}
