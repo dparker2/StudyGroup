@@ -70,7 +70,7 @@ function loginAccount($username, $password, $client, $sock) {
         }
         updateFavoriteGroups($client, $groupList);
         updateRecentGroups($client, $groupList);
-      } 
+      }
       else{
         $message = "FAILPassword incorrect, please try again.";
         sendMessage($message, $sock);
@@ -87,9 +87,10 @@ function logout($user) {
   $accountDB = connectAccountDB();
   $groupDB = connectGroupDB();
   if ($user->getName() != NULL) {
+    echo "DEBUG: Clearing shiet \n";
     setOfflineDB($user, $accountDB);
-    setFavoriteGroupsDB($user, $groupDB);
-    setRecentGroupsDB($user, $groupDB);
+    setFavoriteGroupsDB($user, $accountDB);
+    setRecentGroupsDB($user, $accountDB);
     if (count($user->getCurrGroups()) != 0)
       clearFromGroupsGL($user, $groupDB);
     setOfflineCL($user);
