@@ -4,11 +4,12 @@ include_once 'utilityFunctions.php';
 include_once 'groupFunctions.php';
 include_once 'whiteboardFunctions.php';
 include_once 'utilityFunctions.php';
+include_once 'classes.php';
 
 
 
 function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
-  $connection = connectGroup();
+  $connection = connectGroupDB();
   $flashGroupID = "$groupID" . "FC";
   //RETURN FRONT SIDE AND BACK SIDE
   for($i= 0; $i<2; $i++){
@@ -36,14 +37,15 @@ function updateFlashCards($connection, $ip, $clients, $groupID, $sock) {
       sendMessage($message, $sock);
     } //closes query for loop
   } //closes front/back for loop
-  disconnect($connection);
+  disconnectDB($connection);
 
 
 }//Close function
 
 function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
+  global $groupList;
   $side = "side" . "$side";
-  $connection =  connectGroup();
+  $connection = connectGroupDB();
   $username = $user->getName();
   $ip = $user->getIP();
   $num = $num + 1;
@@ -53,31 +55,31 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
   $username = mysqli_real_escape_string($connection, $username);
   $message = mysqli_real_escape_string($connection, $message);
   $groupID = mysqli_real_escape_string($connection, $groupID);
-
   $unescMessage = stripslashes($message);
   $unescGroupID = stripslashes($groupID);
-
-
   $flashGroupID = "$groupID" . "FC";
-  $return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
-  $resultIP = mysqli_query($connection, $return_ipList); //Returns list of current IP addresses i.e. current user list connected.
+
+  /*$return_ipList = "SELECT ipAddress FROM $groupID WHERE ipAddress IS NOT NULL";
+  $resultIP = mysqli_query($connection, $return_ipList); //Returns list of current IP addresses i.e. current user list connected.*/
+  $resultIP = $groupList[$groupID]->getMemberIP();
 //  $num_ip = $resultIP->num_rows; //Stores number of people currently connected for while loop iteration.
   $query = "INSERT INTO $flashGroupID (user, $side) VALUES ('$username', '$message')";
 // Check to see if the id for this card exists already
   $check_card = "SELECT * FROM $flashGroupID WHERE (id='$num')";
-  if (checkExists($connection, $check_card) > 0){
+  if (checkExistsDB($connection, $check_card) > 0){
     echo "Card exists already \n";
     $update = "UPDATE $flashGroupID SET user= '$username', $side='$message' WHERE (id='$num')";
     mysqli_query($connection, $update);
     $NewID = "SELECT id FROM $flashGroupID WHERE (user='$username' AND $side='$message')";
-    $returnID = getObjString($connection, $NewID)->id;
+    $returnID = getObjStringDB($connection, $NewID)->id;
     $returnID = $returnID -1;
     /*$clientMessage = "SUCC{$returnID}";
     sendMessage($clientMessage, $sock);
     //echo "$clientMessage \n";*/
 
-    while($rowIP = mysqli_fetch_array($resultIP)){
-      $keyIP = $rowIP[0];
+    //while($rowIP = mysqli_fetch_array($resultIP)){
+    foreach ($resultIP as $keyIP) {
+      //$keyIP = $rowIP[0];
       $keySock = $clientList[$keyIP]->getSocket();
       $FlashCards = "$unescGroupID $returnID $unescMessage";
 
@@ -88,21 +90,22 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
         $clientMessage = "FCBK$FlashCards";
       }
       sendMessage($clientMessage, $keySock);
-    } //Closes while loop
+    } //Closes while loop/foreach
   }//Closes outer if statement
 
   else{
     mysqli_query($connection, $query);
     $NewID = "SELECT id FROM $flashGroupID ORDER BY id DESC LIMIT 1";
-    $returnID = getObjString($connection, $NewID)->id;
+    $returnID = getObjStringDB($connection, $NewID)->id;
     $returnID = $returnID -1;
     //echo "returnID is: $returnID\n\n";
     /*$clientMessage = "SUCC{$returnID}";
     //echo "clientMessage is: $clientMessage\n\n";
     sendMessage($clientMessage, $sock);*/
 
-      while($rowIP = mysqli_fetch_array($resultIP)){
-        $keyIP = $rowIP[0];
+      //while($rowIP = mysqli_fetch_array($resultIP)){
+      foreach($resultIP as $keyIP) {
+        //$keyIP = $rowIP[0];
         $keySock = $clientList[$keyIP]->getSocket();
         $FlashCards = "$unescGroupID $returnID $unescMessage";
         if($side == 'side1'){
@@ -112,9 +115,9 @@ function addToCard($groupID, $num, $message, $user, $clientList, $sock, $side) {
           $clientMessage = "FCBK$FlashCards";
         }
         sendMessage($clientMessage, $keySock);
-      }// end while loop
+      }// end while loop/foreach
   } // end else bracket
-  disconnect($connection);
+  disconnectDB($connection);
 }//close function
 
 ?>
