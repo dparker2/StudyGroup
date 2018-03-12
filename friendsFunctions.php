@@ -24,12 +24,11 @@ function searchUser($user, $sock) {
   if(mysqli_query($connection, $query)) {
     echo "Yeeeeeeeee buddy it worked!\n\n";
     $result = mysqli_query($connection, $query);
-    $searchResults = [];
+    $searchResults = "";
     while ($rows = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-      $searchResults = $rows["Username"];
+      $searchResults .= $rows["Username"] . " ";
     }
-    $joinedSearchResults = join(" ", $searchResults);
-    $message = "RSLT$joinedSearchResults";
+    $message = "RSLT$searchResults";
     sendMessage($message, $sock);
   }
   else {
