@@ -11,8 +11,15 @@ function microtime_float() {
 // i need to verify what type of time i'm getting so i can set the 2nd if statement'
 function loginTimeout($username){
 	static $a = 0; // attempt counter
+	static $t = 0; // total time elapsed since first fail counter
+	$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
+	if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
+		$message = "FAILThis account is currently locked.";
+		sendMessage($message, $sock);
+		exit("account locked");
+	}
 	$time_start = microtime_float();
-	static $t = $time_start; // need time_start to be static, cant directly declare it as static.
+	$t = $t + $time_start;
 	$a++;
 	if (a==3){ // 3 failed attempts
 		$time_end = microtime_float();
@@ -27,12 +34,6 @@ function loginTimeout($username){
 		}
 	}
 	else if (a>=5){ // 5+ failed attempts
-		$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
-	    if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
-			$message = "FAILThis account is currently locked.";
-			sendMessage($message, $sock);
-			break;
-	    }
 		$time_end = microtime_float();
 		$time = $time_end - $t;
 		if ($time > 60){ // 60 seconds since first fail, restart timeout
@@ -51,15 +52,22 @@ function loginTimeout($username){
 // with this login and securityQ share the same lockout. should they be separate?
 function securityTimeout($username){
 	static $a = 0; // attempt counter
+	static $t = 0; // total time elapsed since first fail counter
+	$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
+	if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
+		$message = "FAILThis account is currently locked.";
+		sendMessage($message, $sock);
+		exit("account locked");
+	}
 	$time_start = microtime_float();
-	static $t = $time_start; // need time_start to be static, cant directly declare it as static.
+	$t = $t + $time_start;
 	$a++;
 	if (a==3){ // 3 failed attempts
 		$time_end = microtime_float();
 		$time = $time_end - $t;
 		if ($time > 60){ // 60 seconds since first fail, restart timeout
 			$t = microtime_float();
-			$s = 1;
+			$a = 1;
 		}
 		else { // a warning for imminent timeout
 			$message = "FAIL3rd failure";
@@ -67,12 +75,6 @@ function securityTimeout($username){
 		}
 	}
 	else if (a>=5){ // 5+ failed attempts
-		$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
-	    if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
-			$message = "FAILThis account is currently locked.";
-			sendMessage($message, $sock);
-			break;
-	    }
 		$time_end = microtime_float();
 		$time = $time_end - $t;
 		if ($time > 60){ // 60 seconds since first fail, restart timeout

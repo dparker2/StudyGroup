@@ -66,10 +66,10 @@ function loginAccount($username, $password, $sock) {
 	  if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
 	    $message = "FAILThis account is currently locked.";
 		sendMessage($message, $sock);
-		break;
+		exit("account locked");
 	  }
       $checkPass = getObjString($connection, $check_password)->Pass;
-      else if (password_verify($password, $checkPass)) {
+      if (password_verify($password, $checkPass)) {
         $resultEmail = getObjString($connection, $check_email)->Email;
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);

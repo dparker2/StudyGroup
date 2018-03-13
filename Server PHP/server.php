@@ -5,6 +5,7 @@ include_once 'flashCardFunctions.php';
 include_once 'whiteboardFunctions.php';
 include_once 'utilityFunctions.php';
 include_once 'securityQuestions.php';
+include_once 'timeout.php';
 
 
 $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server

@@ -67,7 +67,6 @@ function setSecQuest($user, $q1, $q2, $q3, $sock) {
   $query = "UPDATE UserInfo SET SQ1='$escQ1', SET SQ2='$escQ2', SET SQ3='$escQ3' WHERE Username = '$username'";
   if (!mysqli_query($connection, $query)) {
     $message = "FAILThere was an issue setting the security questions.\n\n";
-	securityTimeout($user);
     sendMessage($message, $sock);
   }
 
