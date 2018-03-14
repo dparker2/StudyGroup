@@ -484,7 +484,7 @@ QPushButton:checked {
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
@@ -518,7 +518,7 @@ QPushButton:checked {
   <customwidget>
    <class>Homepage</class>
    <extends>QWidget</extends>
-   <header>homepage.h</header>
+   <header>Homepage\homepage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

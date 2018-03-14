@@ -93,4 +93,3 @@ void Homepage::on_join_group(QString group)
 {
     join_group(group);
 }
-

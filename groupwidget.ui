@@ -351,9 +351,7 @@ QComboBox::down-arrow {
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
-              <widget class="QWidget" name="flashcard_page">
-               <zorder></zorder>
-              </widget>
+              <widget class="QWidget" name="flashcard_page"/>
              </widget>
             </item>
            </layout>

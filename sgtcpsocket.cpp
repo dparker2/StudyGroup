@@ -162,6 +162,10 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     {
         return "homepage";
     }
+    else if(code == "RSLT")
+    {
+        return "socialarea";
+    }
 }
 
 void SGTCPSocket::read_socket_send_signal()

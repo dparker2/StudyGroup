@@ -27,6 +27,7 @@ const QString server::FLASHCARD_SET_BACK = "FCBK";
 const QString server::HOMEPAGE_UPDATE = "UPHP";
 const QString server::HOMEPAGE_NEW_FAVORITE = "NWFG";
 const QString server::HOMEPAGE_REMOVE_FAVORITE = "RMFG";
+const QString server::SOCIAL_SEARCH_USER = "SUSR";
 
 server::server(QObject *parent) : QObject(parent)
 {
