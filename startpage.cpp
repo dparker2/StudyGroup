@@ -30,7 +30,7 @@ StartPage::StartPage(QString name, QWidget *parent) :
     //customQ_flag = false;
 
 
-
+    sign_up = new CreateAccount("create account");
 }
 
 StartPage::~StartPage()
@@ -352,22 +352,33 @@ void StartPage::on_tabWidget_tabBarClicked(int index)
         }
     }
     */
-    if(index == 1){
-       // ui->recover_account->removeWidget();
+
+
+}
+
+void StartPage::on_tabWidget_currentChanged(int index)
+{
+    if(index == 0){
+        ui->tabWidget->setMaximumWidth(406);
+        ui->tabWidget->setMaximumHeight(372);
+        ui->tabWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
     }
-    if(index == 2){
+    else if(index == 1){
+       // ui->recover_account->removeWidget();
+        ui->sign_up->addWidget(sign_up);
+        ui->sign_up->setCurrentWidget(sign_up);
+        ui->tabWidget->setMaximumHeight(500);
+        ui->tabWidget->setMaximumWidth(900);
+        ui->tabWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
+    }
+    else if(index == 2){
         recover_username->clear_text();
         ui->recover_account->removeWidget(recover_username);
         ui->recover_account->setCurrentWidget(ui->recover_acct_page);
         qDebug() << "resetting margins *** ";
         ui->tab_recover_account->setContentsMargins(0, 0, 0, 0);
+        ui->tabWidget->setMaximumWidth(406);
+        ui->tabWidget->setMaximumHeight(372);
+        ui->tabWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
     }
-
 }
-
-
-
-
-
-
-

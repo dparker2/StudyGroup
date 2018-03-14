@@ -7,6 +7,7 @@
 #include <qcombobox.h>
 #include "recoverusername.h"
 #include "resetpassword.h"
+#include "createaccount.h"
 
 namespace Ui {
 class StartPage;
@@ -77,6 +78,8 @@ private slots:
 
     void on_reset_password_btn_clicked();
 
+    void on_tabWidget_currentChanged(int index);
+
 private:
     Ui::StartPage *ui;
     RecoverUsername *recover_username;
@@ -86,6 +89,7 @@ private:
     QList<QLineEdit*> custom_questions;
     QList<QString> questions;
     QList<QComboBox*> question_comboBox;
+    CreateAccount* sign_up;
 
 };
 

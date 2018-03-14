@@ -44,7 +44,8 @@ SOURCES += \
     whiteboard.cpp \
     recoverusername.cpp \
     resetpassword.cpp \
-    securityquestions.cpp
+    securityquestions.cpp \
+    createaccount.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -66,7 +67,8 @@ HEADERS += \
     whiteboard.h \
     recoverusername.h \
     resetpassword.h \
-    securityquestions.h
+    securityquestions.h \
+    createaccount.h
 
 FORMS += \
         mainwindow.ui \
@@ -82,7 +84,8 @@ FORMS += \
     whiteboard.ui \
     recoverusername.ui \
     resetpassword.ui \
-    securityquestions.ui
+    securityquestions.ui \
+    createaccount.ui
 
 RESOURCES += \
     resource.qrc
