@@ -77,7 +77,7 @@ void CreateAccount::set_valid_icons(QLabel* this_label, QLineEdit* this_line, QS
 
 void CreateAccount::on_lineEdit_email_editingFinished()
 {
-
+    
 }
 
 
@@ -102,4 +102,10 @@ bool CreateAccount::validate_password(QString password)
 void CreateAccount::on_lineEdit_password2_editingFinished()
 {
 
+}
+
+void CreateAccount::test(QLineEdit* this_lineEdit){
+    QString test;
+    this_lineEdit->textChanged(test);
+    qDebug(test);
 }

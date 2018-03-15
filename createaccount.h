@@ -29,6 +29,13 @@ private slots:
 
     void on_lineEdit_password2_textChanged(const QString &arg1);
 
+    // Validate Info Functions
+    bool validate_email(QString);
+
+    void on_lineEdit_email_editingFinished();
+
+    void on_lineEdit_password2_editingFinished();
+
 private:
     Ui::CreateAccount *ui;
     QString username;
