@@ -5,12 +5,13 @@
 #include <QLabel>
 #include <QLineEdit>
 #include "sgwidget.h"
+#include "recoverusername.h"
 
 namespace Ui {
 class CreateAccount;
 }
 
-class CreateAccount : public SGWidget
+class CreateAccount : public SGWidget, public RecoverUsername
 {
     Q_OBJECT
 
@@ -21,7 +22,7 @@ public:
 private slots:
     void do_work();
     void on_lineEdit_username_signup_textChanged(const QString &arg1);
-    void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
+    void set_valid_icons(QLabel* this_label, QLineEdit* this_line, bool valid, QString error_msg = "");
 
     void on_lineEdit_email_textChanged(const QString &arg1);
 
@@ -31,14 +32,21 @@ private slots:
 
     // Validate Info Functions
     bool validate_email(QString);
+    bool validate_username(QString);
+    bool validate_password(QString);
 
-    void on_lineEdit_email_editingFinished();
+
+
+    void on_lineEdit_password1_editingFinished();
 
     void on_lineEdit_password2_editingFinished();
 
 private:
     Ui::CreateAccount *ui;
     QString username;
+    QString email;
+    QString password;
+    bool user_info_valid;
 };
 
 #endif // CREATEACCOUNT_H

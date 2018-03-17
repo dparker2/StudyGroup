@@ -106,6 +106,9 @@ background-color: #283035;</string>
 color:white;
 border-style:none;</string>
        </property>
+       <property name="maxLength">
+        <number>16</number>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
