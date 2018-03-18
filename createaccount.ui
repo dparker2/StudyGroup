@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1078</width>
-    <height>469</height>
+    <height>288</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -69,6 +69,9 @@ background-color: #283035;</string>
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="3" column="1">
+    <layout class="QGridLayout" name="questions_layout"/>
    </item>
    <item row="2" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -190,258 +193,6 @@ border-style:none;</string>
      </item>
     </layout>
    </item>
-   <item row="4" column="1">
-    <layout class="QGridLayout" name="layout_security_questions">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>30</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="4" column="1">
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Minimum</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>25</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="6" column="2">
-      <widget class="QLineEdit" name="lineEdit_answer3">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Trebuchet MS</family>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-       </property>
-       <property name="placeholderText">
-        <string>Answer</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>375</width>
-         <height>0</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="4" column="0">
-      <widget class="QComboBox" name="comboBox_q2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Trebuchet MS</family>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QComboBox" name="comboBox_q3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Trebuchet MS</family>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QComboBox" name="comboBox_q1">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>0</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Trebuchet MS</family>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-       </property>
-       <property name="sizeAdjustPolicy">
-        <enum>QComboBox::AdjustToContents</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLineEdit" name="lineEdit_answer2">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Trebuchet MS</family>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-       </property>
-       <property name="placeholderText">
-        <string>Answer</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLineEdit" name="lineEdit_answer1">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>37</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Trebuchet MS</family>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: #545454;
-color:white;
-border-style:none;</string>
-       </property>
-       <property name="placeholderText">
-        <string>Answer</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="1" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <property name="leftMargin">
@@ -536,6 +287,9 @@ border-style:none;</string>
 color:white;
 border-style:none;</string>
        </property>
+       <property name="maxLength">
+        <number>20</number>
+       </property>
        <property name="placeholderText">
         <string>Username</string>
        </property>
@@ -562,56 +316,7 @@ border-style:none;</string>
      </item>
     </layout>
    </item>
-   <item row="3" column="1">
-    <layout class="QGridLayout" name="gridLayout_9">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_security_questions">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>84</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>Trebuchet MS</family>
-         <pointsize>25</pointsize>
-         <weight>75</weight>
-         <italic>false</italic>
-         <bold>true</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color:rgba(10,190,140);</string>
-       </property>
-       <property name="text">
-        <string>Security Questions</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="5" column="0" colspan="2">
+   <item row="4" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_8">
      <property name="topMargin">
       <number>20</number>
@@ -677,6 +382,13 @@ QPushButton:hover {
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_email</tabstop>
+  <tabstop>lineEdit_username_signup</tabstop>
+  <tabstop>lineEdit_password1</tabstop>
+  <tabstop>lineEdit_password2</tabstop>
+  <tabstop>register_btn</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -160,13 +160,16 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     }
     else if(code == "REQQ")
     {
-        return "startpage";
+        qDebug() << "*** REQQ ***";
+        return "create account";
     }
-    else if (code == "RUSR"){
+    else if (code == "RUSR")
+    {
         message.remove(4, first_section.length());
         return "recover username";
     }
-    else if(code == "RPWD"){
+    else if(code == "RPWD")
+    {
         qDebug() << "Recover password message";
         return "reset password";
     }

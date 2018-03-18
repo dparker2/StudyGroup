@@ -42,7 +42,7 @@ private slots:
 
     void on_lineEdit_password2_editingFinished();*/
 
-    void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
+    //void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
 
     //void on_singup_button_clicked();
 
@@ -54,27 +54,10 @@ private slots:
 
     void do_work();
 
-    void on_lineEdit_email_textChanged(const QString &arg1);
-
-    void on_lineEdit_username_signup_textChanged(const QString &arg1);
-
-    void on_lineEdit_password1_textChanged(const QString &arg1);
-
-    void on_lineEdit_password2_textChanged(const QString &arg1);
-
     void on_tabWidget_tabBarClicked(int index);
 
-    void on_save_question_btn_clicked();
 
-    void on_register_btn_clicked();
 
-    void REQQ(QList<QByteArray> questions);
-    void set_questions(QList<QByteArray> questions);
-
-    void update_question_list(int, QComboBox*);
-    void on_comboBox_q1_activated(int index);
-    void on_comboBox_q2_activated(int index);
-    void on_comboBox_q3_activated(int index);
 
     void on_reset_password_btn_clicked();
 

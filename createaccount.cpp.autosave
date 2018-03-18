@@ -168,7 +168,7 @@ void CreateAccount::on_lineEdit_password1_editingFinished()
     user_info_valid = validate_password(ui->lineEdit_password1, ui->lineEdit_password2, error_msg);
 
     if(!password.isEmpty() && !user_info_valid){
-        set_valid_icons(ui->label_email_check, ui->lineEdit_email, user_info_valid, error_msg);
+        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, user_info_valid, error_msg);
         ui->lineEdit_email->setFocus();
     }
     /*

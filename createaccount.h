@@ -5,18 +5,18 @@
 #include <QLabel>
 #include <QLineEdit>
 #include "sgwidget.h"
-#include "recoverusername.h"
+#include "securityquestions.h"
 
 namespace Ui {
 class CreateAccount;
 }
 
-class CreateAccount : public SGWidget, public RecoverUsername
+class CreateAccount : public SGWidget
 {
     Q_OBJECT
 
 public:
-    explicit CreateAccount(QString name, QWidget *parent = 0);
+    explicit CreateAccount(QString name = "create account", QWidget *parent = 0);
     ~CreateAccount();
 
 private slots:
@@ -31,9 +31,9 @@ private slots:
     void on_lineEdit_password2_textChanged(const QString &arg1);
 
     // Validate Info Functions
-    bool validate_email(QString);
-    bool validate_username(QString);
-    bool validate_password(QString);
+    bool validate_email(QString email);
+    bool validate_username(QString username, QString &error_msg);
+    bool validate_password(QLineEdit* current_line, QLineEdit* other_line, QString &error_msg);
 
 
 
@@ -41,8 +41,15 @@ private slots:
 
     void on_lineEdit_password2_editingFinished();
 
+    void on_register_btn_clicked();
+
+    void on_lineEdit_email_editingFinished();
+
+    void on_lineEdit_username_signup_editingFinished();
+
 private:
     Ui::CreateAccount *ui;
+    SecurityQuestions *security_questions;
     QString username;
     QString email;
     QString password;
