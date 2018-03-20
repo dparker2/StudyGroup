@@ -5,7 +5,7 @@ include_once 'utilityFunctions.php';
 include_once 'classes.php';
 
 function followUser($user, $follow) {
-  $connection = connectAccount();
+  $connection = connectAccountDB();
   $query = "INSERT INTO FriendTest (followerID, followedID) VALUES ('$user', '$follow')";
   if(mysqli_query($connection, $query)) {
     $message = "SUCCUser $follow has been successfully followed!\n\n";
@@ -15,11 +15,11 @@ function followUser($user, $follow) {
     $message = "FAILSomething went wrong.\n\n";
     sendMessage($message, $sock);
   }
-  disconnect($connection);
+  disconnectDB($connection);
 }
 
 function searchUser($user, $sock) {
-  $connection = connectAccount();
+  $connection = connectAccountDB();
   $query = "SELECT Username FROM UserInfo WHERE Username LIKE '%$user%' ORDER BY Username ASC LIMIT 20";
   if(mysqli_query($connection, $query)) {
     echo "Yeeeeeeeee buddy it worked!\n\n";
@@ -37,7 +37,7 @@ function searchUser($user, $sock) {
     $message = "FAIL";
   }
 
-  disconnect($connection);
+  disconnectDB($connection);
 }
 
 
