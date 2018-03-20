@@ -21,37 +21,38 @@ public:
 
 private slots:
     void do_work();
-    void on_lineEdit_username_signup_textChanged(const QString &arg1);
-    void set_valid_icons(QLabel* this_label, QLineEdit* this_line, bool valid, QString error_msg = "");
 
-    void on_lineEdit_email_textChanged(const QString &arg1);
+    void on_lineEdit_email_textChanged(const QString &email);
+    void on_lineEdit_username_signup_textChanged(const QString &username);
+    void on_lineEdit_password1_textChanged(const QString &password1);
+    void on_lineEdit_password2_textChanged(const QString &password2);
 
-    void on_lineEdit_password1_textChanged(const QString &arg1);
 
-    void on_lineEdit_password2_textChanged(const QString &arg1);
+    void on_lineEdit_email_editingFinished();
+    void on_lineEdit_username_signup_editingFinished();
+    void on_lineEdit_password1_editingFinished();
+    void on_lineEdit_password2_editingFinished();
 
     // Validate Info Functions
     bool validate_email(QString email);
     bool validate_username(QString username, QString &error_msg);
     bool validate_password(QLineEdit* current_line, QLineEdit* other_line, QString &error_msg);
 
-
-
-    void on_lineEdit_password1_editingFinished();
-
-    void on_lineEdit_password2_editingFinished();
+    void set_valid_icons(QLabel* this_label, QLineEdit* this_line, bool valid, QString error_msg = "");
+    void initialize_validation_variables(bool);
+    bool info_valid_status();
 
     void on_register_btn_clicked();
-
-    void on_lineEdit_email_editingFinished();
-
-    void on_lineEdit_username_signup_editingFinished();
 
 private:
     Ui::CreateAccount *ui;
     SecurityQuestions *security_questions;
-    bool user_info_valid;
+
+    // Might move this stuff to a validation class
     QString error_msg;
+    bool valid_username;
+    bool valid_email;
+    bool valid_password;
 };
 
 #endif // CREATEACCOUNT_H

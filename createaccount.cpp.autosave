@@ -15,13 +15,12 @@ CreateAccount::CreateAccount(QString name, QWidget *parent) :
     ui(new Ui::CreateAccount)
 {
     ui->setupUi(this);
-    user_info_valid = false;
+    initialize_validation_variables(false);
     security_questions = new SecurityQuestions();
     ui->questions_layout->addWidget(security_questions);
 
     server::send(server::SECURITY_QUESTIONS+"msalomon"); // should send at initial start of program
 
-    //ui->register_btn->setEnabled(false);
 }
 
 CreateAccount::~CreateAccount()
@@ -54,8 +53,8 @@ void CreateAccount::on_register_btn_clicked()
             " " + username +
             " " + ui->lineEdit_password2->text();
     QString response, questions;
-    qDebug() << "Info Valid.." << user_info_valid;
-    if(user_info_valid && server::request_response(full_string, response))
+    qDebug() << "Info Valid.." << info_valid_status();
+    if(info_valid_status() && server::request_response(full_string, response))
     {
         qDebug() << "sending account";
         QMessageBox success_box;
@@ -70,73 +69,73 @@ void CreateAccount::on_register_btn_clicked()
 void CreateAccount::on_lineEdit_email_textChanged(const QString &email)
 {
     ui->label_email_check->clear();
-    user_info_valid = validate_email(email);
-    if(user_info_valid){
-        set_valid_icons(ui->label_email_check, ui->lineEdit_email, user_info_valid);
+    valid_email = validate_email(email);
+    if(valid_email){
+        set_valid_icons(ui->label_email_check, ui->lineEdit_email, valid_email);
     }
 }
 void CreateAccount::on_lineEdit_email_editingFinished()
 {
     QString email = ui->lineEdit_email->text();
-    if(!email.isEmpty() && !user_info_valid){
-        set_valid_icons(ui->label_email_check, ui->lineEdit_email, user_info_valid, "Email not valid");
+    if(!email.isEmpty() && !valid_email){
+        set_valid_icons(ui->label_email_check, ui->lineEdit_email, valid_email, "Email not valid");
     }
 }
 void CreateAccount::on_lineEdit_username_signup_textChanged(const QString &username)
 {
     ui->label_username_check->clear();
-    user_info_valid = validate_username(username, error_msg);
-    if(user_info_valid){
-        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, user_info_valid);
+    valid_username = validate_username(username, error_msg);
+    if(valid_username){
+        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, valid_username);
     }
 }
 
 void CreateAccount::on_lineEdit_username_signup_editingFinished()
 {
     QString username = ui->lineEdit_username_signup->text();
-    if(!username.isEmpty() && !user_info_valid){
-        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, user_info_valid, error_msg);
+    if(!username.isEmpty() && !valid_username){
+        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, valid_username, error_msg);
     }
 }
 
 void CreateAccount::on_lineEdit_password1_textChanged(const QString &password1)
 {
     ui->label_password1_check->clear();
-    user_info_valid = validate_password(ui->lineEdit_password1, ui->lineEdit_password2, error_msg);
-    if(!password1.isEmpty() && user_info_valid){
-        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, user_info_valid);
+    valid_password = validate_password(ui->lineEdit_password1, ui->lineEdit_password2, error_msg);
+    if(!password1.isEmpty() && valid_password){
+        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, valid_password);
     }
 }
 
 void CreateAccount::on_lineEdit_password1_editingFinished()
 {
     QString password = ui->lineEdit_password1->text();
-    if(!password.isEmpty() && !user_info_valid){
-        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, user_info_valid, error_msg);
+    if(!password.isEmpty() && !valid_password){
+        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, valid_password, error_msg);
     }
 }
 
 void CreateAccount::on_lineEdit_password2_textChanged(const QString &password2)
 {
     ui->label_password2_check->clear();
-    user_info_valid = validate_password(ui->lineEdit_password2, ui->lineEdit_password1, error_msg);
-    if(!password2.isEmpty() && user_info_valid){
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, user_info_valid);
-        ui->lineEdit_password2->setFocus();
+    valid_password = validate_password(ui->lineEdit_password2, ui->lineEdit_password1, error_msg);
+    if(!password2.isEmpty() && valid_password){
+        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, valid_password);
     }
 }
 
 void CreateAccount::on_lineEdit_password2_editingFinished()
 {
     QString password = ui->lineEdit_password2->text();
-    if(!password.isEmpty() && !user_info_valid){
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, user_info_valid, error_msg);
+    if(!password.isEmpty() && !valid_password){
+        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, valid_password, error_msg);
     }
 }
 
-/*
- * User Info Validation ( Create a separate class for validation? )
-*****/
+
+/*****************************************************
+ * USER INFO VALIDATION ( Create a separate class for validation? )
+*/
 
 void CreateAccount::set_valid_icons(QLabel* this_label, QLineEdit* this_line, bool valid, QString error_msg)
 {
@@ -219,6 +218,16 @@ bool CreateAccount::validate_password(QLineEdit* current_line, QLineEdit* other_
     return true;
 }
 
+bool CreateAccount::info_valid_status()
+{
+    return valid_email && valid_username && valid_password;
+}
+
+void CreateAccount::initialize_validation_variables(bool set_false){
+    valid_email = set_false;
+    valid_username = set_false;
+    valid_password = set_false;
+}
 
 
 
