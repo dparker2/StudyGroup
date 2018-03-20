@@ -50,10 +50,8 @@ private slots:
 private:
     Ui::CreateAccount *ui;
     SecurityQuestions *security_questions;
-    QString username;
-    QString email;
-    QString password;
     bool user_info_valid;
+    QString error_msg;
 };
 
 #endif // CREATEACCOUNT_H

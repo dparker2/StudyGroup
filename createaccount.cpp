@@ -15,12 +15,13 @@ CreateAccount::CreateAccount(QString name, QWidget *parent) :
     ui(new Ui::CreateAccount)
 {
     ui->setupUi(this);
+    user_info_valid = false;
     security_questions = new SecurityQuestions();
     ui->questions_layout->addWidget(security_questions);
-    QString test;
+
     server::send(server::SECURITY_QUESTIONS+"msalomon"); // should send at initial start of program
 
-    ui->register_btn->setEnabled(false);
+    //ui->register_btn->setEnabled(false);
 }
 
 CreateAccount::~CreateAccount()
@@ -68,143 +69,68 @@ void CreateAccount::on_register_btn_clicked()
 }
 void CreateAccount::on_lineEdit_email_textChanged(const QString &email)
 {
-    user_info_valid = validate_email(email);
     ui->label_email_check->clear();
+    user_info_valid = validate_email(email);
     if(user_info_valid){
-            set_valid_icons(ui->label_email_check, ui->lineEdit_email, user_info_valid);
+        set_valid_icons(ui->label_email_check, ui->lineEdit_email, user_info_valid);
     }
 }
 void CreateAccount::on_lineEdit_email_editingFinished()
 {
     QString email = ui->lineEdit_email->text();
-    user_info_valid = validate_email(email);
-
     if(!email.isEmpty() && !user_info_valid){
         set_valid_icons(ui->label_email_check, ui->lineEdit_email, user_info_valid, "Email not valid");
-        ui->lineEdit_email->setFocus();
     }
 }
 void CreateAccount::on_lineEdit_username_signup_textChanged(const QString &username)
 {
-    QString error_msg;
-    user_info_valid = validate_username(username, error_msg);
     ui->label_username_check->clear();
+    user_info_valid = validate_username(username, error_msg);
     if(user_info_valid){
         set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, user_info_valid);
     }
 }
+
 void CreateAccount::on_lineEdit_username_signup_editingFinished()
 {
     QString username = ui->lineEdit_username_signup->text();
-
-    QString error_msg;
-    user_info_valid = validate_username(username, error_msg);
     if(!username.isEmpty() && !user_info_valid){
-        qDebug() << "editing finished...";
         set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, user_info_valid, error_msg);
-        ui->lineEdit_username_signup->setFocus();
     }
 }
 
-void CreateAccount::on_lineEdit_password1_textChanged(const QString &password)
+void CreateAccount::on_lineEdit_password1_textChanged(const QString &password1)
 {
-    QString error_msg;
-    user_info_valid = validate_password(ui->lineEdit_password1, ui->lineEdit_password2, error_msg);
     ui->label_password1_check->clear();
-    if(user_info_valid){
-        qDebug() << "text changed...";
-        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, user_info_valid);
-    }
-    /*
-
-    if (password1.isEmpty()) {
-        ui->label_password1_check->clear();
-    }
-    else {
-        QString password2 = ui->lineEdit_password2->text();
-
-        if(!password2.isEmpty() && validate_password(password1))
-        {
-            user_info_valid = (password1 == password2);
-            if(user_info_valid)
-            {
-                set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, user_info_valid);
-            }
-        }
-        else{
-            user_info_valid = validate_password(password1);
-        }
+    user_info_valid = validate_password(ui->lineEdit_password1, ui->lineEdit_password2, error_msg);
+    if(!password1.isEmpty() && user_info_valid){
         set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, user_info_valid);
-    }*/
-}
-
-void CreateAccount::on_lineEdit_password2_textChanged(const QString &password2)
-{
-    QString error_msg;
-    if (password2.isEmpty()) {
-        ui->label_password2_check->clear();
-    }
-    else {
-        QString password1 = ui->lineEdit_password1->text();
-        if(!password1.isEmpty())
-        {
-            user_info_valid = (password1 == password2);
-            if(user_info_valid)
-            {
-                set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, user_info_valid);
-            }
-        }
-        else{
-            user_info_valid = validate_password(ui->lineEdit_password2, ui->lineEdit_password1, error_msg);
-        }
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, user_info_valid);
     }
 }
 
 void CreateAccount::on_lineEdit_password1_editingFinished()
 {
-    QString error_msg;
     QString password = ui->lineEdit_password1->text();
-    user_info_valid = validate_password(ui->lineEdit_password1, ui->lineEdit_password2, error_msg);
-
     if(!password.isEmpty() && !user_info_valid){
-        set_valid_icons(ui->label_email_check, ui->lineEdit_email, user_info_valid, error_msg);
-        ui->lineEdit_email->setFocus();
+        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, user_info_valid, error_msg);
     }
-    /*
-    QString password1 = ui->lineEdit_password1->text();
-    QString password2 = ui->lineEdit_password2->text();
-    if(!password1.isEmpty() && !password2.isEmpty() && ui->lineEdit_password1->text().size() < PASSWORD_MIN)
-    {
-        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, false, "Password must be at least 8 characters");
-        //set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, false);
+}
+
+void CreateAccount::on_lineEdit_password2_textChanged(const QString &password2)
+{
+    ui->label_password2_check->clear();
+    user_info_valid = validate_password(ui->lineEdit_password2, ui->lineEdit_password1, error_msg);
+    if(!password2.isEmpty() && user_info_valid){
+        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, user_info_valid);
+        ui->lineEdit_password2->setFocus();
     }
-    else if(password1.size() > PASSWORD_MAX){
-        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, false, "Password cannot be more that 16 characters");
-    }
-    else if(!password2.isEmpty() && password1 != password2){
-        qDebug() << "Pass1 match..";
-        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, false, "Passwords do not match");
-    }
-    */
 }
 
 void CreateAccount::on_lineEdit_password2_editingFinished()
 {
-    QString password1 = ui->lineEdit_password1->text();
-    QString password2 = ui->lineEdit_password2->text();
-
-    if(!password2.isEmpty() && !password2.isEmpty() && ui->lineEdit_password2->text().size() < PASSWORD_MIN)
-    {
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, false, "Password must be at least 8 characters");
-        //set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, false);
-    }
-    else if(password2.size() > PASSWORD_MAX){
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, false, "Password cannot be more that 16 characters");
-    }
-    else if(!password1.isEmpty() && password1 != password2){
-        qDebug() <<"Pass2 match..";
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, false, "Passwords do not match");
+    QString password = ui->lineEdit_password2->text();
+    if(!password.isEmpty() && !user_info_valid){
+        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, user_info_valid, error_msg);
     }
 }
 
@@ -270,26 +196,29 @@ bool CreateAccount::validate_password(QLineEdit* current_line, QLineEdit* other_
     QString current_password = current_line->text();
     QString other_password = other_line->text();
 
-    if(!current_password.isEmpty() && current_password.size() < PASSWORD_MIN){
-        QString min = QString::number(PASSWORD_MIN);
-        error_msg = "Password cannot be less than " + min + " characters";
-        return false;
-    }
-    if(!current_password.isEmpty() && current_password.size() > PASSWORD_MAX){
-        QString max = QString::number(PASSWORD_MAX);
-        error_msg = "Password cannot exceed " + max + " characters";
-        return false;
-    }
-    else if(!current_password.isEmpty() && !other_password.isEmpty() && current_password != other_password)
+    if(!other_password.isEmpty() && current_password != other_password)
     {
         error_msg = "Passwords do not match";
-        //set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, false);
+        qDebug() << error_msg;
+        return false;
+    }
+    if(current_password.size() < PASSWORD_MIN)
+    {
+        QString min = QString::number(PASSWORD_MIN);
+        error_msg = "Password cannot be less than " + min + " characters";
+        qDebug() << error_msg;
+        return false;
+    }
+    else if(current_password.size() > PASSWORD_MAX)
+    {
+        QString max = QString::number(PASSWORD_MAX);
+        error_msg = "Password cannot exceed " + max + " characters";
+        qDebug() << error_msg;
         return false;
     }
     return true;
-
-
 }
+
 
 
 
