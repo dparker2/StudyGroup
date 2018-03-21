@@ -10,7 +10,6 @@ AccountInfoValidator::AccountInfoValidator()
 {
     initialize_validation_variables(false);
 }
-
 bool AccountInfoValidator::get_username_status(){
     return valid_username;
 }
@@ -81,9 +80,6 @@ bool AccountInfoValidator::validate_password(QLineEdit* current_line, QLineEdit*
     QString other_password = other_line->text();
     bool valid;
 
-    qDebug() << "OTHER PASS: " << other_password;
-    qDebug() << "CURR PASS: " << current_password;
-
     if(!current_password.isEmpty() && !other_password.isEmpty() && current_password == other_password){
         valid_password1 = valid_password2 = true;
         return true;
@@ -104,7 +100,7 @@ bool AccountInfoValidator::validate_password(QLineEdit* current_line, QLineEdit*
         error_msg = "Passwords do not match";
         valid = false;
     }
-    qDebug() << "TEST: " << valid;
+
     if(pwd){
         return valid_password1 = valid;
     }
