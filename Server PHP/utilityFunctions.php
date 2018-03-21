@@ -140,4 +140,16 @@ function getSocketListCL($clientList) {
   }
   return $socketList;
 }
+
+function returnResultColumnAsStringSQL($column, $connection, $query) {
+  $result = mysqli_query($connection, $query);
+  $searchResults = [];
+  while ($rows = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+    array_push($searchResults, $rows["$column"]);
+  }
+  $joinedSearchResults = join(" ", $searchResults);
+  return $joinedSearchResults;
+}
+
+
 ?>

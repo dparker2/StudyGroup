@@ -40,16 +40,19 @@ function loginAccount($username, $password, $client, $sock) {
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
   $check_recent_groups = "SELECT RecentGroups FROM UserInfo WHERE Username = '$username' AND RecentGroups IS NOT NULL";
   $check_favorite_groups = "SELECT FavoriteGroups FROM UserInfo WHERE Username = '$username' AND FavoriteGroups IS NOT NULL";
+  $check_id = "SELECT UserID FROM UserInfo WHERE Username = '$username'";
 
   if (($username_exists = checkExistsDB($connection, $check_username)) > 0) {
       $checkPass = getObjStringDB($connection, $check_password)->Pass;
       if ($checkPass == $password) {
         $resultEmail = getObjStringDB($connection, $check_email)->Email;
+        $userID = getObjStringDB($connection, $check_id)->UserID;
         $message = "SUCC{$resultEmail}";
         sendMessage($message, $sock);
         mysqli_query($connection, $change_online);
         $client->setName($username);
         $client->setEmail($resultEmail);
+        $client->setID($userID);
         if (checkExistsDB($connection, $check_favorite_groups) > 0) {
           $favorite_groups = getObjStringDB($connection, $check_favorite_groups)->FavoriteGroups;
           $fav_group_array = array_reverse(explode(" ", $favorite_groups));

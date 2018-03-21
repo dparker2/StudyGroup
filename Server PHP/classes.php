@@ -10,6 +10,7 @@ class User {
   var $ip;
   var $socket;
   var $email;
+  var $id;
   var $currGroups = array();
   var $recGroups = array();
   var $favGroups = array();
@@ -38,6 +39,9 @@ class User {
   function getFavoriteGroups() {
     return $this->favGroups;
   }
+  function getID() {
+    return $this->id;
+  }
 
   function setName($name) {
     $this->username = $name;
@@ -56,6 +60,9 @@ class User {
   }
   function setNumRecent($num) {
     $this->numRecent = $num;
+  }
+  function setID($userID) {
+    $this->id = $userID;
   }
   function setGroup($groupID) {
     array_unshift($this->currGroups, $groupID);

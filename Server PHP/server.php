@@ -171,6 +171,12 @@ while(true) {
             case "SUSR":
               searchUser($codeMessage[0], $sock);
               break;
+            case "ADFR":
+              followUser($codeMessage[0], $codeMessage[1], $sock); 
+              break;
+            case "RMFR":
+              unfollowUser($codeMessage[0], $codeMessage[1], $sock);
+              break;
           }
       }
     }
