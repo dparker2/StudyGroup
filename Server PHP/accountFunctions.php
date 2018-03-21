@@ -64,10 +64,15 @@ function loginAccount($username, $password, $sock) {
   //Checks if username exists before attempting to login, will return error otherwise.
   if (($username_exists = checkExists($connection, $check_username)) > 0) {
 	  if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
-	    $message = "FAILThis account is currently locked.";
-		sendMessage($message, $sock);
-		exit("account locked");
-	  }
+		if ($time > 1800) { // time since lockout > 30 mins
+			unlockAccount($username); // unlock the account
+		}
+		else{
+			$message = "FAILThis account is currently locked.";
+			sendMessage($message, $sock);
+			exit("account locked");
+		}
+	}
       $checkPass = getObjString($connection, $check_password)->Pass;
       if (password_verify($password, $checkPass)) {
         $resultEmail = getObjString($connection, $check_email)->Email;

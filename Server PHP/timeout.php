@@ -14,9 +14,14 @@ function loginTimeout($username){
 	static $t = 0; // total time elapsed since first fail counter
 	$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
 	if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
-		$message = "FAILThis account is currently locked.";
-		sendMessage($message, $sock);
-		exit("account locked");
+		if ($time > 1800) { // time since lockout > 30 mins
+			unlockAccount($username); // unlock the account
+		}
+		else{
+			$message = "FAILThis account is currently locked.";
+			sendMessage($message, $sock);
+			exit("account locked");
+		}
 	}
 	$time_start = microtime_float();
 	$t = $t + $time_start;
@@ -29,7 +34,7 @@ function loginTimeout($username){
 			$a = 1;
 		}
 		else { // a warning for imminent timeout
-			$message = "FAIL3rd failure";
+			$message = "FAIL3";
 			sendMessage($message, $sock);
 		}
 	}
@@ -49,15 +54,21 @@ function loginTimeout($username){
 	}
 }
 
-// with this login and securityQ share the same lockout. should they be separate?
+// with this login and securityQ share the same lockout. should they be separate for any reason?
+// not sure where to call this yet \o/
 function securityTimeout($username){
 	static $a = 0; // attempt counter
 	static $t = 0; // total time elapsed since first fail counter
 	$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
 	if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
-		$message = "FAILThis account is currently locked.";
-		sendMessage($message, $sock);
-		exit("account locked");
+		if ($time > 1800) { // time since lockout > 30 mins
+			unlockAccount($username); // unlock the account
+		}
+		else{
+			$message = "FAILThis account is currently locked.";
+			sendMessage($message, $sock);
+			exit("account locked");
+		}
 	}
 	$time_start = microtime_float();
 	$t = $t + $time_start;
@@ -70,7 +81,7 @@ function securityTimeout($username){
 			$a = 1;
 		}
 		else { // a warning for imminent timeout
-			$message = "FAIL3rd failure";
+			$message = "FAIL3";
 			sendMessage($message, $sock);
 		}
 	}
@@ -90,4 +101,14 @@ function securityTimeout($username){
 	}
 }
 
+// call to unlock an account and reset the fail counter + fail timer
+function unlockAccount($username){
+	$unlock_acc = "UPDATE LockoutStatus SET LockoutStatus='0' WHERE Username = '$username'"; // actualy unlocks the account
+	mysqli_query($connection, $unlock_acc);
+	$message = "SUCCAccount now unlocked";
+	sendMessage();
+
+	$t = microtime_float(); // might as well restart the timer
+	$a = 0; // reset fail counter to 0
+}
 ?>
