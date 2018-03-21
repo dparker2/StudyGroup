@@ -22,18 +22,17 @@ function searchUser($user, $sock) {
   $connection = connectAccountDB();
   $query = "SELECT Username FROM UserInfo WHERE Username LIKE '%$user%' ORDER BY Username ASC LIMIT 20";
   if(mysqli_query($connection, $query)) {
-    echo "Yeeeeeeeee buddy it worked!\n\n";
     $result = mysqli_query($connection, $query);
     $searchResults = [];
     while ($rows = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-      $searchResults = $rows["Username"];
+      array_push($searchResults, $rows["Username"]);
     }
     $joinedSearchResults = join(" ", $searchResults);
     $message = "RSLT$joinedSearchResults";
     sendMessage($message, $sock);
   }
   else {
-    echo "Damn it didn't work son :/ ... Error: " . mysqli_error($connection);
+    echo "Something went wrong... Error: " . mysqli_error($connection);
     $message = "FAIL";
   }
 
