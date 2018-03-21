@@ -28,6 +28,8 @@ const QString server::HOMEPAGE_UPDATE = "UPHP";
 const QString server::HOMEPAGE_NEW_FAVORITE = "NWFG";
 const QString server::HOMEPAGE_REMOVE_FAVORITE = "RMFG";
 const QString server::SOCIAL_SEARCH_USER = "SUSR";
+const QString server::SOCIAL_ADD_FRIEND = "ADFR";
+const QString server::SOCIAL_REMOVE_FRIEND = "RMFR";
 
 server::server(QObject *parent) : QObject(parent)
 {

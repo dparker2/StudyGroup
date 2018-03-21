@@ -65,6 +65,8 @@ public:
     static const QString HOMEPAGE_NEW_FAVORITE;
     static const QString HOMEPAGE_REMOVE_FAVORITE;
     static const QString SOCIAL_SEARCH_USER;
+    static const QString SOCIAL_ADD_FRIEND;
+    static const QString SOCIAL_REMOVE_FRIEND;
 
 protected:
     explicit server(QObject *parent = nullptr);  // Protect the constructor to prevent class instantiation

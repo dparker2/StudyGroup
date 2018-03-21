@@ -1,5 +1,6 @@
 #include "userlistitem.h"
 #include "ui_userlistitem.h"
+#include "server.h"
 
 UserListItem::UserListItem(QWidget *parent) :
     QWidget(parent),
@@ -16,13 +17,13 @@ UserListItem::~UserListItem()
 void UserListItem::show_add_button()
 {
     ui->button->show();
-    ui->button->setCurrentWidget(ui->add_button);
+    ui->button->setCurrentWidget(ui->add);
 }
 
 void UserListItem::show_remove_button()
 {
     ui->button->show();
-    ui->button->setCurrentWidget(ui->remove_button);
+    ui->button->setCurrentWidget(ui->remove);
 }
 
 void UserListItem::hide_button()
@@ -53,4 +54,9 @@ void UserListItem::set_online_status(int status)
 void UserListItem::set_name(QString name)
 {
     ui->name->setText(name);
+}
+
+void UserListItem::on_add_button_released()
+{
+    server::send(server::SOCIAL_ADD_FRIEND + ui->name->text());
 }

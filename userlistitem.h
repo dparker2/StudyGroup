@@ -22,6 +22,9 @@ public:
     void set_online_status(int status);
     void set_name(QString name);
 
+private slots:
+    void on_add_button_released();
+
 private:
     Ui::UserListItem *ui;
 };

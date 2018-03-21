@@ -14,6 +14,9 @@
    <string>Form</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>15</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -88,11 +91,11 @@
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton {
-background-color: rgb(30, 33, 36);
 color: white; 
 font:bold;
 padding: 4px 6px 4px 6px;
-border: 0px;
+border: 1px solid rgb(30, 33, 36);
+border-radius: 3px;
 }
 
 QPushButton:hover {
@@ -152,11 +155,11 @@ QPushButton:checked {
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton {
-background-color: rgb(30, 33, 36);
 color: white; 
 font:bold;
 padding: 4px 6px 4px 6px;
-border: 0px;
+border: 1px solid rgb(30, 33, 36);
+border-radius: 3px;
 }
 
 QPushButton:hover {
@@ -171,10 +174,10 @@ QPushButton:checked {
       <string> Join </string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
