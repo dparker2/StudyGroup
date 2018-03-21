@@ -4,18 +4,14 @@
 #include <QRegExp>
 #include <QMessageBox>
 
-const int USERNAME_MIN = 8;
-const int USERNAME_MAX = 20;
 
-const int PASSWORD_MIN = 8;
-const int PASSWORD_MAX = 16;
 
 CreateAccount::CreateAccount(QString name, QWidget *parent) :
     SGWidget(name, parent),
     ui(new Ui::CreateAccount)
 {
     ui->setupUi(this);
-    initialize_validation_variables(false);
+    //initialize_validation_variables(false);
     security_questions = new SecurityQuestions();
     ui->questions_layout->addWidget(security_questions);
 
@@ -70,72 +66,88 @@ void CreateAccount::on_register_btn_clicked()
 void CreateAccount::on_lineEdit_email_textChanged(const QString &email)
 {
     ui->label_email_check->clear();
-    valid_email = validate_email(email);
-    if(valid_email){
-        set_valid_icons(ui->label_email_check, ui->lineEdit_email, valid_email);
+    bool valid = validate_email(email);
+    if(valid){
+        set_valid_icons(ui->label_email_check, ui->lineEdit_email, valid);
     }
 }
 void CreateAccount::on_lineEdit_email_editingFinished()
 {
     QString email = ui->lineEdit_email->text();
-    if(!email.isEmpty() && !valid_email){
-        set_valid_icons(ui->label_email_check, ui->lineEdit_email, valid_email, "Email not valid");
+    bool valid = get_email_status();
+    if(!email.isEmpty() && !valid){
+        set_valid_icons(ui->label_email_check, ui->lineEdit_email, valid, "Email not valid");
     }
 }
 void CreateAccount::on_lineEdit_username_signup_textChanged(const QString &username)
 {
     ui->label_username_check->clear();
-    valid_username = validate_username(username, error_msg);
-    if(valid_username){
-        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, valid_username);
+    bool valid = validate_username(username);
+    if(valid){
+        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, valid);
     }
 }
 
 void CreateAccount::on_lineEdit_username_signup_editingFinished()
 {
     QString username = ui->lineEdit_username_signup->text();
-    if(!username.isEmpty() && !valid_username){
-        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, valid_username, error_msg);
+    bool valid = get_username_status();
+    if(!username.isEmpty() && !valid){
+        set_valid_icons(ui->label_username_check, ui->lineEdit_username_signup, valid, get_error_msg());
     }
 }
 
 void CreateAccount::on_lineEdit_password1_textChanged(const QString &password1)
 {
     ui->label_password1_check->clear();
-    valid_password = validate_password(ui->lineEdit_password1, ui->lineEdit_password2, error_msg);
-    if(!password1.isEmpty() && valid_password){
-        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, valid_password);
+    bool valid = validate_password(ui->lineEdit_password1, ui->lineEdit_password2, true);
+    if(!password1.isEmpty() && valid){
+        if(ui->lineEdit_password1->text() == ui->lineEdit_password2->text()){
+            set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, valid);
+        }
+        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, valid);
     }
 }
 
 void CreateAccount::on_lineEdit_password1_editingFinished()
 {
-    QString password = ui->lineEdit_password1->text();
-    if(!password.isEmpty() && !valid_password){
-        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, valid_password, error_msg);
+    QString password1 = ui->lineEdit_password1->text();
+    QString password2 = ui->lineEdit_password2->text();
+
+    bool valid2 = get_password2_status();
+    bool valid1 = get_password1_status();
+    qDebug() << "VALID: " << valid1 << " " << valid2;
+    if(!password1.isEmpty() && !valid1){
+        qDebug() << "HEY LOOK AT ME";
+        set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, valid1, get_error_msg());
     }
+
 }
 
 void CreateAccount::on_lineEdit_password2_textChanged(const QString &password2)
 {
     ui->label_password2_check->clear();
-    valid_password = validate_password(ui->lineEdit_password2, ui->lineEdit_password1, error_msg);
-    if(!password2.isEmpty() && valid_password){
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, valid_password);
+    bool valid = validate_password(ui->lineEdit_password2, ui->lineEdit_password1, false);
+    if(!password2.isEmpty() && valid){
+        if(ui->lineEdit_password1->text() == ui->lineEdit_password2->text()){
+            set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, valid);
+        }
+        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, valid);
     }
 }
 
 void CreateAccount::on_lineEdit_password2_editingFinished()
 {
-    QString password = ui->lineEdit_password2->text();
-    if(!password.isEmpty() && !valid_password){
-        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, valid_password, error_msg);
+    QString password1 = ui->lineEdit_password1->text();
+    QString password2 = ui->lineEdit_password2->text();
+    bool valid1 = get_password1_status();
+    bool valid2 = get_password2_status();
+    qDebug() << "VALID: " << valid1 << " " << valid2;
+    if(!password2.isEmpty() && !valid2){
+        set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, valid2, get_error_msg());
     }
-}
 
-/*
- * User Info Validation ( Create a separate class for validation? )
-*****/
+}
 
 void CreateAccount::set_valid_icons(QLabel* this_label, QLineEdit* this_line, bool valid, QString error_msg)
 {
@@ -153,80 +165,6 @@ void CreateAccount::set_valid_icons(QLabel* this_label, QLineEdit* this_line, bo
     QPixmap mark = valid ? QPixmap(":/resources/img/check_mark.png") : QPixmap(":/resources/img/x_mark.png");
     this_label->setPixmap(mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     this_label->show();
-}
-
-bool CreateAccount::validate_email(QString email)
-{
-    QRegExp email_regex("\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b");
-    email_regex.setCaseSensitivity(Qt::CaseInsensitive);
-    email_regex.setPatternSyntax(QRegExp::RegExp);
-
-    return email_regex.exactMatch(email);
-}
-
-bool CreateAccount::validate_username(QString username, QString &error_msg)
-{
-    QRegExp username_regex("([\\d]+|[\\w]+)+");
-    username_regex.setCaseSensitivity(Qt::CaseSensitive);
-    username_regex.setPatternSyntax(QRegExp::RegExp);
-    bool password_valid = username_regex.exactMatch(username);
-
-    if(username.size() > USERNAME_MIN && username.size() < USERNAME_MAX && password_valid){
-        return true;
-    }
-    if(!password_valid){
-        error_msg = "Username can contain only alphanumeric characters and unserscores";
-    }
-    else if(username.size() < USERNAME_MIN)
-    {
-        QString min = QString::number(USERNAME_MIN);
-        error_msg = "Username must be more than " + min + "  characters";
-    }
-    else if(username.size() > USERNAME_MAX)
-    {
-        QString max = QString::number(USERNAME_MIN);
-        error_msg = "Username cannot exceed " + max + " characters";
-    }
-    return false;
-}
-
-bool CreateAccount::validate_password(QLineEdit* current_line, QLineEdit* other_line, QString &error_msg)
-{
-    QString current_password = current_line->text();
-    QString other_password = other_line->text();
-
-    if(!other_password.isEmpty() && current_password != other_password)
-    {
-        error_msg = "Passwords do not match";
-        qDebug() << error_msg;
-        return false;
-    }
-    if(current_password.size() < PASSWORD_MIN)
-    {
-        QString min = QString::number(PASSWORD_MIN);
-        error_msg = "Password cannot be less than " + min + " characters";
-        qDebug() << error_msg;
-        return false;
-    }
-    else if(current_password.size() > PASSWORD_MAX)
-    {
-        QString max = QString::number(PASSWORD_MAX);
-        error_msg = "Password cannot exceed " + max + " characters";
-        qDebug() << error_msg;
-        return false;
-    }
-    return true;
-}
-
-bool CreateAccount::info_valid_status()
-{
-    return valid_email && valid_username && valid_password;
-}
-
-void CreateAccount::initialize_validation_variables(bool set_false){
-    valid_email = set_false;
-    valid_username = set_false;
-    valid_password = set_false;
 }
 
 

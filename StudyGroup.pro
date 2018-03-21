@@ -45,7 +45,8 @@ SOURCES += \
     recoverusername.cpp \
     resetpassword.cpp \
     securityquestions.cpp \
-    createaccount.cpp
+    createaccount.cpp \
+    accountinfovalidator.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -68,7 +69,8 @@ HEADERS += \
     recoverusername.h \
     resetpassword.h \
     securityquestions.h \
-    createaccount.h
+    createaccount.h \
+    accountinfovalidator.h
 
 FORMS += \
         mainwindow.ui \

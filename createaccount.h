@@ -6,12 +6,13 @@
 #include <QLineEdit>
 #include "sgwidget.h"
 #include "securityquestions.h"
+#include "accountinfovalidator.h"
 
 namespace Ui {
 class CreateAccount;
 }
 
-class CreateAccount : public SGWidget
+class CreateAccount : public SGWidget, public AccountInfoValidator
 {
     Q_OBJECT
 
@@ -34,13 +35,15 @@ private slots:
     void on_lineEdit_password2_editingFinished();
 
     // Validate Info Functions
+    /*
     bool validate_email(QString email);
     bool validate_username(QString username, QString &error_msg);
     bool validate_password(QLineEdit* current_line, QLineEdit* other_line, QString &error_msg);
+    */
 
     void set_valid_icons(QLabel* this_label, QLineEdit* this_line, bool valid, QString error_msg = "");
-    void initialize_validation_variables(bool);
-    bool info_valid_status();
+    //void initialize_validation_variables(bool);
+    //bool info_valid_status();
 
     void on_register_btn_clicked();
 
@@ -49,10 +52,12 @@ private:
     SecurityQuestions *security_questions;
 
     // Might move this stuff to a validation class
+    /*
     QString error_msg;
     bool valid_username;
     bool valid_email;
     bool valid_password;
+    */
 };
 
 #endif // CREATEACCOUNT_H
