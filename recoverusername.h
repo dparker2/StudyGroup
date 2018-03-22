@@ -22,9 +22,10 @@ private slots:
     void do_work();
     void RUSR(QString email);
     void set_invalid_icon();
-    void on_recover_username_btn_clicked();
 
     void on_email_lineEdit_textEdited(const QString &arg1);
+
+    void on_pushButton_recover_username_clicked();
 
 private:
     Ui::RecoverUsername *ui;
