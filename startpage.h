@@ -65,6 +65,8 @@ private slots:
 
     void on_pushButton_recover_back_clicked();
 
+    void display_recover_widget(QWidget* recover_widget);
+
 private:
     Ui::StartPage *ui;
     RecoverUsername *recover_username;

@@ -29,8 +29,6 @@ StartPage::StartPage(QString name, QWidget *parent) :
     recover_username = new RecoverUsername("recover username");
     reset_password = new ResetPassword("reset password");
 
-
-
     //sign_up = new CreateAccount("create account");
 }
 
@@ -43,7 +41,6 @@ void StartPage::do_work()
 {
 
 }
-
 
 void StartPage::on_signin_button_clicked()
 {
@@ -69,8 +66,6 @@ void StartPage::on_signin_button_clicked()
     }
 }
 
-
-
 /*****************************************************************
  * ACCOUNT RECOVERY
  */
@@ -84,22 +79,26 @@ void StartPage::show_recover_buttons()
     ui->pushButton_recover_user->show();
     ui->pushButton_reset_password->show();
 }
+void StartPage::display_recover_widget(QWidget* recover_widget)
+{
+    ui->recover_account->addWidget(recover_widget);
+    ui->recover_account->setCurrentWidget(recover_widget);
+}
 void StartPage::on_pushButton_recover_user_clicked()
 {
     hide_recover_buttons();
     ui->pushButton_recover_back->show();
-    ui->recover_account->addWidget(recover_username);
-    ui->recover_account->setCurrentWidget(recover_username);
+    display_recover_widget(recover_username);
     ui->tab_recover_account->setContentsMargins(25, 0, 0, 0);
 }
 
 void StartPage::on_pushButton_reset_password_clicked()
 {
     hide_recover_buttons();
+    reset_password->clear_info();
     ui->pushButton_recover_back->show();
-    ui->recover_account->addWidget(reset_password);
-    ui->recover_account->setCurrentWidget(reset_password);
-    ui->tab_recover_account->setContentsMargins(25, 0, 0, 0);
+    display_recover_widget(reset_password);
+    //ui->tab_recover_account->setContentsMargins(25, 0, 0, 0);
 }
 void StartPage::on_pushButton_recover_back_clicked()
 {

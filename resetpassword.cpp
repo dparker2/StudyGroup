@@ -9,7 +9,7 @@ ResetPassword::ResetPassword(QString name, QWidget *parent) :
 {
     ui->setupUi(this);
     ui->reset_password->setCurrentIndex(0);
-    ui->question_invalid_icon->hide();
+    ui->label_question_invalid->hide();
 }
 
 ResetPassword::~ResetPassword()
@@ -31,12 +31,18 @@ void ResetPassword::do_work(){
         }
     }
 }
-void ResetPassword::clear_text()
+
+void ResetPassword::clear_info()
 {
-    ui->username_lineEdit->clear();
-    ui->answer_lineEdit->clear();
-    ui->confirm_pass_lineEdit->clear();
-    ui->email_code_lineEdit->clear();
+    ui->lineEdit_username->clear();
+    ui->lineEdit_answer->clear();
+    ui->lineEdit_confirm_pass->clear();
+    ui->lineEdit_email_code->clear();
+
+    ui->label_question_invalid->hide();
+    ui->label_username_invalid->hide();
+
+    ui->reset_password->setCurrentIndex(0);
 }
 void ResetPassword::RPWD(int index, QString random_question)
 {
@@ -49,12 +55,12 @@ void ResetPassword::RPWD(int index, QString random_question)
     ui->reset_password->setCurrentIndex(1);
 }
 
-void ResetPassword::on_next_btn_clicked()
+void ResetPassword::on_pushButton_next_clicked()
 {
     qDebug() << "Sending username...";
-    username = ui->username_lineEdit->text();
+    username = ui->lineEdit_username->text();
     if(username.isEmpty()){
-        set_invalid_icon(ui->username_invalid_icon);
+        set_invalid_icon(ui->label_username_invalid);
         return;
     }
     QString email_message;
@@ -64,14 +70,14 @@ void ResetPassword::on_next_btn_clicked()
         ui->reset_password->setCurrentIndex(1);
     }
     else{
-        set_invalid_icon(ui->username_invalid_icon);
+        set_invalid_icon(ui->label_username_invalid);
     }
 }
 
-void ResetPassword::on_submit_answer_btn_clicked()
+void ResetPassword::on_pushButton_submit_answer_clicked()
 {
     qDebug() << "Sending answer...";
-    QString answer = ui->answer_lineEdit->text().replace(' ', '_');
+    QString answer = ui->lineEdit_answer->text().replace(' ', '_');
     if(answer.isEmpty()){
         return;
     }
@@ -83,38 +89,38 @@ void ResetPassword::on_submit_answer_btn_clicked()
     }
 }
 
-void ResetPassword::on_verify_code_btn_clicked()
+void ResetPassword::on_pushButton_verify_code_clicked()
 {
     qDebug() << "Verifying security code...";
-    QString code = ui->email_code_lineEdit->text();
+    QString code = ui->lineEdit_email_code->text();
     if(code.isEmpty()){
         return;
     }
     QString code_verified;
-    if(server::request_response(server::CHECK_SECURITY_CODE + username + " " + ui->email_code_lineEdit->text(), code_verified)){
+    if(server::request_response(server::CHECK_SECURITY_CODE + username + " " + ui->lineEdit_email_code->text(), code_verified)){
         qDebug() << "Code verified: " << code_verified;
         ui->reset_password->setCurrentIndex(3);
     }
 }
-
-void ResetPassword::on_reset_password_btn_clicked()
+void ResetPassword::on_pushButton_reset_password_clicked()
 {
     qDebug() << "Resetting password...";
-    bool empty_field = (ui->new_pass_lineEdit->text().isEmpty() || ui->confirm_pass_lineEdit->text().isEmpty());
-    bool passwords_match = (ui->new_pass_lineEdit->text() == ui->confirm_pass_lineEdit->text());
+    bool empty_field = (ui->lineEdit_new_pass->text().isEmpty() || ui->lineEdit_confirm_pass->text().isEmpty());
+    bool passwords_match = (ui->lineEdit_new_pass->text() == ui->lineEdit_confirm_pass->text());
 
     if(empty_field || !passwords_match){
         return;
     }
     QString password_reset;
-    if(server::request_response(server::UPDATE_PASSWORD + username + " " + ui->new_pass_lineEdit->text(), password_reset)){
+    if(server::request_response(server::UPDATE_PASSWORD + username + " " + ui->lineEdit_new_pass->text(), password_reset)){
         QMessageBox succs_box;
         succs_box.information(0, "Check Email", password_reset);
         qDebug() << "Password reset: " << password_reset;
-        clear_text();
+        clear_info();
         // back to login
      }
 }
+
 
 void ResetPassword::set_invalid_icon(QLabel *mark)
 {
@@ -125,5 +131,13 @@ void ResetPassword::set_invalid_icon(QLabel *mark)
 
 void ResetPassword::on_username_lineEdit_textEdited(const QString &arg1)
 {
-    ui->username_invalid_icon->clear();
+    ui->label_username_invalid->clear();
 }
+
+
+
+
+
+
+
+
