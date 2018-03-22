@@ -14,7 +14,7 @@ function loginTimeout($username){
 	static $t = 0; // total time elapsed since first fail counter
 	$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
 	if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
-		if ($time > 1800) { // time since lockout > 30 mins
+		if ($time > 300) { // time since lockout > 5 mins
 			unlockAccount($username); // unlock the account
 		}
 		else{
@@ -61,7 +61,7 @@ function securityTimeout($username){
 	static $t = 0; // total time elapsed since first fail counter
 	$check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
 	if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
-		if ($time > 1800) { // time since lockout > 30 mins
+		if ($time > 300) { // time since lockout > 5 mins
 			unlockAccount($username); // unlock the account
 		}
 		else{
