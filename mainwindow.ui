@@ -411,6 +411,9 @@ QPushButton:checked {
           <property name="lineWidth">
            <number>0</number>
           </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
           <widget class="CreateGroupPage" name="create_page"/>
           <widget class="JoinGroupPage" name="join_page"/>
          </widget>
@@ -429,7 +432,7 @@ QPushButton:checked {
      <x>0</x>
      <y>0</y>
      <width>1600</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

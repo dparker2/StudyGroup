@@ -54,14 +54,16 @@ private slots:
 
     void do_work();
 
-    void on_tabWidget_tabBarClicked(int index);
-
-
-
-
-    void on_reset_password_btn_clicked();
 
     void on_tabWidget_currentChanged(int index);
+
+
+    void on_pushButton_reset_password_clicked();
+
+    void hide_recover_buttons();
+    void show_recover_buttons();
+
+    void on_pushButton_recover_back_clicked();
 
 private:
     Ui::StartPage *ui;

@@ -21,13 +21,14 @@ StartPage::StartPage(QString name, QWidget *parent) :
     ui->label_password1_check->hide();
     ui->label_password2_check->hide();
     ui->label_email_check->hide();
+    ui->pushButton_recover_back->hide();
 
     ui->tabWidget->setCurrentWidget(ui->tab_sign_in);
 
     // Account Security
     recover_username = new RecoverUsername("recover username");
     reset_password = new ResetPassword("reset password");
-    //customQ_flag = false;
+
 
 
     //sign_up = new CreateAccount("create account");
@@ -73,37 +74,41 @@ void StartPage::on_signin_button_clicked()
 /*****************************************************************
  * ACCOUNT RECOVERY
  */
+void StartPage::hide_recover_buttons()
+{
+    ui->pushButton_recover_user->hide();
+    ui->pushButton_reset_password->hide();
+}
+void StartPage::show_recover_buttons()
+{
+    ui->pushButton_recover_user->show();
+    ui->pushButton_reset_password->show();
+}
 void StartPage::on_pushButton_recover_user_clicked()
 {
+    hide_recover_buttons();
+    ui->pushButton_recover_back->show();
     ui->recover_account->addWidget(recover_username);
     ui->recover_account->setCurrentWidget(recover_username);
-    ui->tab_recover_account->setContentsMargins(0, 0, -20, 0);
+    ui->tab_recover_account->setContentsMargins(25, 0, 0, 0);
 }
-void StartPage::on_reset_password_btn_clicked()
+
+void StartPage::on_pushButton_reset_password_clicked()
 {
+    hide_recover_buttons();
+    ui->pushButton_recover_back->show();
     ui->recover_account->addWidget(reset_password);
     ui->recover_account->setCurrentWidget(reset_password);
-    ui->tab_recover_account->setContentsMargins(0, 0, -20, 0);
+    ui->tab_recover_account->setContentsMargins(25, 0, 0, 0);
 }
-
-void StartPage::on_tabWidget_tabBarClicked(int index)
+void StartPage::on_pushButton_recover_back_clicked()
 {
-    /*
-     * NOT SURE ABOUT THIS FEATURE
-     * Asks the user whether they want to skip security questions if they click away from
-     * security question tab
-    if(ui->tabWidget->currentIndex() == 1)
-    {
-        QMessageBox message_box;
-        int user_reply = message_box.warning(0, "Skip Security Questions", "Are you sure you want to skip security questions?", "I want to be safe", "Yes, risk it");
-        if(user_reply){
-            ui->tabWidget->setCurrentIndex(0);
-        }
-    }
-    */
-
-
+    show_recover_buttons();
+    ui->pushButton_recover_back->hide();
+    ui->recover_account->removeWidget(ui->recover_account->currentWidget());
+    ui->tab_recover_account->setContentsMargins(0, 0, 0, 0);
 }
+
 
 void StartPage::on_tabWidget_currentChanged(int index)
 {
@@ -113,7 +118,6 @@ void StartPage::on_tabWidget_currentChanged(int index)
         ui->tabWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
     }
     else if(index == 1){
-       // ui->recover_account->removeWidget();
         sign_up = new CreateAccount("create account");
         ui->sign_up->addWidget(sign_up);
         ui->sign_up->setCurrentWidget(sign_up);
@@ -123,12 +127,15 @@ void StartPage::on_tabWidget_currentChanged(int index)
     }
     else if(index == 2){
         recover_username->clear_text();
-        ui->recover_account->removeWidget(recover_username);
-        ui->recover_account->setCurrentWidget(ui->recover_acct_page);
-        qDebug() << "resetting margins *** ";
         ui->recover_account->setContentsMargins(0,0,0,0);
         ui->tabWidget->setMaximumWidth(406);
         ui->tabWidget->setMaximumHeight(372);
         ui->tabWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
     }
 }
+
+
+
+
+
+
