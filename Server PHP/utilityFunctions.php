@@ -141,7 +141,16 @@ function getSocketListCL($clientList) {
   return $socketList;
 }
 
-function returnResultColumnAsStringSQL($column, $connection, $query) {
+function collapseKeyValuePairs($array) {
+  $resultArray = [];
+  foreach($array as $key => $value) {
+    $resultArray[] = "$key $value";
+  }
+  return $resultArray;
+}
+
+//retrieves column from query and returns as "a b c d" etc
+function getResultColumnAsStringDB($column, $connection, $query) {
   $result = mysqli_query($connection, $query);
   $searchResults = [];
   while ($rows = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -151,5 +160,16 @@ function returnResultColumnAsStringSQL($column, $connection, $query) {
   return $joinedSearchResults;
 }
 
+//retrieves two columns from query and returns as "key1 val1,key2 val2" etc
+function getResultTwoColumnsAsStringDB($column1, $column2, $connection, $query) {
+  $result = mysqli_query($connection, $query);
+  $searchResults = [];
+  while ($rows = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+    $searchResults[$rows["$column2"]] = $rows["$column1"];
+  }
+  $collapsedArray = collapseKeyValuePairs($searchResults);
+  $joinedSearchResults = join(",", $collapsedArray);
+  return $joinedSearchResults;
+}
 
 ?>

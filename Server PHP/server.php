@@ -172,10 +172,16 @@ while(true) {
               searchUser($codeMessage[0], $sock);
               break;
             case "ADFR":
-              followUser($codeMessage[0], $codeMessage[1], $sock); 
+              followUser($codeMessage[0], $client, $clientList, $sock);
               break;
             case "RMFR":
-              unfollowUser($codeMessage[0], $codeMessage[1], $sock);
+              unfollowUser($codeMessage[0], $client, $clientList, $sock);
+              break;
+            case "FLNG":
+              returnFollowingListDB($codeMessage[0], $sock);
+              break;
+            case "FLWR":
+              returnFollowerListDB($codeMessage[0], $sock);
               break;
           }
       }

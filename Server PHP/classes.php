@@ -14,6 +14,8 @@ class User {
   var $currGroups = array();
   var $recGroups = array();
   var $favGroups = array();
+  var $following = array();
+  var $followers = array();
   var $numFavorite = 25;
   var $numRecent = 5;
 
@@ -30,6 +32,9 @@ class User {
   function getEmail() {
     return $this->email;
   }
+  function getID() {
+    return $this->id;
+  }
   function getCurrGroups() {
     return $this->currGroups;
   }
@@ -39,8 +44,11 @@ class User {
   function getFavoriteGroups() {
     return $this->favGroups;
   }
-  function getID() {
-    return $this->id;
+  function getFollowing() {
+    return $this->following;
+  }
+  function getFollowers() {
+    return $this->followers;
   }
 
   function setName($name) {
@@ -66,6 +74,18 @@ class User {
   }
   function setGroup($groupID) {
     array_unshift($this->currGroups, $groupID);
+  }
+  function addFollowing($user, $userID) {
+    $this->following[$userID] = $user;
+  }
+  function addFollowers($user, $userID) {
+    $this->followers[$userID] = $user;
+  }
+  function removeFollowing($userID) {
+    unset($this->following[$userID]);
+  }
+  function removeFollowers($userID) {
+    unset($this->followers[$userID]);
   }
   function setRecGroup($groupID) {
     if (in_array($groupID, $this->recGroups)) {
