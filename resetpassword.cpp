@@ -117,6 +117,7 @@ void ResetPassword::on_pushButton_reset_password_clicked()
         succs_box.information(0, "Check Email", password_reset);
         qDebug() << "Password reset: " << password_reset;
         clear_info();
+        emit display_login();
         // back to login
      }
 }

@@ -30,6 +30,8 @@ StartPage::StartPage(QString name, QWidget *parent) :
     reset_password = new ResetPassword("reset password");
 
     //sign_up = new CreateAccount("create account");
+
+    connect(reset_password, SIGNAL(display_login()), this, SLOT(display_login()));
 }
 
 StartPage::~StartPage()
@@ -133,8 +135,21 @@ void StartPage::on_tabWidget_currentChanged(int index)
     }
 }
 
+void StartPage::display_login(){
+    ui->tabWidget->setCurrentIndex(0);
+}
 
 
 
+void StartPage::on_pushButton_clicked()
+{
+    qDebug() << "PRESS BUTTON";
+    on_pushButton_recover_user_clicked();
+    ui->tabWidget->setCurrentIndex(2);
+}
 
-
+void StartPage::on_pushButton_2_clicked()
+{
+    on_pushButton_reset_password_clicked();
+    ui->tabWidget->setCurrentIndex(2);
+}

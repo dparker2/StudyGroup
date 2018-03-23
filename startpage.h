@@ -21,6 +21,8 @@ public:
     explicit StartPage(QString name = "startpage", QWidget *parent = 0);
     ~StartPage();
 
+    void display_login();
+
 signals:
     void logged_in(unsigned);
 
@@ -66,6 +68,11 @@ private slots:
     void on_pushButton_recover_back_clicked();
 
     void display_recover_widget(QWidget* recover_widget);
+
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::StartPage *ui;

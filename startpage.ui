@@ -85,7 +85,7 @@ background-color: #283035;</string>
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_sign_in">
       <attribute name="title">
@@ -264,6 +264,63 @@ QPushButton:hover {
           <bool>false</bool>
          </property>
         </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="font">
+            <font>
+             <family>.SF Compact Rounded</family>
+             <pointsize>15</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+             <kerning>true</kerning>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+color: rgb(10,95,134);
+background-color: none;
+border: none;
+text-align: left;
+}
+QPushButton:hover{
+	color: red;
+}</string>
+           </property>
+           <property name="text">
+            <string>Forgot Username</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="font">
+            <font>
+             <family>.SF Compact Rounded</family>
+             <pointsize>15</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+color: rgb(10,95,134);
+background-color: none;
+border: none;
+text-align: right;
+}
+QPushButton:hover{
+	color: red;
+}</string>
+           </property>
+           <property name="text">
+            <string>Forgot Password</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -745,7 +802,7 @@ QPushButton:hover {
         <widget class="QPushButton" name="pushButton_recover_back">
          <property name="font">
           <font>
-           <family>Trebuchet MS</family>
+           <family>Verdana</family>
            <pointsize>18</pointsize>
            <weight>75</weight>
            <italic>false</italic>

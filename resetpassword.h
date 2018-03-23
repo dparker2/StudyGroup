@@ -19,6 +19,9 @@ public:
 
     void clear_info();
 
+signals:
+    void display_login();
+
 private slots:
     void do_work();    
     void set_invalid_icon(QLabel *mark);
