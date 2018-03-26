@@ -254,9 +254,11 @@ border-style:none;</string>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: #545454;
+        <string notr="true">QComboBox{
+background-color: #545454;
 color:white;
-border-style:none;</string>
+border-style:none;
+}</string>
        </property>
        <property name="sizeAdjustPolicy">
         <enum>QComboBox::AdjustToContents</enum>

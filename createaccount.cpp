@@ -15,7 +15,7 @@ CreateAccount::CreateAccount(QString name, QWidget *parent) :
     security_questions = new SecurityQuestions();
     ui->questions_layout->addWidget(security_questions);
 
-    server::send(server::SECURITY_QUESTIONS+"msalomon"); // should send at initial start of program
+    server::send(server::SECURITY_QUESTIONS); // should send at initial start of program
 
     //ui->register_btn->setEnabled(false);
 }

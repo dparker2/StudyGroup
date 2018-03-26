@@ -139,11 +139,8 @@ void StartPage::display_login(){
     ui->tabWidget->setCurrentIndex(0);
 }
 
-
-
 void StartPage::on_pushButton_clicked()
 {
-    qDebug() << "PRESS BUTTON";
     on_pushButton_recover_user_clicked();
     ui->tabWidget->setCurrentIndex(2);
 }
