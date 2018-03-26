@@ -51,6 +51,10 @@ void CreateAccount::on_register_btn_clicked()
             " " + ui->lineEdit_password2->text();
     QString response, questions;
     qDebug() << "Info Valid.." << info_valid_status();
+
+    QString security_question_msg;
+    bool ready = security_questions->ready_to_send(security_question_msg);
+
     if(info_valid_status() && server::request_response(full_string, response))
     {
         qDebug() << "sending account";
@@ -112,11 +116,7 @@ void CreateAccount::on_lineEdit_password1_textChanged(const QString &password1)
 void CreateAccount::on_lineEdit_password1_editingFinished()
 {
     QString password1 = ui->lineEdit_password1->text();
-    QString password2 = ui->lineEdit_password2->text();
-
-    bool valid2 = get_password2_status();
     bool valid1 = get_password1_status();
-    qDebug() << "VALID: " << valid1 << " " << valid2;
     if(!password1.isEmpty() && !valid1){
         qDebug() << "HEY LOOK AT ME";
         set_valid_icons(ui->label_password1_check, ui->lineEdit_password1, valid1, get_error_msg());
@@ -138,15 +138,11 @@ void CreateAccount::on_lineEdit_password2_textChanged(const QString &password2)
 
 void CreateAccount::on_lineEdit_password2_editingFinished()
 {
-    QString password1 = ui->lineEdit_password1->text();
     QString password2 = ui->lineEdit_password2->text();
-    bool valid1 = get_password1_status();
     bool valid2 = get_password2_status();
-    qDebug() << "VALID: " << valid1 << " " << valid2;
     if(!password2.isEmpty() && !valid2){
         set_valid_icons(ui->label_password2_check, ui->lineEdit_password2, valid2, get_error_msg());
     }
-
 }
 
 void CreateAccount::set_valid_icons(QLabel* this_label, QLineEdit* this_line, bool valid, QString error_msg)

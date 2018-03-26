@@ -20,6 +20,7 @@ public:
     explicit CreateAccount(QString name = "create account", QWidget *parent = 0);
     ~CreateAccount();
 
+
 private slots:
     void do_work();
 
