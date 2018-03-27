@@ -47,6 +47,8 @@ private slots:
     //bool info_valid_status();
 
     void on_register_btn_clicked();
+    bool user_info_ready(QString &user_info_msg);
+    void error_prompt(QLineEdit* this_line, QString error_msg);
 
 private:
     Ui::CreateAccount *ui;

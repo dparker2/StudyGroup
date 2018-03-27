@@ -54,7 +54,7 @@ void SecurityQuestions::init_question_list(QList<QByteArray> message)
     default_questions.push_back("Choose Security Question");
     for(int i = 0; i < message.size(); i++){
         default_questions.push_back(QString(message[i]).replace('_', ' '));
-        custom_questions.push_back(QString(message[i]).replace('_', ' '));
+        selected_questions.push_back(QString(message[0]).replace('_', ' '));
     }
     default_questions.push_back("Create Custom Question");
 }
@@ -63,8 +63,8 @@ void SecurityQuestions::init_comboBox_list()
 {
     for(int i = 0; i < comboBoxes.size(); i++)
     {
-        if(comboBoxes[i]->lineEdit() != 0 ){
-            custom_questions[i] = comboBoxes[i]->lineEdit()->text();
+        if(comboBoxes[i]->lineEdit() != 0){
+            selected_questions[i] = comboBoxes[i]->lineEdit()->text();
         }
         comboBoxes[i]->clear();
         for(int j = 0; j < default_questions.size(); j++){
@@ -87,19 +87,18 @@ void SecurityQuestions::set_list_stylesheet(QComboBox* combobox){
                                     "}");
 }
 
-void SecurityQuestions::update_selected_questions(QList<QString> &selected_questions)
+void SecurityQuestions::update_selected_questions()
 {
     for(int i = 0; i < comboBoxes.count(); i++){
-        selected_questions.push_back(comboBoxes[i]->currentText());
+        selected_questions[i] = comboBoxes[i]->currentText();
     }
 }
 void SecurityQuestions::update_comboBoxes()
 {
-    QList<QString> selected_questions;
-    update_selected_questions(selected_questions);
+    update_selected_questions();
+    init_comboBox_list();
 
     int index;
-    init_comboBox_list();
     for(int i = 0; i < comboBoxes.size(); i++)
     {
         for(int j = 0; j < selected_questions.size(); j++)
@@ -110,7 +109,7 @@ void SecurityQuestions::update_comboBoxes()
             }            
         }
         if(comboBoxes[i]->lineEdit() != 0){
-            comboBoxes[i]->lineEdit()->setText(custom_questions[i]);
+            comboBoxes[i]->lineEdit()->setText(selected_questions[i]);
         }
         else{
             comboBoxes[i]->setCurrentIndex(comboBoxes[i]->findText(selected_questions[i]));
@@ -126,18 +125,15 @@ void SecurityQuestions::on_comboBox_q1_activated(int index)
         comboBoxes[0]->setEditable(true);
         comboBoxes[0]->lineEdit()->clear();
         set_list_stylesheet(comboBoxes[0]);
-        update_comboBoxes();
     }
-    else{
         update_comboBoxes();
-    }
 }
 
 void SecurityQuestions::on_comboBox_q1_currentTextChanged(const QString &custom_q)
 {
     if(!custom_q.isEmpty() && custom_q != default_questions[0] && custom_q != comboBoxes[0]->count()-1){
-        custom_questions[0].clear();
-        custom_questions[0] = custom_q;
+        selected_questions[0].clear();
+        selected_questions[0] = custom_q;
     }
     customQ_flag = true;
 }
@@ -150,18 +146,15 @@ void SecurityQuestions::on_comboBox_q2_activated(int index)
         comboBoxes[1]->setEditable(true);
         comboBoxes[1]->lineEdit()->clear();
         set_list_stylesheet(comboBoxes[1]);
-        update_comboBoxes();
     }
-    else{
-        update_comboBoxes();
-    }
+    update_comboBoxes();
 }
 void SecurityQuestions::on_comboBox_q2_currentTextChanged(const QString &custom_q)
 {
     int size = default_questions.size();
     if(!custom_q.isEmpty() && custom_q != default_questions[0] && custom_q != comboBoxes[1]->count()-1){
-        custom_questions[1].clear();
-        custom_questions[1] = custom_q;
+        selected_questions[1].clear();
+        selected_questions[1] = custom_q;
     }
     customQ_flag = true;
 }
@@ -174,40 +167,35 @@ void SecurityQuestions::on_comboBox_q3_activated(int index)
         comboBoxes[2]->setEditable(true);
         comboBoxes[2]->lineEdit()->clear();
         set_list_stylesheet(comboBoxes[2]);
-        update_comboBoxes();
     }
-    else{
-        update_comboBoxes();
-    }
+    update_comboBoxes();
 }
 void SecurityQuestions::on_comboBox_q3_editTextChanged(const QString &custom_q)
 {
     int size = default_questions.size();
     if(!custom_q.isEmpty() && custom_q != default_questions[0] && custom_q != comboBoxes[2]->count()-1){
-        custom_questions[2].clear();
-        custom_questions[2] = custom_q;
+        selected_questions[2].clear();
+        selected_questions[2] = custom_q;
     }
     customQ_flag = true;
 }
 
-bool SecurityQuestions::ready_to_send(QString &security_question_msg)
+bool SecurityQuestions::ready_to_send(QString &security_question_msg, QString &security_answer_msg)
 {
-
     if(!questions_ready() || !answers_ready()){
         return false;
     }
-    if(customQ_flag){
-        for(int i = 0; i < custom_questions.size(); i++){
-            security_question_msg += custom_questions[i].replace(' ', '_') + " ";
-        }
+    for(int i = 0; i < selected_questions.size(); i++){
+        QLineEdit* answer = parentWidget()->findChild<QLineEdit*>("lineEdit_answer" + QString::number(i+1));
+        security_answer_msg += answer->text().replace(' ', '_') + " ";
+        security_question_msg += selected_questions[i].replace(' ', '_') + " ";
     }
-    qDebug() << "custom: " << security_question_msg;
+
     return false;
 }
 bool SecurityQuestions::questions_ready()
 {
-    QList<QString> selected_questions;
-    update_selected_questions(selected_questions);
+    update_selected_questions();
 
     for(int i = 0; i < selected_questions.size(); i++){
         qDebug() << "Question: " << selected_questions[i];

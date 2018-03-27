@@ -16,9 +16,9 @@ public:
     bool get_password2_status();
     QString get_error_msg();
 
-    bool validate_email(QString email);
-    bool validate_username(QString username);
-    bool validate_password(QLineEdit* current_line, QLineEdit* other_line, bool pwd);
+    bool validate_email(QString email, bool check_empty);
+    bool validate_username(QString username, bool check_empty);
+    bool validate_password(QLineEdit* current_line, QLineEdit* other_line, bool pwd, bool check_empty);
     bool info_valid_status();
 
 private:

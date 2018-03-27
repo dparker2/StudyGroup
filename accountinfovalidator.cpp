@@ -37,17 +37,23 @@ void AccountInfoValidator::initialize_validation_variables(bool set_false){
     valid_password2 = set_false;
 }
 
-bool AccountInfoValidator::validate_email(QString email)
+bool AccountInfoValidator::validate_email(QString email, bool check_empty)
 {
+    if(check_empty && email.isEmpty()){
+        error_msg = "Email cannot be blank";
+        return false;
+    }
     QRegExp email_regex("\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b");
     email_regex.setCaseSensitivity(Qt::CaseInsensitive);
     email_regex.setPatternSyntax(QRegExp::RegExp);
 
+    error_msg = "Email is not valid";
     return valid_email = email_regex.exactMatch(email);
 }
 
-bool AccountInfoValidator::validate_username(QString username)
+bool AccountInfoValidator::validate_username(QString username, bool check_empty)
 {
+
     QRegExp username_regex("([\\d]+|[\\w]+)+");
     username_regex.setCaseSensitivity(Qt::CaseSensitive);
     username_regex.setPatternSyntax(QRegExp::RegExp);
@@ -55,7 +61,10 @@ bool AccountInfoValidator::validate_username(QString username)
     bool regex_valid = username_regex.exactMatch(username);
     bool size_valid = username.size() > USERNAME_MIN && username.size() < USERNAME_MAX;
 
-    if(size_valid && regex_valid){
+    if(check_empty && username.isEmpty()){
+        error_msg = "Username cannot be blank";
+    }
+    else if(size_valid && regex_valid){
         return valid_username = true;
     }
     if(!regex_valid){
@@ -74,13 +83,16 @@ bool AccountInfoValidator::validate_username(QString username)
     return valid_username = false;
 }
 
-bool AccountInfoValidator::validate_password(QLineEdit* current_line, QLineEdit* other_line, bool pwd)
+bool AccountInfoValidator::validate_password(QLineEdit* current_line, QLineEdit* other_line, bool pwd, bool check_empty)
 {
     QString current_password = current_line->text();
     QString other_password = other_line->text();
-    bool valid;
+    bool valid;    
 
-    if(!current_password.isEmpty() && !other_password.isEmpty() && current_password == other_password){
+    if(check_empty && (current_password.isEmpty() || other_password.isEmpty())){
+        error_msg = "Passowrd cannot be blank";
+    }
+    else if(!current_password.isEmpty() && !other_password.isEmpty() && current_password == other_password){
         valid_password1 = valid_password2 = true;
         return true;
     }
@@ -101,7 +113,7 @@ bool AccountInfoValidator::validate_password(QLineEdit* current_line, QLineEdit*
         valid = false;
     }
 
-    if(pwd){
+    if(pwd){  // Determines which password ui line is currently being updated
         return valid_password1 = valid;
     }
     return valid_password2 = valid;

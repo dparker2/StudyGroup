@@ -72,8 +72,8 @@ public:
     static const QString FLASHCARD_SET_FRONT;
     static const QString FLASHCARD_SET_BACK;
     static const QString SECURITY_QUESTIONS;
-    static const QString SECURITYQ_CUSTOM;
-    static const QString SECURITY_ANSWERS;
+    static const QString SECURITY_SET_QUESTIONS;
+    static const QString SECURITY_SET_ANSWERS;
     static const QString CHECK_SECURITY_ANSWER;
     static const QString CHECK_SECURITY_CODE;
     static const QString UPDATE_PASSWORD;

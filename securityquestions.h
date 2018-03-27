@@ -19,7 +19,7 @@ public:
     void set_custom_question(QComboBox* current_comboBox);
     void REQQ(QList<QByteArray> message);
 
-    bool ready_to_send(QString &security_question_msg);
+    bool ready_to_send(QString &security_question_msg, QString &security_answer_msg);
 
 private slots:
     void comboBox_ptrs_to_list();
@@ -28,7 +28,7 @@ private slots:
     void on_comboBox_q1_activated(int index);
     void on_comboBox_q2_activated(int index);
     void on_comboBox_q3_activated(int index);
-    void update_selected_questions(QList<QString> &selected_questions);
+    void update_selected_questions();
     void update_comboBoxes();
 
     void set_list_stylesheet(QComboBox* combobox);
@@ -45,9 +45,11 @@ private slots:
     bool answers_ready();
     bool questions_ready();
 
+
 private:
     Ui::SecurityQuestions *ui;
     bool customQ_flag;
+    QList<QString> selected_questions;
     QList<QString> custom_questions;
     QList<QString> default_questions;
     QList<QComboBox*> comboBoxes;
