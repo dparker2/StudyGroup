@@ -55,7 +55,8 @@ function createAccount($email, $username, $password, $sock) {
 
 function loginAccount($username, $password, $sock) {
   $connection = connectAccount();
-  $value = 5067; // temp ip value for testing
+  //$value = $user->getIP(); //* for when i want to start using actual ip, DOESNT WORK. WHY!?
+  $value = 570; // temp ip value for testing
   $bool_check = false;
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
   $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
@@ -63,13 +64,18 @@ function loginAccount($username, $password, $sock) {
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
 
   addLoginAttempt($value); // keeps track of # of login attempts from $value
-  confirmIPAddress($value); //* need to add that if this returns 1 login is a fail right here
+  confirmIPAddress($value); // still need if (return = 1)->fail login
+  if (confirmIPAddress($value) === 1){
+	$message = "FAILTimeout";
+	sendMessage($message, $sock);
+	return $bool_check;
+  }
 
   //Checks if username exists before attempting to login, will return error otherwise.
   if (($username_exists = checkExists($connection, $check_username)) > 0) {
       $checkPass = getObjString($connection, $check_password)->Pass;
       if (password_verify($password, $checkPass)) {
-	    confirmIPAddress($value);
+	    clearLoginAttempts($value); // upon successful login ip timeout is removed;
         $resultEmail = getObjString($connection, $check_email)->Email;
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);
@@ -78,7 +84,7 @@ function loginAccount($username, $password, $sock) {
       } //Closes password check.
       else{
         $message = "FAILPassword incorrect, please try again.";
-        loginTimeout($username, $sock);
+        sendMessage($message, $sock);
       }
   }
   else{
@@ -100,7 +106,6 @@ function logoutAccount($username, $sock) {
     fwrite($sock, "00004FAIL\n");
   }
   disconnect($connection);
-
 }
 
 //unfinished code to change a users password, need client input
@@ -116,7 +121,6 @@ function changePassword($username, $password, $sock) {
   else {
     fwrite($sock, "FAIL\n");
   }
-
   disconnect($connection);
 }
 
