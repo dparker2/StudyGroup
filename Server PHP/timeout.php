@@ -3,7 +3,7 @@ function confirmIPAddress($value) {
 
   // LoginAttempts table. looks at # of attempts, and time >=5 minutes. used to create an array for later.
   // may split this into multiple variables for better readability
-  $q = "SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL "5" 
+  $q = "SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL ".TIME_PERIOD." 
   MINUTE)>NOW() then 1 else 0 end) as Denied FROM LoginAttempts WHERE IP = '$value'"; 
 
   $result = mysql_query($q, $this->connection); 
@@ -34,14 +34,15 @@ function addLoginAttempt($value) {
    $data = mysql_fetch_array($result);
    
    if($data) { // if not first time attempting to log in
-     $attempts = $data["Attempts"]+1;         
+     $attempts = $data["attempts"]+1; 
+     // $attempts = "UPDATE LoginAttempts SET Attempts = Attempts + 1 WHERE IP = $value";      
 
      if($attempts==5) { // just hit 5 fails, update time and attempt# in db for comnfirmIPAddress
-       $q = "UPDATE LoginAttempts SET Attempts="$attempts", lastlogin=NOW() WHERE ip = '$value'";
+       $q = "UPDATE LoginAttempts SET Attempts='$attempts', LastLogin=NOW() WHERE ip = '$value'";
        $result = mysql_query($q, $this->connection);
      }
      else { // not yet at 5, just update db
-       $q = "UPDATE LoginAttempts SET Attempts="$attempts" WHERE ip = '$value'";
+       $q = "UPDATE LoginAttempts SET Attempts='$attempts' WHERE ip = '$value'";
        $result = mysql_query($q, $this->connection);
      }
    }
