@@ -55,26 +55,21 @@ function createAccount($email, $username, $password, $sock) {
 
 function loginAccount($username, $password, $sock) {
   $connection = connectAccount();
+  $value = 5067; // temp ip value for testing
   $bool_check = false;
   $check_password = "SELECT Pass FROM UserInfo WHERE Username = '$username'";
   $check_username = "SELECT Username FROM UserInfo WHERE Username = '$username'";
   $check_email = "SELECT Email FROM UserInfo WHERE Username = '$username'";
-  $check_lockout = "SELECT LockoutStatus FROM UserInfo WHERE Username = '$username'";
   $change_online = "UPDATE UserInfo SET UserStatus='Online' WHERE Username = '$username'";
+
+  addLoginAttempt($value); // keeps track of # of login attempts from $value
+  confirmIPAddress($value); //* need to add that if this returns 1 login is a fail right here
+
   //Checks if username exists before attempting to login, will return error otherwise.
   if (($username_exists = checkExists($connection, $check_username)) > 0) {
-	  if(($account_locked = checkExists($connection, $check_lockout)) > 0) {
-		if ($time > 1800) { // time since lockout > 30 mins
-			unlockAccount($username); // unlock the account
-		}
-		else{
-			$message = "FAILThis account is currently locked.";
-			sendMessage($message, $sock);
-			exit("account locked");
-		}
-	}
       $checkPass = getObjString($connection, $check_password)->Pass;
       if (password_verify($password, $checkPass)) {
+	    confirmIPAddress($value);
         $resultEmail = getObjString($connection, $check_email)->Email;
         $message = "SUCC{$resultEmail}"; //Successful if matches and writes back email belonging to user for UI
         sendMessage($message, $sock);
@@ -83,8 +78,7 @@ function loginAccount($username, $password, $sock) {
       } //Closes password check.
       else{
         $message = "FAILPassword incorrect, please try again.";
-		loginTimeout($username);
-        sendMessage($message, $sock);
+        loginTimeout($username, $sock);
       }
   }
   else{
