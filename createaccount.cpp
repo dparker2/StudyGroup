@@ -45,12 +45,20 @@ void CreateAccount::do_work()
 
 void CreateAccount::on_register_btn_clicked()
 {
+    QString response2;
+    if(server::request_response(server::SECURITY_SET_ANSWERS, response2)){
+        QMessageBox success_box;
+        success_box.setText(response2);
+        success_box.exec();
+    }
+    return;
     QString security_question_msg, security_answer_msg;
     QString user_info_msg;
     QString response;
-
+    qDebug() << "register..";
     bool questions_ready;
     if(user_info_ready(user_info_msg)){
+        qDebug() << "info_ready..";
         user_info_msg = server::CREATE_ACCOUNT + user_info_msg;
 
         questions_ready = security_questions->ready_to_send(security_question_msg, security_answer_msg);

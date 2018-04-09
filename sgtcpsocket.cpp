@@ -1,6 +1,7 @@
 #include "sgtcpsocket.h"
 #include <QMessageBox>
 #include <QDateTime>
+#include <QNetworkDatagram>
 
 SGTCPSocket::SGTCPSocket(QObject *parent) : QObject(parent)
 {
@@ -27,10 +28,10 @@ SGTCPSocket::~SGTCPSocket()
 
 void SGTCPSocket::connect_server()
 {
-    //my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
+    my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
     // Connect the socket to the host
     //my_tcp_socket->connectToHost("52.14.84.3", 9001); // CSCI 150 SERVER
-    my_tcp_socket->connectToHost("localhost", 9001);
+    //my_tcp_socket->connectToHost("localhost", 9001);
     // If it ever disconnects (including while trying this), the socket will
     // continuouslyq try to reconnect. See reconnect_socket().
 }
@@ -137,7 +138,6 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
 {
     QString message_string(message);
     QString first_section = message_string.section(' ', 0, 0);
-    qDebug() << "*** CHECKING First section: " << first_section;
     QString code = first_section.left(4);  // Get the code
     first_section.remove(0, 4);  // Remove the code
     qDebug() << "before remove" << message;

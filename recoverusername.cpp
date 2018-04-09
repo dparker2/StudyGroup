@@ -58,7 +58,7 @@ void RecoverUsername::set_invalid_icon()
 {
     QPixmap x_mark = QPixmap(":/resources/img/x_mark.png");
     ui->label_invalid->setPixmap(x_mark.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    ui->label_invalid->show();
+    //ui->label_invalid->show();
 }
 
 void RecoverUsername::on_email_lineEdit_textEdited(const QString &arg1)
