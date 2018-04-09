@@ -222,7 +222,8 @@ while(true) {
               setSecQuest($codeMessage[0], $codeMessage[1], $codeMessage[2], $codeMessage[3], $sock); // 0 = username, 1 = question 1, 2 = question 2, 3 = question 3
               break;
             case "SETA":
-              setSecAns($codeMessage[0], $codeMessage[1], $codeMessage[2], $codeMessage[3], $sock); // 0 = username, 1 = answer 1, 2 = answer 2, 3 = answer 3
+              sendMessage("SUCC Account Created!", $sock); 
+              //setSecAns($codeMessage[0], $codeMessage[1], $codeMessage[2], $codeMessage[3], $sock); // 0 = username, 1 = answer 1, 2 = answer 2, 3 = answer 3
               break;
             case "RPWD":
               sendRandomSecQuest($codeMessage[0], $sock); // username

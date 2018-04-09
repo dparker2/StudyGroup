@@ -10,6 +10,10 @@ function reqSecQuest($user, $sock) { /*why not combine this function to take mul
   */
   $connection = connectAccount();
   $username = $user; //why username = user? why not just change parameter to username?? FOR ALL
+  $q1 = "What_is_your_last_name";
+  $q2 = "What_was_the_name_of_your_first_pet";
+  $q3 = "What_is_the_name_of_the_street_you_grew_up_on";
+  /*
   echo "the username input to the function is: $username\n\n";
   $query1 = "SELECT SQ1 FROM UserInfo WHERE Username = '$username'";
   echo "This is question1 query: $query1";
@@ -25,7 +29,7 @@ function reqSecQuest($user, $sock) { /*why not combine this function to take mul
   echo "q2 is: $q2\n\n";
   $q3 = mysqli_query($connection, $query3);
   echo "q3 is: $q3\n\n";
-  */
+
 
   $q1 = getObjString($connection, $query1)->SQ1;
   echo "This is q1 as string: " . "$q1\n";
@@ -33,6 +37,7 @@ function reqSecQuest($user, $sock) { /*why not combine this function to take mul
   echo "This is q2 as object? : " . "{$q2}\n\n";
   $q3 = getObjString($connection, $query3)->SQ3;
   echo "This is q3 as object? : " . "{$q3}\n\n";
+  */
 
   $message = "REQQ{$q1} {$q2} {$q3}";
   sendMessage($message, $sock);

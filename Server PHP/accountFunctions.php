@@ -146,7 +146,7 @@ function rememberUsername ($email, $sock) {
   if(checkExists($connection, $find_user) > 0) {
     $returnUser = getObjString($connection, $find_user)->Username;
 //    $message = "SUCC1Email has been sent with your username. Make sure to check your spam folder!\n";
-    $message = "RUSRSUCC Email has been sent with your username. Make sure to check your spam folder!\n";
+    $message = "SUCCEmail has been sent with your username. Make sure to check your spam folder!\n";
     sendMessage($message, $sock);
     sendVerEmail($email, $returnUser);
   }
