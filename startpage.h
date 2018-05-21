@@ -4,8 +4,10 @@
 #include <QWidget>
 #include <QLabel>
 #include <QLineEdit>
-
-#include <sgwidget.h>
+#include <qcombobox.h>
+#include "recoverusername.h"
+#include "resetpassword.h"
+#include "createaccount.h"
 
 namespace Ui {
 class StartPage;
@@ -19,8 +21,11 @@ public:
     explicit StartPage(QString name = "startpage", QWidget *parent = 0);
     ~StartPage();
 
+    void display_login();
+
 signals:
     void logged_in(unsigned);
+
 
 private slots:
     void on_signin_button_clicked();
@@ -39,11 +44,9 @@ private slots:
 
     void on_lineEdit_password2_editingFinished();*/
 
-    void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
+    //void set_valid_icons(QLabel* this_label, QLineEdit* this_line, QString error_msg, bool valid);
 
-    void on_singup_button_clicked();
-
-    void on_pushButton_recover_pass_clicked();
+    //void on_singup_button_clicked();
 
     void on_pushButton_recover_user_clicked();
 
@@ -53,16 +56,35 @@ private slots:
 
     void do_work();
 
-    void on_lineEdit_email_textChanged(const QString &arg1);
 
-    void on_lineEdit_username_signup_textChanged(const QString &arg1);
+    void on_tabWidget_currentChanged(int index);
 
-    void on_lineEdit_password1_textChanged(const QString &arg1);
 
-    void on_lineEdit_password2_textChanged(const QString &arg1);
+    void on_pushButton_reset_password_clicked();
+
+    void hide_recover_buttons();
+    void show_recover_buttons();
+
+    void on_pushButton_recover_back_clicked();
+
+    void display_recover_widget(QWidget* recover_widget);
+
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::StartPage *ui;
+    RecoverUsername *recover_username;
+    ResetPassword *reset_password;
+    QString username;
+    bool customQ_flag;
+    QList<QLineEdit*> custom_questions;
+    QList<QString> questions;
+    QList<QComboBox*> question_comboBox;
+    CreateAccount* sign_up;
+
 };
 
 #endif // STARTPAGE_H

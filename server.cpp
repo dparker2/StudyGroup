@@ -14,7 +14,7 @@ const QString server::CREATE_ACCOUNT = "CACC";
 const QString server::LOGIN = "LOGN";
 const QString server::LOGOUT = "LOGT";
 const QString server::RECOVER_USERNAME = "RUSR";
-const QString server::RECOVER_PASSWORD = "RUSP";
+const QString server::RECOVER_PASSWORD = "RPWD";
 const QString server::GROUP_CREATE = "CGRP";
 const QString server::GROUP_JOIN = "JGRP";
 const QString server::GROUP_LEAVE = "LGRP";
@@ -24,6 +24,13 @@ const QString server::WHITEBOARD_UPDATE = "UPWB";
 const QString server::WHITEBOARD_SAVE = "SVWB";
 const QString server::FLASHCARD_SET_FRONT = "FCFT";
 const QString server::FLASHCARD_SET_BACK = "FCBK";
+const QString server::SECURITY_QUESTIONS = "REQQ";
+const QString server::SECURITY_SET_QUESTIONS = "SETQ";
+const QString server::SECURITY_SET_ANSWERS = "SETA";
+const QString server::CHECK_SECURITY_ANSWER = "CHKA";
+const QString server::CHECK_SECURITY_CODE = "CHKC";
+const QString server::UPDATE_PASSWORD = "CHPW";
+
 
 server::server(QObject *parent) : QObject(parent)
 {

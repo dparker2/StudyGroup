@@ -41,7 +41,12 @@ SOURCES += \
     fcfront.cpp \
     fcback.cpp \
     whiteboard_wrapper.cpp \
-    whiteboard.cpp
+    whiteboard.cpp \
+    recoverusername.cpp \
+    resetpassword.cpp \
+    securityquestions.cpp \
+    createaccount.cpp \
+    accountinfovalidator.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,7 +65,12 @@ HEADERS += \
     fcfront.h \
     fcback.h \
     whiteboard_wrapper.h \
-    whiteboard.h
+    whiteboard.h \
+    recoverusername.h \
+    resetpassword.h \
+    securityquestions.h \
+    createaccount.h \
+    accountinfovalidator.h
 
 FORMS += \
         mainwindow.ui \
@@ -73,7 +83,11 @@ FORMS += \
     deck.ui \
     fcfront.ui \
     fcback.ui \
-    whiteboard.ui
+    whiteboard.ui \
+    recoverusername.ui \
+    resetpassword.ui \
+    securityquestions.ui \
+    createaccount.ui
 
 RESOURCES += \
     resource.qrc
