@@ -29,26 +29,51 @@ SOURCES += \
     user_account_check.cpp \
     server.cpp \
     groupwidget.cpp \
-    whiteboard.cpp \
-    whiteboard_p.cpp \
-    cardwidget.cpp\
-    flashcard.cpp
+    flashcard.cpp \
+    startpage.cpp \
+    joingrouppage.cpp \
+    creategrouppage.cpp \
+    settingspage.cpp \
+    sgtcpsocket.cpp \
+    sgwidget.cpp \
+    groupmainpage.cpp \
+    deck.cpp \
+    fcfront.cpp \
+    fcback.cpp \
+    whiteboard_wrapper.cpp \
+    whiteboard.cpp
 
 HEADERS += \
         mainwindow.h \
     user_account_check.h \
     server.h \
     groupwidget.h \
-    whiteboard.h \
-    whiteboard_p.h\
-    cardwidget.h \
-    flashcard.h
+    flashcard.h \
+    startpage.h \
+    joingrouppage.h \
+    creategrouppage.h \
+    settingspage.h \
+    sgtcpsocket.h \
+    sgwidget.h \
+    groupmainpage.h \
+    deck.h \
+    fcfront.h \
+    fcback.h \
+    whiteboard_wrapper.h \
+    whiteboard.h
 
 FORMS += \
         mainwindow.ui \
     groupwidget.ui\
-    cardwidget.ui\
-    flashcard.ui
+    flashcard.ui \
+    startpage.ui \
+    joingrouppage.ui \
+    creategrouppage.ui \
+    settingspage.ui \
+    deck.ui \
+    fcfront.ui \
+    fcback.ui \
+    whiteboard.ui
 
 RESOURCES += \
     resource.qrc
