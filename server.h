@@ -67,6 +67,12 @@ public:
     static const QString SOCIAL_SEARCH_USER;
     static const QString SOCIAL_ADD_FRIEND;
     static const QString SOCIAL_REMOVE_FRIEND;
+    static const QString SECURITY_QUESTIONS;
+    static const QString SECURITY_SET_QUESTIONS;
+    static const QString SECURITY_SET_ANSWERS;
+    static const QString CHECK_SECURITY_ANSWER;
+    static const QString CHECK_SECURITY_CODE;
+    static const QString UPDATE_PASSWORD;
 
 protected:
     explicit server(QObject *parent = nullptr);  // Protect the constructor to prevent class instantiation

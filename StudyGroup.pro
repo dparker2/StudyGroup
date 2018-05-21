@@ -46,6 +46,11 @@ SOURCES += \
     userlistitem.cpp \
     Homepage/homepage.cpp \
     Homepage/socialarea.cpp
+    recoverusername.cpp \
+    resetpassword.cpp \
+    securityquestions.cpp \
+    createaccount.cpp \
+    accountinfovalidator.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -69,6 +74,11 @@ HEADERS += \
     userlistitem.h \
     Homepage/homepage.h \
     Homepage/socialarea.h
+    recoverusername.h \
+    resetpassword.h \
+    securityquestions.h \
+    createaccount.h \
+    accountinfovalidator.h
 
 FORMS += \
         mainwindow.ui \
@@ -86,6 +96,10 @@ FORMS += \
     userlistitem.ui \
     Homepage/homepage.ui \
     Homepage/socialarea.ui
+    recoverusername.ui \
+    resetpassword.ui \
+    securityquestions.ui \
+    createaccount.ui
 
 RESOURCES += \
     resource.qrc

@@ -1,6 +1,7 @@
 #include "sgtcpsocket.h"
 #include <QMessageBox>
 #include <QDateTime>
+#include <QNetworkDatagram>
 
 SGTCPSocket::SGTCPSocket(QObject *parent) : QObject(parent)
 {
@@ -166,6 +167,21 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     {
         return "socialarea";
     }
+    else if(code == "REQQ")
+    {
+        qDebug() << "*** REQQ ***";
+        return "create account";
+    }
+    else if (code == "RUSR")
+    {
+        message.remove(4, first_section.length());
+        return "recover username";
+    }
+    else if(code == "RPWD")
+    {
+        qDebug() << "Recover password message";
+        return "reset password";
+    }
 }
 
 void SGTCPSocket::read_socket_send_signal()
@@ -179,6 +195,7 @@ void SGTCPSocket::read_socket_send_signal()
         // First short circuit in case its just a succ or fail message
         if (QString(message_ba).left(4) == "SUCC")
         {
+            qDebug() << "SUCCESSSSSSS";
             // Set the success flag and message
             success_flag = true;
             message_ba.remove(0, 4);
