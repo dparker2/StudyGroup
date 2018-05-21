@@ -20,6 +20,8 @@ private slots:
     void on_create_group_button_released();
 
 private:
+    void do_work();
+
     Ui::CreateGroupPage *ui;
 };
 

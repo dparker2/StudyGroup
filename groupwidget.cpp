@@ -45,6 +45,12 @@ void GroupWidget::do_work()
         else if(message_list[0] == "NCHT") {
             new_chat(message_list[1], message_list[2] + ' ' + message_list[3], message_list[4]);
         }
+        else if(message_list[0] == "NWFG") {
+            ui->fav_button->setChecked(true);
+        }
+        else if(message_list[0] == "RMFG") {
+            ui->fav_button->setChecked(false);
+        }
     }
 }
 
@@ -142,5 +148,20 @@ void GroupWidget::on_comboBox_study_mode_currentIndexChanged(int index)
     else{
         ui->study_mode->setCurrentWidget(whiteboard);
         ui->study_menu->setCurrentIndex(0);
+    }
+}
+
+void GroupWidget::on_fav_button_clicked(bool checked)
+{
+    ui->fav_button->setChecked(false);
+    QString _;
+    if (checked) {
+        if(server::request_response(server::HOMEPAGE_NEW_FAVORITE + ui->groupid_label->text().remove(0, 9), _)) {
+            ui->fav_button->setChecked(true);
+        }
+    } else {
+        if(server::request_response(server::HOMEPAGE_REMOVE_FAVORITE + ui->groupid_label->text().remove(0, 9), _)) {
+            ui->fav_button->setChecked(false);
+        }
     }
 }

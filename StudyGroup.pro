@@ -42,6 +42,10 @@ SOURCES += \
     fcback.cpp \
     whiteboard_wrapper.cpp \
     whiteboard.cpp \
+    grouplistitem.cpp \
+    userlistitem.cpp \
+    Homepage/homepage.cpp \
+    Homepage/socialarea.cpp
     recoverusername.cpp \
     resetpassword.cpp \
     securityquestions.cpp \
@@ -66,6 +70,10 @@ HEADERS += \
     fcback.h \
     whiteboard_wrapper.h \
     whiteboard.h \
+    grouplistitem.h \
+    userlistitem.h \
+    Homepage/homepage.h \
+    Homepage/socialarea.h
     recoverusername.h \
     resetpassword.h \
     securityquestions.h \
@@ -84,6 +92,10 @@ FORMS += \
     fcfront.ui \
     fcback.ui \
     whiteboard.ui \
+    grouplistitem.ui \
+    userlistitem.ui \
+    Homepage/homepage.ui \
+    Homepage/socialarea.ui
     recoverusername.ui \
     resetpassword.ui \
     securityquestions.ui \

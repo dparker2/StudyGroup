@@ -144,10 +144,7 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     QString first_section = message_string.section(' ', 0, 0);
     QString code = first_section.left(4);  // Get the code
     first_section.remove(0, 4);  // Remove the code
-    qDebug() << "before remove" << message;
-
-    qDebug() << "after remove" << message;
-    if ((code == "USCH") || (code == "NUSR") || (code == "NCHT"))
+    if ((code == "USCH") || (code == "NUSR") || (code == "NCHT") || (code == "NWFG") || (code == "RMFG"))
     {
         message.remove(4, first_section.length());
         return first_section;
@@ -161,6 +158,14 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
     {
         message.remove(4, first_section.length());
         return first_section + " flashcard";
+    }
+    else if((code == "UPRG") || (code == "UPFG"))
+    {
+        return "homepage";
+    }
+    else if(code == "RSLT")
+    {
+        return "socialarea";
     }
     else if(code == "REQQ")
     {
@@ -177,7 +182,6 @@ QString SGTCPSocket::get_object_name(QByteArray &message)
         qDebug() << "Recover password message";
         return "reset password";
     }
-
 }
 
 void SGTCPSocket::read_socket_send_signal()
@@ -186,8 +190,7 @@ void SGTCPSocket::read_socket_send_signal()
     {
         QByteArray message_ba = single_message();
 
-        QString server_code = QString(); // Remove the server code
-        qDebug() << "Server code: " << server_code;
+        //qDebug() << "Server code: " << message_ba.left(4);
 
         // First short circuit in case its just a succ or fail message
         if (QString(message_ba).left(4) == "SUCC")
@@ -197,7 +200,7 @@ void SGTCPSocket::read_socket_send_signal()
             success_flag = true;
             message_ba.remove(0, 4);
             success_message = message_ba;
-            qDebug() << "Server message: " << success_message;
+            //qDebug() << "Server message: " << success_message;
         }
         else if (QString(message_ba).left(4) == "FAIL")
         {
@@ -205,11 +208,13 @@ void SGTCPSocket::read_socket_send_signal()
             fail_flag = true;
             message_ba.remove(0, 4);
             // Display the failure message to user
-            QMessageBox timeout_box;
-            timeout_box.setText("Error");
-            timeout_box.setInformativeText(message_ba);
-            timeout_box.setIcon(QMessageBox::Warning);
-            timeout_box.exec();
+            if (message_ba.size() > 0) {
+                QMessageBox timeout_box;
+                timeout_box.setText("Error");
+                timeout_box.setInformativeText(message_ba);
+                timeout_box.setIcon(QMessageBox::Warning);
+                timeout_box.exec();
+            }
         }
         else {
             QString object_name = get_object_name(message_ba);

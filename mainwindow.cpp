@@ -14,18 +14,22 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     group_widget = nullptr;
     ui->setupUi(this);
+    ui->stackedWidget_window->setCurrentIndex(0);
 
     server::initialize();
+    left_buttons_list.push_back(ui->home_button);
     left_buttons_list.push_back(ui->create_button);
     left_buttons_list.push_back(ui->join_button);
 
     connect(ui->login_page, SIGNAL(logged_in(unsigned)), this, SLOT(changePage(unsigned)));
 
+    connect(ui->homepage, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
     connect(ui->join_page, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
     connect(ui->create_page, SIGNAL(group_joined(QWidget*,QString)), this, SLOT(newPage(QWidget*,QString)));
 
-    connect(ui->create_button, &QPushButton::released, [=] { changePage(0); });
-    connect(ui->join_button, &QPushButton::released, [=] { changePage(1); });
+    connect(ui->home_button, &QPushButton::released, [=] { changePage(0); });
+    connect(ui->create_button, &QPushButton::released, [=] { changePage(1); });
+    connect(ui->join_button, &QPushButton::released, [=] { changePage(2); });
 
     connect(ui->settings, &SettingsPage::exit_settings, [=] { ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper); });
     QPixmap gear = QPixmap(":/resources/img/gear.png").scaled(35, 35, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -106,9 +110,10 @@ void MainWindow::setStackedIndex(unsigned index)
 
 void MainWindow::changePage(unsigned index)
 {
-    show_leave_button(index > 1);
+    show_leave_button(index > 2);
     ui->stackedWidget_window->setCurrentWidget(ui->page_wrapper);
     ui->page->setCurrentIndex(index);
+    ui->homepage->set_active(index == 0);
     set_active_button(index);
 }
 
@@ -126,7 +131,7 @@ void MainWindow::removeCurrentPage()
 {
     QWidget* page = ui->page->currentWidget();
     ui->page->removeWidget(page);
-    show_leave_button(ui->page->currentIndex() > 1);
+    show_leave_button(ui->page->currentIndex() > 2);
     page->deleteLater();
 }
 
@@ -196,10 +201,6 @@ void MainWindow::on_logout_button_released()
     // Sanity check: if we aren't even logged in yet (if login_page is active), don't do anything!
     if((ui->stackedWidget_window->currentWidget() != ui->login_page))
     {
-        for (unsigned i = 2; i < left_buttons_list.size(); ) {
-            ui->page->setCurrentIndex(i);  // Change the page
-            on_leave_button_released();  // Simulate pressing leave group
-        }
         // Clear username info -- REDO WHEN DONE
         //user_info->setEmail("");
         //user_info->setUsername("");

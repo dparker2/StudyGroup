@@ -43,6 +43,7 @@ public slots:
 
 private slots:
     void on_comboBox_study_mode_currentIndexChanged(int index);
+    void on_fav_button_clicked(bool checked);
 
 private:
     void do_work();

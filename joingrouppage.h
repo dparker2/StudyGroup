@@ -20,6 +20,8 @@ private slots:
     void on_join_group_button_released();
 
 private:
+    void do_work();
+
     Ui::JoinGroupPage *ui;
 };
 

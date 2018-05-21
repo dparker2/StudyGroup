@@ -24,13 +24,18 @@ const QString server::WHITEBOARD_UPDATE = "UPWB";
 const QString server::WHITEBOARD_SAVE = "SVWB";
 const QString server::FLASHCARD_SET_FRONT = "FCFT";
 const QString server::FLASHCARD_SET_BACK = "FCBK";
+const QString server::HOMEPAGE_UPDATE = "UPHP";
+const QString server::HOMEPAGE_NEW_FAVORITE = "NWFG";
+const QString server::HOMEPAGE_REMOVE_FAVORITE = "RMFG";
+const QString server::SOCIAL_SEARCH_USER = "SUSR";
+const QString server::SOCIAL_ADD_FRIEND = "ADFR";
+const QString server::SOCIAL_REMOVE_FRIEND = "RMFR";
 const QString server::SECURITY_QUESTIONS = "REQQ";
 const QString server::SECURITY_SET_QUESTIONS = "SETQ";
 const QString server::SECURITY_SET_ANSWERS = "SETA";
 const QString server::CHECK_SECURITY_ANSWER = "CHKA";
 const QString server::CHECK_SECURITY_CODE = "CHKC";
 const QString server::UPDATE_PASSWORD = "CHPW";
-
 
 server::server(QObject *parent) : QObject(parent)
 {

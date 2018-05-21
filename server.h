@@ -61,6 +61,12 @@ public:
     static const QString WHITEBOARD_SAVE;
     static const QString FLASHCARD_SET_FRONT;
     static const QString FLASHCARD_SET_BACK;
+    static const QString HOMEPAGE_UPDATE;
+    static const QString HOMEPAGE_NEW_FAVORITE;
+    static const QString HOMEPAGE_REMOVE_FAVORITE;
+    static const QString SOCIAL_SEARCH_USER;
+    static const QString SOCIAL_ADD_FRIEND;
+    static const QString SOCIAL_REMOVE_FRIEND;
     static const QString SECURITY_QUESTIONS;
     static const QString SECURITY_SET_QUESTIONS;
     static const QString SECURITY_SET_ANSWERS;
