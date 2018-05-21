@@ -5,6 +5,7 @@ include_once 'flashCardFunctions.php';
 include_once 'whiteboardFunctions.php';
 include_once 'utilityFunctions.php';
 include_once 'classes.php';
+include_once 'friendsFunctions.php';
 include_once 'homePageFunctions.php';
 
 $server = stream_socket_server("tcp://0.0.0.0:9001", $errno, $errorMessage); //AWS EC2 server
@@ -166,6 +167,21 @@ while(true) {
             case "FCFT":
               if(count($codeMessage) < 3) {$codeMessage[2] = "";}
               addToCard($codeMessage[0], $codeMessage[1], $codeMessage[2], $client, $clientList, $sock, 1);
+              break;
+            case "SUSR":
+              searchUser($codeMessage[0], $sock);
+              break;
+            case "ADFR":
+              followUser($codeMessage[0], $client, $clientList, $sock);
+              break;
+            case "RMFR":
+              unfollowUser($codeMessage[0], $client, $clientList, $sock);
+              break;
+            case "FLNG":
+              returnFollowingListDB($codeMessage[0], $sock);
+              break;
+            case "FLWR":
+              returnFollowerListDB($codeMessage[0], $sock);
               break;
           }
       }
